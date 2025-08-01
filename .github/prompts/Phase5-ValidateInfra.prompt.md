@@ -1,0 +1,55 @@
+---
+mode: agent
+---
+Validate infrastructure as code files
+
+# Rules for Validating Infrastructure as Code Files
+- Use `azure_development-get_deployment_best_practices` to get guidance on validating IaC files.
+- Validate the infrastructure files in the 'infra' folder against Azure best practices.
+- Check that the infrastructure matches the target hosting platform selected during assessment (App Service, AKS, or Container Apps).
+- Validate that the IaC files follow these requirements:
+
+## For Bicep Infrastructure:
+- Proper modularization with separate files for different resource types
+- Use of Azure Verified Modules (AVM) where appropriate
+- Proper parameters and variables usage
+- Correct resource dependencies
+- Secure configuration settings
+- Appropriate use of managed identities
+- Proper RBAC setup with least privilege
+- Monitoring and logging configuration with Application Insights
+- Networking security configurations (if applicable)
+- Proper tagging and naming conventions
+
+## For Terraform Infrastructure:
+- Proper modularization with separate files for different resource types
+- Use of Terraform modules where appropriate
+- Proper variables and outputs definitions
+- Correct resource dependencies
+- Secure configuration settings
+- Appropriate use of managed identities
+- Proper RBAC setup with least privilege
+- Monitoring and logging configuration with Application Insights
+- Networking security configurations (if applicable)
+- Proper tagging and naming conventions
+
+## General Requirements:
+- Use `azure_check_predeploy` to check for issues in the IaC files.
+- Use `azure_check_region` to validate regional availability of the specified Azure resources.
+- Generate an infrastructure validation report in the 'reports' folder, named 'infra_validation_report.md', summarizing:
+  - Compliance with Azure best practices
+  - Resource configuration correctness
+  - Security considerations
+  - Scalability configurations
+  - Monitoring and logging setup
+  - Any issues found and recommendations to fix them
+  - Infrastructure quality score
+
+- If the validation fails, provide detailed error messages and suggestions for fixing the issues.
+- If the validation passes or has only minor issues, indicate that the infrastructure is ready for deployment.
+- Make the validation report human-readable and in markdown format, using headings, bullet points, and other formatting options to make it easy to read.
+- Validation state must be one of: Success, Warning (with minor issues), Failed, or Could Not Validate.
+- If the validate prompt is called before infrastructure generation has been performed, create a report stating that validation cannot be performed.
+- If the user runs Validate again, ask if they want to overwrite the existing report. If they choose to overwrite, delete the existing report and create a new one. If they choose not to overwrite, ask if they want to create the report in a new file instead.
+- Suggest that next step is to deploy the application to Azure, and mention /phase6-deploytoazure is the command to start the deployment process.
+- At the end, update the status report file with the status of the infrastructure validation step.

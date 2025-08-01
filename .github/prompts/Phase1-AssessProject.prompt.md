@@ -1,0 +1,45 @@
+---
+mode: agent
+---
+Assess this application for migration and modernization.
+
+# Rules for Assessment of Application
+- First, ask the user which hosting platform they want to use for the assessment, possible hosting are (Azure App Service, AKS, Container Apps).
+- Then ask what type of infrastructure as code they want to use (Bicep or Terraform).
+- Then if the workspace does not contain a 'reports' folder, create one.
+- Then, assess the workspace and generate a report in the 'reports' folder. The name of the report should be 'application_assessment_report.md'.
+- Analyze the application to determine if it's a .NET or Java application and identify the current framework version.
+- Analyze the project structure, dependencies, and architecture.
+- Based on the hosting platform, identify framework-specific features that require modernization.
+- For .NET applications:
+  - Identify if it's using .NET Framework and which version
+  - Check for WCF services, WebForms, or MVC patterns
+  - Identify authentication mechanisms (Windows Authentication, Forms Auth, etc.)
+  - Analyze configuration files (web.config, app.config)
+  - Check database connections and providers
+  - Identify third-party dependencies and their compatibility
+- For Java applications:
+  - Identify Java version and framework (Spring, Java EE, etc.)
+  - Check for SOAP services, Servlets, or JSP pages
+  - Identify authentication mechanisms (JAAS, container-based, etc.)
+  - Analyze configuration files (properties, XML configs)
+  - Check database connections and providers
+  - Identify third-party dependencies and their compatibility
+- Identify any cloud-incompatible components or practices.
+- Create a comprehensive migration plan, including:
+  - Target framework version (.NET 6/7/8 or Java 11/17/21)
+  - Recommended Azure hosting platform (App Service, AKS, Container Apps)
+  - Authentication migration strategy (to Entra ID)
+  - Required code changes for modernization
+  - Service migration strategy (WCF to REST, SOAP to REST)
+  - Configuration transformation strategy
+  - Containerization strategy (if applicable)
+  - Testing strategy after migration
+- Draw an architecture diagram of the current application.
+- Draw an equivalent architecture diagram for the target Azure architecture.
+- If the user runs assess again, ask the user if they want to overwrite the existing report. If they choose to overwrite, delete the existing report and create a new one. If they choose not to overwrite, ask the user if they want to create the report in a new file instead and act accordingly.
+- Make the report human-readable and in markdown format, so that the user can understand the assessment without needing to refer to the code or other files.
+- Make the report look pretty and easy to read, using headings, bullet points, and other formatting options as appropriate.
+- Include date and time at the beginning of the report.
+- Suggest that the next step is to migrate the application code, and mention /phase2-migratecode is the command to start the migration process.
+- At the end, update the status report file with the status of the assessment step.
