@@ -7,24 +7,27 @@ Assess this application for migration and modernization.
 - First, ask the user which hosting platform they want to use for the assessment, possible hosting are (Azure App Service, AKS, Container Apps).
 - Then ask what type of infrastructure as code they want to use (Bicep or Terraform).
 - Then if the workspace does not contain a 'reports' folder, create one.
+- Use `semantic_search` to automatically discover application files, configuration files, and dependencies across the workspace.
+- Use `file_search` to locate specific framework files (*.csproj, pom.xml, package.json, web.config, etc.).
+- Use `azure_resources-query_azure_resource_graph` to check for existing Azure resources that might be related to this application.
 - Then, assess the workspace and generate a report in the 'reports' folder. The name of the report should be 'application_assessment_report.md'.
 - Analyze the application to determine if it's a .NET or Java application and identify the current framework version.
-- Analyze the project structure, dependencies, and architecture.
+- Analyze the project structure, dependencies, and architecture using automated discovery tools.
 - Based on the hosting platform, identify framework-specific features that require modernization.
 - For .NET applications:
-  - Identify if it's using .NET Framework and which version
-  - Check for WCF services, WebForms, or MVC patterns
-  - Identify authentication mechanisms (Windows Authentication, Forms Auth, etc.)
-  - Analyze configuration files (web.config, app.config)
-  - Check database connections and providers
-  - Identify third-party dependencies and their compatibility
+  - Use `grep_search` to find project files (*.csproj, *.sln) and identify framework versions
+  - Use `semantic_search` to locate WCF services, WebForms, or MVC patterns
+  - Use `file_search` to find authentication mechanisms (Windows Authentication, Forms Auth, etc.)
+  - Use `grep_search` to analyze configuration files (web.config, app.config) for connection strings and settings
+  - Use `semantic_search` to identify database connections and providers
+  - Use `file_search` to check third-party dependencies and their compatibility
 - For Java applications:
-  - Identify Java version and framework (Spring, Java EE, etc.)
-  - Check for SOAP services, Servlets, or JSP pages
-  - Identify authentication mechanisms (JAAS, container-based, etc.)
-  - Analyze configuration files (properties, XML configs)
-  - Check database connections and providers
-  - Identify third-party dependencies and their compatibility
+  - Use `grep_search` to find project files (pom.xml, build.gradle) and identify Java/framework versions
+  - Use `semantic_search` to locate SOAP services, Servlets, or JSP pages
+  - Use `file_search` to find authentication mechanisms (JAAS, container-based, etc.)
+  - Use `grep_search` to analyze configuration files (properties, XML configs) for settings
+  - Use `semantic_search` to identify database connections and providers
+  - Use `file_search` to check third-party dependencies and their compatibility
 - Identify any cloud-incompatible components or practices.
 - Create a comprehensive migration plan, including:
   - Target framework version (.NET 6/7/8 or Java 11/17/21)
@@ -35,8 +38,14 @@ Assess this application for migration and modernization.
   - Configuration transformation strategy
   - Containerization strategy (if applicable)
   - Testing strategy after migration
+  - Error handling and rollback procedures
+  - Dependency compatibility matrix
+  - Security considerations and modernization requirements
 - Draw an architecture diagram of the current application.
 - Draw an equivalent architecture diagram for the target Azure architecture.
+- Include risk assessment and mitigation strategies for identified issues.
+- Provide estimated effort and timeline for each migration phase.
+- If assessment fails due to insufficient information, provide specific guidance on what additional information is needed.
 - If the user runs assess again, ask the user if they want to overwrite the existing report. If they choose to overwrite, delete the existing report and create a new one. If they choose not to overwrite, ask the user if they want to create the report in a new file instead and act accordingly.
 - Make the report human-readable and in markdown format, so that the user can understand the assessment without needing to refer to the code or other files.
 - Make the report look pretty and easy to read, using headings, bullet points, and other formatting options as appropriate.

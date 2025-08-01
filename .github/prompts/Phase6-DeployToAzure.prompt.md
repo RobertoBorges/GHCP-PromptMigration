@@ -1,15 +1,16 @@
 ---
 mode: agent
 ---
-Deploy application to Azure
+Deploy application to Azure, using Azure Developer CLI (azd) for streamlined deployment. 
 
 # Azure Deployment Guide
 
 Deploy the modernized application to the selected Azure platform. Follow these steps:
-- Use `azure_development-get_deployment_best_practices` to get high-level instructions to follow.
-- Use `azure_check_predeploy` to check the infrastructure files and fix issues accordingly.
+- Use `azure_development-summarize_topic` to get high-level deployment instructions.
+- Use `azure_check_predeploy` to perform final infrastructure validation and fix any remaining issues.
 - Use `azure_check_quota` and `azure_check_region` to ensure the Azure resources can be deployed to the target region.
 - Use `azure_azd-up_deploy` to deploy the Azure resources from the infrastructure files.
+- Use `azure_get_azd_app_logs` after deployment to validate application health and troubleshoot any issues.
 
 ## Deployment Approach
 
@@ -75,20 +76,47 @@ Before deploying, ensure:
    ```
 
 3. **Verify Deployment**
-   Check the deployment status and application health:
-   - Verify all resources were created successfully
-   - Check application logs for any errors
-   - Test application functionality
-   - Verify monitoring is working properly
-   - Check that authentication is working correctly
+   Use `azure_get_azd_app_logs` to check application logs and health status:
+   - Verify all resources were created successfully in Azure portal
+   - Check application logs for any errors or warnings
+   - Test application functionality including authentication flows
+   - Verify monitoring is working properly with Application Insights
+   - Check that authentication with Entra ID is working correctly
+   - Validate database connections and data access
+   - Test API endpoints and verify proper responses
+   - Check scaling and performance under load
+   - Verify security configurations are properly applied
 
 ## Post-Deployment Tasks
 
+- Use `azure_applens-diagnose_resource` to perform health checks on deployed resources
 - Configure any additional settings in the Azure portal
-- Set up CI/CD pipelines for future deployments
-- Configure monitoring alerts
+- Set up CI/CD pipelines using `azure_config_deploymentpipeline` for future deployments
+- Configure monitoring alerts and notification channels
 - Set up backup and disaster recovery policies
+- Validate security configurations and run security scans
+- Perform load testing to validate performance
 - Document the deployment process and configuration
+- Create runbooks for operational procedures
+- Set up cost monitoring and optimization alerts
 
-At the end, generate a deployment summary report in the reports folder.
-Also, update the status report file with the status of the deployment step.
+## Error Handling and Troubleshooting
+
+- If deployment fails, use `azure_activity_log-list` to investigate issues
+- Use `azure_applens-diagnose_resource` to get insights into resource problems
+- Check `azure_get_azd_app_logs` for application-specific errors
+- Validate that all prerequisites are met (quotas, permissions, etc.)
+- Verify that infrastructure files pass all validation checks
+- Check for regional service outages or capacity issues
+
+At the end, generate a comprehensive deployment summary report in the reports folder, including:
+- Deployment timeline and status
+- Resource configurations and endpoints
+- Security and monitoring setup
+- Performance baseline measurements
+- Operational procedures and troubleshooting guides
+- Cost analysis and optimization recommendations
+- Next steps for ongoing maintenance and optimization
+
+Suggest that the next step is to set up comprehensive testing, and mention /phase7-setuptesting is the command to start the testing setup process.
+Also, update the status report file with the deployment status and progress towards completion.

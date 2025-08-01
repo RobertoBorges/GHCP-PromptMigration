@@ -11,17 +11,33 @@ Retrieve status of the modernization process
   - Current framework version
   - Target framework version
   - Selected Azure hosting platform (App Service, AKS, or Container Apps)
-  - Completed phases
-  - Current phase
+  - Selected Infrastructure as Code type (Bicep or Terraform)
+  - Completed phases with timestamps:
+    * Phase 1: Assessment
+    * Phase 2: Code Migration
+    * Phase 3: Infrastructure Generation
+    * Phase 4: Code Validation
+    * Phase 5: Infrastructure Validation
+    * Phase 6: Deployment to Azure
+    * Phase 7: Testing Setup
+    * Phase 8: CI/CD Pipeline Setup
+  - Current phase in progress
+  - Overall completion percentage
+  - Quality scores for each completed phase
   - Any errors encountered and the last successful step
-  - Next recommended step
+  - Security and compliance status
+  - Performance metrics and baseline
+  - Next recommended step with specific command
   
 - Make the status file human-readable and in markdown format, with a structured layout:
-  1. Summary section at the top
-  2. Progress tracking with checkboxes
-  3. Details section for each phase
-  4. Issues section if applicable
-  5. Next steps section
+  1. Executive Summary section at the top with key metrics
+  2. Progress tracking with checkboxes and completion percentages
+  3. Quality scores and metrics dashboard
+  4. Detailed section for each phase with timestamps and outcomes
+  5. Issues and risk section with severity levels if applicable
+  6. Performance and security metrics
+  7. Next steps section with specific commands and recommendations
+  8. Resources and documentation links
   
 - Use checkboxes in the status file to indicate steps that have been completed:
   - [x] Completed step
