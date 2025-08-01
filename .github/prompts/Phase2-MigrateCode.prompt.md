@@ -18,6 +18,14 @@ Migrate application code to modern framework version compatible with Azure.
   - Configuration transformation errors
   - Authentication migration failures
 - Based on the assessed application type (.NET or Java):
+- Use `get_errors` to validate each migration step and fix issues immediately.
+- Create comprehensive unit tests for migrated code using modern testing frameworks.
+- Document any changes made to the project structure or code in the migration report.
+- Make the migration report human-readable and in markdown format. Use headings, bullet points, and other formatting options as appropriate.
+- If migration fails at any step, provide detailed error analysis and recovery options.
+- Suggest that the next step is to generate infrastructure files, and mention /phase3-generateinfra is the command to start the infra generation process.
+- At the end, update the status report file with the status of the migration step.
+
 
 ## For .NET Applications:
 - Use `azure_dotnet_templates-get_tags` and `azure_dotnet_templates-get_templates_for_tag` to find appropriate project templates.
@@ -65,23 +73,3 @@ Migrate application code to modern framework version compatible with Azure.
 - Set up proper logging with SLF4J and Azure-compatible appenders.
 - Implement filters/interceptors for cross-cutting concerns.
 - Containerize the application if specified in the assessment report.
-
-## General Rules:
-- Use `get_errors` to validate each migration step and fix issues immediately.
-- Create comprehensive unit tests for migrated code using modern testing frameworks.
-- Implement integration tests for API endpoints and database operations.
-- Set up automated testing pipeline configuration.
-- Create a migration report in the 'reports' folder, named 'code_migration_report.md'. This report should summarize the migration process, including:
-  - Migration steps completed successfully
-  - Issues encountered and resolution steps
-  - Code patterns that were modernized
-  - Breaking changes introduced and mitigation strategies
-  - Performance improvements achieved
-  - Security enhancements implemented
-  - Testing coverage and validation results
-- Document any changes made to the project structure or code in the migration report.
-- Include rollback procedures in case migration needs to be reverted.
-- Make the migration report human-readable and in markdown format. Use headings, bullet points, and other formatting options as appropriate.
-- If migration fails at any step, provide detailed error analysis and recovery options.
-- Suggest that the next step is to generate infrastructure files, and mention /phase3-generateinfra is the command to start the infra generation process.
-- At the end, update the status report file with the status of the migration step.
