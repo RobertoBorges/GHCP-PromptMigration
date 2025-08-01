@@ -1,0 +1,163 @@
+/* General Styles */
+body {
+    background-color: #f5f5f5;
+    font-size: 12px;
+    font-family: Verdana, Helvetica, Sans-Serif;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #000066;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+h1 {
+    font-size: 2em;
+}
+
+h2 {
+    font-size: 1.75em;
+}
+
+h3 {
+    font-size: 1.5em;
+}
+
+a:link, a:visited {
+    color: #034af3;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #1d60ff;
+    text-decoration: underline;
+}
+
+/* Layout */
+.header, .main, .footer {
+    width: 960px;
+    margin: 0 auto;
+}
+
+.header {
+    background-color: #4b6c9e;
+    color: #ffffff;
+    padding: 10px;
+}
+
+.header .title {
+    float: left;
+    width: 600px;
+}
+
+.header .title h1 {
+    color: #fff;
+    margin: 0;
+    padding: 0;
+}
+
+.loginDisplay {
+    float: right;
+    font-size: 1.1em;
+    text-align: right;
+    padding: 10px;
+    color: #fff;
+}
+
+.loginDisplay a:link, .loginDisplay a:visited {
+    color: #fff;
+    text-decoration: underline;
+}
+
+.clear {
+    clear: both;
+}
+
+.navigationMenu {
+    margin: 15px 0 10px 0;
+}
+
+.menu {
+    padding: 4px 0 4px 8px;
+}
+
+.menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.menu li {
+    display: inline;
+    list-style: none;
+    padding: 0 10px;
+}
+
+.menu a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+.menu a:hover {
+    text-decoration: underline;
+}
+
+.main {
+    padding: 20px;
+    background-color: #ffffff;
+    border: 1px solid #999;
+    border-top: none;
+}
+
+.content {
+    line-height: 1.6;
+}
+
+.content ul {
+    padding-left: 20px;
+    margin-bottom: 15px;
+}
+
+.content ul li {
+    margin-bottom: 5px;
+}
+
+.footer {
+    color: #999;
+    padding: 10px 0;
+    text-align: center;
+    line-height: normal;
+}
+
+.dateTime {
+    color: #666;
+    font-style: italic;
+}
+
+/* Form elements */
+input, textarea, select {
+    font-family: inherit;
+    font-size: inherit;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+/* Secure page specific styles */
+.userInfo {
+    border: 1px solid #ddd;
+    padding: 15px;
+    background-color: #f9f9f9;
+    margin: 10px 0;
+}
+
+.error {
+    color: #c00;
+    font-weight: bold;
+}

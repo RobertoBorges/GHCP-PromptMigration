@@ -1,0 +1,30 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.36217.24
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetFramework30ASPNETWEB", "NetFramework30ASPNETWEB.csproj", "{AF5E2A7F-3920-430F-8722-C0E2DD15E913}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Doc", "Doc", "{CF5676ED-2678-464A-A8A4-887770EEA690}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AF5E2A7F-3920-430F-8722-C0E2DD15E913}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF5E2A7F-3920-430F-8722-C0E2DD15E913}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF5E2A7F-3920-430F-8722-C0E2DD15E913}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF5E2A7F-3920-430F-8722-C0E2DD15E913}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EDEC5742-55CC-4186-84E7-A4D9F54783E5}
+	EndGlobalSection
+EndGlobal
