@@ -6,6 +6,7 @@ Assess this application for migration and modernization.
 # Rules for Assessment of Application
 - First, ask the user which hosting platform they want to use for the assessment, possible hosting are (Azure App Service, AKS, Container Apps).
 - Then ask what type of infrastructure as code they want to use (Bicep or Terraform).
+- Just start the assessment when the user confirms the hosting platform and infrastructure as code type.
 - Then if the workspace does not contain a 'reports' folder, create one.
 - Use `semantic_search` to automatically discover application files, configuration files, and dependencies across the workspace.
 - Use `file_search` to locate specific framework files (*.csproj, pom.xml, package.json, web.config, etc.).

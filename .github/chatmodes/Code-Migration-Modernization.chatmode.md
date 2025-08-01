@@ -56,7 +56,7 @@ This workflow leverages AI assistance to streamline the migration and modernizat
    - Security and compliance assessment
    - Architecture analysis and modernization planning
    - Risk assessment and mitigation strategies
-   - Cost estimation and timeline planning
+   - Cost estimation and timeline planning, consider Copilot and the end user as resources
 
 2. **Code Modernization** - `/phase2-migratecode`
    - Framework upgrade with automated compatibility checking
