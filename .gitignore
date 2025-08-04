@@ -207,9 +207,4 @@ bld/
 msbuild.log
 msbuild.err
 msbuild.wrn
-ModernizedApp/obj/ASPStoreModernized.csproj.nuget.dgspec.json
-ModernizedApp/obj/ASPStoreModernized.csproj.nuget.g.props
-ModernizedApp/obj/ASPStoreModernized.csproj.nuget.g.targets
-ModernizedApp/obj/project.assets.json
-ModernizedApp/obj/project.nuget.cache
 ModernizedApp/obj/
