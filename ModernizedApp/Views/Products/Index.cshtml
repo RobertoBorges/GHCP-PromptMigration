@@ -14,10 +14,10 @@
             <p class="price">$@product.Price.ToString("F2")</p>
             <p>@product.Description.Substring(0, Math.Min(100, product.Description.Length))@(product.Description.Length > 100 ? "..." : "")</p>
             <a asp-action="Details" asp-route-id="@product.Id" class="btn btn-primary">View Details</a>
-            <form asp-controller="Cart" asp-action="AddToCart" method="post">
+            <form asp-controller="Cart" asp-action="AddToCart" method="post" class="mt-2 ajax-cart-form">
                 <input type="hidden" name="productId" value="@product.Id" />
                 <input type="hidden" name="quantity" value="1" />
-                <button type="submit" class="btn btn-success mt-2">Add to Cart</button>
+                <button type="submit" class="btn btn-success">Add to Cart</button>
             </form>
         </div>
     }

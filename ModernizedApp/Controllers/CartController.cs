@@ -9,9 +9,9 @@ namespace ASPStoreModernized.Controllers
     public class CartController : Controller
     {
         private readonly StoreDbContext _context;
-        private readonly SessionCartService _cartService;
+        private readonly ICartService _cartService;
 
-        public CartController(StoreDbContext context, SessionCartService cartService)
+        public CartController(StoreDbContext context, ICartService cartService)
         {
             _context = context;
             _cartService = cartService;
@@ -26,22 +26,42 @@ namespace ASPStoreModernized.Controllers
         [HttpPost]
         public async Task<IActionResult> AddToCart(int productId, int quantity = 1)
         {
-            var product = await _context.Products.FindAsync(productId);
-            
-            if (product == null)
+            try
             {
-                return NotFound();
-            }
+                var product = await _context.Products.FindAsync(productId);
+                
+                if (product == null)
+                {
+                    if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                    {
+                        return Json(new { success = false, message = "Product not found" });
+                    }
+                    return NotFound();
+                }
 
-            _cartService.AddToCart(product, quantity);
-            
-            // If this is an AJAX request, return a partial view or JSON
-            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
-            {
-                return Json(new { success = true, message = "Product added to cart", cartCount = _cartService.GetCartItemCount() });
+                _cartService.AddToCart(product, quantity);
+                
+                // If this is an AJAX request, return JSON
+                if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                {
+                    return Json(new { success = true, message = "Product added to cart", cartCount = _cartService.GetCartItemCount() });
+                }
+                
+                return RedirectToAction(nameof(Index));
             }
-            
-            return RedirectToAction(nameof(Index));
+            catch (Exception ex)
+            {
+                // Log the exception
+                Console.WriteLine($"Error in AddToCart: {ex.Message}");
+                
+                if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                {
+                    return Json(new { success = false, message = "Error adding product to cart" });
+                }
+                
+                TempData["ErrorMessage"] = "An error occurred while adding the product to the cart.";
+                return RedirectToAction("Index", "Products");
+            }
         }
 
         [HttpPost]
@@ -60,7 +80,7 @@ namespace ASPStoreModernized.Controllers
         [HttpPost]
         public IActionResult UpdateQuantity(int productId, int quantity)
         {
-            _cartService.UpdateQuantity(productId, quantity);
+            _cartService.UpdateCartQuantity(productId, quantity);
             
             if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
             {

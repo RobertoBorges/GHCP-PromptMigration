@@ -58,7 +58,7 @@ namespace ASPStoreModernized.Services
             SaveCart(cart);
         }
 
-        public void UpdateQuantity(int productId, int quantity)
+        public void UpdateCartQuantity(int productId, int quantity)
         {
             var cart = GetCart();
             cart.UpdateQuantity(productId, quantity);

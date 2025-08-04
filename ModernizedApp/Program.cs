@@ -1,6 +1,7 @@
 using ASPStoreModernized.Data;
 using ASPStoreModernized.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Data.Sqlite;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
 
@@ -9,9 +10,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container
 builder.Services.AddControllersWithViews();
 
-// Add database context
+// Add database context - using in-memory database for development
 builder.Services.AddDbContext<StoreDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseInMemoryDatabase("ASPStoreModernized"));
 
 // Add session services
 builder.Services.AddDistributedMemoryCache(); // Use Redis in production: .AddStackExchangeRedisCache
