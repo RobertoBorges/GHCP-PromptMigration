@@ -1,0 +1,13 @@
+@model int
+
+<a asp-controller="Cart" asp-action="Index" class="btn btn-light">
+    <i class="bi bi-cart"></i> Cart
+    @if (Model > 0)
+    {
+        <span class="badge bg-danger cart-count">@Model</span>
+    }
+    else
+    {
+        <span class="badge bg-secondary cart-count">0</span>
+    }
+</a>

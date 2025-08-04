@@ -1,0 +1,101 @@
+@model ASPStoreModernized.Models.ShoppingCart
+
+@{
+    ViewData["Title"] = "Shopping Cart";
+}
+
+<h1>Shopping Cart</h1>
+
+@if (Model.Items.Any())
+{
+    <div class="cart-container">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Items)
+                {
+                    <tr>
+                        <td>@item.ProductName</td>
+                        <td>$@item.Price.ToString("F2")</td>
+                        <td>
+                            <div class="quantity-control">
+                                <form asp-action="UpdateQuantity" method="post" class="d-inline">
+                                    <input type="hidden" name="productId" value="@item.ProductId" />
+                                    <input type="number" name="quantity" value="@item.Quantity" min="1" class="form-control form-control-sm d-inline" style="width: 60px;" />
+                                    <button type="submit" class="btn btn-sm btn-primary">Update</button>
+                                </form>
+                            </div>
+                        </td>
+                        <td>$@item.Total.ToString("F2")</td>
+                        <td>
+                            <form asp-action="RemoveFromCart" method="post">
+                                <input type="hidden" name="productId" value="@item.ProductId" />
+                                <button type="submit" class="btn btn-sm btn-danger">Remove</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="3" class="text-right"><strong>Total:</strong></td>
+                    <td><strong>$@Model.TotalPrice.ToString("F2")</strong></td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
+
+        <div class="cart-actions d-flex justify-content-between">
+            <form asp-action="ClearCart" method="post">
+                <button type="submit" class="btn btn-warning">Clear Cart</button>
+            </form>
+
+            <div class="checkout-actions">
+                <a asp-controller="Products" asp-action="Index" class="btn btn-secondary">Continue Shopping</a>
+                <button class="btn btn-success">Checkout</button>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="alert alert-info">
+        Your cart is empty. <a asp-controller="Products" asp-action="Index">Continue shopping</a> to add items to your cart.
+    </div>
+}
+
+@section Styles {
+    <style>
+        .cart-container {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 20px;
+        }
+
+        .cart-actions {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .checkout-actions {
+            display: flex;
+            gap: 10px;
+        }
+    </style>
+}

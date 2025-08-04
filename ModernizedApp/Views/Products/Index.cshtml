@@ -1,0 +1,59 @@
+@model IEnumerable<ASPStoreModernized.Models.Product>
+
+@{
+    ViewData["Title"] = "Product Catalog";
+}
+
+<h1>Product Catalog</h1>
+
+<div class="product-grid">
+    @foreach (var product in Model)
+    {
+        <div class="product-item">
+            <h3>@product.Name</h3>
+            <p class="price">$@product.Price.ToString("F2")</p>
+            <p>@product.Description.Substring(0, Math.Min(100, product.Description.Length))@(product.Description.Length > 100 ? "..." : "")</p>
+            <a asp-action="Details" asp-route-id="@product.Id" class="btn btn-primary">View Details</a>
+            <form asp-controller="Cart" asp-action="AddToCart" method="post">
+                <input type="hidden" name="productId" value="@product.Id" />
+                <input type="hidden" name="quantity" value="1" />
+                <button type="submit" class="btn btn-success mt-2">Add to Cart</button>
+            </form>
+        </div>
+    }
+</div>
+
+@section Styles {
+    <style>
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-gap: 20px;
+            margin-top: 20px;
+        }
+
+        .product-item {
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .product-item h3 {
+            margin-top: 0;
+            color: #333;
+        }
+
+        .price {
+            font-size: 1.2em;
+            color: #e74c3c;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .btn {
+            display: inline-block;
+        }
+    </style>
+}

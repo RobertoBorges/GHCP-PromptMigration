@@ -1,0 +1,97 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Hero section styling */
+.hero-section {
+  background-color: #f8f9fa;
+  padding: 3rem 0;
+  margin-bottom: 2rem;
+  border-radius: 0.5rem;
+}
+
+.hero-section h1 {
+  color: #0d6efd;
+}
+
+/* Product card styling */
+.product-card {
+  transition: all 0.3s ease;
+  height: 100%;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.product-card .card-img-top {
+  height: 200px;
+  object-fit: cover;
+}
+
+/* Cart badge styling */
+.cart-count {
+  position: relative;
+  top: -1px;
+}
+
+/* Footer styling */
+.footer {
+  background-color: #f8f9fa;
+  padding: 1.5rem 0;
+}
+
+/* Form styling */
+.form-control:focus {
+  border-color: #0d6efd;
+}
+
+/* Product details page */
+.product-detail-img {
+  max-height: 400px;
+  object-fit: contain;
+}
+
+/* Cart page styling */
+.cart-item {
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.cart-item img {
+  max-height: 100px;
+  object-fit: contain;
+}
+
+/* Button styling */
+.btn-primary {
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+}
+
+.btn-primary:hover {
+  background-color: #0b5ed7;
+  border-color: #0a58ca;
+}

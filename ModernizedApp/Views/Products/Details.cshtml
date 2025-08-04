@@ -1,0 +1,77 @@
+@model ASPStoreModernized.Models.Product
+
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<div class="product-detail">
+    <h1>@Model.Name</h1>
+    
+    <div class="product-meta">
+        <span class="price">$@Model.Price.ToString("F2")</span>
+        <span class="product-id">Product ID: @Model.Id</span>
+    </div>
+    
+    <div class="product-description">
+        <h2>Description</h2>
+        <p>@Model.Description</p>
+    </div>
+    
+    <div class="add-to-cart-form">
+        <form asp-controller="Cart" asp-action="AddToCart" method="post">
+            <input type="hidden" name="productId" value="@Model.Id" />
+            <div class="form-group">
+                <label for="quantity">Quantity:</label>
+                <input type="number" class="form-control" id="quantity" name="quantity" value="1" min="1" style="width: 100px;" />
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg mt-2">Add to Cart</button>
+        </form>
+    </div>
+    
+    <div class="back-link mt-4">
+        <a asp-action="Index" class="btn btn-secondary">Back to Products</a>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .product-detail {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .product-meta {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .price {
+            font-size: 1.8em;
+            color: #e74c3c;
+            font-weight: bold;
+            margin-right: 20px;
+        }
+        
+        .product-id {
+            color: #999;
+        }
+        
+        .product-description {
+            margin-bottom: 30px;
+        }
+        
+        .product-description h2 {
+            font-size: 1.4em;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .add-to-cart-form {
+            margin-top: 20px;
+        }
+    </style>
+}
