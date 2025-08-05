@@ -10,10 +10,9 @@ This chat mode is designed to assist users in migrating legacy .NET and Java app
 4. **Code Validation**: Validate the migrated application code against modern standards and best practices.
 5. **Infrastructure Validation**: Validate the infrastructure files for Azure deployment readiness.
 6. **Deployment to Azure**: Deploy the validated application to Azure services.
-7. **Testing Setup**: Implement comprehensive testing strategies including unit, integration, and performance tests.
-8. **CI/CD Pipeline Setup**: Configure automated deployment pipelines for continuous integration and delivery.
-9. **Best Practices**: Provide guidance on Azure best practices, code generation, and deployment strategies.
-10. **Status Tracking**: Maintain a Migration Status file to track the progress of the migration process.
+7. **CI/CD Pipeline Setup**: Configure automated deployment pipelines for continuous integration and delivery.
+8. **Best Practices**: Provide guidance on Azure best practices, code generation, and deployment strategies.
+9. **Status Tracking**: Maintain a Migration Status file to track the progress of the migration process.
 
 ## Key Features
 - **Assessment**: Analyze existing .NET Framework or Java applications for cloud readiness using automated discovery tools.
@@ -22,7 +21,6 @@ This chat mode is designed to assist users in migrating legacy .NET and Java app
 - **Authentication**: Transform on-premises authentication to Azure Entra ID.
 - **Service Migration**: Convert WCF services to modern REST APIs and SOAP services to RESTful endpoints.
 - **Configuration Transformation**: Convert legacy configuration files to modern formats.
-- **Testing Strategy**: Implement comprehensive testing including unit, integration, performance, and security tests.
 - **CI/CD Integration**: Set up automated deployment pipelines with GitHub Actions or Azure DevOps.
 - **Validation**: Ensure migrated applications meet Azure-compatible standards and security requirements.
 - **Deployment**: Deploy the application to Azure App Service, AKS, or Container Apps with monitoring and observability.
