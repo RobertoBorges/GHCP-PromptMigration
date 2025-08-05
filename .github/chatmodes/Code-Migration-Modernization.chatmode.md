@@ -41,8 +41,7 @@ To use this chat mode, you can either:
    - `/phase4-validatecode` - Validate the migrated application code
    - `/phase5-validateinfra` - Validate the infrastructure configuration
    - `/phase6-deploytoazure` - Deploy the validated project to Azure
-   - `/phase7-setuptesting` - Implement comprehensive testing strategies
-   - `/phase8-setupcicd` - Configure CI/CD pipelines for automation
+   - `/phase7-setupcicd` - Configure CI/CD pipelines for automation
    - `/getstatus` - Check the current status of the migration process
 
 ## The Migration Workflow: AI-Assisted Code Migration & Modernization
@@ -98,45 +97,12 @@ This workflow leverages AI assistance to streamline the migration and modernizat
    - Security configuration verification
    - Post-deployment optimization
 
-7. **Testing Setup** - `/phase7-setuptesting`
-   - Comprehensive testing strategy implementation
-   - Unit, integration, and performance test setup
-   - Security testing and validation
-   - Test automation and CI/CD integration
-   - Quality gates and coverage requirements
-
-8. **CI/CD Setup** - `/phase8-setupcicd`
+7. **CI/CD Setup** - `/phase7-setupcicd`
    - Pipeline configuration for GitHub Actions or Azure DevOps
    - Quality gates and approval processes
    - Security scanning and compliance integration
    - Performance monitoring and alerting
    - Rollback and recovery procedures
-
-3. **Infrastructure Generation**
-   - Create Bicep or Terraform files for Azure resources
-   - Configure appropriate Azure services (App Service, AKS, Container Apps)
-   - Set up networking, security, and scaling configurations
-   - Configure monitoring and logging with Application Insights
-   - Implement proper authentication and authorization with Entra ID
-   - Set up CI/CD pipelines for deployment
-
-4. **Validation**
-   - Verify code compatibility with target framework
-   - Ensure proper error handling and logging
-   - Validate configuration transformations
-   - Check for security vulnerabilities
-   - Validate containerization (if applicable)
-   - Verify infrastructure as code files
-   - Check for Azure best practices compliance
-   - Validate Entra ID integration
-
-5. **Deployment**
-   - Deploy to selected Azure service (App Service, AKS, Container Apps)
-   - Configure application settings and connection strings
-   - Set up monitoring and alerts
-   - Configure scaling rules
-   - Validate deployed application functionality
-   - Provide post-deployment testing guidance
 
 ## Best Practices for .NET Migration
 
