@@ -1,0 +1,40 @@
+﻿@model ContosoUniversity.Web.Models.HomeViewModel
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="jumbotron">
+    <h1>Contoso University</h1>
+    <p class="lead">Welcome to Contoso University, a sample application for managing a university's students, courses, and faculty.</p>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card shadow">
+            <div class="card-body">
+                <h2 class="card-title">Students</h2>
+                <p class="card-text">We have <span class="badge bg-primary">@Model.StudentCount</span> students enrolled at Contoso University.</p>
+                <p><a class="btn btn-primary" asp-controller="Students" asp-action="Index">View Students &raquo;</a></p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card shadow">
+            <div class="card-body">
+                <h2 class="card-title">Courses</h2>
+                <p class="card-text">We offer <span class="badge bg-primary">@Model.CourseCount</span> courses across multiple departments.</p>
+                <p><a class="btn btn-primary" asp-controller="Courses" asp-action="Index">View Courses &raquo;</a></p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card shadow">
+            <div class="card-body">
+                <h2 class="card-title">About</h2>
+                <p class="card-text">Learn more about Contoso University and how this application was built.</p>
+                <p><a class="btn btn-primary" asp-controller="Home" asp-action="About">Learn More &raquo;</a></p>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,109 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+    <title>Contoso University with DiPS</title>
+    <link href="/Content/bootstrap.css" rel="stylesheet">
+    <link href="/Content/bootstrapValidator.css" rel="stylesheet">
+    <link href="/Content/bootstrap-datetimepicker.css" rel="stylesheet">
+    <link href="/Content/jquery_ui/jquery-ui.min.css" rel="stylesheet">
+    <link href="/Content/bs_pagination/jquery.bs_pagination.min.css" rel="stylesheet">
+    <link href="/Content/jui_filter/jquery.jui_filter_rules.bs.min.css" rel="stylesheet">
+    <link href="/Content/bs_grid/jquery.bs_grid.min.css" rel="stylesheet">
+    <link href="/Content/Site.css" rel="stylesheet" />
+    <script src="/Scripts/DiPSClient.js"></script>
+    <script src="/Scripts/main.js"></script>
+    <script src="/Scripts/require.config.js"></script>
+    <script src="/Scripts/require.js"></script>
+    <script>
+        //we initiate the connection as soon as we can
+        diPSClient.Connect('ws://localhost:8888/dips');
+    </script>
+
+</head>
+<body cz-shortcut-listen="true">
+
+
+
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+
+        <div class="navbar-header">
+            <div class="container">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+
+                    <span class="sr-only">Toggle navigation</span>
+
+                    <span class="icon-bar"></span>
+
+                    <span class="icon-bar"></span>
+
+                    <span class="icon-bar"></span>
+
+                </button>
+                <a class="navbar-brand" href="/" style="margin-top:-23px"><img src="/Content/dipslogo.png" style="border:none;" /></a>
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a href="/Student/index.html">Students</a></li>
+                        <li><a href="/Instructor/index.html">Instructors</a></li>
+                        <li><a href="/Department/index.html">Departments</a></li>
+                        <li><a href="/Course/index.html">Courses</a></li>
+                        <!--toplinks-->
+                    </ul>
+
+                </div>
+
+                <!--/.nav-collapse -->
+            </div>
+        </div>
+    </div>
+
+    <div id="spinjs" class="spinjs"></div>
+
+    <div class="container">
+
+
+        <div class="jumbotron">
+            <h1>Contoso University</h1>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <h2>Welcome to DiPS backend for Contoso University</h2>
+                <p>
+                    Contoso University is a sample application that
+                    demonstrates how to use DiPS to build a back end for a web application.
+                </p>
+            </div>
+            <div class="col-md-4">
+                <h2>Contoso University</h2>
+                <p>The original Contoso University application is a sample application from Microsoft that was created as a tutorial for Asp.Net MVC 5 and Entity Framework Code First</p>
+                <p>You can see the tutorial <a target="_blank" class="btn btn-info btn-sm" href="http://www.asp.net/mvc/overview/getting-started/getting-started-with-ef-using-mvc/creating-an-entity-framework-data-model-for-an-asp-net-mvc-application" > here</a>.</p>
+                <p>You can download the original sample code <a  target="_blank" class="btn btn-info btn-sm" href="https://code.msdn.microsoft.com/ASPNET-MVC-Application-b01a9fe8">here</a></p>
+            </div>
+            <div class="col-md-4">
+                <h2>DiPS</h2>
+                <p>DiPS is a <b>Di</b>stributed <b>P</b>ublish <b>S</b>ubscribe service</p>
+                <p>You can download the DiPS service <a class="btn btn-info btn-sm" href="https://github.com/pedro-ramirez-suarez/DiPS/raw/master/binaries/DipsServiceBinaries.zip">here</a></p>
+                <p>Download the zip, and uncompress the file to <code>c:\dips</code></p>
+                <i>You can uncompress the file into another folder, but you may need to change the app.config of the ContosoBackend project to point it into the right folder.</i>
+            </div>
+            
+        </div>
+
+
+
+
+    </div>
+
+
+
+</body>
+</html>
+
+

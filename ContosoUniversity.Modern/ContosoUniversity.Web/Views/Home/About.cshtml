@@ -1,0 +1,57 @@
+@{
+    ViewData["Title"] = "About";
+}
+
+<h2>About Contoso University</h2>
+
+<div class="row mt-4">
+    <div class="col-md-8">
+        <h3>Our Mission</h3>
+        <p>
+            Contoso University is a sample ASP.NET Core MVC application that demonstrates best practices
+            for building a modern, cloud-native application for Azure.
+        </p>
+        
+        <h3>Technology Stack</h3>
+        <ul>
+            <li><strong>Backend:</strong> ASP.NET Core 8.0 MVC</li>
+            <li><strong>Data Access:</strong> Entity Framework Core</li>
+            <li><strong>Authentication:</strong> Microsoft Entra ID (formerly Azure AD) with Microsoft.Identity.Web</li>
+            <li><strong>Real-time Communication:</strong> SignalR</li>
+            <li><strong>Cloud Platform:</strong> Azure App Service</li>
+            <li><strong>Monitoring:</strong> Application Insights</li>
+        </ul>
+        
+        <h3>Migration Journey</h3>
+        <p>
+            This application was migrated from a legacy .NET Framework 4.5.1 application that used DiPS for 
+            communication between a console backend and HTML/JavaScript frontend. The migration included:
+        </p>
+        <ul>
+            <li>Modernizing the code to ASP.NET Core 8.0</li>
+            <li>Replacing Needletail ORM with Entity Framework Core</li>
+            <li>Implementing SignalR for real-time communication</li>
+            <li>Adding Microsoft Entra ID authentication</li>
+            <li>Setting up Application Insights for monitoring</li>
+            <li>Creating a cloud-native application ready for Azure App Service</li>
+        </ul>
+        
+        <div class="alert alert-info mt-4">
+            <strong>Note:</strong> This is a demonstration application and not intended for production use.
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Application Stats</h4>
+            </div>
+            <div class="card-body">
+                <p><strong>Version:</strong> 1.0.0</p>
+                <p><strong>Build Date:</strong> August 5, 2025</p>
+                <p><strong>.NET Version:</strong> 8.0</p>
+                <p><strong>EF Core Version:</strong> 8.0.8</p>
+                <p><strong>Hosted On:</strong> Azure App Service</p>
+            </div>
+        </div>
+    </div>
+</div>

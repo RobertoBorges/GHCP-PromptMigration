@@ -1,0 +1,41 @@
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+
+.spinjs {
+    position: absolute;
+    margin: 30% 50%;
+}
+
+
+#res {
+            margin: 0px;
+            padding-left: 0px;
+            width: 150px;
+        }
+        
+        #res li {
+            font-size: 1.1em;
+            width: 100%;
+            min-width:200px;
+            height:30px;
+            padding-left:5px;
+            padding-top:3px;
+            list-style-type: none;
+			background-color: lightgray;
+        }
+        
+        #res li:hover {
+            background-color: #054e82;
+            border: 1px solid #808080;
+            color: #FFF;
+            cursor: pointer;
+        }

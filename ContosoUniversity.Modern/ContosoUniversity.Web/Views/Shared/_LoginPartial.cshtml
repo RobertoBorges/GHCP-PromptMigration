@@ -1,0 +1,19 @@
+@using System.Security.Claims
+
+<ul class="navbar-nav">
+@if (User.Identity?.IsAuthenticated == true)
+{
+    <li class="nav-item">
+        <span class="nav-link text-light">Hello @User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value!</span>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-light" asp-area="MicrosoftIdentity" asp-controller="Account" asp-action="SignOut">Sign out</a>
+    </li>
+}
+else
+{
+    <li class="nav-item">
+        <a class="nav-link text-light" asp-area="MicrosoftIdentity" asp-controller="Account" asp-action="SignIn">Sign in</a>
+    </li>
+}
+</ul>
