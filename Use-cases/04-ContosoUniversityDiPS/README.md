@@ -1,24 +1,33 @@
-# Contoso University with DiPS
-## A web application with a C# backend build with DiPS.
+# Contoso University [![Build Status](https://travis-ci.org/alimon808/contoso-university.svg?branch=master)](https://travis-ci.org/alimon808/contoso-university)
+Contoso University is a place for learning AspNetCore and related technologies.  This demo application is an amalgamation of smaller demo applications found in tutorials at [AspNetCore docs](https://docs.microsoft.com/en-us/aspnet/core/).  The tutorials are great at demonstrating isolated concepts, but issues surfaces when applying these concepts/techniques in a larger context.  The purpose of this demo application is to apply concepts/techniques learned from those tutorial into a single domain (i.e. university).
 
-<a href="http://pedro-ramirez-suarez.github.io/DiPS/" target="_blank">DiPS</a> is a Distributed Publish Subscribe service, built with C# and clients for C#, Ruby and Javascript.
+### ContosoUniversity.Web
+- Traditional Web App using MVC + Razor Pages
+- [Demo](http://contoso-university-web.adrianlimon.com)
+### ContosoUniversity.Api
+- Traditional Rest Api
+- [Demo](http://contoso-university-api.adrianlimon.com/)
+- Generate JWT Token at http://contoso-university-web.adrianlimon.com/api/token to access secure api content.  Requires registering via Web App.
+### Testing
+- Unit Testing using [Moq](https://github.com/Moq/moq4/wiki/Quickstart) and [xUnit](https://xunit.github.io/docs/getting-started-dotnet-core)
+- Integration Testing using TestHost and InMemoryDatabase
+- UI Testing using Selenium
+### Security
+- using Identity 2.0
+- Confirm Email using [SendGrid](sendgrid.com)
+- Confirm Phone using [Twilio](https://www.twilio.com/sms/api)
+- Two-Factor Authentication - [see tutorial](https://docs.microsoft.com/en-us/aspnet/core/security/authentication/2fa)
+- OAuth 2 - Enable Google & Facebook logins
+- JWT (Json Web Token) - use to access secure API
+### Technologies
+- [ASP.NET Core 2.0](https://blogs.msdn.microsoft.com/webdev/2017/08/14/announcing-asp-net-core-2-0/)
+- Asp.Net Core Mvc 2.0 / Razor 2.0
+- Entity Framework Core 2.0 / Identity 2.0
+- Moq
+- xUnit
+- Twilio
+- SendGrid
 
-The application is a demonstration of how to build a web application that has a console application as backend and communicates with it through DiPS, the web appliction is built only with html, css and javascript.
-
-## Running the application.
-The first time you run the application the database structure will be created, you need to create the database and modify the console application  app.config file accordingly.
-
-Run the website without debugging(ctrl+F5).
-
-## Points of interest
-The backend uses the <a href="http://www.nuget.org/packages/DiPSBackEndApplication/" target="_blank">DiPSBackEndApplication</a> nuget package, this package contains functionality that facilitates the creation of the service that acts as the backend, like registration of the controllers and it's methods, it also uses the <a href="http://www.nuget.org/packages/Needletail.DataAccess/" target="_blank">Needletail</a> micro orm and the  <a href="http://www.nuget.org/packages/Needletail.DataAccess.Migrations/" target="_blank">Needletail Migrations</a> packages for the data base access and initialization.
-
-## Original idea.
-The original contoso university application is a sample app and tutorial from Microsoft, the tutorial is located <a href="https://www.asp.net/mvc/overview/getting-started/getting-started-with-ef-using-mvc/creating-an-entity-framework-data-model-for-an-asp-net-mvc-application" target="_blank">here</a>
-
-## Things to improve
-The application needs some improvement handling a high number of  concurrent users, it handles the load pretty well, but some times some browsers may react to events that are intended to be for other user, this is not hard to fix, but right now I am not sure about the best way to handle some scenarios.
-
-
-
-
+### Design Patterns
+- [Repository](https://social.technet.microsoft.com/wiki/contents/articles/36287.repository-pattern-in-asp-net-core.aspx)
+- [Unit Of Work](https://docs.microsoft.com/en-us/aspnet/core/data/ef-mvc/advanced)
