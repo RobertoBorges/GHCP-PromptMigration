@@ -76,7 +76,7 @@ Configure automated deployment pipelines for continuous integration and delivery
 1. Clone this repository
 2. Install [GitHub Copilot](https://copilot.github.com/) in your Visual Studio Code
 3. Open one of the use case projects in VS Code
-4. Start a chat with GitHub Copilot using the `/phase1-assessproject` command
+4. Start a chat with GitHub Copilot using the `/phase1-assessproject under the folder #file:02-NetFramework30-ASPNET-WEB` command
 5. Follow the guided prompts to complete each phase of the migration process
 
 ## Target Azure Hosting Platforms
