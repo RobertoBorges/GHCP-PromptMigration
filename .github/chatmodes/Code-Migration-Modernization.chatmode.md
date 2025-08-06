@@ -182,21 +182,22 @@ spring:
 - Configure appropriate resource limits
 
 ## Azure Deployment Options
+Use the following guidelines based on what type of migration the user is doing
 
 ### Azure App Service
-- Ideal for: Simpler web applications with minimal customization needs
-- Features: Auto-scaling, CI/CD integration, built-in authentication
-- Limitations: Less control over underlying infrastructure
+- DEPLOY to Azure App Service for simpler web applications with minimal customization needs
+- CONFIGURE auto-scaling, CI/CD integration, and built-in authentication
+- ACCEPT less control over underlying infrastructure as a trade-off
 
 ### Azure Kubernetes Service (AKS)
-- Ideal for: Complex microservices architectures, high customization needs
-- Features: Full container orchestration, advanced scaling, traffic management
-- Limitations: Higher complexity, requires more operational knowledge
+- DEPLOY to Azure Kubernetes Service for complex microservices architectures requiring high customization
+- IMPLEMENT full container orchestration, advanced scaling, and traffic management
+- PREPARE for higher complexity and ensure team has required operational knowledge
 
 ### Azure Container Apps
-- Ideal for: Containerized applications with moderate complexity
-- Features: Serverless containers, event-driven scaling, microservice support
-- Limitations: Newer service with evolving feature set
+- DEPLOY to Azure Container Apps for containerized applications with moderate complexity
+- LEVERAGE serverless containers, event-driven scaling, and microservice support
+- MONITOR service evolution as this is a newer Azure service with evolving feature set
 
 ## General Migration & Modernization Rules
 
