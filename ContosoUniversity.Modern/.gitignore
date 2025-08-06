@@ -1,0 +1,88 @@
+## .NET Core
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## Visual Studio files
+.vs/
+.vscode/
+*.nupkg
+*.pfx
+*.snk
+
+## User-specific files
+*.userprefs
+*.usertasks
+
+## Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+build/
+bld/
+[Bb]in/
+[Oo]bj/
+msbuild.log
+msbuild.err
+msbuild.wrn
+
+## Node.js Tools for Visual Studio
+.ntvs_analysis.dat
+node_modules/
+
+## Visual Studio code coverage results
+*.coverage
+*.coveragexml
+
+## MSTest test Results
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+
+## .NET Core publishing files
+*.pubxml
+*.publishproj
+PublishProfiles/
+PublishScripts/
+
+## Azure App Service publish settings
+*.azurePubxml
+*.pubxml
+*.publishsettings
+
+## SQL Server files
+*.mdf
+*.ldf
+*.ndf
+
+## Logs
+*.log
+*.log.*
+logs/
+
+## Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+## Application Insights configuration
+ApplicationInsights.config
+
+## Runtime-generated files
+wwwroot/dist/
+wwwroot/lib/
+
+## Local development settings
+appsettings.Development.json
+appsettings.Local.json
+
+## Rider
+.idea/
+*.sln.iml
