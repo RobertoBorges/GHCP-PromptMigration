@@ -1,0 +1,56 @@
+@model ContosoUniversity.Web.ViewModels.ManageIndexViewModel
+
+@{
+    ViewData["Title"] = "Manage Account Settings";
+}
+
+<h2>@ViewData["Title"]</h2>
+<p class="text-success">@ViewData["StatusMessage"]</p>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>Password:</dt>
+        <dd>
+            @if (Model.HasPassword)
+            {
+                <a asp-controller="Manage" asp-action="ChangePassword" class="btn-bracketed">Change</a>
+            }
+        </dd>
+        <dt>Phone Number:</dt>
+        <dd>
+            @(Model.PhoneNumber ?? "None")
+            @if (Model.PhoneNumber != null)
+            {
+                <br />
+                <a asp-controller="Manage" asp-action="AddPhoneNumber" class="btn-bracketed">Change</a>
+                <form asp-controller="Manage" asp-action="RemovePhoneNumber" method="post" style="display:inline" class="btn-bracketed">
+                    <button type="submit" class="btn-link">Remove</button>
+                </form>
+            }
+            else
+            {
+                <a asp-controller="Manage" asp-action="AddPhoneNumber" class="btn-bracketed">Add</a>
+            }
+
+        </dd>
+        @if (Model.PhoneNumber != null)
+        {
+            <dt>Two-Factor Authentication</dt>
+            <dd>
+                @if (Model.TwoFactor)
+                {
+                    <form asp-controller="Manage" asp-action="DisableTwoFactorAuthentication" method="post" class="form-horizontal">
+                        Enabled <button type="submit" class="btn-link btn-bracketed">Disable</button>
+                    </form>
+                }
+                else
+                {
+                    <form asp-controller="Manage" asp-action="EnableTwoFactorAuthentication" method="post" class="form-horizontal">
+                        <button type="submit" class="btn-link btn-bracketed">Enable</button> Disabled
+                    </form>
+                }
+            </dd>
+        }
+    </dl>
+</div>
