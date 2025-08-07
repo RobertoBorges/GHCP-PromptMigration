@@ -9,29 +9,27 @@ Generate Infrastructure as Code Files for Azure Deployment
 - Use `azure_check_region` to validate that required Azure services are available in the target region.
 - Use `azure_check_quota` to ensure sufficient quota for deployment.
 - Create an 'infra' directory in the modernized project folder if it doesn't already exist.
-- At the end, update the status report file with the status of the migration step.
 - Create an azure.yaml file in the root of the modernized project for Azure Developer CLI (azd) support.
 - Use `azure_check_predeploy` to validate the generated infrastructure files.
 - Use managed identities for authentication instead of connection strings and keys.
 - Set up proper RBAC with least privilege principles.
 - Configure appropriate scaling settings based on the application requirements.
 - Set up proper networking and security configurations including private endpoints where applicable.
-- Implement disaster recovery and backup strategies.
 - Configure cost optimization settings (auto-scaling, reserved instances where appropriate).
 - Set up monitoring, alerting, and log aggregation.
 - Include infrastructure testing and validation scripts.
+- If infrastructure generation fails, provide detailed error analysis and alternative approaches.
+- Make the infrastructure section in the migration report human-readable and in markdown format, using headings, bullet points, and other formatting options as appropriate.
+- Suggest that the next step is to validate the migrated code, and mention /phase4-validatecode is the command to start the code validation process.
 - Update the migration report in the 'reports' folder with information about the generated infrastructure, including:
   - Infrastructure components created
   - Security configurations implemented  
   - Monitoring and logging setup
-  - Cost optimization measures
   - Scaling and performance configurations
   - Any issues encountered during generation
-- If infrastructure generation fails, provide detailed error analysis and alternative approaches.
-- Make the infrastructure section in the migration report human-readable and in markdown format, using headings, bullet points, and other formatting options as appropriate.
-- Suggest that the next step is to validate the migrated code, and mention /phase4-validatecode is the command to start the code validation process.
-- At the end, update the status report file with the status of the infrastructure generation step.
-- Based on the chosen Azure hosting platform in the assessment report (App Service, AKS, or Container Apps), generate the appropriate infrastructure files:
+
+
+Based on the chosen Azure hosting platform in the assessment report (App Service, AKS, or Container Apps), generate the appropriate infrastructure files:
 
 ## For Bicep Infrastructure:
 - Use `azure_bicep_schemas-get_bicep_resource_schema` tool for each resource type to ensure correct schema usage.
@@ -74,4 +72,3 @@ Generate Infrastructure as Code Files for Azure Deployment
 - Configure Entra ID integration for authentication.
 - Set up database resources if applicable (Azure SQL, Cosmos DB, etc.).
 - Include proper tagging and naming conventions.
-

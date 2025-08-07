@@ -6,9 +6,12 @@ Assess this application for migration and modernization.
 # Rules for Assessment of Application
 - First, ask the user which hosting platform they want to use for the assessment, possible hosting are (Azure App Service, AKS, Container Apps).
 - Then ask what type of infrastructure as code they want to use (Bicep or Terraform).
-- Just start the assessment when the user confirms the hosting platform and infrastructure as code type.
+- Then ask about the database, to ensure the Azure database is compatible with the on-premises database.
+- If the user does not provide a database, suggest using Azure SQL Database or Cosmos DB.
+- Just start the assessment when the user confirms the hosting platform, infrastructure as code type, and database.
 - Then if the workspace does not contain a 'reports' folder, create one.
 - Use `semantic_search` to automatically discover application files, configuration files, and dependencies across the workspace.
+- Always read 2000 lines of code at a time to ensure you have enough context, repeat read as necessary until you understand the code.
 - Use `file_search` to locate specific framework files (*.csproj, pom.xml, package.json, web.config, etc.).
 - Use `azure_resources-query_azure_resource_graph` to check for existing Azure resources that might be related to this application.
 - Then, assess the workspace and generate a report in the 'reports' folder. The name of the report should be 'application_assessment_report.md'.
@@ -49,6 +52,7 @@ Assess this application for migration and modernization.
 - If assessment fails due to insufficient information, provide specific guidance on what additional information is needed.
 - If the user runs assess again, ask the user if they want to overwrite the existing report. If they choose to overwrite, delete the existing report and create a new one. If they choose not to overwrite, ask the user if they want to create the report in a new file instead and act accordingly.
 - Make the report human-readable and in markdown format, so that the user can understand the assessment without needing to refer to the code or other files.
+- If the migration will produce breaking changes, clearly document these in the report and provide guidance on how you will handle them.
 - Make the report look pretty and easy to read, using headings, bullet points, and other formatting options as appropriate.
 - Include date and time at the beginning of the report.
 - Suggest that the next step is to migrate the application code, and mention /phase2-migratecode is the command to start the migration process.

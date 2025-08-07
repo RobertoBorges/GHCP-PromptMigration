@@ -7,21 +7,21 @@ Migrate application code to modern framework version compatible with Azure.
 - Ensure appropriate Azure extensions for the target framework are installed in VS Code.
 - Always start migration by creating a new folder with an intuitive name for the modernized project. Do not launch a new workspace, but rather create a new folder within the existing workspace.
 - Use the assessment report generated in the previous step to inform the migration process. The assessment report can be found in the 'reports' folder.
+- Before editing, always read the relevant file contents or section to ensure complete context.
 - Use `semantic_search` to identify all code files that need migration.
+- Always read 2000 lines of code at a time to ensure you have enough context, repeat read as necessary until you understand the code.
+- If a patch is not applied correctly, attempt to reapply it.
+- Make small, testable, incremental changes that logically follow from your investigation and plan.
 - Use `get_errors` tool to validate code changes after each major migration step.
 - Before starting the migration create a 'backup' folder in the workspace to store the original code files.
 - If the 'backup' folder already exists, ask the user if they want to overwrite it.
 - Use the guidance provided in #file:Code-Migration-Modernization.chatmode.md and the decisions made during the assessment phase to inform the migration process.
-- Implement error handling for common migration issues:
-  - Package compatibility conflicts
-  - Breaking API changes
-  - Configuration transformation errors
-  - Authentication migration failures
+- Containerize the application if specified in the assessment report.
+- Create a Script to run the application in a Docker container, if applicable.
+- Create a Script to build and run the application on windows or Linux.
 - Based on the assessed application type (.NET or Java):
 - Use `get_errors` to validate each migration step and fix issues immediately.
-- Create comprehensive unit tests for migrated code using modern testing frameworks.
 - Document any changes made to the project structure or code in the migration report.
-- Make the migration report human-readable and in markdown format. Use headings, bullet points, and other formatting options as appropriate.
 - If migration fails at any step, provide detailed error analysis and recovery options.
 - Suggest that the next step is to generate infrastructure files, and mention /phase3-generateinfra is the command to start the infra generation process.
 - At the end, update the status report file with the status of the migration step.
@@ -45,14 +45,8 @@ Migrate application code to modern framework version compatible with Azure.
   - Map WCF service contracts to REST endpoints
   - Transform data contracts to models/DTOs
   - Create OpenAPI/Swagger documentation for new REST APIs
-- Implement modern dependency injection pattern with built-in DI container.
 - Migrate authentication from Windows/Forms auth to Entra ID using Microsoft.Identity.Web.
-- Update database access code to use Entity Framework Core with Azure-compatible providers.
-- Set up proper logging with ILogger and Application Insights support.
-- Implement middleware for cross-cutting concerns (CORS, security headers, etc.).
-- Add health checks for Azure deployment compatibility.
-- Implement modern patterns: Minimal APIs, async/await, cancellation tokens.
-- Containerize the application if specified in the assessment report.
+- Update database access code to use Azure-compatible providers.
 
 ## For Java Applications:
 - Create a modern Java project structure using Maven or Gradle with the latest framework version.
@@ -67,9 +61,7 @@ Migrate application code to modern framework version compatible with Azure.
   - Warn the user about the conversion from SOAP to REST
   - Map service interfaces to REST endpoints
   - Transform data objects to DTOs
-- Implement modern dependency injection with Spring or CDI.
 - Migrate authentication to OAuth2/OIDC with Entra ID integration.
 - Update database access code to be compatible with Azure databases.
 - Set up proper logging with SLF4J and Azure-compatible appenders.
-- Implement filters/interceptors for cross-cutting concerns.
-- Containerize the application if specified in the assessment report.
+

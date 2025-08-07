@@ -40,7 +40,6 @@ Set up CI/CD pipelines for automated deployment and continuous integration
 ## Pipeline Configuration Details
 
 ### Continuous Integration Pipeline:
-```yaml
 # Include the following stages:
 - Source code checkout and caching
 - Dependency installation and caching
@@ -52,10 +51,8 @@ Set up CI/CD pipelines for automated deployment and continuous integration
 - Container image build and security scanning (if applicable)
 - Artifact publishing to registry
 - Infrastructure validation (Bicep/Terraform linting)
-```
 
 ### Continuous Deployment Pipeline:
-```yaml
 # Include the following stages:
 - Environment-specific configuration
 - Infrastructure deployment (using azd or direct ARM/Bicep)
@@ -67,16 +64,6 @@ Set up CI/CD pipelines for automated deployment and continuous integration
 - Production deployment with approval gates
 - Post-deployment validation and monitoring
 - Rollback procedures in case of failures
-```
-
-### Security and Compliance Integration:
-- Set up static application security testing (SAST)
-- Configure dynamic application security testing (DAST)
-- Implement infrastructure security scanning
-- Set up dependency vulnerability scanning
-- Configure compliance validation (SOX, HIPAA, etc.)
-- Implement secret scanning and management
-- Set up security reporting and alerting
 
 ## Environment Management:
 
@@ -93,77 +80,6 @@ Set up CI/CD pipelines for automated deployment and continuous integration
 - Configure infrastructure drift detection
 - Implement infrastructure rollback procedures
 - Set up infrastructure security scanning
-
-## Advanced Pipeline Features:
-
-### Blue-Green and Canary Deployments:
-- Configure deployment slots for Azure App Service
-- Set up traffic routing for gradual rollouts
-- Implement automatic rollback based on metrics
-- Configure feature flags for controlled releases
-- Set up A/B testing infrastructure
-
-### Performance and Monitoring Integration:
-- Configure Application Insights integration
-- Set up performance baseline validation
-- Implement performance regression detection
-- Configure alerting and notification systems
-- Set up log aggregation and analysis
-
-### Quality Gates and Approvals:
-- Set up code coverage thresholds
-- Configure performance regression gates
-- Implement security compliance checks
-- Set up manual approval processes for production
-- Configure automated rollback triggers
-
-## Pipeline Optimization:
-
-### Performance and Efficiency:
-- Implement build caching strategies
-- Configure parallel job execution
-- Set up incremental builds and deployments
-- Optimize container layer caching
-- Configure artifact caching and reuse
-
-### Cost Optimization:
-- Configure self-hosted runners where appropriate
-- Implement scheduled builds and deployments
-- Set up resource cleanup procedures
-- Configure cost monitoring and alerting
-- Optimize pipeline resource usage
-
-## Monitoring and Observability:
-
-### Pipeline Monitoring:
-- Set up pipeline execution monitoring
-- Configure failure notifications and alerting
-- Implement pipeline performance metrics
-- Set up deployment success rate tracking
-- Configure pipeline security monitoring
-
-### Application Monitoring Integration:
-- Configure Application Insights in all environments
-- Set up custom metrics and telemetry
-- Implement distributed tracing
-- Configure log aggregation and analysis
-- Set up alerting rules and escalation procedures
-
-## Documentation and Training:
-
-### Pipeline Documentation:
-- Document pipeline architecture and flow
-- Create deployment procedures and runbooks
-- Document troubleshooting guides
-- Create developer onboarding guides
-- Document security and compliance procedures
-
-### Operational Procedures:
-- Create incident response procedures
-- Document rollback and recovery processes
-- Set up change management procedures
-- Create performance monitoring guidelines
-- Document cost optimization procedures
 
 ## Deliverables:
 
