@@ -69,4 +69,4 @@ Validate the migrated application code
 - If the validate prompt is called before code migration has been performed, create a report stating that validation cannot be performed since migration has not started yet.
 - If the user runs Validate again, ask if they want to overwrite the existing report. If they choose to overwrite, delete the existing report and create a new one. If they choose not to overwrite, ask if they want to create the report in a new file instead and act accordingly.
 - Suggest that the next step is to validate the infrastructure files, and mention /phase5-validateinfra is the command to start the infrastructure validation process.
-- At the end, update the status report file with the status of the code validation step.
+- At the end, update the status report file Reports/Report-Status.md with the status of the assessment step.

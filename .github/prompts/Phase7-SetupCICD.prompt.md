@@ -103,4 +103,4 @@ Set up CI/CD pipelines for automated deployment and continuous integration
 - If CI/CD setup fails at any step, provide detailed error analysis and alternative approaches.
 - Make the CI/CD report human-readable and in markdown format with clear sections and actionable guidance.
 - Suggest that the migration and modernization process is now complete! Mention /getstatus to review the final status and next steps for ongoing maintenance and optimization.
-- At the end, update the status report file with the status of the CI/CD setup step and mark the overall migration process as successfully completed.
+- At the end, update the status report file Reports/Report-Status.md with the status of the assessment step and mark the overall migration process as successfully completed.

@@ -38,7 +38,7 @@ Validate infrastructure as code files
 - If the validate prompt is called before infrastructure generation has been performed, create a report stating that validation cannot be performed.
 - If the user runs Validate again, ask if they want to overwrite the existing report. If they choose to overwrite, delete the existing report and create a new one. If they choose not to overwrite, ask if they want to create the report in a new file instead.
 - Suggest that next step is to deploy the application to Azure, and mention /phase6-deploytoazure is the command to start the deployment process.
-- At the end, update the status report file with the status of the infrastructure validation step.
+- At the end, update the status report file Reports/Report-Status.md with the status of the assessment step.
 
 
 ## For Bicep Infrastructure:

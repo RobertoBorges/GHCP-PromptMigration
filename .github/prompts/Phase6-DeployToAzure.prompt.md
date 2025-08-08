@@ -16,8 +16,8 @@ At the end, generate a comprehensive deployment summary report in the reports fo
 - Cost analysis and optimization recommendations
 - Next steps for ongoing maintenance and optimization
 
-Suggest that the next step is to set up comprehensive testing, and mention /phase7-setuptesting is the command to start the testing setup process.
-Also, update the status report file with the deployment status and progress towards completion.
+- Suggest that the next step is to set up CI/CD pipelines, and mention /phase7-setuptesting is the command to start the testing setup process.
+- At the end, update the status report file Reports/Report-Status.md with the status of the assessment step.
 
 ## Pre-Deployment Checklist
 

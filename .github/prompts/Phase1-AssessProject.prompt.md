@@ -14,7 +14,7 @@ Assess this application for migration and modernization.
 - Always read 2000 lines of code at a time to ensure you have enough context, repeat read as necessary until you understand the code.
 - Use `file_search` to locate specific framework files (*.csproj, pom.xml, package.json, web.config, etc.).
 - Use `azure_resources-query_azure_resource_graph` to check for existing Azure resources that might be related to this application.
-- Then, assess the workspace and generate a report in the 'reports' folder. The name of the report should be 'application_assessment_report.md'.
+- Then, assess the workspace and generate a report in the 'reports' folder. The name of the report should be 'Application-Assessment-Report.md'.
 - Analyze the application to determine if it's a .NET or Java application and identify the current framework version.
 - Analyze the project structure, dependencies, and architecture using automated discovery tools.
 - Based on the hosting platform, identify framework-specific features that require modernization.
@@ -56,4 +56,4 @@ Assess this application for migration and modernization.
 - Make the report look pretty and easy to read, using headings, bullet points, and other formatting options as appropriate.
 - Include date and time at the beginning of the report.
 - Suggest that the next step is to migrate the application code, and mention /phase2-migratecode is the command to start the migration process.
-- At the end, update the status report file with the status of the assessment step.
+- At the end, update the status report file Reports/Report-Status.md with the status of the assessment step.
