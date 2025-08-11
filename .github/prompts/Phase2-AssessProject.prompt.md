@@ -1,14 +1,20 @@
 ---
 mode: agent
+model: Claude Sonnet 3.7
+tools: ['codebase', 'usages', 'vscodeAPI', 'think', 'problems', 'changes', 'testFailure', 'terminalSelection', 'terminalLastCommand', 'openSimpleBrowser', 'fetch', 'findTestFiles', 'searchResults', 'githubRepo', 'extensions', 'runTests', 'editFiles', 'runNotebooks', 'search', 'new', 'runCommands', 'runTasks']
 ---
-Assess this application for migration and modernization.
+
+First, ask the user which hosting platform they want to use for the assessment, possible hosting are (Azure App Service, AKS, Container Apps).
+
+Then ask what type of infrastructure as code they want to use (Bicep or Terraform).
+
+Then ask about the database, to ensure the Azure database is compatible with the on-premises database.
+
+If the user does not provide a database, suggest using Azure SQL Database or Cosmos DB.
+
+Just start the assessment when the user confirms the hosting platform, infrastructure as code type, and database.
 
 # Rules for Assessment of Application
-- First, ask the user which hosting platform they want to use for the assessment, possible hosting are (Azure App Service, AKS, Container Apps).
-- Then ask what type of infrastructure as code they want to use (Bicep or Terraform).
-- Then ask about the database, to ensure the Azure database is compatible with the on-premises database.
-- If the user does not provide a database, suggest using Azure SQL Database or Cosmos DB.
-- Just start the assessment when the user confirms the hosting platform, infrastructure as code type, and database.
 - Then if the workspace does not contain a 'reports' folder, create one.
 - Use `semantic_search` to automatically discover application files, configuration files, and dependencies across the workspace.
 - Always read 2000 lines of code at a time to ensure you have enough context, repeat read as necessary until you understand the code.
@@ -55,5 +61,5 @@ Assess this application for migration and modernization.
 - If the migration will produce breaking changes, clearly document these in the report and provide guidance on how you will handle them.
 - Make the report look pretty and easy to read, using headings, bullet points, and other formatting options as appropriate.
 - Include date and time at the beginning of the report.
-- Suggest that the next step is to migrate the application code, and mention /phase2-migratecode is the command to start the migration process.
+- Suggest that the next step is to migrate the application code, and mention /Phase2-AssessProject is the command to start the migration process.
 - At the end, update the status report file Reports/Report-Status.md with the status of the assessment step.

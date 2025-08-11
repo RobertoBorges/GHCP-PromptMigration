@@ -1,6 +1,6 @@
 # GitHub Copilot Migration & Modernization for Azure
 
-This repository showcases how GitHub Copilot using custom prompts and chat mode can be leveraged to migrate solutions from various languages and frameworks to Azure. The current focus is on .NET and Java applications, demonstrating end-to-end migration journeys.
+This repository showcases how GitHub Copilot using custom prompts and chat mode can be leveraged to migrate solutions from various languages and frameworks to Azure. The current focus is on .NET and Java applications, demonstrating end-to-end migration journeys. The project now includes enhanced modernization tracking, status reporting, and a more structured approach to the migration process.
 
 ## Overview
 
@@ -14,6 +14,19 @@ The GitHub Copilot Migration & Modernization for Azure project provides a struct
 6. Set up CI/CD pipelines for automated deployment
 
 Through a guided, AI-assisted workflow, developers can efficiently transform legacy applications into modern, cloud-native solutions running on Azure.
+
+## Avoiding Hallucinations
+
+To reduce hallucinations during the migration, the guided prompts use two files in the repository's `reports/` folder:
+
+- `modernization_status.md` — overall migration status dashboard
+- `Application-Assessment-Report.md` — application assessment summary
+
+You can update these files at any phase to fit your requirements.
+
+During each phase, read the summary carefully to understand what will be delivered by the model and what inputs are needed.
+
+Pro tip: during the rewrite migration process, some unnecessary files may be created (Class1.cs); clean them up before your final check-in.
 
 ## Repository Structure
 
@@ -29,35 +42,39 @@ Through a guided, AI-assisted workflow, developers can efficiently transform leg
 
 ## Migration & Modernization Process
 
-The repository implements a structured 7-phase approach to application migration:
+The repository implements a structured 8-phase approach to application migration:
 
-### Phase 1: Assessment
+### Phase 1: Plan Migration
 
-Generate a comprehensive report assessing the current application structure, dependencies, and architecture.
+Plan your migration by asking key questions about your migration project requirements, hosting preferences, and database needs to create a tailored migration strategy.
 
-### Phase 2: Code Migration
+### Phase 2: Assessment
 
-Upgrade application code to the latest framework versions compatible with Azure.
+Generate a comprehensive report assessing the current application structure, dependencies, and architecture with detailed risk analysis and effort estimation.
 
-### Phase 3: Infrastructure Generation
+### Phase 3: Code Migration
 
-Create infrastructure as code (IaC) files (Bicep or Terraform) for deploying to Azure.
+Upgrade application code to the latest framework versions compatible with Azure, with automated transformations and incremental validation.
 
-### Phase 4: Code Validation
+### Phase 4: Infrastructure Generation
 
-Validate the migrated application code against modern standards and best practices.
+Create infrastructure as code (IaC) files (Bicep or Terraform) for deploying to Azure, incorporating best practices and security configurations.
 
-### Phase 5: Infrastructure Validation
+### Phase 5: Code Validation
 
-Validate the infrastructure files for Azure deployment readiness.
+Validate the migrated application code against modern standards, security requirements, and cloud-native best practices.
 
-### Phase 6: Deployment to Azure
+### Phase 6: Infrastructure Validation
 
-Deploy the validated application to Azure services.
+Validate the infrastructure files for Azure deployment readiness, regional availability, quota requirements, and cost optimization.
 
-### Phase 7: CI/CD Pipeline Setup
+### Phase 7: Deployment to Azure
 
-Configure automated deployment pipelines for continuous integration and delivery.
+Deploy the validated application to Azure services with comprehensive deployment monitoring and validation.
+
+### Phase 8: CI/CD Pipeline Setup
+
+Configure automated deployment pipelines for continuous integration and delivery, with environment-specific configurations and security gates.
 
 ## Key Features
 
@@ -70,14 +87,34 @@ Configure automated deployment pipelines for continuous integration and delivery
 - **Configuration Transformation**: Convert legacy configuration files to modern formats
 - **CI/CD Integration**: Set up GitHub Actions or Azure DevOps pipelines for automated deployment
 - **Validation & Best Practices**: Ensure migrated applications follow Azure best practices
+- **Status Tracking**: Comprehensive modernization status reporting with progress tracking and quality metrics
+- **Structured Migration Planning**: Guided approach to planning migration with targeted questions and requirements gathering
+- **Risk Assessment & Mitigation**: Identification and mitigation strategies for potential migration issues
+- **Deployment Monitoring**: Real-time validation and monitoring during application deployment
+- **Incremental Validation**: Step-by-step validation throughout the migration process
+
+## Migration Status Tracking
+
+The project now includes comprehensive migration status tracking through the `/getstatus` command:
+
+- **Progress Monitoring**: Track overall migration progress with completion percentages and phase status
+- **Quality Metrics**: View quality scores for each completed phase
+- **Timeline Tracking**: Timestamps for completed phases to monitor project timeline
+- **Risk Management**: Identification and tracking of potential issues with severity levels
+- **Next Steps Guidance**: Clear recommendations for the next steps in the migration process
+- **Resource Links**: Quick access to relevant documentation and resources
+- **Executive Summary**: At-a-glance view of key migration metrics and status
+
+Status reports are stored in the `reports/modernization_status.md` file, providing a central location for tracking migration progress across all phases.
 
 ## Getting Started
 
 1. Clone this repository
 2. Install [GitHub Copilot](https://copilot.github.com/) in your Visual Studio Code
 3. Open one of the use case projects in VS Code
-4. Start a chat with GitHub Copilot using the `/phase1-assessproject under the folder #file:02-NetFramework30-ASPNET-WEB` command
-5. Follow the guided prompts to complete each phase of the migration process
+4. Start a chat with GitHub Copilot using the `/phase1-planmigration under the folder #file:02-NetFramework30-ASPNET-WEB` command to begin the migration planning
+5. Use `/getstatus` at any time to check the current migration status
+6. Follow the guided prompts to complete each phase of the migration process
 
 ## Target Azure Hosting Platforms
 
@@ -99,6 +136,34 @@ This repository contains example applications that can be used to test prompts a
 - **.NET Framework Web Apps**: Upgrading to modern .NET versions
 - **WCF Services**: Converting to RESTful APIs
 - **Java Applications**: Modernizing for Azure compatibility
+
+## Improved Prompt Structure
+
+The custom prompts have been significantly enhanced with:
+
+### Enhanced Structured Workflow
+
+- **Planning Phase**: Added a dedicated planning phase to gather requirements before starting the assessment
+- **Status Command**: New `/getstatus` command to check migration progress at any time
+- **Report Generation**: Automatic creation of assessment, validation, and status reports
+- **Incremental Validation**: Step-by-step validation checks throughout the migration process
+- **Context Preservation**: Better context retention between phases of the migration
+
+### Technical Improvements
+
+- **Enhanced Azure Integration**: Better support for Azure resource validation and deployment
+- **Comprehensive Validation**: More thorough code and infrastructure validation checks
+- **Database Migration**: Improved guidance for database migration scenarios
+- **Security Focus**: Enhanced security validation and configuration for Azure resources
+- **Cost Optimization**: Added recommendations for optimizing cost in Azure deployments
+
+### Documentation and Reporting
+
+- **Detailed Reports**: More comprehensive reports with actionable recommendations
+- **Visual Progress**: Visual progress tracking with completion percentages
+- **Risk Management**: Enhanced risk identification and mitigation guidance
+- **Architecture Diagrams**: Support for generating before/after architecture diagrams
+- **Performance Metrics**: Added performance baseline recommendations and validation
 
 ## Contributing
 

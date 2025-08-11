@@ -1,5 +1,7 @@
 ---
 mode: agent
+model: Claude Sonnet 3.7
+tools: ['codebase', 'usages', 'vscodeAPI', 'think', 'problems', 'changes', 'testFailure', 'terminalSelection', 'terminalLastCommand', 'openSimpleBrowser', 'fetch', 'findTestFiles', 'searchResults', 'githubRepo', 'extensions', 'runTests', 'editFiles', 'runNotebooks', 'search', 'new', 'runCommands', 'runTasks']
 ---
 Generate Infrastructure as Code Files for Azure Deployment
 
@@ -20,7 +22,7 @@ Generate Infrastructure as Code Files for Azure Deployment
 - Include infrastructure testing and validation scripts.
 - If infrastructure generation fails, provide detailed error analysis and alternative approaches.
 - Make the infrastructure section in the migration report human-readable and in markdown format, using headings, bullet points, and other formatting options as appropriate.
-- Suggest that the next step is to validate the migrated code, and mention /phase4-validatecode is the command to start the code validation process.
+- Suggest that the next step is to validate the migrated code, and mention /phase5-validatecode is the command to start the code validation process.
 - At the end, update the status report file Reports/Report-Status.md with the status of the assessment step, including:
   - Infrastructure components created
   - Security configurations implemented  

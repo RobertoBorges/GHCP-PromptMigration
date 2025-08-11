@@ -1,5 +1,7 @@
 ---
 mode: agent
+model: Claude Sonnet 3.7
+tools: ['codebase', 'usages', 'vscodeAPI', 'think', 'problems', 'changes', 'testFailure', 'terminalSelection', 'terminalLastCommand', 'openSimpleBrowser', 'fetch', 'findTestFiles', 'searchResults', 'githubRepo', 'extensions', 'runTests', 'editFiles', 'runNotebooks', 'search', 'new', 'runCommands', 'runTasks']
 ---
 Validate the migrated application code
 
@@ -68,5 +70,5 @@ Validate the migrated application code
 - Validation state must be one of: Success, Warning (with minor issues), Failed, or Could Not Validate.
 - If the validate prompt is called before code migration has been performed, create a report stating that validation cannot be performed since migration has not started yet.
 - If the user runs Validate again, ask if they want to overwrite the existing report. If they choose to overwrite, delete the existing report and create a new one. If they choose not to overwrite, ask if they want to create the report in a new file instead and act accordingly.
-- Suggest that the next step is to validate the infrastructure files, and mention /phase5-validateinfra is the command to start the infrastructure validation process.
+- Suggest that the next step is to validate the infrastructure files, and mention /phase6-validateinfra is the command to start the infrastructure validation process.
 - At the end, update the status report file Reports/Report-Status.md with the status of the assessment step.

@@ -1,5 +1,7 @@
 ---
 mode: agent
+model: Claude Sonnet 3.7
+tools: ['codebase', 'usages', 'vscodeAPI', 'think', 'problems', 'changes', 'testFailure', 'terminalSelection', 'terminalLastCommand', 'openSimpleBrowser', 'fetch', 'findTestFiles', 'searchResults', 'githubRepo', 'extensions', 'runTests', 'editFiles', 'runNotebooks', 'search', 'new', 'runCommands', 'runTasks']
 ---
 Migrate application code to modern framework version compatible with Azure.
 
@@ -23,7 +25,7 @@ Migrate application code to modern framework version compatible with Azure.
 - Use `get_errors` to validate each migration step and fix issues immediately.
 - Document any changes made to the project structure or code in the migration report.
 - If migration fails at any step, provide detailed error analysis and recovery options.
-- Suggest that the next step is to generate infrastructure files, and mention /phase3-generateinfra is the command to start the infra generation process.
+- Suggest that the next step is to generate infrastructure files, and mention /phase4-generateinfra is the command to start the infra generation process.
 - At the end, update the status report file Reports/Report-Status.md with the status of the assessment step.
 
 
