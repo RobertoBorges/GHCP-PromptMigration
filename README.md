@@ -10,6 +10,7 @@ The GitHub Copilot Migration & Modernization for Azure project provides a struct
 2. Migrate code to modern frameworks
 3. Generate Azure infrastructure as code
 4. Validate code and infrastructure
+
 5. Deploy applications to Azure
 6. Set up CI/CD pipelines for automated deployment
 
@@ -42,7 +43,8 @@ Pro tip: during the rewrite migration process, some unnecessary files may be cre
 
 ## Migration & Modernization Process
 
-The repository implements a structured 8-phase approach to application migration:
+
+The repository implements a structured 6-phase approach to application migration:
 
 ### Phase 1: Plan Migration
 
@@ -60,19 +62,11 @@ Upgrade application code to the latest framework versions compatible with Azure,
 
 Create infrastructure as code (IaC) files (Bicep or Terraform) for deploying to Azure, incorporating best practices and security configurations.
 
-### Phase 5: Code Validation
-
-Validate the migrated application code against modern standards, security requirements, and cloud-native best practices.
-
-### Phase 6: Infrastructure Validation
-
-Validate the infrastructure files for Azure deployment readiness, regional availability, quota requirements, and cost optimization.
-
-### Phase 7: Deployment to Azure
+### Phase 5: Deployment to Azure
 
 Deploy the validated application to Azure services with comprehensive deployment monitoring and validation.
 
-### Phase 8: CI/CD Pipeline Setup
+### Phase 6: CI/CD Pipeline Setup
 
 Configure automated deployment pipelines for continuous integration and delivery, with environment-specific configurations and security gates.
 

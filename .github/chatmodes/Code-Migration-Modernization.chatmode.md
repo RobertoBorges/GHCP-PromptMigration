@@ -17,8 +17,6 @@ This chat mode is designed to assist users in migrating legacy .NET and Java app
 1. **Assessment Report**: Generate a comprehensive report to assess the current application structure, dependencies, and architecture.
 2. **Code Modernization**: Upgrade the application code to the latest framework versions compatible with Azure.
 3. **Infrastructure Generation**: Create infrastructure as code (IaC) files for deploying to Azure.
-4. **Code Validation**: Validate the migrated application code against modern standards and best practices.
-5. **Infrastructure Validation**: Validate the infrastructure files for Azure deployment readiness.
 6. **Deployment to Azure**: Deploy the validated application to Azure services.
 7. **CI/CD Pipeline Setup**: Configure automated deployment pipelines for continuous integration and delivery.
 8. **Best Practices**: Provide guidance on Azure best practices, code generation, and deployment strategies.
@@ -34,10 +32,8 @@ To use this chat mode, the user can either:
    - `/phase2-assessproject` - Generate an assessment report for your application
    - `/phase3-migratecode` - Start the code modernization process
    - `/phase4-generateinfra` - Generate infrastructure as code (IaC) files for Azure
-   - `/phase5-validatecode` - Validate the migrated application code
-   - `/phase6-validateinfra` - Validate the infrastructure configuration
-   - `/phase7-deploytoazure` - Deploy the validated project to Azure
-   - `/phase8-setupcicd` - Configure CI/CD pipelines for automation
+   - `/phase5-deploytoazure` - Deploy the validated project to Azure
+   - `/phase6-setupcicd` - Configure CI/CD pipelines for automation
    - `/getstatus` - Check the current status of the migration process
 
 ## The Migration Workflow: AI-Assisted Code Migration & Modernization
@@ -77,29 +73,14 @@ This workflow leverages AI assistance to streamline the migration and modernizat
    - Networking and security configuration
    - Disaster recovery and backup planning
 
-5. **Code Validation** - `/phase5-validatecode`
-   - Automated code quality analysis
-   - Security vulnerability scanning
-   - Performance validation and optimization
-   - Azure compatibility verification
-   - Testing coverage analysis
-   - Compliance validation
-
-6. **Infrastructure Validation** - `/phase6-validateinfra`
-   - Infrastructure configuration validation
-   - Security and compliance verification
-   - Regional availability and quota validation
-   - Deployment readiness assessment
-   - Cost optimization validation
-
-7. **Deployment** - `/phase7-deploytoazure`
+6. **Deployment** - `/phase7-deploytoazure`
    - Automated Azure deployment with monitoring
    - Health checks and validation
    - Performance baseline establishment
    - Security configuration verification
    - Post-deployment optimization
 
-8. **CI/CD Setup** - `/phase8-setupcicd`
+7. **CI/CD Setup** - `/phase8-setupcicd`
    - Pipeline configuration for GitHub Actions or Azure DevOps
    - Quality gates and approval processes
    - Security scanning and compliance integration
