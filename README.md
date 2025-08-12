@@ -16,6 +16,17 @@ The GitHub Copilot Migration & Modernization for Azure project provides a struct
 
 Through a guided, AI-assisted workflow, developers can efficiently transform legacy applications into modern, cloud-native solutions running on Azure.
 
+## Requirements
+
+- Azure MCP Server Extension
+- GitHub Copilot for Azure Extension
+- GitHub Copilot Extension 1.35+
+- GitHub Copilot Chat Extension 0.30+
+- Visual Studio code 1.101+
+- AZD CLI
+- AZ CLI
+- Development tools that fit to your application
+
 ## Avoiding Hallucinations
 
 To reduce hallucinations during the migration, the guided prompts use two files in the repository's `reports/` folder:
