@@ -73,14 +73,14 @@ This workflow leverages AI assistance to streamline the migration and modernizat
    - Networking and security configuration
    - Disaster recovery and backup planning
 
-6. **Deployment** - `/phase6-deploytoazure`
+6. **Deployment** - `/phase5-deploytoazure`
    - Automated Azure deployment with monitoring
    - Health checks and validation
    - Performance baseline establishment
    - Security configuration verification
    - Post-deployment optimization
 
-7. **CI/CD Setup** - `/phase7-setupcicd`
+7. **CI/CD Setup** - `/phase6-setupcicd`
    - Pipeline configuration for GitHub Actions or Azure DevOps
    - Quality gates and approval processes
    - Security scanning and compliance integration

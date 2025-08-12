@@ -61,5 +61,5 @@ Just start the assessment when the user confirms the hosting platform, infrastru
 - If the migration will produce breaking changes, clearly document these in the report and provide guidance on how you will handle them.
 - Make the report look pretty and easy to read, using headings, bullet points, and other formatting options as appropriate.
 - Include date and time at the beginning of the report.
-- Suggest that the next step is to migrate the application code, and mention /Phase2-AssessProject is the command to start the migration process.
+- Suggest that the next step is to migrate the application code, and mention /Phase3-MigrateCode is the command to start the migration process.
 - At the end, update the status report file Reports/Report-Status.md with the status of the assessment step.

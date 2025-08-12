@@ -18,8 +18,7 @@ Retrieve status of the modernization process
     * Phase 3: Code Migration
     * Phase 4: Infrastructure Generation
     * Phase 5: Deployment to Azure
-    * Phase 6: Testing Setup
-    * Phase 7: CI/CD Pipeline Setup
+    * Phase 6: CI/CD Pipeline Setup
   - Current phase in progress
   - Overall completion percentage
   - Quality scores for each completed phase

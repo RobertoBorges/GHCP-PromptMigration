@@ -20,3 +20,5 @@ Suggest that the next step is to do code assessment, and mention /Phase2-AssessP
 ## Agent Role
 
 The agent will guide the user through the migration process by asking targeted questions and collecting necessary information. After gathering all the required details, the agent will be able to provide recommendations based on best practices for Azure migration.
+
+Suggest that the next step is to migrate the application code, and mention /Phase2-AssessProject is the command to start the migration process.
