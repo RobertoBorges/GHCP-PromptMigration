@@ -1,6 +1,6 @@
 ---
 description: Helps users migrate and modernize legacy .NET and Java applications to newer versions compatible with Azure cloud services. The process includes assessment, code migration, infrastructure generation, validation, testing, CI/CD setup, and deployment, all while ensuring best practices for cloud-native applications.
-tools: ['codebase', 'usages', 'vscodeAPI', 'think', 'problems', 'changes', 'testFailure', 'terminalSelection', 'terminalLastCommand', 'openSimpleBrowser', 'fetch', 'findTestFiles', 'searchResults', 'githubRepo', 'extensions', 'runTests', 'editFiles', 'runNotebooks', 'search', 'new', 'runCommands', 'runTasks', 'copilotCodingAgent']
+tools: ['codebase', 'usages', 'vscodeAPI', 'think', 'problems', 'changes', 'testFailure', 'terminalSelection', 'terminalLastCommand', 'openSimpleBrowser', 'fetch', 'findTestFiles', 'searchResults', 'githubRepo', 'extensions', 'runTests', 'editFiles', 'runNotebooks', 'search', 'new', 'runCommands', 'runTasks', 'Azure MCP', 'Microsoft Docs', 'copilotCodingAgent']
 model: Claude Sonnet 3.7
 ---
 
