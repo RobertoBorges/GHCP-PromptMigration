@@ -110,14 +110,14 @@ The project now includes comprehensive migration status tracking through the `/g
 - **Resource Links**: Quick access to relevant documentation and resources
 - **Executive Summary**: At-a-glance view of key migration metrics and status
 
-Status reports are stored in the `reports/modernization_status.md` file, providing a central location for tracking migration progress across all phases.
+Status reports are stored in the `reports/Report-Status.md` file, providing a central location for tracking migration progress across all phases.
 
 ## Getting Started
 
 1. Clone this repository
 2. Install [GitHub Copilot](https://copilot.github.com/) in your Visual Studio Code
 3. Open one of the use case projects in VS Code
-4. Start a chat with GitHub Copilot using the `/phase1-planmigration under the folder #file:02-NetFramework30-ASPNET-WEB` command to begin the migration planning
+4. Start a chat with GitHub Copilot using the `/Phase1-Plan-Migration` command under the folder #file:02-NetFramework30-ASPNET-WEB to begin the migration planning
 5. Use `/getstatus` at any time to check the current migration status
 6. Follow the guided prompts to complete each phase of the migration process
 
