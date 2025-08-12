@@ -38,7 +38,9 @@ You can update these files at any phase to fit your requirements.
 
 During each phase, read the summary carefully to understand what will be delivered by the model and what inputs are needed.
 
-Pro tip: during the rewrite migration process, some unnecessary files may be created (Class1.cs); clean them up before your final check-in.
+Pro tip: for the rewrite migration process, some unnecessary files may be created (Class1.cs); clean them up before your final check-in.
+Pro tip2: use the @terminal command to ask the agent to solve issues during your tests.
+Pro tip3: Don't assume anything, always verify with the documentation.
 
 ## Repository Structure
 
@@ -53,7 +55,6 @@ Pro tip: during the rewrite migration process, some unnecessary files may be cre
   - **`04-ContosoUniversityDiPS/`**: Sample university application with multiple components
 
 ## Migration & Modernization Process
-
 
 The repository implements a structured 6-phase approach to application migration:
 
