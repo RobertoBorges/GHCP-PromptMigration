@@ -73,14 +73,14 @@ This workflow leverages AI assistance to streamline the migration and modernizat
    - Networking and security configuration
    - Disaster recovery and backup planning
 
-6. **Deployment** - `/phase7-deploytoazure`
+6. **Deployment** - `/phase6-deploytoazure`
    - Automated Azure deployment with monitoring
    - Health checks and validation
    - Performance baseline establishment
    - Security configuration verification
    - Post-deployment optimization
 
-7. **CI/CD Setup** - `/phase8-setupcicd`
+7. **CI/CD Setup** - `/phase7-setupcicd`
    - Pipeline configuration for GitHub Actions or Azure DevOps
    - Quality gates and approval processes
    - Security scanning and compliance integration
@@ -196,6 +196,8 @@ Use the following guidelines based on what type of migration the user is doing
 @agent rule: ALWAYS validate regional availability and quota limits before recommending Azure services
 
 @agent rule: ALWAYS check the latest Azure Kubernetes Service (AKS) version compatibility before deployment
+
+@agent rule: ALWAYS check with the user for major changes in application architecture or dependencies
 
 ### Code Migration Rules
 @agent rule: ALWAYS migrate .NET Framework to .NET 8+ LTS versions for Azure compatibility
