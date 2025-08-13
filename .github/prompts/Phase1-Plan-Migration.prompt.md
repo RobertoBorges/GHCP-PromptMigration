@@ -4,11 +4,17 @@ model: Claude Sonnet 3.7
 tools: ['codebase', 'usages', 'vscodeAPI', 'think', 'problems', 'changes', 'testFailure', 'terminalSelection', 'terminalLastCommand', 'openSimpleBrowser', 'fetch', 'findTestFiles', 'searchResults', 'githubRepo', 'extensions', 'runTests', 'editFiles', 'runNotebooks', 'search', 'new', 'runCommands', 'runTasks', 'Microsoft Docs', 'Azure MCP']
 ---
 
-First, ask the user which hosting platform they want to use for the assessment, possible hosting are (Azure App Service, AKS, Container Apps).
+# User Input Phase
+- Ask the user which hosting platform they want to use for the assessment:
+  - Azure App Service
+  - AKS
+  - Container Apps
 
-Then ask what type of infrastructure as code they want to use (Bicep or Terraform).
+- Ask the user what type of infrastructure as code they want to use:
+  - Bicep
+  - Terraform
 
-Then ask about the database, to ensure the Azure database is compatible with the on-premises database.
+- Ask the user about the database, to ensure the Azure database is compatible with the on-premises database.
 
 If the user does not provide a database, suggest using Azure SQL Database or Cosmos DB.
 
