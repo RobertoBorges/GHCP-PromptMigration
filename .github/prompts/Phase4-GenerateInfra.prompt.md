@@ -22,7 +22,7 @@ Generate Infrastructure as Code Files for Azure Deployment
 - Include infrastructure testing and validation scripts.
 - If infrastructure generation fails, provide detailed error analysis and alternative approaches.
 - Make the infrastructure section in the migration report human-readable and in markdown format, using headings, bullet points, and other formatting options as appropriate.
-- Suggest that the next step is to validate the migrated code, and mention /Phase5-DeployToAzure is the command to start the code validation process.
+- Suggest that the next step is to validate the migrated code, and mention `/Phase5-DeployToAzure` is the command to start the code validation process.
 - At the end, update the status report file Reports/Report-Status.md with the status of the assessment step, including:
   - Infrastructure components created
   - Security configurations implemented  
