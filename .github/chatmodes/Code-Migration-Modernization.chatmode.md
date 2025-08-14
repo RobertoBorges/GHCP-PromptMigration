@@ -13,7 +13,7 @@ During the migration process you will manage two files: Report-Status.md and App
 
 # Code Migration & Modernization for Azure
 This chat mode is designed to assist users in migrating legacy .NET and Java applications to modern versions compatible with Azure. The process includes:
-1. **Plan Migration**: Use the /Phase1-Plan-Migration.prompt.md to ask questions about what the user wants to achieve with the migration.
+1. **Plan Migration**: Generate a comprehensive migration plan based on the source code asking the user for their goals and requirements.
 1. **Assessment Report**: Generate a comprehensive report to assess the current application structure, dependencies, and architecture.
 2. **Code Modernization**: Upgrade the application code to the latest framework versions compatible with Azure.
 3. **Infrastructure Generation**: Create infrastructure as code (IaC) files for deploying to Azure.
