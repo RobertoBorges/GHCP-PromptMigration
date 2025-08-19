@@ -1,0 +1,51 @@
+<%@ Master Language="C#" AutoEventWireup="true" CodeFile="Site.master.cs" Inherits="SiteMaster" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head runat="server">
+    <title>BookShop Online Store</title>
+    <link href="~/css/site.css" rel="stylesheet" type="text/css" />
+    <asp:ContentPlaceHolder ID="HeadContent" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form1" runat="server">
+    <div class="page">
+        <div class="header">
+            <div class="title">
+                <h1>
+                    <a href="~/Default.aspx" runat="server">BookShop Online Store</a>
+                </h1>
+            </div>
+            <div class="loginDisplay">
+                Welcome to our online bookstore!
+            </div>
+            <div class="clear hideSkiplink">
+                <asp:Menu ID="NavigationMenu" runat="server" CssClass="menu" EnableViewState="false" 
+                    IncludeStyleBlock="false" Orientation="Horizontal">
+                    <Items>
+                        <asp:MenuItem NavigateUrl="~/Default.aspx" Text="Home"/>
+                        <asp:MenuItem NavigateUrl="~/Books.aspx" Text="Browse Books"/>
+                        <asp:MenuItem NavigateUrl="~/Categories.aspx" Text="Categories"/>
+                        <asp:MenuItem NavigateUrl="~/Authors.aspx" Text="Authors"/>
+                        <asp:MenuItem NavigateUrl="~/About.aspx" Text="About"/>
+                    </Items>
+                </asp:Menu>
+            </div>
+        </div>
+        <div class="main">
+            <asp:ContentPlaceHolder ID="MainContent" runat="server"/>
+        </div>
+        <div class="clear">
+        </div>
+    </div>
+    <div class="footer">
+        <p>
+            &copy; 2008 BookShop Library. All rights reserved. | 
+            <a href="mailto:info@bookshop.com">Contact Us</a> | 
+            <a href="~/About.aspx" runat="server">About Us</a>
+        </p>
+    </div>
+    </form>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<%@ Master Language="C#" AutoEventWireup="true" CodeFile="AdminMaster.master.cs" Inherits="AdminMaster" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head runat="server">
+    <title>BookShop Administration</title>
+    <link href="~/css/admin.css" rel="stylesheet" type="text/css" />
+    <asp:ContentPlaceHolder ID="HeadContent" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form1" runat="server">
+    <div class="page">
+        <div class="header">
+            <div class="title">
+                <h1>
+                    <a href="~/Default.aspx" runat="server">BookShop Administration</a>
+                </h1>
+            </div>
+            <div class="loginDisplay">
+                Welcome, <asp:Label ID="CurrentUserLabel" runat="server" /><br />
+                <asp:Label ID="UserRoleLabel" runat="server" CssClass="user-role" />
+            </div>
+            <div class="clear hideSkiplink">
+                <asp:Menu ID="NavigationMenu" runat="server" CssClass="menu" EnableViewState="false" 
+                    IncludeStyleBlock="false" Orientation="Horizontal">
+                    <Items>
+                        <asp:MenuItem NavigateUrl="~/Default.aspx" Text="Dashboard"/>
+                        <asp:MenuItem NavigateUrl="~/Admin/ManageBooks.aspx" Text="Manage Books"/>
+                        <asp:MenuItem NavigateUrl="~/Admin/ManageAuthors.aspx" Text="Manage Authors"/>
+                        <asp:MenuItem NavigateUrl="~/Admin/ManageCategories.aspx" Text="Manage Categories"/>
+                        <asp:MenuItem NavigateUrl="~/Admin/ViewOrders.aspx" Text="View Orders"/>
+                        <asp:MenuItem NavigateUrl="~/Admin/ManageEmployees.aspx" Text="Manage Employees"/>
+                        <asp:MenuItem NavigateUrl="~/Admin/Reports.aspx" Text="Reports"/>
+                    </Items>
+                </asp:Menu>
+            </div>
+        </div>
+        <div class="main">
+            <asp:ContentPlaceHolder ID="MainContent" runat="server"/>
+        </div>
+        <div class="clear">
+        </div>
+    </div>
+    <div class="footer">
+        <p>
+            &copy; 2008 BookShop Library Administration System. All rights reserved. | 
+            <a href="mailto:admin@bookshop.com">Contact IT</a>
+        </p>
+    </div>
+    </form>
+</body>
+</html>
