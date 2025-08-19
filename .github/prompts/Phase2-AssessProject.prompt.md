@@ -56,9 +56,9 @@ Just start the assessment when the user confirms the hosting platform, infrastru
 - Include risk assessment and mitigation strategies for identified issues.
 - Provide estimated effort and timeline for each migration phase.
 - If the 'reports' folder does not have an Application-Change-Log.md create one
-- During the assessment, if a change is required and can or cannot be executed on, include this information into the Application-Change-Log.md: 
+- During the assessment, if a change is required and can or cannot be executed on, include this information into the "Application-Assessment-Report.md": 
 - At the end of the "Application-Assessment-Report.md" create a header named "Change Report"
-- During the assessment, if a change is required and can or cannot be executed on, include this information into the Application-Change-Log.md: 
+- During the assessment, if a change is required and can or cannot be executed on, include this information into the "Application-Assessment-Report.md": 
 - Refactor the code to address [INSERT ISSUE OR BREAKING CHANGE], ensuring compliance with [INSERT FRAMEWORK/VERSION] guidelines
 - Reference Supporting Documentation [INSERT LINK TO OFFICIAL DOCUMENTATION]
 - Objective[INSERT GOAL — e.g., improve security, remove deprecated API usage, enhance performance]
@@ -81,4 +81,5 @@ Just start the assessment when the user confirms the hosting platform, infrastru
 - Include date and time at the beginning of the report.
 - Suggest that the next step is to migrate the application code, and mention `/Phase3-MigrateCode` is the command to start the migration process.
 - At the end, update the status report file Reports/Report-Status.md with the status of the assessment step.
+
 
