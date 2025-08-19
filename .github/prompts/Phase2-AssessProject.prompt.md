@@ -57,12 +57,23 @@ Just start the assessment when the user confirms the hosting platform, infrastru
 - Provide estimated effort and timeline for each migration phase.
 - If the 'reports' folder does not have an Application-Change-Log.md create one
 - During the assessment, if a change is required and can or cannot be executed on, include this information into the Application-Change-Log.md: 
+- At the end of the "Application-Assessment-Report.md" create a header named "Change Report"
+- During the assessment, if a change is required and can or cannot be executed on, include this information into the Application-Change-Log.md: 
 - Refactor the code to address [INSERT ISSUE OR BREAKING CHANGE], ensuring compliance with [INSERT FRAMEWORK/VERSION] guidelines
 - Reference Supporting Documentation [INSERT LINK TO OFFICIAL DOCUMENTATION]
 - Objective[INSERT GOAL — e.g., improve security, remove deprecated API usage, enhance performance]
 - Constraints [INSERT CONSTRAINTS — e.g., maintain backward compatibility, avoid performance regressions]
 - If not confident in the result, flag the task for review
 - If assessment fails due to insufficient information, provide specific guidance on what additional information is needed.
+- Before suggesting or applying code changes:
+- **Verify the change produces the intended result**
+  - Include relevant standards and constraints:
+   - Performance
+   - Security
+   - Readability
+   - Maintainability
+- **Do not modify code** unless the change can be confidently verified
+- Instead, explain what additional information, context, or testing is required to safely implement the change
 - If the user runs assess again, ask the user if they want to overwrite the existing report. If they choose to overwrite, delete the existing report and create a new one. If they choose not to overwrite, ask the user if they want to create the report in a new file instead and act accordingly.
 - Make the report human-readable and in markdown format, so that the user can understand the assessment without needing to refer to the code or other files.
 - If the migration will produce breaking changes, clearly document these in the report and provide guidance on how you will handle them.
