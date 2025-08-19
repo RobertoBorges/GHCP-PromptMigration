@@ -55,6 +55,13 @@ Just start the assessment when the user confirms the hosting platform, infrastru
 - Draw an equivalent architecture diagram for the target Azure architecture.
 - Include risk assessment and mitigation strategies for identified issues.
 - Provide estimated effort and timeline for each migration phase.
+- If the 'reports' folder does not have an Application-Change-Log.md create one
+- During the assessment, if a change is required and can or cannot be executed on, include this information into the Application-Change-Log.md: 
+- Refactor the code to address [INSERT ISSUE OR BREAKING CHANGE], ensuring compliance with [INSERT FRAMEWORK/VERSION] guidelines
+- Reference Supporting Documentation [INSERT LINK TO OFFICIAL DOCUMENTATION]
+- Objective[INSERT GOAL — e.g., improve security, remove deprecated API usage, enhance performance]
+- Constraints [INSERT CONSTRAINTS — e.g., maintain backward compatibility, avoid performance regressions]
+- If not confident in the result, flag the task for review
 - If assessment fails due to insufficient information, provide specific guidance on what additional information is needed.
 - If the user runs assess again, ask the user if they want to overwrite the existing report. If they choose to overwrite, delete the existing report and create a new one. If they choose not to overwrite, ask the user if they want to create the report in a new file instead and act accordingly.
 - Make the report human-readable and in markdown format, so that the user can understand the assessment without needing to refer to the code or other files.
@@ -63,3 +70,4 @@ Just start the assessment when the user confirms the hosting platform, infrastru
 - Include date and time at the beginning of the report.
 - Suggest that the next step is to migrate the application code, and mention `/Phase3-MigrateCode` is the command to start the migration process.
 - At the end, update the status report file Reports/Report-Status.md with the status of the assessment step.
+
