@@ -31,8 +31,8 @@ Through a guided, AI-assisted workflow, developers can efficiently transform leg
 
 To reduce hallucinations during the migration, the guided prompts use two files in the repository's `reports/` folder:
 
-- `Report-Status.md` — overall migration status dashboard
-- `Application-Assessment-Report.md` — application assessment summary
+- `reports/Report-Status.md` — overall migration status dashboard
+- `reports/Application-Assessment-Report.md` — application assessment summary
 
 You can update these files at any phase to fit your requirements.
 
@@ -121,7 +121,7 @@ Status reports are stored in the `reports/Report-Status.md` file, providing a ce
 1. Clone this repository
 2. Install [GitHub Copilot](https://copilot.github.com/) in your Visual Studio Code
 3. Open one of the use case projects in VS Code
-4. Start a chat with GitHub Copilot using the prompt: "`/phase1-planmigration` under the folder #file:02-NetFramework30-ASPNET-WEB" to begin the migration planning
+4. Start a chat with GitHub Copilot using the prompt:  "`/phase1-planmigration` under the folder #file:02-NetFramework30-ASPNET-WEB" to begin the migration planning
 5. Use `/getstatus` at any time to check the current migration status
 6. Follow the guided prompts to complete each phase of the migration process
 

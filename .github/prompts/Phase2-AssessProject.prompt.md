@@ -10,7 +10,7 @@ Then ask what type of infrastructure as code they want to use (Bicep or Terrafor
 
 Then ask about the database, to ensure the Azure database is compatible with the on-premises database.
 
-If the user does not provide a database, suggest Azure SQL Database (relational) or Azure Cosmos DB (NoSQL) based on workload.
+If the user does not provide a database, suggest Azure SQL Database (for transactional, relational workloads) or Azure Cosmos DB (for globally distributed, NoSQL, or high-throughput workloads) based on the current application's data access patterns and requirements.
 
 Just start the assessment when the user confirms the hosting platform, infrastructure as code type, and database.
 

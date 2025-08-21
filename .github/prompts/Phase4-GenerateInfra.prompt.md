@@ -73,4 +73,4 @@ Based on the chosen Azure hosting platform in the assessment report (App Service
 - Configure Entra ID integration for authentication.
 - Set up database resources if applicable (Azure SQL, Cosmos DB, etc.).
 - Include proper tagging and naming conventions.
- - Prefer Managed Identity and OIDC federated credentials; avoid storing secrets in state or code.
+- Prefer Managed Identity and OIDC federated credentials; avoid storing secrets in state or code.
