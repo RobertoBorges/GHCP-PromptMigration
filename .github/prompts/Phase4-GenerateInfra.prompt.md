@@ -22,8 +22,8 @@ Generate Infrastructure as Code Files for Azure Deployment
 - Include infrastructure testing and validation scripts.
 - If infrastructure generation fails, provide detailed error analysis and alternative approaches.
 - Make the infrastructure section in the migration report human-readable and in markdown format, using headings, bullet points, and other formatting options as appropriate.
-- Suggest that the next step is to validate the migrated code, and mention `/Phase5-DeployToAzure` is the command to start the code validation process.
-- At the end, update the status report file Reports/Report-Status.md with the status of the assessment step, including:
+- Suggest that the next step is to validate the migrated code, and mention `/phase5-deploytoazure` is the command to start the code validation process.
+- At the end, update the status report file reports/Report-Status.md with the status of the assessment step, including:
   - Infrastructure components created
   - Security configurations implemented  
   - Monitoring and logging setup
@@ -56,7 +56,7 @@ Based on the chosen Azure hosting platform in the assessment report (App Service
 - Implement security best practices: managed identities, private endpoints, network restrictions.
 
 ## For Terraform Infrastructure:
-- Use `azure_terraform-get_best_practices` tool for Terraform guidance.
+- Use `mcp_azure_mcp_azureterraformbestpractices` to retrieve current Terraform best practices for Azure.
 - Create the following structure in the 'infra' folder:
   - main.tf - Main deployment file
   - variables.tf - Variable definitions
@@ -73,3 +73,4 @@ Based on the chosen Azure hosting platform in the assessment report (App Service
 - Configure Entra ID integration for authentication.
 - Set up database resources if applicable (Azure SQL, Cosmos DB, etc.).
 - Include proper tagging and naming conventions.
+ - Prefer Managed Identity and OIDC federated credentials; avoid storing secrets in state or code.

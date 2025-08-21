@@ -16,18 +16,16 @@ tools: ['codebase', 'usages', 'vscodeAPI', 'think', 'problems', 'changes', 'test
 
 - Ask the user about the database, to ensure the Azure database is compatible with the on-premises database.
 
-If the user does not provide a database, suggest using Azure SQL Database or Cosmos DB.
+If the user does not provide a database, suggest Azure SQL Database (for relational) or Azure Cosmos DB (for NoSQL) based on the current workload.
 
-Create Two files: Report-Status.md and Application-Assessment-Report.md under the root-folder/reports
+Create two files under the root-folder/reports: Report-Status.md and Application-Assessment-Report.md
   - Make the Report-Status.md and Application-Assessment-Report.md look pretty and easy to read, using headings, bullet points, and other formatting options as appropriate.
 
-  - Those files are created by the must have the collected information from the user a a high-level plan that will be used by the Phase2-AssessProject.prompt.md
+  - Those files must be created and must have the collected information from the user and a high-level plan that will be used by the Phase2-AssessProject.prompt.md
 
-
-Suggest that the next step is to do code assessment, and mention /Phase2-AssessProject is the command to start the migration process.
+Suggest that the next step is to do the assessment, and mention `/phase2-assessproject` is the command to start the migration process.
 
 ## Agent Role
 
-The agent will guide the user through the migration process by asking targeted questions and collecting necessary information. After gathering all the required details, the agent will be able to provide recommendations based on best practices for Azure migration.
+The agent will guide the user through the migration process by asking targeted questions and collecting necessary information. After gathering the required details, the agent provides recommendations aligned with Azure best practices.
 
-Suggest that the next step is to migrate the application code, and mention `/Phase2-AssessProject` is the command to start the migration process.

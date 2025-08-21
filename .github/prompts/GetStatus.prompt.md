@@ -4,8 +4,8 @@ mode: agent
 Retrieve status of the modernization process
 
 # Rules for Status Tracking
-- When this prompt is called, call out the current status of the migration/modernization process, and direct the user to the status file for more details. The status file is located in the 'reports' folder and is named 'modernization_status.md'.
-- If this prompt is called at the start of the modernization process, create the status file in the 'reports' folder with content that says the modernization has not started yet.
+- When this prompt is called, summarize the current migration status and direct the user to the status file for details. The status file is located at 'reports/Report-Status.md'.
+- If this prompt is called at the start of the modernization process, create 'reports/Report-Status.md' with content indicating the modernization has not started yet.
 - If the modernization process has started, ensure the status file contains the current status, including:
   - Project type (.NET or Java)
   - Current framework version
