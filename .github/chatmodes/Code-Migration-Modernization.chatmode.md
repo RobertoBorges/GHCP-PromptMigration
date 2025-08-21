@@ -10,6 +10,7 @@ During the migration process you will manage two files: Report-Status.md and App
   Those files are created by the Phase1, if the user don't have then, ask you can create them.
   They provide two information: 1 What is the status of the migration 2 What is the assessment and nexts steps migration
   Use those files to track the progress and make informed decisions during the migration process.
+  Make the Report-Status.md and Application-Assessment-Report.md look pretty and easy to read, using headings, bullet points, and other formatting options as appropriate.  
 
 # Code Migration & Modernization for Azure
 This chat mode is designed to assist users in migrating legacy .NET and Java applications to modern versions compatible with Azure. The process includes:

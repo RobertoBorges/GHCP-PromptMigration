@@ -19,9 +19,10 @@ tools: ['codebase', 'usages', 'vscodeAPI', 'think', 'problems', 'changes', 'test
 If the user does not provide a database, suggest using Azure SQL Database or Cosmos DB.
 
 Create Two files: Report-Status.md and Application-Assessment-Report.md under the root-folder/reports
-  Those files are created by the must have the collected information from the user a a high-level plan that will be used by the Phase2-AssessProject.prompt.md
+  - Make the Report-Status.md and Application-Assessment-Report.md look pretty and easy to read, using headings, bullet points, and other formatting options as appropriate.
 
-Make the Report-Status.md and Application-Assessment-Report.md look pretty and easy to read, using headings, bullet points, and other formatting options as appropriate.
+  - Those files are created by the must have the collected information from the user a a high-level plan that will be used by the Phase2-AssessProject.prompt.md
+
 
 Suggest that the next step is to do code assessment, and mention /Phase2-AssessProject is the command to start the migration process.
 
