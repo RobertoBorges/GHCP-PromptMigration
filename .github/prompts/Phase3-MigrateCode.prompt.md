@@ -26,7 +26,7 @@ Migrate application code to modern framework version compatible with Azure.
 - Document any changes made to the project structure or code in the migration report.
 - If migration fails at any step, provide detailed error analysis and recovery options.
 - Suggest that the next step is to generate infrastructure files, and mention `/phase4-generateinfra` is the command to start the infra generation process.
-- At the end, update the status report file Reports/Report-Status.md with the status of the assessment step.
+- At the end, update the status report file reports/Report-Status.md with the status of the migration step.
 
 
 ## For .NET Applications:

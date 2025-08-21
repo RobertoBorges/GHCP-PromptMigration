@@ -31,8 +31,8 @@ Through a guided, AI-assisted workflow, developers can efficiently transform leg
 
 To reduce hallucinations during the migration, the guided prompts use two files in the repository's `reports/` folder:
 
-- `modernization_status.md` — overall migration status dashboard
-- `Application-Assessment-Report.md` — application assessment summary
+- `reports/Report-Status.md` — overall migration status dashboard
+- `reports/Application-Assessment-Report.md` — application assessment summary
 
 You can update these files at any phase to fit your requirements.
 
@@ -53,6 +53,9 @@ Pro tip3: Don't assume anything, always verify with the documentation.
   - **`02-NetFramework30-ASPNET-WEB/`**: .NET Framework 3.0 ASP.NET Web Application
   - **`03-WCFNet35/`**: WCF services using .NET Framework 3.5
   - **`04-ContosoUniversityDiPS/`**: Sample university application with multiple components
+  - **`05-BookShop/`**: Bookshop ASP.Net 3.5 Web Forms application for migration demonstration
+  - **`06-Java-API-BusReservation/`**: Java 8 API for bus reservation system
+
 
 ## Migration & Modernization Process
 
@@ -118,7 +121,7 @@ Status reports are stored in the `reports/Report-Status.md` file, providing a ce
 1. Clone this repository
 2. Install [GitHub Copilot](https://copilot.github.com/) in your Visual Studio Code
 3. Open one of the use case projects in VS Code
-4. Start a chat with GitHub Copilot using the `/Phase1-Plan-Migration` command under the folder #file:02-NetFramework30-ASPNET-WEB to begin the migration planning
+4. Start a chat with GitHub Copilot using the prompt:  "`/phase1-planmigration` under the folder #file:02-NetFramework30-ASPNET-WEB" to begin the migration planning
 5. Use `/getstatus` at any time to check the current migration status
 6. Follow the guided prompts to complete each phase of the migration process
 
