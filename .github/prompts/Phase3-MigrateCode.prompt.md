@@ -6,8 +6,7 @@ tools: ['codebase', 'usages', 'vscodeAPI', 'think', 'problems', 'changes', 'test
 Migrate application code to modern framework version compatible with Azure.
 
 # Rules for Code Migration and Modernization
-- Ensure appropriate Azure extensions for the target framework are installed in VS Code.
-- Always start migration by creating a new folder with an intuitive name for the modernized project. Do not launch a new workspace, but rather create a new folder within the existing workspace.
+- Always start migration by creating a new folder under the root folder with an intuitive name for the modernized project. Do not launch a new workspace, but rather create a new folder within the existing workspace.
 - Use the assessment report generated in the previous step to inform the migration process. The assessment report can be found in the 'reports' folder.
 - Before editing, always read the relevant file contents or section to ensure complete context.
 - Use `semantic_search` to identify all code files that need migration.
