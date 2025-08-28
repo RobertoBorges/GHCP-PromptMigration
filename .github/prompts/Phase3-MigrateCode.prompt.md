@@ -5,29 +5,50 @@ tools: ['codebase', 'usages', 'vscodeAPI', 'think', 'problems', 'changes', 'test
 ---
 Migrate application code to modern framework version compatible with Azure.
 
-# Rules for Code Migration and Modernization
-- Ensure appropriate Azure extensions for the target framework are installed in VS Code.
-- Always start migration by creating a new folder with an intuitive name for the modernized project. Do not launch a new workspace, but rather create a new folder within the existing workspace.
-- Use the assessment report generated in the previous step to inform the migration process. The assessment report can be found in the 'reports' folder.
-- Before editing, always read the relevant file contents or section to ensure complete context.
-- Use `semantic_search` to identify all code files that need migration.
-- Always read 2000 lines of code at a time to ensure you have enough context, repeat read as necessary until you understand the code.
-- If a patch is not applied correctly, attempt to reapply it.
-- Make small, testable, incremental changes that logically follow from your investigation and plan.
-- Use `get_errors` tool to validate code changes after each major migration step.
-- Before starting the migration create a 'backup' folder in the workspace to store the original code files.
-- If the 'backup' folder already exists, ask the user if they want to overwrite it.
-- Use the guidance provided in #file:Code-Migration-Modernization.chatmode.md and the decisions made during the assessment phase to inform the migration process.
-- Containerize the application if specified in the assessment report.
-- Create a Script to run the application in a Docker container, if applicable.
-- Create a Script to build and run the application on windows or Linux.
-- Based on the assessed application type (.NET or Java):
+Ensure appropriate Azure extensions for the target framework are installed in VS Code.
+
+Always start migration by creating a new folder under the root folder with an intuitive name for the modernized project. 
+
+Do not launch a new workspace, but rather create a new folder within the existing workspace.
+
+Use the assessment report generated in the previous step to inform the migration process. The assessment report can be found in the 'reports' folder.
+
+Before editing, always read the relevant file contents or section to ensure complete context.
+
+Use `semantic_search` tool to identify all code files that need migration.
+
+Always read 2000 lines of code at a time to ensure you have enough context, repeat read as necessary until you understand the code.
+
+If a patch is not applied correctly, attempt to reapply it.
+
+Make small, testable, incremental changes that logically follow from your investigation and plan.
+
+Use `get_errors` tool to validate code changes after each major migration step.
+
+Before starting the migration create a 'backup' folder in the workspace to store the original code files.
+
+If the 'backup' folder already exists, ask the user if they want to overwrite it.
+
+Use the guidance provided in #file:Code-Migration-Modernization.chatmode.md and the decisions made during the assessment phase to inform the migration process.
+
+Copy media files from the original project directory to the new project directory at same relative paths.
+
+Keep equivalent UI components to avoid breaking changes.
+
+Confirm that all functionality is preserved after migration.
+
+Containerize the application if specified in the assessment report.
+
+Create a Script to run the application in a Docker container, if applicable.
+
+Based on the assessed application type (.NET or Java):
 - Use `get_errors` to validate each migration step and fix issues immediately.
 - Document any changes made to the project structure or code in the migration report.
 - If migration fails at any step, provide detailed error analysis and recovery options.
-- Suggest that the next step is to generate infrastructure files, and mention `/phase4-generateinfra` is the command to start the infra generation process.
-- At the end, update the status report file reports/Report-Status.md with the status of the migration step.
 
+Suggest that the next step is to generate infrastructure files, and mention `/phase4-generateinfra` is the command to start the infra generation process.
+
+At the end, update the status report file reports/Report-Status.md with the status of the migration step.
 
 ## For .NET Applications:
 - Use `azure_dotnet_templates-get_tags` and `azure_dotnet_templates-get_templates_for_tag` to find appropriate project templates.

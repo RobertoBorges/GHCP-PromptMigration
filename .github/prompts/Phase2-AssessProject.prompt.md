@@ -12,7 +12,9 @@ Then ask about the database, to ensure the Azure database is compatible with the
 
 If the user does not provide a database, suggest Azure SQL Database (for transactional, relational workloads) or Azure Cosmos DB (for globally distributed, NoSQL, or high-throughput workloads) based on the current application's data access patterns and requirements.
 
-Just start the assessment when the user confirms the hosting platform, infrastructure as code type, and database.
+JUST CONTINUE THIS PROMPT IF THE USER CONFIRMS THE HOSTING PLATFORM, INFRASTRUCTURE AS CODE TYPE, AND DATABASE.
+
+In the final answer provide a risk assessment based on the current application versus the target architecture.
 
 # Rules for Assessment of Application
 - Then if the workspace does not contain a 'reports' folder, create one.
