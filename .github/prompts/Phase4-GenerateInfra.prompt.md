@@ -55,9 +55,7 @@ Include proper tagging and naming conventions using resource tokens.
 
 Implement security best practices: managed identities, private endpoints, network restrictions.
 
-Use Tagging on Azure resources for better organization and cost management.
-
-Ensure to create RBAC roles between different Azure services.
+Configure RBAC assignments for service-to-service authentication using managed identities.
 
 Based on the chosen Azure hosting platform in the assessment report (App Service, AKS, or Container Apps), generate the appropriate infrastructure files:
 
