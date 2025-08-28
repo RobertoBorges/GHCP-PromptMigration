@@ -74,7 +74,7 @@ Based on the chosen Azure hosting platform in the assessment report (App Service
     - identityAndSecurity.bicep - Managed Identity and RBAC setup
     - networking.bicep (if applicable) - VNet, NSG, private endpoints
     - keyvault.bicep - Azure Key Vault for secrets management
-    - Keyvault must be configured with RBAC and access policies
+    - Key Vault must be configured with RBAC and access policies
 - Configure the infrastructure for the selected hosting platform:
   - For App Service: Set up App Service Plan, App Service, deployment slots, and related resources
   - For AKS: Set up AKS cluster, node pools, Azure Container Registry, and related resources
