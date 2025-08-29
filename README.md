@@ -18,6 +18,8 @@ Through a guided, AI-assisted workflow, developers can efficiently transform leg
 
 ## Requirements
 
+- GitHub Copilot License
+- Model Claude Sonnet 3.7+ (Included in GitHub Copilot)
 - Azure MCP Server Extension
 - GitHub Copilot for Azure Extension
 - GitHub Copilot Extension 1.35+
