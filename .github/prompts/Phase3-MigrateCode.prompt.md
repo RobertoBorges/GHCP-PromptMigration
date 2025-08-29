@@ -39,7 +39,9 @@ Confirm that all functionality is preserved after migration.
 
 Containerize the application if specified in the assessment report.
 
-Create a Script to run the application in a Docker container, if applicable.
+Create a Script to build and run the application in a Docker container, if applicable.
+
+Make sure you build the application as you create it, and fix them as you go.
 
 Based on the assessed application type (.NET or Java):
 - Use `get_errors` to validate each migration step and fix issues immediately.
