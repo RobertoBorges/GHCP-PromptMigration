@@ -1,0 +1,322 @@
+/* BookShop Online Store CSS - Legacy Style (2008) */
+
+body {
+    background: #b6b7bc;
+    font-size: .80em;
+    font-family: "Trebuchet MS", "Lucida Grande", Verdana, Arial, sans-serif;
+    margin: 0px;
+    padding: 0px;
+    color: #696969;
+}
+
+a:link, a:visited {
+    color: #034af3;
+}
+
+a:hover {
+    color: #1d60ff;
+    text-decoration: none;
+}
+
+a:active {
+    color: #034af3;
+}
+
+p {
+    margin-bottom: 10px;
+    line-height: 1.6em;
+}
+
+/* Main Layout */
+.page {
+    width: 960px;
+    background-color: #fff;
+    margin: 20px auto 0px auto;
+    border: 1px solid #496077;
+}
+
+.header {
+    position: relative;
+    margin: 0px;
+    padding: 0px;
+    background: #4b6c9e;
+    width: 100%;
+}
+
+.header h1 {
+    font-weight: 700;
+    margin: 0px;
+    padding: 0px 0px 0px 20px;
+    color: #f9f9f9;
+    border: none;
+    line-height: 2em;
+    font-size: 2em !important;
+}
+
+.header h1 a {
+    color: #f9f9f9;
+    text-decoration: none;
+}
+
+.loginDisplay {
+    font-size: 1.1em;
+    display: block;
+    text-align: right;
+    color: White;
+    margin: 10px;
+    padding: 10px;
+}
+
+.clear {
+    clear: both;
+}
+
+.main {
+    padding: 0px 12px;
+    margin: 12px 8px 8px 8px;
+    min-height: 420px;
+}
+
+.footer {
+    color: #4e5766;
+    padding: 8px 0px 0px 0px;
+    margin: 0px auto;
+    text-align: center;
+    line-height: normal;
+    background: #4b6c9e;
+}
+
+.footer p {
+    color: White;
+    margin: 5px 0;
+}
+
+.footer a {
+    color: #ddd;
+}
+
+/* Menu */
+div.menu {
+    padding: 4px 0px 4px 8px;
+}
+
+div.menu ul {
+    list-style: none;
+    margin: 0px;
+    padding: 0px;
+    width: auto;
+}
+
+div.menu ul li a, div.menu ul li a:visited {
+    background-color: #465c71;
+    border: 1px #4e667d solid;
+    color: #ddd;
+    display: block;
+    line-height: 1.35em;
+    padding: 4px 20px;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+div.menu ul li a:hover {
+    background-color: #bfcbd6;
+    color: #465c71;
+    text-decoration: none;
+}
+
+div.menu ul li a:active {
+    background-color: #465c71;
+    color: #cfdbe6;
+    text-decoration: none;
+}
+
+div.menu ul li {
+    float: left;
+    margin: 0px;
+    padding: 0px;
+}
+
+/* Content */
+.book-list {
+    display: table;
+    width: 100%;
+}
+
+.book-item {
+    display: table-cell;
+    width: 200px;
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: center;
+    vertical-align: top;
+    background: #f9f9f9;
+}
+
+.book-item img {
+    width: 120px;
+    height: 160px;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+}
+
+.book-item h3 {
+    font-size: 1.1em;
+    margin: 5px 0;
+    color: #034af3;
+}
+
+.book-item .author {
+    font-style: italic;
+    color: #666;
+    margin: 3px 0;
+}
+
+.book-item .price {
+    font-weight: bold;
+    color: #c00;
+    font-size: 1.2em;
+    margin: 5px 0;
+}
+
+.book-item .category {
+    font-size: 0.9em;
+    color: #888;
+    margin: 3px 0;
+}
+
+/* Forms */
+.form-table {
+    width: 100%;
+}
+
+.form-table td {
+    padding: 5px;
+    vertical-align: top;
+}
+
+.form-table .label {
+    font-weight: bold;
+    text-align: right;
+    width: 150px;
+}
+
+.form-table input[type="text"], .form-table textarea, .form-table select {
+    width: 300px;
+    padding: 3px;
+    border: 1px solid #ccc;
+}
+
+.form-table textarea {
+    height: 80px;
+}
+
+/* Buttons */
+.btn {
+    background: #4b6c9e;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    cursor: pointer;
+    margin: 5px;
+}
+
+.btn:hover {
+    background: #365373;
+}
+
+/* Messages */
+.message {
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    background: #f0f8ff;
+}
+
+.error {
+    background: #ffe6e6;
+    border-color: #ff9999;
+    color: #cc0000;
+}
+
+.success {
+    background: #e6ffe6;
+    border-color: #99cc99;
+    color: #006600;
+}
+
+/* Grid */
+.grid {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0;
+}
+
+.grid th {
+    background: #4b6c9e;
+    color: white;
+    padding: 8px;
+    text-align: left;
+    border: 1px solid #365373;
+}
+
+.grid td {
+    padding: 8px;
+    border: 1px solid #ddd;
+}
+
+.grid tr:nth-child(even) {
+    background: #f9f9f9;
+}
+
+.grid tr:hover {
+    background: #f0f8ff;
+}
+
+/* Hide skip links */
+.hideSkiplink {
+    background-color: #4b6c9e;
+    width: 100%;
+}
+
+/* About Page Styles */
+.about-section {
+    margin: 20px 0;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.about-section h1 {
+    color: #4b6c9e;
+    font-size: 2em;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 10px;
+}
+
+.about-content {
+    line-height: 1.6;
+}
+
+.about-content h2 {
+    color: #4b6c9e;
+    font-size: 1.4em;
+    margin: 20px 0 10px 0;
+}
+
+.contact-info {
+    background-color: #eef5fc;
+    padding: 15px;
+    border-left: 4px solid #4b6c9e;
+    margin-top: 30px;
+}
+
+.version-info {
+    display: block;
+    margin-top: 30px;
+    font-size: 0.9em;
+    color: #777;
+    font-style: italic;
+}

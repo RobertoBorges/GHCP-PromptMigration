@@ -1,0 +1,63 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "web-app",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build-web-app",
+            "program": "${workspaceRoot}/ContosoUniversity.Web/bin/Debug/netcoreapp2.1/ContosoUniversity.Web.dll",
+            "args": [],
+            "cwd": "${workspaceRoot}/ContosoUniversity.Web",
+            "stopAtEntry": false,
+            "launchBrowser": {
+                "enabled": true,
+                "args": "${auto-detect-url}",
+                "windows": {
+                    "command": "cmd.exe",
+                    "args": "/C start ${auto-detect-url}"
+                },
+                "osx": {
+                    "command": "open"
+                },
+                "linux": {
+                    "command": "xdg-open"
+                }
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceRoot}/Views"
+            }
+        },
+        {
+            "name": "api",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build-api",
+            "program": "${workspaceRoot}/ContosoUniversity.Api/bin/Debug/netcoreapp2.1/ContosoUniversity.Api.dll",
+            "args": [],
+            "cwd": "${workspaceRoot}/ContosoUniversity.Api",
+            "stopAtEntry": false,
+            "launchBrowser": {
+                "enabled": true,
+                "args": "${auto-detect-url}",
+                "windows": {
+                    "command": "cmd.exe",
+                    "args": "/C start ${auto-detect-url}"
+                },
+                "osx": {
+                    "command": "open"
+                },
+                "linux": {
+                    "command": "xdg-open"
+                }
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {}
+        }
+    ]
+}

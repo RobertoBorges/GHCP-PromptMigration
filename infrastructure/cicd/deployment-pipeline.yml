@@ -1,0 +1,288 @@
+# Azure DevOps Pipeline for StoreApp with SPN
+# This pipeline builds, tests, and deploys the StoreApp to Azure using a Service Principal
+
+trigger:
+  branches:
+    include:
+      - main
+  paths:
+    exclude:
+      - README.md
+      - docs/*
+
+# PR trigger
+pr:
+  branches:
+    include:
+      - main
+  paths:
+    exclude:
+      - README.md
+      - docs/*
+
+# Pipeline variables
+variables:
+  vmImageName: 'windows-latest'
+  buildConfiguration: 'Release'
+  dotnetSdkVersion: '8.0.x'
+  projectPath: 'src/StoreApp/StoreApp.csproj'
+  publishPath: '$(Build.ArtifactStagingDirectory)/app'
+  infraPath: 'infrastructure/terraform'
+  # Service Principal Variables - Set these in the pipeline variables or variable group
+  # ARM_CLIENT_ID: Service Principal Client ID
+  # ARM_TENANT_ID: Service Principal Tenant ID
+  # ARM_SUBSCRIPTION_ID: Azure Subscription ID
+  # ARM_CLIENT_SECRET: Service Principal Secret (store as a secret variable)
+
+# Multiple stages for build, infrastructure, and deployment
+stages:
+- stage: Build
+  displayName: 'Build and Test'
+  jobs:
+  - job: BuildAndTest
+    displayName: 'Build and Test Application'
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+    - task: UseDotNet@2
+      displayName: 'Use .NET SDK $(dotnetSdkVersion)'
+      inputs:
+        packageType: 'sdk'
+        version: '$(dotnetSdkVersion)'
+        
+    - task: DotNetCoreCLI@2
+      displayName: 'Restore NuGet packages'
+      inputs:
+        command: 'restore'
+        projects: '$(projectPath)'
+        
+    - task: DotNetCoreCLI@2
+      displayName: 'Build application'
+      inputs:
+        command: 'build'
+        projects: '$(projectPath)'
+        arguments: '--configuration $(buildConfiguration) --no-restore'
+        
+    - task: DotNetCoreCLI@2
+      displayName: 'Run tests'
+      inputs:
+        command: 'test'
+        projects: 'src/**/*Tests.csproj'
+        arguments: '--configuration $(buildConfiguration) --no-build'
+        testRunTitle: 'All Tests'
+        continueOnError: true
+        
+    - task: DotNetCoreCLI@2
+      displayName: 'Publish application'
+      inputs:
+        command: 'publish'
+        publishWebProjects: false
+        projects: '$(projectPath)'
+        arguments: '--configuration $(buildConfiguration) --output $(publishPath) --no-build'
+        zipAfterPublish: true
+        
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish artifacts'
+      inputs:
+        PathtoPublish: '$(publishPath)'
+        ArtifactName: 'app'
+        
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Terraform files'
+      inputs:
+        PathtoPublish: '$(infraPath)'
+        ArtifactName: 'terraform'
+
+- stage: Validate_Infrastructure
+  displayName: 'Validate Infrastructure'
+  dependsOn: Build
+  jobs:
+  - job: TerraformValidate
+    displayName: 'Validate Terraform Configuration'
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - task: DownloadBuildArtifacts@1
+      displayName: 'Download Terraform files'
+      inputs:
+        buildType: 'current'
+        downloadType: 'specific'
+        itemPattern: 'terraform/**'
+        downloadPath: '$(System.ArtifactsDirectory)'
+        
+    - task: TerraformInstaller@0
+      displayName: 'Install Terraform'
+      inputs:
+        terraformVersion: 'latest'
+    
+    # Set up Service Principal authentication
+    - task: AzureCLI@2
+      displayName: 'Set up Azure authentication'
+      inputs:
+        azureSubscription: 'Azure Subscription'
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          echo "##vso[task.setvariable variable=ARM_CLIENT_ID]$(ARM_CLIENT_ID)"
+          echo "##vso[task.setvariable variable=ARM_CLIENT_SECRET]$(ARM_CLIENT_SECRET)"
+          echo "##vso[task.setvariable variable=ARM_TENANT_ID]$(ARM_TENANT_ID)"
+          echo "##vso[task.setvariable variable=ARM_SUBSCRIPTION_ID]$(ARM_SUBSCRIPTION_ID)"
+        
+    - task: TerraformTaskV4@4
+      displayName: 'Terraform Init'
+      inputs:
+        provider: 'azurerm'
+        command: 'init'
+        workingDirectory: '$(System.ArtifactsDirectory)/terraform'
+        backendServiceArm: 'Azure Subscription' # This uses the service connection
+        backendAzureRmResourceGroupName: '$(TF_BACKEND_RG)'
+        backendAzureRmStorageAccountName: '$(TF_BACKEND_STORAGE)'
+        backendAzureRmContainerName: '$(TF_BACKEND_CONTAINER)'
+        backendAzureRmKey: 'storeapp.terraform.tfstate'
+        
+    - task: TerraformTaskV4@4
+      displayName: 'Terraform Validate'
+      inputs:
+        provider: 'azurerm'
+        command: 'validate'
+        workingDirectory: '$(System.ArtifactsDirectory)/terraform'
+
+- stage: Deploy_Dev
+  displayName: 'Deploy to Development'
+  dependsOn: Validate_Infrastructure
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+  variables:
+    environment: 'dev'
+  jobs:
+  - deployment: DeployInfrastructure
+    displayName: 'Deploy Infrastructure'
+    environment: 'Dev'
+    pool:
+      vmImage: 'ubuntu-latest'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: DownloadBuildArtifacts@1
+            displayName: 'Download Terraform files'
+            inputs:
+              buildType: 'current'
+              downloadType: 'specific'
+              itemPattern: 'terraform/**'
+              downloadPath: '$(System.ArtifactsDirectory)'
+              
+          - task: TerraformInstaller@0
+            displayName: 'Install Terraform'
+            inputs:
+              terraformVersion: 'latest'
+          
+          # Set up Service Principal authentication
+          - task: AzureCLI@2
+            displayName: 'Set up Azure authentication'
+            inputs:
+              azureSubscription: 'Azure Subscription'
+              scriptType: 'bash'
+              scriptLocation: 'inlineScript'
+              inlineScript: |
+                echo "##vso[task.setvariable variable=ARM_CLIENT_ID]$(ARM_CLIENT_ID)"
+                echo "##vso[task.setvariable variable=ARM_CLIENT_SECRET]$(ARM_CLIENT_SECRET)"
+                echo "##vso[task.setvariable variable=ARM_TENANT_ID]$(ARM_TENANT_ID)"
+                echo "##vso[task.setvariable variable=ARM_SUBSCRIPTION_ID]$(ARM_SUBSCRIPTION_ID)"
+              
+          - task: TerraformTaskV4@4
+            displayName: 'Terraform Init'
+            inputs:
+              provider: 'azurerm'
+              command: 'init'
+              workingDirectory: '$(System.ArtifactsDirectory)/terraform'
+              backendServiceArm: 'Azure Subscription'
+              backendAzureRmResourceGroupName: '$(TF_BACKEND_RG)'
+              backendAzureRmStorageAccountName: '$(TF_BACKEND_STORAGE)'
+              backendAzureRmContainerName: '$(TF_BACKEND_CONTAINER)'
+              backendAzureRmKey: 'storeapp.terraform.tfstate'
+              
+          - task: TerraformTaskV4@4
+            displayName: 'Terraform Plan'
+            inputs:
+              provider: 'azurerm'
+              command: 'plan'
+              workingDirectory: '$(System.ArtifactsDirectory)/terraform'
+              environmentServiceNameAzureRM: 'Azure Subscription'
+              commandOptions: '-var="environment=$(environment)" -out=tfplan'
+              
+          - task: TerraformTaskV4@4
+            displayName: 'Terraform Apply'
+            inputs:
+              provider: 'azurerm'
+              command: 'apply'
+              workingDirectory: '$(System.ArtifactsDirectory)/terraform'
+              environmentServiceNameAzureRM: 'Azure Subscription'
+              commandOptions: 'tfplan'
+              
+          - task: PowerShell@2
+            displayName: 'Get Terraform Outputs'
+            inputs:
+              targetType: 'inline'
+              workingDirectory: '$(System.ArtifactsDirectory)/terraform'
+              script: |
+                $resourceGroupName = terraform output -raw resource_group_name
+                $appServiceName = terraform output -raw app_service_name
+                Write-Host "##vso[task.setvariable variable=RESOURCE_GROUP_NAME;isOutput=true]$resourceGroupName"
+                Write-Host "##vso[task.setvariable variable=APP_SERVICE_NAME;isOutput=true]$appServiceName"
+            name: 'TerraformOutputs'
+            
+  - deployment: DeployApplication
+    displayName: 'Deploy Application'
+    dependsOn: DeployInfrastructure
+    environment: 'Dev'
+    pool:
+      vmImage: 'windows-latest'
+    variables:
+      RESOURCE_GROUP_NAME: $[ dependencies.DeployInfrastructure.outputs['TerraformOutputs.RESOURCE_GROUP_NAME'] ]
+      APP_SERVICE_NAME: $[ dependencies.DeployInfrastructure.outputs['TerraformOutputs.APP_SERVICE_NAME'] ]
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: DownloadBuildArtifacts@1
+            displayName: 'Download App Artifacts'
+            inputs:
+              buildType: 'current'
+              downloadType: 'specific'
+              itemPattern: 'app/**'
+              downloadPath: '$(Pipeline.Workspace)'
+              
+          - task: AzureRmWebAppDeployment@4
+            displayName: 'Deploy to Azure App Service'
+            inputs:
+              ConnectionType: 'AzureRM'
+              azureSubscription: 'Azure Subscription'
+              appType: 'webApp'
+              WebAppName: '$(APP_SERVICE_NAME)'
+              ResourceGroupName: '$(RESOURCE_GROUP_NAME)'
+              packageForLinux: '$(Pipeline.Workspace)/app/*.zip'
+              enableCustomDeployment: true
+              DeploymentType: 'zipDeploy'
+              TakeAppOfflineFlag: true
+              
+          - task: PowerShell@2
+            displayName: 'Perform Application Warmup'
+            inputs:
+              targetType: 'inline'
+              script: |
+                $appUrl = "https://$env:APP_SERVICE_NAME.azurewebsites.net"
+                $pages = @("/", "/products", "/about", "/contact")
+                
+                foreach ($page in $pages) {
+                    $url = "$appUrl$page"
+                    Write-Host "Warming up: $url"
+                    try {
+                        $response = Invoke-WebRequest -Uri $url -UseBasicParsing
+                        Write-Host "Status: $($response.StatusCode)"
+                    } catch {
+                        Write-Host "Error during warmup: $_"
+                    }
+                }
+
+# Additional stages for Test and Production environments
+# These would be similar to the Dev stage but with different environment variables and approvals

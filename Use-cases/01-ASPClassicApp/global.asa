@@ -1,0 +1,24 @@
+Sub Application_OnStart
+    ' Initialize application-level variables here
+    Application("AppName") = "Classic ASP Store"
+    Application("AppVersion") = "1.0"
+    Application("CreationDate") = Now()
+End Sub
+
+' Session_OnStart - Runs when a new user session begins
+Sub Session_OnStart
+    ' Initialize session variables here
+    Session("UserID") = 0 ' 0 means not logged in
+    Session("CartItems") = 0
+    Session("LastActivity") = Now()
+End Sub
+
+' Application_OnEnd - Runs when the application ends (server shutdown)
+Sub Application_OnEnd
+    ' Cleanup code here
+End Sub
+
+' Session_OnEnd - Runs when a user session times out or ends
+Sub Session_OnEnd
+    ' Cleanup user-specific resources here
+End Sub

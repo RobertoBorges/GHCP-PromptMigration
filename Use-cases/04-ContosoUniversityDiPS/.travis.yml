@@ -1,0 +1,12 @@
+language: csharp
+mono: none
+dotnet: 2.1.300
+
+install: 
+- dotnet restore
+
+script:
+- dotnet build
+- dotnet test ContosoUniversity.Data.Tests/ContosoUniversity.Data.Tests.csproj
+- dotnet test ContosoUniversity.Web.Tests/ContosoUniversity.Web.Tests.csproj
+- dotnet test ContosoUniversity.Api.Tests/ContosoUniversity.Api.Tests.csproj

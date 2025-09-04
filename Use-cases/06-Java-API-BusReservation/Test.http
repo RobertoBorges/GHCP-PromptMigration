@@ -1,0 +1,25 @@
+@busName=Bus01
+@seatNumber=d5
+@busName=Bus01
+@userName=user2
+
+###
+POST http://localhost:8081/api/search
+content-type: application/json
+
+{
+    "busName": "Bus01",
+    "departureDate": "2020-07-02T04:30:00.176+00:00",
+    "returnDate": "2020-07-03T04:30:00.176+00:00",
+    "sourceCity": "S1",
+    "destinationCity": "D1"
+}
+
+
+### GET 
+GET http://localhost:8081/api/bus/{{busName}}
+
+### POST Express
+POST http://localhost:8081/api/bookBus?seatNumber={{seatNumber}}&busName={{busName}}&userName={{userName}}
+content-type: application/json
+
