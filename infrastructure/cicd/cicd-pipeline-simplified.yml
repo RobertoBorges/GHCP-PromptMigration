@@ -1,0 +1,337 @@
+# Azure DevOps CI/CD Pipeline for StoreApp
+# This pipeline implements CI/CD for the StoreApp:
+# - CI: Build, test, and package the application
+# - CD: Deploy infrastructure and application to multiple environments
+
+trigger:
+  branches:
+    include:
+      - main
+      - pipeline-branch
+  paths:
+    exclude:
+      - README.md
+      - docs/*
+
+# PR trigger
+pr:
+  branches:
+    include:
+      - main
+      - pipeline-branch
+  paths:
+    exclude:
+      - README.md
+      - docs/*
+
+# Pipeline variables
+variables:
+  - name: vmImageName
+    value: 'windows-latest'
+  - name: buildConfiguration
+    value: 'Release'
+  - name: dotnetSdkVersion
+    value: '8.0.x'
+  - name: projectPath
+    value: 'src/StoreApp/StoreApp.csproj'
+  - name: testProjectPattern
+    value: 'src/**/*Tests.csproj'
+  - name: publishPath
+    value: '$(Build.ArtifactStagingDirectory)/app'
+  - name: infraPath
+    value: 'infrastructure/terraform'
+  - name: isDevelopment
+    value: $[eq(variables['Build.SourceBranch'], 'refs/heads/pipeline-branch')]
+  - name: isProduction
+    value: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
+  - group: AzureServicePrincipal
+  - group: TerraformConfig
+
+# ==============================================
+# STAGES
+# ==============================================
+
+stages:
+# =============== CI STAGES ===============
+- stage: CI
+  displayName: 'Continuous Integration'
+  jobs:
+  - job: Build
+    displayName: 'Build and Test'
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+    - task: UseDotNet@2
+      displayName: 'Use .NET SDK $(dotnetSdkVersion)'
+      inputs:
+        packageType: 'sdk'
+        version: '$(dotnetSdkVersion)'
+        
+    - task: DotNetCoreCLI@2
+      displayName: 'Restore NuGet packages'
+      inputs:
+        command: 'restore'
+        projects: '$(projectPath)'
+        
+    - task: DotNetCoreCLI@2
+      displayName: 'Build application'
+      inputs:
+        command: 'build'
+        projects: '$(projectPath)'
+        arguments: '--configuration $(buildConfiguration) --no-restore'
+        
+    - task: DotNetCoreCLI@2
+      displayName: 'Run unit tests'
+      inputs:
+        command: 'test'
+        projects: '$(testProjectPattern)'
+        arguments: '--configuration $(buildConfiguration) --no-build'
+        testRunTitle: 'Unit Tests'
+        
+    - task: DotNetCoreCLI@2
+      displayName: 'Publish application'
+      inputs:
+        command: 'publish'
+        publishWebProjects: false
+        projects: '$(projectPath)'
+        arguments: '--configuration $(buildConfiguration) --output $(publishPath) --no-build'
+        zipAfterPublish: true
+        
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish app artifacts'
+      inputs:
+        PathtoPublish: '$(publishPath)'
+        ArtifactName: 'app'
+        
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish infrastructure files'
+      inputs:
+        PathtoPublish: '$(infraPath)'
+        ArtifactName: 'terraform'
+
+# =============== INFRASTRUCTURE VALIDATION STAGE ===============
+- stage: Validate_Infrastructure
+  displayName: 'Validate Infrastructure'
+  dependsOn: CI
+  jobs:
+  - job: TerraformValidate
+    displayName: 'Validate Terraform Configuration'
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - task: DownloadBuildArtifacts@1
+      displayName: 'Download Terraform files'
+      inputs:
+        buildType: 'current'
+        downloadType: 'specific'
+        itemPattern: 'terraform/**'
+        downloadPath: '$(System.ArtifactsDirectory)'
+    
+    # Set up Azure CLI authentication and run Terraform using CLI
+    - task: AzureCLI@2
+      displayName: 'Validate Terraform Configuration'
+      inputs:
+        azureSubscription: 'azure-service-connection'
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          # Install Terraform
+          wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor | sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg
+          echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+          sudo apt-get update && sudo apt-get install terraform
+          
+          # Export Azure credentials as environment variables
+          export ARM_CLIENT_ID="$(ARM_CLIENT_ID)"
+          export ARM_CLIENT_SECRET="$(ARM_CLIENT_SECRET)"
+          export ARM_TENANT_ID="$(ARM_TENANT_ID)"
+          export ARM_SUBSCRIPTION_ID="$(ARM_SUBSCRIPTION_ID)"
+          
+          # Initialize Terraform
+          cd $(System.ArtifactsDirectory)/terraform
+          terraform init \
+            -backend-config="resource_group_name=$(TF_STATE_RESOURCE_GROUP_NAME)" \
+            -backend-config="storage_account_name=$(TF_STATE_STORAGE_ACCOUNT_NAME)" \
+            -backend-config="container_name=$(TF_STATE_CONTAINER_NAME)" \
+            -backend-config="key=$(TF_STATE_KEY)"
+          
+          # Validate Terraform configuration
+          terraform validate
+
+# =============== CD STAGES ===============
+# Development Environment Deployment
+- stage: Deploy_Dev
+  displayName: 'Deploy to Development'
+  dependsOn: Validate_Infrastructure
+  condition: and(succeeded(), eq(variables.isDevelopment, true))
+  variables:
+    environment: 'dev'
+  jobs:
+  - job: DeployInfrastructure
+    displayName: 'Deploy Infrastructure'
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - task: DownloadBuildArtifacts@1
+      displayName: 'Download Terraform files'
+      inputs:
+        buildType: 'current'
+        downloadType: 'specific'
+        itemPattern: 'terraform/**'
+        downloadPath: '$(System.ArtifactsDirectory)'
+    
+    # Set up Azure CLI authentication and run Terraform using CLI
+    - task: AzureCLI@2
+      displayName: 'Deploy Azure Infrastructure'
+      inputs:
+        azureSubscription: 'azure-service-connection'
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          # Install Terraform
+          wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor | sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg
+          echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+          sudo apt-get update && sudo apt-get install terraform
+          
+          # Export Azure credentials as environment variables
+          export ARM_CLIENT_ID="$(ARM_CLIENT_ID)"
+          export ARM_CLIENT_SECRET="$(ARM_CLIENT_SECRET)"
+          export ARM_TENANT_ID="$(ARM_TENANT_ID)"
+          export ARM_SUBSCRIPTION_ID="$(ARM_SUBSCRIPTION_ID)"
+          
+          # Initialize Terraform
+          cd $(System.ArtifactsDirectory)/terraform
+          terraform init \
+            -backend-config="resource_group_name=$(TF_STATE_RESOURCE_GROUP_NAME)" \
+            -backend-config="storage_account_name=$(TF_STATE_STORAGE_ACCOUNT_NAME)" \
+            -backend-config="container_name=$(TF_STATE_CONTAINER_NAME)" \
+            -backend-config="key=$(TF_STATE_KEY)"
+          
+          # Create Terraform plan
+          terraform plan -var="environment=$(environment)" -out=terraform.tfplan
+          
+          # Apply Terraform plan
+          terraform apply terraform.tfplan
+          
+          # Get outputs and set as pipeline variables
+          RESOURCE_GROUP_NAME=$(terraform output -raw resource_group_name)
+          APP_SERVICE_NAME=$(terraform output -raw app_service_name)
+          APP_SERVICE_URL=$(terraform output -raw app_service_url)
+          
+          echo "##vso[task.setvariable variable=resourceGroupName;isOutput=true]$RESOURCE_GROUP_NAME"
+          echo "##vso[task.setvariable variable=appServiceName;isOutput=true]$APP_SERVICE_NAME"
+          echo "##vso[task.setvariable variable=appServiceUrl;isOutput=true]$APP_SERVICE_URL"
+    
+  - job: DeployApplication
+    displayName: 'Deploy Application'
+    dependsOn: DeployInfrastructure
+    pool:
+      vmImage: 'windows-latest'
+    variables:
+      resourceGroupName: $[ dependencies.DeployInfrastructure.outputs['AzureCLI.resourceGroupName'] ]
+      appServiceName: $[ dependencies.DeployInfrastructure.outputs['AzureCLI.appServiceName'] ]
+    steps:
+    - task: DownloadBuildArtifacts@1
+      displayName: 'Download application package'
+      inputs:
+        buildType: 'current'
+        downloadType: 'specific'
+        itemPattern: 'app/**'
+        downloadPath: '$(System.ArtifactsDirectory)'
+    
+    - task: AzureWebApp@1
+      displayName: 'Deploy to Azure App Service'
+      inputs:
+        azureSubscription: 'azure-service-connection'
+        appType: 'webApp'
+        appName: '$(appServiceName)'
+        package: '$(System.ArtifactsDirectory)/app/*.zip'
+        deploymentMethod: 'auto'
+
+# Production Environment Deployment
+- stage: Deploy_Prod
+  displayName: 'Deploy to Production'
+  dependsOn: Validate_Infrastructure
+  condition: and(succeeded(), eq(variables.isProduction, true))
+  variables:
+    environment: 'prod'
+  jobs:
+  - job: DeployInfrastructure
+    displayName: 'Deploy Infrastructure'
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - task: DownloadBuildArtifacts@1
+      displayName: 'Download Terraform files'
+      inputs:
+        buildType: 'current'
+        downloadType: 'specific'
+        itemPattern: 'terraform/**'
+        downloadPath: '$(System.ArtifactsDirectory)'
+    
+    # Set up Azure CLI authentication and run Terraform using CLI
+    - task: AzureCLI@2
+      displayName: 'Deploy Azure Infrastructure'
+      inputs:
+        azureSubscription: 'azure-service-connection'
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          # Install Terraform
+          wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor | sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg
+          echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+          sudo apt-get update && sudo apt-get install terraform
+          
+          # Export Azure credentials as environment variables
+          export ARM_CLIENT_ID="$(ARM_CLIENT_ID)"
+          export ARM_CLIENT_SECRET="$(ARM_CLIENT_SECRET)"
+          export ARM_TENANT_ID="$(ARM_TENANT_ID)"
+          export ARM_SUBSCRIPTION_ID="$(ARM_SUBSCRIPTION_ID)"
+          
+          # Initialize Terraform
+          cd $(System.ArtifactsDirectory)/terraform
+          terraform init \
+            -backend-config="resource_group_name=$(TF_STATE_RESOURCE_GROUP_NAME)" \
+            -backend-config="storage_account_name=$(TF_STATE_STORAGE_ACCOUNT_NAME)" \
+            -backend-config="container_name=$(TF_STATE_CONTAINER_NAME)" \
+            -backend-config="key=$(TF_STATE_KEY)"
+          
+          # Create Terraform plan
+          terraform plan -var="environment=$(environment)" -out=terraform.tfplan
+          
+          # Apply Terraform plan
+          terraform apply terraform.tfplan
+          
+          # Get outputs and set as pipeline variables
+          RESOURCE_GROUP_NAME=$(terraform output -raw resource_group_name)
+          APP_SERVICE_NAME=$(terraform output -raw app_service_name)
+          APP_SERVICE_URL=$(terraform output -raw app_service_url)
+          
+          echo "##vso[task.setvariable variable=resourceGroupName;isOutput=true]$RESOURCE_GROUP_NAME"
+          echo "##vso[task.setvariable variable=appServiceName;isOutput=true]$APP_SERVICE_NAME"
+          echo "##vso[task.setvariable variable=appServiceUrl;isOutput=true]$APP_SERVICE_URL"
+    
+  - job: DeployApplication
+    displayName: 'Deploy Application'
+    dependsOn: DeployInfrastructure
+    pool:
+      vmImage: 'windows-latest'
+    variables:
+      resourceGroupName: $[ dependencies.DeployInfrastructure.outputs['AzureCLI.resourceGroupName'] ]
+      appServiceName: $[ dependencies.DeployInfrastructure.outputs['AzureCLI.appServiceName'] ]
+    steps:
+    - task: DownloadBuildArtifacts@1
+      displayName: 'Download application package'
+      inputs:
+        buildType: 'current'
+        downloadType: 'specific'
+        itemPattern: 'app/**'
+        downloadPath: '$(System.ArtifactsDirectory)'
+    
+    - task: AzureWebApp@1
+      displayName: 'Deploy to Azure App Service'
+      inputs:
+        azureSubscription: 'azure-service-connection'
+        appType: 'webApp'
+        appName: '$(appServiceName)'
+        package: '$(System.ArtifactsDirectory)/app/*.zip'
+        deploymentMethod: 'auto'
