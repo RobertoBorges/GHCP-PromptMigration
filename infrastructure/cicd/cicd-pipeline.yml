@@ -61,6 +61,26 @@ stages:
     pool:
       vmImage: $(vmImageName)
     steps:
+    - checkout: self
+      fetchDepth: 1
+      persistCredentials: true
+      
+    - task: PowerShell@2
+      displayName: 'Verify source code availability'
+      inputs:
+        targetType: 'inline'
+        script: |
+          Write-Host "Checking repository content..."
+          Get-ChildItem -Path $(Build.SourcesDirectory) -Recurse -Directory -Depth 1
+          
+          $projectPath = "$(Build.SourcesDirectory)/$(projectPath)"
+          if (Test-Path $projectPath) {
+            Write-Host "Project file found at: $projectPath"
+          } else {
+            Write-Host "##vso[task.logissue type=error]Project file not found at: $projectPath"
+            exit 1
+          }
+      
     - task: UseDotNet@2
       displayName: 'Use .NET SDK $(dotnetSdkVersion)'
       inputs:

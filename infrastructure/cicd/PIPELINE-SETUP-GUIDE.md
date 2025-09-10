@@ -91,3 +91,8 @@ If you encounter errors:
 4. **Variable errors** - Ensure all required variables are defined in the variable groups
 5. **Terraform backend issues** - Verify storage account access and container existence
 6. **Deployment failures** - Check Terraform logs for specific error messages
+7. **Git fetch errors** - If you encounter "Git fetch failed with exit code: 128", check:
+   - Repository permissions in Azure DevOps
+   - Git configuration in the pipeline
+   - If the repository uses Git LFS, ensure proper LFS configuration
+   - The pipeline now includes an explicit checkout step to address common Git fetch issues
