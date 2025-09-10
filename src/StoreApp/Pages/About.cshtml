@@ -1,0 +1,43 @@
+@page
+@model AboutModel
+@{
+    ViewData["Title"] = "About";
+}
+
+<h1>About Classic ASP Store</h1>
+
+<div class="about-content">
+    <p>Welcome to Classic ASP Store, a demonstration of Classic ASP technology modernized to ASP.NET Core.</p>
+    
+    <h2>Our Story</h2>
+    <p>Classic ASP Store was created as a demonstration project to show the capabilities of ASP Classic for creating dynamic web applications. This modernized version shows how to migrate from ASP Classic to ASP.NET Core.</p>
+    
+    <h2>Our Mission</h2>
+    <p>Our mission is to provide a simple, working example of an e-commerce application that developers can learn from and extend.</p>
+    
+    <h2>Technology</h2>
+    <p>This store is built using:</p>
+    <ul>
+        <li>ASP.NET Core with Razor Pages</li>
+        <li>Entity Framework Core with SQLite</li>
+        <li>HTML5 and CSS3</li>
+    </ul>
+</div>
+
+<style>
+    .about-content {
+        line-height: 1.8;
+    }
+    
+    .about-content h2 {
+        margin-top: 25px;
+        margin-bottom: 15px;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 10px;
+    }
+    
+    .about-content ul {
+        margin-left: 20px;
+        margin-bottom: 20px;
+    }
+</style>

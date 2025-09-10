@@ -1,0 +1,80 @@
+@page
+@model CartModel
+@{
+    ViewData["Title"] = "Shopping Cart";
+}
+
+<h1>Shopping Cart</h1>
+
+@if (Model.CartItems.Any())
+{
+    <div class="cart-items">
+        @foreach (var item in Model.CartItems)
+        {
+            <div class="cart-item">
+                <h3>@item.Product?.Name</h3>
+                <p class="price">@item.Product?.Price.ToString("C")</p>
+                <p>Quantity: @item.Quantity</p>
+                <p>Subtotal: @((item.Product?.Price * item.Quantity ?? 0).ToString("C"))</p>
+            </div>
+        }
+    </div>
+    
+    <div class="cart-summary">
+        <h2>Cart Summary</h2>
+        <p>Items in cart: @Model.CartItems.Sum(i => i.Quantity)</p>
+        <p>Total: @Model.CartTotal.ToString("C")</p>
+    </div>
+    
+    <div class="cart-actions">
+        <a asp-page="/Products/Index" class="button">Continue Shopping</a>
+        <form method="post" asp-page-handler="Clear">
+            <button type="submit" class="button clear-button">Clear Cart</button>
+        </form>
+        <a href="#" class="button checkout-button">Proceed to Checkout</a>
+    </div>
+}
+else
+{
+    <p>Your cart is currently empty.</p>
+    <a asp-page="/Products/Index" class="button">Start Shopping</a>
+}
+
+<style>
+    .cart-items {
+        margin-bottom: 20px;
+    }
+    
+    .cart-item {
+        background: #f9f9f9;
+        padding: 15px;
+        margin-bottom: 15px;
+        border-radius: 4px;
+    }
+    
+    .cart-summary {
+        background: #f9f9f9;
+        padding: 20px;
+        margin-bottom: 20px;
+        border-radius: 4px;
+    }
+    
+    .cart-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+    }
+    
+    .checkout-button {
+        background-color: #27ae60;
+    }
+    
+    .clear-button {
+        background-color: #e74c3c;
+    }
+    
+    .price {
+        font-weight: bold;
+        color: #e74c3c;
+    }
+</style>

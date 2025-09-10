@@ -1,0 +1,114 @@
+@page
+@model ContactModel
+@{
+    ViewData["Title"] = "Contact";
+}
+
+<h1>Contact Us</h1>
+
+@if (Model.MessageSent)
+{
+    <div class="success-message">Thank you for your message! We'll get back to you soon.</div>
+}
+
+@if (!ModelState.IsValid)
+{
+    <div class="error-message">Please fill out all fields correctly.</div>
+}
+
+<div class="contact-form">
+    <p>Have questions or comments? Fill out the form below to get in touch with us.</p>
+    
+    <form method="post">
+        <div class="form-group">
+            <label asp-for="Contact.Name">Your Name:</label>
+            <input asp-for="Contact.Name" type="text" required />
+            <span asp-validation-for="Contact.Name" class="text-danger"></span>
+        </div>
+        
+        <div class="form-group">
+            <label asp-for="Contact.Email">Email Address:</label>
+            <input asp-for="Contact.Email" type="email" required />
+            <span asp-validation-for="Contact.Email" class="text-danger"></span>
+        </div>
+        
+        <div class="form-group">
+            <label asp-for="Contact.Message">Message:</label>
+            <textarea asp-for="Contact.Message" rows="5" required></textarea>
+            <span asp-validation-for="Contact.Message" class="text-danger"></span>
+        </div>
+        
+        <button type="submit" class="button">Send Message</button>
+    </form>
+</div>
+
+<div class="contact-info">
+    <h2>Contact Information</h2>
+    <p><strong>Address:</strong> 123 Store St, Web City, WC 12345</p>
+    <p><strong>Phone:</strong> (555) 123-4567</p>
+    <p><strong>Email:</strong> info@classicstore.com</p>
+    <p><strong>Hours:</strong> Monday-Friday: 9am-5pm, Saturday: 10am-4pm</p>
+</div>
+
+<style>
+    .contact-form {
+        background: #f9f9f9;
+        padding: 20px;
+        margin-bottom: 20px;
+        border-radius: 5px;
+    }
+    
+    .form-group {
+        margin-bottom: 15px;
+    }
+    
+    label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+    
+    input[type="text"],
+    input[type="email"],
+    textarea {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+    
+    .success-message {
+        background-color: #d4edda;
+        color: #155724;
+        padding: 10px;
+        margin-bottom: 20px;
+        border-radius: 4px;
+    }
+    
+    .error-message {
+        background-color: #f8d7da;
+        color: #721c24;
+        padding: 10px;
+        margin-bottom: 20px;
+        border-radius: 4px;
+    }
+    
+    .text-danger {
+        color: #dc3545;
+        font-size: 0.875em;
+        display: block;
+        margin-top: 5px;
+    }
+    
+    .contact-info {
+        margin-top: 30px;
+    }
+    
+    .contact-info h2 {
+        margin-bottom: 15px;
+    }
+    
+    .contact-info p {
+        margin-bottom: 10px;
+    }
+</style>

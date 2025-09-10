@@ -1,0 +1,50 @@
+# .NET Core build artifacts
+bin/
+obj/
+*.user
+*.userosscache
+*.suo
+*.cache
+*.dll
+*.exe
+*.pdb
+*.userprefs
+*.log
+*.binlog
+*.vspscc
+*.vssscc
+*.publish.xml
+**/packages/
+**/node_modules/
+**/.vs/
+**/.vscode/
+**/.idea/
+**/publish/
+**/wwwroot/lib/
+
+# Local development configuration
+appsettings.Development.json
+appsettings.local.json
+local.settings.json
+
+# SQLite database files (but keep the schema file if exists)
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+
+# Terraform local files
+**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+*.tfplan
+.terraformrc
+terraform.rc
+
+# Misc
+.DS_Store
+Thumbs.db
+desktop.ini

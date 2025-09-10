@@ -1,0 +1,51 @@
+@page
+@model ProductsModel
+@{
+    ViewData["Title"] = "Products";
+}
+
+<h1>Product Catalog</h1>
+
+<div class="product-grid">
+    @foreach (var product in Model.Products)
+    {
+        <div class="product-item">
+            <h3>@product.Name</h3>
+            <p class="price">@product.Price.ToString("C")</p>
+            <p>@product.Description</p>
+            <a asp-page="./Details" asp-route-id="@product.Id" class="button">View Details</a>
+        </div>
+    }
+</div>
+
+<style>
+    .product-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        grid-gap: 20px;
+        margin-top: 20px;
+    }
+    
+    .product-item {
+        background: #f9f9f9;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .price {
+        font-weight: bold;
+        color: #e74c3c;
+        margin: 10px 0;
+    }
+    
+    .button {
+        margin-top: 10px;
+    }
+    
+    @@media (max-width: 768px) {
+        .product-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>

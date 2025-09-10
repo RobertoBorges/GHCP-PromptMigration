@@ -1,0 +1,80 @@
+@page "{id:int}"
+@model DetailsModel
+@{
+    ViewData["Title"] = Model.Product?.Name ?? "Product Details";
+}
+
+<div class="product-detail">
+    <h1>@Model.Product?.Name</h1>
+    <div class="product-meta">
+        <span class="price">@Model.Product?.Price.ToString("C")</span>
+        <span class="product-id">Product ID: @Model.Product?.Id</span>
+    </div>
+    
+    <div class="product-description">
+        <h2>Description</h2>
+        <p>@Model.Product?.Description</p>
+    </div>
+    
+    <form method="post">
+        <input type="hidden" asp-for="ProductId" />
+        <label asp-for="Quantity">Quantity:</label>
+        <input type="number" asp-for="Quantity" value="1" min="1" max="10" />
+        <button type="submit" class="button">Add to Cart</button>
+    </form>
+    
+    <a asp-page="./Index" class="back-link"><- Back to Products</a>
+</div>
+
+<style>
+    .product-detail {
+        padding: 20px;
+        background: #fff;
+        border-radius: 5px;
+    }
+    
+    .product-meta {
+        margin: 15px 0;
+    }
+    
+    .price {
+        font-size: 1.5em;
+        font-weight: bold;
+        color: #e74c3c;
+        margin-right: 20px;
+    }
+    
+    .product-id {
+        color: #777;
+    }
+    
+    .product-description {
+        margin: 25px 0;
+    }
+    
+    form {
+        margin: 20px 0;
+    }
+    
+    label {
+        margin-right: 10px;
+        font-weight: bold;
+    }
+    
+    input[type="number"] {
+        width: 60px;
+        padding: 5px;
+        margin-right: 10px;
+    }
+    
+    .back-link {
+        display: inline-block;
+        margin-top: 20px;
+        color: #3498db;
+        text-decoration: none;
+    }
+    
+    .back-link:hover {
+        text-decoration: underline;
+    }
+</style>
