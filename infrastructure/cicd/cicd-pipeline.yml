@@ -26,20 +26,24 @@ pr:
 
 # Pipeline variables
 variables:
-  # Build Configuration
-  vmImageName: 'windows-latest'
-  buildConfiguration: 'Release'
-  dotnetSdkVersion: '8.0.x'
-  projectPath: 'src/StoreApp/StoreApp.csproj'
-  testProjectPattern: 'src/**/*Tests.csproj'
-  publishPath: '$(Build.ArtifactStagingDirectory)/app'
-  infraPath: 'infrastructure/terraform'
-  
-  # Environment Settings
-  isDevelopment: $[eq(variables['Build.SourceBranch'], 'refs/heads/pipeline-branch')]
-  isProduction: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
-  
-  # Variable Groups
+  - name: vmImageName
+    value: 'windows-latest'
+  - name: buildConfiguration
+    value: 'Release'
+  - name: dotnetSdkVersion
+    value: '8.0.x'
+  - name: projectPath
+    value: 'src/StoreApp/StoreApp.csproj'
+  - name: testProjectPattern
+    value: 'src/**/*Tests.csproj'
+  - name: publishPath
+    value: '$(Build.ArtifactStagingDirectory)/app'
+  - name: infraPath
+    value: 'infrastructure/terraform'
+  - name: isDevelopment
+    value: $[eq(variables['Build.SourceBranch'], 'refs/heads/pipeline-branch')]
+  - name: isProduction
+    value: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
   - group: AzureServicePrincipal
   - group: TerraformConfig
 
