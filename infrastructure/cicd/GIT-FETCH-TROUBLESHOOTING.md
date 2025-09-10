@@ -11,6 +11,32 @@ Error code 128 in Git usually indicates one of the following issues:
 - Repository access permission issues
 - Git configuration problems
 
+## Last Resort Solution: Manual Git Checkout Script
+
+We've implemented a robust last-resort solution that should fix even the most stubborn Git checkout issues:
+
+1. **Dedicated PowerShell Script**:
+   - Located at `/infrastructure/cicd/scripts/git-checkout.ps1`
+   - Automatically used by the pipeline as its first step
+   - Makes multiple attempts to clone the repository using different methods
+   - Provides detailed diagnostics for each attempt
+
+2. **How the Script Works**:
+   - Configures optimal Git settings to avoid common issues
+   - Tries multiple checkout methods in sequence:
+     1. Standard Git clone
+     2. Clone with OAuth token authentication
+     3. Alternative Git protocol
+     4. Manual initialization and fetch
+   - Diagnoses network connectivity issues
+   - Verifies successful checkout
+   - Provides detailed logs for troubleshooting
+
+3. **Pipeline Configuration**:
+   - The pipeline has been updated to use this script
+   - OAuth token access is provided to the script
+   - No changes to your pipeline definition are needed
+
 ## Solution Implemented in Pipeline
 
 We've updated the pipeline to include a robust Git cloning process that:
