@@ -12,7 +12,28 @@ param (
     [string]$ProjectName = "storeapp",
     
     [Parameter(Mandatory=$false)]
-    [string]$OrganizationPrefix = "contoso"
+    [string]$OrganizationPrefix = "contoso",
+    
+    [Parameter(Mandatory=$false)]
+    [string]$Offering = "infra",
+    
+    [Parameter(Mandatory=$false)]
+    [string]$SubOffering = "winmig",
+    
+    [Parameter(Mandatory=$false)]
+    [string]$FactoryRegion = "emea",
+    
+    [Parameter(Mandatory=$false)]
+    [string]$VId = "v-pmamidi",
+    
+    [Parameter(Mandatory=$false)]
+    [string]$Purpose = "demo",
+    
+    [Parameter(Mandatory=$false)]
+    [string]$CustomerName = "Contoso",
+    
+    [Parameter(Mandatory=$false)]
+    [string]$Tower = "AppMod"
 )
 
 $ErrorActionPreference = "Stop"
@@ -38,12 +59,13 @@ $envShort = switch ($Environment) {
 }
 
 # CMF naming convention: <org>-<app/service>-<environment>-<region>-<instance>
-$resourceGroupName = "$OrganizationPrefix-$ProjectName-tfstate-$envShort-$locationShort-01"
-$storageAccountName = "$($OrganizationPrefix)$($ProjectName)tfst$($envShort)$($locationShort)01".ToLower().Replace("-", "")
+# Resource group follows rg-<offering>-<sub offering>-<factoryregion>-<v-id>-<purpose>
+$resourceGroupName = "rg-$Offering-app-$FactoryRegion-vpmamidi-$Purpose"
+$storageAccountName = "$($OrganizationPrefix)tf$($envShort)$($locationShort)01".ToLower().Replace("-", "")
 $containerName = "tfstate"
 $keyName = "$ProjectName-$Environment.tfstate"
 
-Write-Host "Setting up Terraform backend storage with CMF naming conventions..." -ForegroundColor Green
+Write-Host "Setting up Terraform backend storage with specified naming conventions..." -ForegroundColor Green
 Write-Host "Resource Group: $resourceGroupName" -ForegroundColor Yellow
 Write-Host "Storage Account: $storageAccountName" -ForegroundColor Yellow
 Write-Host "Container: $containerName" -ForegroundColor Yellow
@@ -51,18 +73,16 @@ Write-Host "State Key: $keyName" -ForegroundColor Yellow
 
 # Create resource group
 Write-Host "Creating resource group..." -ForegroundColor Cyan
-az group create --name $resourceGroupName --location $Location
+$currentDate = Get-Date -Format "yyyy-MM-dd"
+az group create --name $resourceGroupName --location $Location --tags "created by=vpmamidi" "created on=$currentDate" "customer name=$CustomerName" "purpose=$Purpose" "region=$FactoryRegion" "tower=$Tower" "v-id=vpmamidi" "Environment=$Environment" "Application=$ProjectName" "email-id=vpmamidi@microsoft.com" "Customer=$CustomerName" "Offering=$Offering"
 
 # Create storage account
 Write-Host "Creating storage account..." -ForegroundColor Cyan
 az storage account create --resource-group $resourceGroupName --name $storageAccountName --sku Standard_LRS --encryption-services blob --https-only true --min-tls-version TLS1_2
 
-# Get storage account key
-$accountKey = $(az storage account keys list --resource-group $resourceGroupName --account-name $storageAccountName --query [0].value -o tsv)
-
-# Create blob container
+# Create blob container using managed identity auth (as key-based auth might be disabled)
 Write-Host "Creating blob container..." -ForegroundColor Cyan
-az storage container create --name $containerName --account-name $storageAccountName --account-key $accountKey
+az storage container create --name $containerName --account-name $storageAccountName --auth-mode login
 
 # Output configuration for Azure DevOps variable groups
 Write-Host "`nConfiguration for Azure DevOps TerraformConfig variable group:" -ForegroundColor Green

@@ -17,7 +17,7 @@ provider "azurerm" {
 # Use data source for the current client configuration
 data "azurerm_client_config" "current" {}
 
-# Local variables for naming consistency following CMF naming convention
+# Local variables for naming consistency following specified naming convention
 locals {
   current_date = formatdate("YYYY-MM-DD", timestamp())
   
@@ -39,28 +39,27 @@ locals {
     "prod"  = "p"
   }, var.environment, substr(var.environment, 0, 1))
   
-  # <org>-<app/service>-<environment>-<region>-<instance>
-  org_prefix = var.organization_prefix
-  instance = "01"
+  # Resource group: rg-<offering>-<sub offering>-<factoryregion>-<v-id>-<purpose>
+  rg_name = "rg-${var.offering}-${var.sub_offering}-${var.factory_region}-${var.v_id}-${var.purpose}"
   
-  # Resource naming following CMF convention
-  rg_name = "${local.org_prefix}-${var.app_name}-${local.env_short}-${local.location_short}-${local.instance}"
-  app_service_plan_name = "${local.org_prefix}-plan-${var.app_name}-${local.env_short}-${local.location_short}-${local.instance}"
-  app_insights_name = "${local.org_prefix}-appi-${var.app_name}-${local.env_short}-${local.location_short}-${local.instance}"
-  app_service_name = "${local.org_prefix}-app-${var.app_name}-${local.env_short}-${local.location_short}-${local.instance}"
-  storage_name = "${replace(local.org_prefix, "-", "")}st${var.app_name}${local.env_short}${local.location_short}${local.instance}"
+  # Resource naming for other resources
+  app_service_plan_name = "${var.organization_prefix}-plan-${var.app_name}-${local.env_short}-${local.location_short}-01"
+  app_insights_name = "${var.organization_prefix}-appi-${var.app_name}-${local.env_short}-${local.location_short}-01"
+  app_service_name = "${var.organization_prefix}-app-${var.app_name}-${local.env_short}-${local.location_short}-01"
+  storage_name = "${replace(var.organization_prefix, "-", "")}st${var.app_name}${local.env_short}${local.location_short}01"
   
   common_tags = {
-    "created_by"     = var.v_id
-    "created_on"     = local.current_date
-    "customer_name"  = var.customer_name
+    "created by"     = var.v_id
+    "created on"     = local.current_date
+    "customer name"  = var.customer_name
     "purpose"        = var.purpose
     "region"         = var.factory_region
     "tower"          = var.tower
-    "v_id"           = var.v_id
+    "v-id"           = var.v_id
     "environment"    = var.environment
     "application"    = var.app_name
-    "managed_by"     = "Terraform"
+    "managed by"     = "Terraform"
+    "email-id"       = "${var.v_id}@microsoft.com"
   }
 }
 

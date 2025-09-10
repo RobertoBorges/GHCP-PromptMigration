@@ -11,13 +11,22 @@ This guide outlines the process for deploying the infrastructure for the StoreAp
 
 ## Step 1: Set Up Terraform Backend Storage
 
-Before running the deployment pipeline, you need to set up a storage account for Terraform state. This can be done using the provided script:
+The Terraform backend has been successfully set up with the following configuration:
+
+- **Resource Group**: `rg-infra-app-emea-vpmamidi-demo`
+- **Storage Account**: `contosotfdwus01`
+- **Container**: `tfstate`
+- **State Key**: `storeapp-dev.tfstate`
+
+If you need to set up the backend again, you can use the provided script:
 
 ```powershell
 # Navigate to the terraform directory
 cd infrastructure/terraform
 
-# Run the setup script
+# Run the setup script with the proper parameters
+.\setup-terraform-backend.ps1 -Environment dev -Location westus -ProjectName storeapp -OrganizationPrefix contoso -Offering infra -FactoryRegion emea -Purpose demo -CustomerName Contoso -Tower AppMod
+```
 ./setup-terraform-backend.ps1 -Environment dev -Location eastus -ProjectName storeapp -OrganizationPrefix contoso
 ```
 
@@ -42,11 +51,11 @@ This group should contain:
 
 ### 2. TerraformConfig
 
-This group should contain the values output by the setup script:
-- `TF_STATE_RESOURCE_GROUP_NAME`: Resource group name for Terraform state
-- `TF_STATE_STORAGE_ACCOUNT_NAME`: Storage account name for Terraform state
-- `TF_STATE_CONTAINER_NAME`: Container name for Terraform state
-- `TF_STATE_KEY`: Key for the Terraform state file
+This group should contain the following values for the Terraform backend:
+- `TF_STATE_RESOURCE_GROUP_NAME`: rg-infra-app-emea-vpmamidi-demo
+- `TF_STATE_STORAGE_ACCOUNT_NAME`: contosotfdwus01
+- `TF_STATE_CONTAINER_NAME`: tfstate
+- `TF_STATE_KEY`: storeapp-dev.tfstate
 
 ## Step 3: Create Service Connection
 
