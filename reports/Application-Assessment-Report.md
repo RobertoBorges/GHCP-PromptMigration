@@ -3,7 +3,7 @@
 ## ASP Classic Store Application
 
 **Assessment Date:** September 3, 2025  
-**Last Updated:** September 10, 2025
+**Last Updated:** September 5, 2025
 
 ## Application Overview
 
@@ -315,11 +315,12 @@ The CI/CD pipeline follows this workflow:
 
 ### Azure DevOps Implementation
 
-The Azure DevOps pipeline has been configured with:
+The Azure DevOps pipeline has been enhanced with a comprehensive CI/CD implementation:
 
 1. **Multi-Stage Pipeline**
-   - YAML-based pipeline definition in `infrastructure/cicd/deployment-pipeline.yml`
-   - Three main stages: Build, Validate Infrastructure, and Deploy
+   - YAML-based pipeline definition in `infrastructure/cicd/cicd-pipeline.yml`
+   - Four main stages: CI, Infrastructure Validation, Development Deployment, and Production Deployment
+   - Clear separation between CI and CD processes
    - Environment-specific deployment configurations
 
 2. **Variable Groups**
@@ -331,15 +332,22 @@ The Azure DevOps pipeline has been configured with:
    - Named `azure-service-connection` for consistent reference in pipeline
 
 4. **Security Features**
+   - Security scanning in CI stage (credential scanner, policy check)
    - No hardcoded credentials in pipeline definition
    - Secrets stored as secure variables in variable groups
    - Service Principal with least privilege access
    - Branch protection policies
 
-5. **Deployment Configuration**
-   - Deployment to Dev environment on main branch changes
-   - Manual triggers for Test and Production environments
-   - Environment-specific variable substitution
+5. **Deployment Strategy**
+   - Deployment to Dev environment from `pipeline-branch`
+   - Deployment to Production from `main` branch
+   - Infrastructure-as-Code validation before deployment
+   - Separate jobs for infrastructure and application deployment
+   - Application warmup and health checks
+
+6. **Documentation**
+   - Setup guide for Azure DevOps pipeline in `infrastructure/cicd/SETUP-GUIDE.md`
+   - Architecture documentation in `infrastructure/cicd/ARCHITECTURE.md`
 
 ### Environment Strategy
 
@@ -347,7 +355,8 @@ The pipeline supports multiple environments with progressive deployment:
 
 | Environment | Purpose | Deployment Trigger | Approval Requirements |
 |-------------|---------|-------------------|----------------------|
-| **Dev** | Development and testing | Automatic on merge to main | None |
+| **Dev** | Development and testing | Automatic on merge to pipeline-branch | None |
+| **Prod** | Production deployment | Automatic on merge to main | Required approvals |
 | **Test** | QA and integration testing | Manual | Single approver |
 | **Prod** | Production deployment | Manual | Multiple approvers |
 
@@ -444,11 +453,13 @@ Detailed documentation for the pipeline setup can be found in `infrastructure/ci
    - Test deployment to Dev environment
 
 4. **Phase 6: CI/CD Setup** ✅
-   - Configure CI/CD pipeline in Azure DevOps
+   - Configure comprehensive CI/CD pipeline in Azure DevOps
+   - Implement security scanning in CI process
    - Set up Service Principal for authentication
    - Create variable groups for secrets management
-   - Configure deployment stages and environments
-   - Create documentation for pipeline setup and maintenance
+   - Configure separate Dev and Prod deployment stages
+   - Implement approval gates for Production deployment
+   - Create detailed documentation for pipeline setup and architecture
 
 2. **Phase 4: Infrastructure Generation** ✅
    - Create Terraform scripts for Azure resources
@@ -461,9 +472,13 @@ Detailed documentation for the pipeline setup can be found in `infrastructure/ci
    - Perform testing and optimization
 
 4. **Phase 6: CI/CD Setup** ✅
-   - Configure CI/CD pipeline
-   - Implement automated testing
-   - Set up deployment automation
+   - Configure comprehensive CI/CD pipeline in Azure DevOps
+   - Implement security scanning in CI stage
+   - Implement Infrastructure validation stage
+   - Configure separate Dev and Prod deployment stages
+   - Implement approval gates for Production deployment
+   - Create architecture documentation for CI/CD pipeline
+   - Create detailed setup guide for Azure DevOps configuration
 
 ## Timeline Estimate
 
