@@ -6,14 +6,8 @@ terraform {
     }
   }
   
-  # If you want to use Terraform Cloud or Azure Storage for state management,
-  # uncomment and configure the backend block
-  # backend "azurerm" {
-  #   resource_group_name  = "terraform-state-rg"
-  #   storage_account_name = "terraformstate12345"
-  #   container_name       = "tfstate"
-  #   key                  = "storeapp.terraform.tfstate"
-  # }
+  # Backend configuration will be provided via backend.tfvars file
+  backend "azurerm" {}
 }
 
 provider "azurerm" {
@@ -23,37 +17,63 @@ provider "azurerm" {
 # Use data source for the current client configuration
 data "azurerm_client_config" "current" {}
 
-# Local variables for naming consistency
+# Local variables for naming consistency following CMF naming convention
 locals {
   current_date = formatdate("YYYY-MM-DD", timestamp())
-  rg_name      = "rg-${var.offering}-${var.sub_offering}-${var.factory_region}-${var.v_id}-${var.purpose}"
-  name_prefix  = "${var.app_name}-${var.environment}"
-  location     = var.location
+  
+  # CMF naming convention formatting
+  location_short = lookup({
+    "eastus"         = "eus",
+    "westus"         = "wus",
+    "northeurope"    = "neu",
+    "westeurope"     = "weu",
+    "eastasia"       = "eas",
+    "southeastasia"  = "seas"
+  }, var.location, substr(var.location, 0, 3))
+  
+  env_short = lookup({
+    "dev"   = "d",
+    "test"  = "t",
+    "qa"    = "q",
+    "uat"   = "u",
+    "prod"  = "p"
+  }, var.environment, substr(var.environment, 0, 1))
+  
+  # <org>-<app/service>-<environment>-<region>-<instance>
+  org_prefix = var.organization_prefix
+  instance = "01"
+  
+  # Resource naming following CMF convention
+  rg_name = "${local.org_prefix}-${var.app_name}-${local.env_short}-${local.location_short}-${local.instance}"
+  app_service_plan_name = "${local.org_prefix}-plan-${var.app_name}-${local.env_short}-${local.location_short}-${local.instance}"
+  app_insights_name = "${local.org_prefix}-appi-${var.app_name}-${local.env_short}-${local.location_short}-${local.instance}"
+  app_service_name = "${local.org_prefix}-app-${var.app_name}-${local.env_short}-${local.location_short}-${local.instance}"
+  storage_name = "${replace(local.org_prefix, "-", "")}st${var.app_name}${local.env_short}${local.location_short}${local.instance}"
   
   common_tags = {
-    "created by"    = var.v_id
-    "created on"    = local.current_date
-    "customer name" = var.customer_name
-    "purpose"       = var.purpose
-    "region"        = var.factory_region
-    "tower"         = var.tower
-    "v-id"          = var.v_id
-    "Environment"   = var.environment
-    "Application"   = var.app_name
-    "ManagedBy"     = "Terraform"
+    "created_by"     = var.v_id
+    "created_on"     = local.current_date
+    "customer_name"  = var.customer_name
+    "purpose"        = var.purpose
+    "region"         = var.factory_region
+    "tower"          = var.tower
+    "v_id"           = var.v_id
+    "environment"    = var.environment
+    "application"    = var.app_name
+    "managed_by"     = "Terraform"
   }
 }
 
 # Resource Group
 resource "azurerm_resource_group" "rg" {
   name     = local.rg_name
-  location = local.location
+  location = var.location
   tags     = local.common_tags
 }
 
 # App Service Plan
 resource "azurerm_service_plan" "app_plan" {
-  name                = "${local.name_prefix}-plan"
+  name                = local.app_service_plan_name
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
   os_type             = "Windows"
@@ -63,7 +83,7 @@ resource "azurerm_service_plan" "app_plan" {
 
 # Application Insights
 resource "azurerm_application_insights" "insights" {
-  name                = "${local.name_prefix}-insights"
+  name                = local.app_insights_name
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
   application_type    = "web"
@@ -72,7 +92,7 @@ resource "azurerm_application_insights" "insights" {
 
 # App Service
 resource "azurerm_windows_web_app" "app" {
-  name                = "${local.name_prefix}-app"
+  name                = local.app_service_name
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
   service_plan_id     = azurerm_service_plan.app_plan.id
@@ -122,11 +142,12 @@ resource "azurerm_windows_web_app" "app" {
 
 # Optional: Storage Account for more persistent SQLite storage
 resource "azurerm_storage_account" "storage" {
-  name                     = replace("${local.name_prefix}storage", "-", "")
+  name                     = local.storage_name
   resource_group_name      = azurerm_resource_group.rg.name
   location                 = azurerm_resource_group.rg.location
   account_tier             = "Standard"
   account_replication_type = "LRS"
+  min_tls_version          = "TLS1_2"
   tags                     = local.common_tags
 }
 

@@ -16,6 +16,12 @@ variable "environment" {
   default     = "dev"
 }
 
+variable "organization_prefix" {
+  description = "The organization prefix for CMF naming convention"
+  type        = string
+  default     = "contoso"
+}
+
 variable "offering" {
   description = "The primary offering category"
   type        = string
