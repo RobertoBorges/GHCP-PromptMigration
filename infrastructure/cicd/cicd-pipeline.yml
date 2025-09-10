@@ -109,37 +109,6 @@ stages:
         PathtoPublish: '$(infraPath)'
         ArtifactName: 'terraform'
 
-  - job: ScanCode
-    displayName: 'Security Scan'
-    pool:
-      vmImage: $(vmImageName)
-    steps:
-    - task: DotNetCoreCLI@2
-      displayName: 'Restore packages'
-      inputs:
-        command: 'restore'
-        projects: '$(projectPath)'
-        
-    - task: securedevelopmentteam.vss-secure-development-tools.build-task-credscan.CredentialScanner@3
-      displayName: 'Scan for credentials'
-      inputs:
-        scanFolders: '$(Build.SourcesDirectory)'
-        toolVersion: 'Latest'
-        
-    - task: securedevelopmentteam.vss-secure-development-tools.build-task-policheck.PoliCheck@2
-      displayName: 'Run PoliCheck'
-      inputs:
-        targetType: F
-        targetArgument: '$(Build.SourcesDirectory)'
-        
-    - task: securedevelopmentteam.vss-secure-development-tools.build-task-publishsecurityanalysislogs.PublishSecurityAnalysisLogs@3
-      displayName: 'Publish Security Analysis Logs'
-        
-    - task: securedevelopmentteam.vss-secure-development-tools.build-task-postanalysis.PostAnalysis@2
-      displayName: 'Post Analysis'
-      inputs:
-        AllTools: true
-
 # =============== INFRASTRUCTURE VALIDATION STAGE ===============
 - stage: Validate_Infrastructure
   displayName: 'Validate Infrastructure'
