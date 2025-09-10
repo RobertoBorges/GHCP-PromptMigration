@@ -36,13 +36,10 @@ variables:
   infraPath: 'infrastructure/terraform'
   
   # Environment Settings
-  - name: isDevelopment
-    value: $[eq(variables['Build.SourceBranch'], 'refs/heads/pipeline-branch')]
-  - name: isProduction
-    value: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
-
-# Use variable groups for secrets and configuration
-variables:
+  isDevelopment: $[eq(variables['Build.SourceBranch'], 'refs/heads/pipeline-branch')]
+  isProduction: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
+  
+  # Variable Groups
   - group: AzureServicePrincipal
   - group: TerraformConfig
 
