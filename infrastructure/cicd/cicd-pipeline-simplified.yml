@@ -24,6 +24,13 @@ pr:
       - README.md
       - docs/*
 
+# Pipeline permissions - Required to resolve Git fetch issues
+resources:
+  repositories:
+    - repository: self
+      fetchDepth: 1
+      clean: true
+
 # Pipeline variables
 variables:
   - name: vmImageName
@@ -61,10 +68,67 @@ stages:
     pool:
       vmImage: $(vmImageName)
     steps:
-    - checkout: self
-      fetchDepth: 1
-      persistCredentials: true
-      
+    # Explicitly set Git configuration and perform checkout with better error handling
+    - task: PowerShell@2
+      displayName: 'Configure Git and Clone Repository'
+      inputs:
+        targetType: 'inline'
+        script: |
+          Write-Host "Configuring Git..."
+          git config --global core.longpaths true
+          git config --global http.sslVerify false
+          
+          # Check Git version
+          Write-Host "Git version:"
+          git --version
+          
+          # If in Azure DevOps, use built-in auth
+          Write-Host "Cloning repository..."
+          $sourceDir = "$(Build.SourcesDirectory)"
+          $repoUrl = "$(Build.Repository.Uri)"
+          
+          Write-Host "Source directory: $sourceDir"
+          Write-Host "Repository URL: $repoUrl"
+          
+          # Clean the directory first if it exists
+          if (Test-Path "$sourceDir") {
+            Write-Host "Cleaning source directory..."
+            Remove-Item -Path "$sourceDir/*" -Recurse -Force -ErrorAction SilentlyContinue
+          }
+          
+          # Clone the repository
+          $env:GIT_TERMINAL_PROMPT = 0
+          $cloneResult = git clone "$repoUrl" "$sourceDir" 2>&1
+          
+          if ($LASTEXITCODE -ne 0) {
+            Write-Host "##vso[task.logissue type=error]Git clone failed with exit code: $LASTEXITCODE"
+            Write-Host "Error details: $cloneResult"
+            
+            # Try alternative clone method with PAT if available
+            if ($env:SYSTEM_ACCESSTOKEN) {
+              Write-Host "Trying alternative clone method with access token..."
+              $authRepoUrl = $repoUrl -replace "https://", "https://oauth2:$env:SYSTEM_ACCESSTOKEN@"
+              git clone "$authRepoUrl" "$sourceDir"
+              
+              if ($LASTEXITCODE -ne 0) {
+                Write-Host "##vso[task.logissue type=error]Alternative git clone failed with exit code: $LASTEXITCODE"
+                exit 1
+              }
+            } else {
+              exit 1
+            }
+          }
+          
+          # Checkout the specific branch
+          cd "$sourceDir"
+          git checkout "$(Build.SourceBranchName)"
+          
+          # List the repository contents
+          Write-Host "Repository contents:"
+          Get-ChildItem -Path "$sourceDir" -Force
+      env:
+        SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+    
     - task: PowerShell@2
       displayName: 'Verify source code availability'
       inputs:
