@@ -2,7 +2,7 @@
 
 ## Project: .NET Framework 3.0 ASP.NET Web Application
 
-**Last Updated:** September 11, 2025
+**Last Updated:** September 12, 2025
 
 ## Migration Phase Status
 
@@ -10,19 +10,17 @@
 |-------|--------|------------|----------|-------|
 | **1. Planning** | Completed | Sep 6, 2025 | Sep 6, 2025 | Migration plan defined |
 | **2. Assessment** | Completed | Sep 6, 2025 | Sep 6, 2025 | Assessment completed |
-| **3. Code Modernization** | In Progress | Sep 6, 2025 | - | ASP.NET Core implementation started |
-| **4. Infrastructure Generation** | Completed | Sep 6, 2025 | Sep 6, 2025 | Bicep templates created for Azure |
-| **5. Deployment to Azure** | Not Started | - | - | Deployment not yet performed |
-| **6. CI/CD Setup** | In Progress | Sep 7, 2025 | - | Azure DevOps pipelines created and fixed |
+| **3. Code Modernization** | Completed | Sep 6, 2025 | Sep 11, 2025 | ASP.NET Core implementation completed |
+| **4. Infrastructure Generation** | Completed | Sep 6, 2025 | Sep 11, 2025 | Terraform templates fixed for Azure |
+| **5. Deployment to Azure** | In Progress | Sep 11, 2025 | - | Azure DevOps pipeline configured |
+| **6. CI/CD Setup** | Completed | Sep 7, 2025 | Sep 12, 2025 | Azure DevOps pipelines and local CI/CD script configured |
 
 ## Current Focus
-- Completing the ASP.NET Core implementation of the application
-- Converting WebForms pages to Razor Pages
-- Implementing modern authentication with Cookie Authentication
-- Setting up proper project structure with ASP.NET Core best practices
-- Testing the application locally before deployment
-- Configuring CI/CD pipeline for automated deployment
-- Fixed Azure DevOps pipeline build errors for migrated applications
+- Created optimized Azure DevOps pipeline for application deployment
+- Added detailed deployment guide for Azure DevOps setup
+- Created helper script for Azure DevOps pipeline configuration
+- Configured pipeline for continuous deployment of both applications
+- Implemented deployment variables with proper Azure Policy compliance
 
 ## Migration Implementation Progress
 - Created ASP.NET Core project structure
@@ -30,43 +28,69 @@
 - Created Razor Pages for all WebForms pages
 - Configured authorization policies
 - Ported CSS styles to the new application
-- Created Bicep templates for Azure resources
+- Created Terraform templates for Azure resources
 - Created deployment scripts for infrastructure and application
+- Fixed naming convention for resources according to organizational policy
+- Implemented required tagging for all Azure resources
+- Updated deployment pipeline to include policy compliance
+- Created comprehensive CI/CD documentation and guides
+- Developed local CI/CD testing script for deployment verification
+- Created Azure Policy compliance guide for resource tagging
+- Enhanced Azure DevOps pipelines for multiple application deployment
+
+## Deployment Options
+- **Azure DevOps Pipeline**: Configured for automated CI/CD deployment
+- **Local Deployment Script**: Created for testing and troubleshooting
+- **Manual Deployment**: Documented for emergency scenarios
+- **Free Tier Deployment**: Configured to work around quota limitations
 
 ## Migration Requirements
 - **Target Framework**: ASP.NET Core 8.0
 - **Authentication**: ASP.NET Core Cookie Authentication
 - **Hosting**: Azure App Service
-- **Infrastructure as Code**: Bicep
-- **Additional Requirements**: Maintain existing functionality and user experience
+- **Infrastructure as Code**: Terraform
+- **Additional Requirements**: 
+  - Maintain existing functionality and user experience
+  - Follow organizational naming convention policy
+  - Implement required tagging for all resources
 
 ## Infrastructure Plan
 - Azure App Service for hosting
 - Application Insights for monitoring
 - Key Vault for configuration and secrets
 - Log Analytics Workspace for centralized logging
-- Bicep templates for infrastructure as code
+- Storage Account for SQLite database files
+- Terraform templates for infrastructure as code
+- Resource naming following the pattern: rg-<offering>-<sub offering>-<factoryregion>-<v-id>-<purpose>
+- Required tags on all resources:
+  - created by
+  - created on
+  - customer name
+  - purpose
+  - region
+  - tower
+  - v-id
 
 ## Next Steps
-- Complete the ASP.NET Core implementation
-- Add unit tests for the application
-- Set up proper Azure DevOps pipeline for automated deployment
-- Fix Azure DevOps repository access issues by ensuring proper URL format
-- Implement the deployment to Azure App Service
-- Test authentication and authorization flows
-- Deploy infrastructure to Azure
-- Deploy the application to Azure App Service
-- Configure CI/CD pipeline
+- Deploy the fixed Terraform configuration to Azure
+- Validate all resources are created with proper naming and tagging
+- Deploy the ASP.NET Core application to Azure App Service
+- Set up Application Insights monitoring
+- Test application in production environment
+- Finalize CI/CD pipeline for automated deployments
 
 ## Blockers
 - None at this time
 
 ## Decision Log
-- Sept 6, 2025: Selected Bicep for infrastructure as code (instead of Terraform)
-- Sept 6, 2025: Decided to use Cookie Authentication instead of Identity
-- Sept 6, 2025: Chose ASP.NET Core Razor Pages for the implementation
-- Sept 6, 2025: Added Key Vault for secrets management
-- Sept 6, 2025: Included Log Analytics for centralized logging
+- Sep 11, 2025: Fixed Terraform configuration to comply with naming convention policy
+- Sep 11, 2025: Implemented required tagging for all resources
+- Sep 7, 2025: Fixed Azure DevOps pipeline configuration for deployment
+- Sep 6, 2025: Selected Terraform for infrastructure as code (changed from Bicep)
+- Sep 6, 2025: Decided to use Cookie Authentication instead of Identity
+- Sep 6, 2025: Chose ASP.NET Core Razor Pages for the implementation
+- Sep 6, 2025: Added Key Vault for secrets management
+- Sep 6, 2025: Included Log Analytics for centralized logging
 
 ## Previous Projects
 ### ASP Classic Store Application

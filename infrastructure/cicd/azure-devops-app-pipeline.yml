@@ -1,0 +1,127 @@
+# Azure DevOps Pipeline for Application Deployment
+
+trigger:
+  branches:
+    include:
+      - main
+      - master
+      - pipeline-branch
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  buildConfiguration: 'Release'
+  artifactName: 'migrated-apps'
+  publishOutput: '$(Build.ArtifactStagingDirectory)'
+  # Variables for resource naming
+  environment: 'dev'
+  location: 'eastus'
+  offering: 'infra'
+  subOffering: 'winmig'
+  factoryRegion: 'emea'
+  vId: 'vpmamidi'
+  purpose: 'demo'
+  # Resource group name following convention
+  resourceGroupName: 'rg-$(offering)-$(subOffering)-$(factoryRegion)-$(vId)-$(purpose)'
+  # App names
+  netFxAppName: 'contoso-app-netframeworkwebapp-d-eus-01'
+  storeAppName: 'contoso-app-storeapp-d-eus-01'
+
+stages:
+- stage: Build
+  displayName: 'Build Applications'
+  jobs:
+  - job: BuildApps
+    displayName: 'Build .NET Applications'
+    steps:
+    # Install .NET SDK
+    - task: UseDotNet@2
+      displayName: 'Install .NET SDK'
+      inputs:
+        packageType: 'sdk'
+        version: '8.0.x'
+        includePreviewVersions: false
+    
+    # Build NetFrameworkWebApp
+    - task: DotNetCoreCLI@2
+      displayName: 'Build NetFrameworkWebApp'
+      inputs:
+        command: 'publish'
+        publishWebProjects: false
+        projects: 'src/NetFrameworkWebApp/NetFrameworkWebApp.csproj'
+        arguments: '--configuration $(buildConfiguration) --output $(publishOutput)/NetFrameworkWebApp'
+        zipAfterPublish: true
+    
+    # Build StoreApp
+    - task: DotNetCoreCLI@2
+      displayName: 'Build StoreApp'
+      inputs:
+        command: 'publish'
+        publishWebProjects: false
+        projects: 'src/StoreApp/StoreApp.csproj'
+        arguments: '--configuration $(buildConfiguration) --output $(publishOutput)/StoreApp'
+        zipAfterPublish: true
+    
+    # Publish artifacts
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Build Artifacts'
+      inputs:
+        pathtoPublish: '$(publishOutput)'
+        artifactName: '$(artifactName)'
+
+- stage: Deploy
+  displayName: 'Deploy to Azure'
+  dependsOn: Build
+  jobs:
+  - deployment: DeployApps
+    displayName: 'Deploy Applications'
+    environment: 'Development'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          # Download artifacts
+          - download: current
+            artifact: '$(artifactName)'
+          
+          # Show what we're deploying
+          - task: PowerShell@2
+            displayName: 'List Deployment Artifacts'
+            inputs:
+              targetType: 'inline'
+              script: |
+                Write-Host "Deploying applications to Azure App Services..."
+                Get-ChildItem -Path "$(Pipeline.Workspace)/$(artifactName)" -Recurse | Where-Object { $_.Extension -eq ".zip" }
+          
+          # Deploy NetFrameworkWebApp
+          - task: AzureWebApp@1
+            displayName: 'Deploy NetFrameworkWebApp'
+            inputs:
+              azureSubscription: 'Azure-Service-Connection'
+              appType: 'webApp'
+              appName: '$(netFxAppName)'
+              resourceGroupName: '$(resourceGroupName)'
+              package: '$(Pipeline.Workspace)/$(artifactName)/NetFrameworkWebApp/*.zip'
+              deploymentMethod: 'zipDeploy'
+          
+          # Deploy StoreApp
+          - task: AzureWebApp@1
+            displayName: 'Deploy StoreApp'
+            inputs:
+              azureSubscription: 'Azure-Service-Connection'
+              appType: 'webApp'
+              appName: '$(storeAppName)'
+              resourceGroupName: '$(resourceGroupName)'
+              package: '$(Pipeline.Workspace)/$(artifactName)/StoreApp/*.zip'
+              deploymentMethod: 'zipDeploy'
+          
+          # Verify deployment
+          - task: PowerShell@2
+            displayName: 'Verify Deployment'
+            inputs:
+              targetType: 'inline'
+              script: |
+                Write-Host "Deployment completed!"
+                Write-Host "NetFrameworkWebApp URL: https://$(netFxAppName).azurewebsites.net"
+                Write-Host "StoreApp URL: https://$(storeAppName).azurewebsites.net"
