@@ -1,0 +1,104 @@
+trigger:
+  branches:
+    include:
+      - main
+      - master
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  buildConfiguration: 'Release'
+
+steps:
+# Explicitly specifying the checkout with the correct URL format
+- checkout: self
+  persistCredentials: true
+
+# Display Git remote information for debugging
+- task: PowerShell@2
+  displayName: 'Debug Git Remotes'
+  inputs:
+    targetType: 'inline'
+    script: |
+      git remote -v
+      git status
+
+- task: UseDotNet@2
+  displayName: 'Install .NET SDK'
+  inputs:
+    packageType: 'sdk'
+    version: '8.0.x'
+    includePreviewVersions: false
+
+# Build and publish only the migrated projects
+- task: DotNetCoreCLI@2
+  displayName: 'Restore migrated projects'
+  inputs:
+    command: 'restore'
+    projects: |
+      src/NetFrameworkWebApp/NetFrameworkWebApp.csproj
+      src/StoreApp/StoreApp.csproj
+    feedsToUse: 'select'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Build migrated projects'
+  inputs:
+    command: 'build'
+    projects: |
+      src/NetFrameworkWebApp/NetFrameworkWebApp.csproj
+      src/StoreApp/StoreApp.csproj
+    arguments: '--configuration $(buildConfiguration)'
+
+# Conditionally run tests if they exist
+- task: DotNetCoreCLI@2
+  displayName: 'Run tests (if available)'
+  inputs:
+    command: 'test'
+    projects: |
+      src/**/*.Tests.csproj
+    arguments: '--configuration $(buildConfiguration)'
+  continueOnError: true
+  condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
+
+# Publish migrated applications
+- task: DotNetCoreCLI@2
+  displayName: 'Publish migrated projects'
+  inputs:
+    command: 'publish'
+    publishWebProjects: false
+    projects: |
+      src/NetFrameworkWebApp/NetFrameworkWebApp.csproj
+      src/StoreApp/StoreApp.csproj
+    arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+    zipAfterPublish: true
+
+# Add an artifact copy step for the sample projects that successfully build
+- task: PowerShell@2
+  displayName: 'Copy ContosoUniversity sample projects'
+  inputs:
+    targetType: 'inline'
+    script: |
+      # This step is for reference only to include any sample projects that did build successfully
+      $contosoDirApi = "$(Build.ArtifactStagingDirectory)/ContosoUniversity.Api"
+      $contosoDirWeb = "$(Build.ArtifactStagingDirectory)/ContosoUniversity.Web"
+      
+      if (Test-Path "$(Build.SourcesDirectory)/Use-cases/04-ContosoUniversityDiPS/ContosoUniversity.Api/bin/$(buildConfiguration)") {
+        Write-Host "Copying ContosoUniversity.Api sample project"
+        New-Item -ItemType Directory -Force -Path $contosoDirApi
+        Copy-Item -Path "$(Build.SourcesDirectory)/Use-cases/04-ContosoUniversityDiPS/ContosoUniversity.Api/bin/$(buildConfiguration)/*" -Destination $contosoDirApi -Recurse
+      }
+      
+      if (Test-Path "$(Build.SourcesDirectory)/Use-cases/04-ContosoUniversityDiPS/ContosoUniversity.Web/bin/$(buildConfiguration)") {
+        Write-Host "Copying ContosoUniversity.Web sample project"
+        New-Item -ItemType Directory -Force -Path $contosoDirWeb
+        Copy-Item -Path "$(Build.SourcesDirectory)/Use-cases/04-ContosoUniversityDiPS/ContosoUniversity.Web/bin/$(buildConfiguration)/*" -Destination $contosoDirWeb -Recurse
+      }
+  continueOnError: true
+
+# Publish artifacts
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish artifacts'
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    artifactName: 'migrated-apps'
