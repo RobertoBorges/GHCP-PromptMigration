@@ -26,8 +26,7 @@ namespace NetFrameworkWebApp.Pages
                 IsAuthenticated = User.Identity.IsAuthenticated.ToString();
                 
                 // Try to get auth time from claims
-                var authTimeClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.AuthenticationTime 
-                    || c.Type == "auth_time");
+                var authTimeClaim = User.Claims.FirstOrDefault(c => c.Type == "auth_time");
                 
                 if (authTimeClaim != null && long.TryParse(authTimeClaim.Value, out long authTimeStamp))
                 {

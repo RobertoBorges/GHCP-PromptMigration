@@ -52,7 +52,7 @@ namespace NetFrameworkWebApp.Pages.Account
                     {
                         new Claim(ClaimTypes.Name, Input.Username),
                         new Claim(ClaimTypes.Role, "Administrator"),
-                        new Claim(ClaimTypes.AuthenticationTime, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString()),
+                        new Claim("auth_time", DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString()),
                     };
 
                     var claimsIdentity = new ClaimsIdentity(
