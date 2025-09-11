@@ -1,0 +1,40 @@
+@page
+@model SecureModel
+@{
+    ViewData["Title"] = "Secure Page";
+}
+
+<h2>Secure Page</h2>
+<p>
+    This is a secure page that can only be accessed by authenticated users.
+</p>
+<h3>Your Authentication Information</h3>
+<div class="userInfo">
+    <p>
+        <strong>User Name:</strong> @Model.UserName
+    </p>
+    <p>
+        <strong>Authentication Type:</strong> @Model.AuthType
+    </p>
+    <p>
+        <strong>Is Authenticated:</strong> @Model.IsAuthenticated
+    </p>
+    <p>
+        <strong>Authenticated Since:</strong> @Model.AuthTime
+    </p>
+</div>
+<h3>Secure Data</h3>
+<p>
+    This section contains sensitive information that should only be visible to authenticated users.
+</p>
+<div class="secureData">
+    <p>
+        <strong>Account ID:</strong> @Model.AccountId
+    </p>
+    <p>
+        <strong>Last Login:</strong> @Model.LastLogin
+    </p>
+    <p>
+        <strong>Security Level:</strong> @Model.SecurityLevel
+    </p>
+</div>

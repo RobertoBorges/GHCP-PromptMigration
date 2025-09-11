@@ -45,24 +45,38 @@ Write-Host "Logged in to Azure as: $loginStatus" -ForegroundColor Green
 
 # Verify that the resource group and storage account exist
 Write-Host "Verifying resource group and storage account..." -ForegroundColor Cyan
-$resourceGroup = az group show --name $ResourceGroupName --query name -o tsv 2>$null
-if (-not $resourceGroup) {
-    Write-Host "Resource group $ResourceGroupName does not exist. Please create it first with setup-terraform-backend.ps1" -ForegroundColor Red
-    exit 1
-}
+try {
+    $resourceGroup = az group show --name $ResourceGroupName --query name -o tsv 2>$null
+    if (-not $resourceGroup) {
+        Write-Host "Resource group $ResourceGroupName does not exist. Please create it first with setup-terraform-backend.ps1" -ForegroundColor Red
+        exit 1
+    }
 
-$storageAccount = az storage account show --name $StorageAccountName --resource-group $ResourceGroupName --query name -o tsv 2>$null
-if (-not $storageAccount) {
-    Write-Host "Storage account $StorageAccountName does not exist. Please create it first with setup-terraform-backend.ps1" -ForegroundColor Red
+    $storageAccount = az storage account show --name $StorageAccountName --resource-group $ResourceGroupName --query name -o tsv 2>$null
+    if (-not $storageAccount) {
+        Write-Host "Storage account $StorageAccountName does not exist. Please create it first with setup-terraform-backend.ps1" -ForegroundColor Red
+        exit 1
+    }
+}
+catch {
+    Write-Host "Error verifying resources: $_" -ForegroundColor Red
+    Write-Host "Please ensure you have the correct permissions and the resources exist." -ForegroundColor Red
     exit 1
 }
 
 # Verify that the container exists
 Write-Host "Verifying blob container..." -ForegroundColor Cyan
-$container = az storage container exists --name $ContainerName --account-name $StorageAccountName --auth-mode login --query exists -o tsv 2>$null
-if ($container -ne "true") {
-    Write-Host "Container $ContainerName does not exist. Creating it now..." -ForegroundColor Yellow
-    az storage container create --name $ContainerName --account-name $StorageAccountName --auth-mode login
+try {
+    $container = az storage container exists --name $ContainerName --account-name $StorageAccountName --auth-mode login --query exists -o tsv 2>$null
+    if ($container -ne "true") {
+        Write-Host "Container $ContainerName does not exist. Creating it now..." -ForegroundColor Yellow
+        az storage container create --name $ContainerName --account-name $StorageAccountName --auth-mode login
+    }
+}
+catch {
+    Write-Host "Error verifying container: $_" -ForegroundColor Red
+    Write-Host "This might be due to authentication issues. Ensure you have proper access to the storage account." -ForegroundColor Red
+    exit 1
 }
 
 # Initialize Terraform with backend configuration

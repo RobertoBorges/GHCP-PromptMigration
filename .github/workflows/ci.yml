@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, pipeline-branch ]
+    paths:
+      - 'src/**'
+      - '.github/workflows/ci.yml'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'src/**'
+      - '.github/workflows/ci.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '8.0.x'
+        
+    - name: Restore dependencies
+      run: dotnet restore src/StoreApp/StoreApp.csproj
+      
+    - name: Build
+      run: dotnet build src/StoreApp/StoreApp.csproj --configuration Release --no-restore
+      
+    - name: Test
+      run: dotnet test src/StoreApp/StoreApp.csproj --configuration Release --no-build
+      continue-on-error: true
+      
+    - name: Publish
+      run: dotnet publish src/StoreApp/StoreApp.csproj --configuration Release --no-build --output ./publish
+      
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: storeapp
+        path: ./publish

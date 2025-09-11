@@ -1,0 +1,157 @@
+name: ASP.NET Core CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        default: 'dev'
+        type: choice
+        options:
+          - dev
+          - test
+          - prod
+
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '8.0.x'
+        
+    - name: Restore dependencies
+      run: dotnet restore src/StoreApp/StoreApp.csproj
+      
+    - name: Build
+      run: dotnet build src/StoreApp/StoreApp.csproj --configuration Release --no-restore
+      
+    - name: Test
+      run: |
+        if (Test-Path src/StoreApp.Tests) {
+          dotnet test src/StoreApp.Tests --no-restore --verbosity normal
+        } else {
+          Write-Host "No test project found, skipping tests"
+        }
+      shell: pwsh
+      
+    - name: Publish
+      run: dotnet publish src/StoreApp/StoreApp.csproj --configuration Release --no-build --output ./publish
+      
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: app-artifact
+        path: ./publish/**
+        retention-days: 5
+
+  validate-terraform:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_version: 1.5.7
+    
+    - name: Terraform Init
+      run: terraform init
+      working-directory: ./infrastructure/terraform
+    
+    - name: Terraform Validate
+      run: terraform validate
+      working-directory: ./infrastructure/terraform
+      
+    - name: Terraform Format Check
+      run: terraform fmt -check
+      working-directory: ./infrastructure/terraform
+      continue-on-error: true
+
+  deploy-infra:
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    needs: validate-terraform
+    environment: ${{ github.event.inputs.environment || 'dev' }}
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_version: 1.5.7
+        
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    
+    - name: Terraform Init
+      run: terraform init
+      working-directory: ./infrastructure/terraform
+    
+    - name: Terraform Plan
+      run: terraform plan -var="environment=${{ github.event.inputs.environment || 'dev' }}" -out=tfplan
+      working-directory: ./infrastructure/terraform
+    
+    - name: Terraform Apply
+      run: terraform apply -auto-approve tfplan
+      working-directory: ./infrastructure/terraform
+      
+    - name: Get Terraform Outputs
+      id: terraform-outputs
+      run: |
+        cd ./infrastructure/terraform
+        echo "RESOURCE_GROUP=$(terraform output -raw resource_group_name)" >> $GITHUB_ENV
+        echo "APP_SERVICE=$(terraform output -raw app_service_name)" >> $GITHUB_ENV
+        echo "APP_URL=$(terraform output -raw app_service_url)" >> $GITHUB_ENV
+        
+  deploy-app:
+    runs-on: ubuntu-latest
+    needs: deploy-infra
+    environment: ${{ github.event.inputs.environment || 'dev' }}
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Download artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: app-artifact
+        path: ./publish
+    
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    
+    - name: Deploy to Azure Web App
+      id: deploy-to-webapp
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: ${{ env.APP_SERVICE }}
+        slot-name: 'production'
+        package: ./publish
+        
+    - name: Post-Deployment Verification
+      run: |
+        echo "Application deployed to ${{ env.APP_URL }}"
+        # Add health check verification here if needed
+        response=$(curl -s -o /dev/null -w "%{http_code}" ${{ env.APP_URL }})
+        if [ $response -eq 200 ]; then
+          echo "Application is up and running!"
+        else
+          echo "Application health check failed with status code: $response"
+          exit 1
+        fi

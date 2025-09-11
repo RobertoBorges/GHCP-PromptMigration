@@ -1,0 +1,38 @@
+@* _Layout.cshtml - Main layout template *@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewData["Title"] - Classic ASP Store</title>
+    <link rel="stylesheet" href="~/css/styles.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1 class="logo">Classic ASP Store</h1>
+            <nav>
+                <ul>
+                    <li><a asp-page="/Index">Home</a></li>
+                    <li><a asp-page="/Products/Index">Products</a></li>
+                    <li><a asp-page="/About">About</a></li>
+                    <li><a asp-page="/Contact">Contact</a></li>
+                    <li><a asp-page="/Cart">Cart (@await Component.InvokeAsync("CartSummary"))</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <div class="container content">
+        @RenderBody()
+    </div>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; @DateTime.Now.Year Classic ASP Store. All rights reserved.</p>
+        </div>
+    </footer>
+    
+    <script src="~/js/site.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

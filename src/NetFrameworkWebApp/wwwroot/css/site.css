@@ -1,0 +1,253 @@
+/* General Styles */
+body {
+    background-color: #f5f5f5;
+    font-size: 12px;
+    font-family: Verdana, Helvetica, Sans-Serif;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #000066;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+h1 {
+    font-size: 2em;
+}
+
+h2 {
+    font-size: 1.75em;
+}
+
+h3 {
+    font-size: 1.5em;
+}
+
+a:link, a:visited {
+    color: #034af3;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #1d60ff;
+    text-decoration: underline;
+}
+
+/* Layout */
+.header, .main, .footer {
+    width: 960px;
+    margin: 0 auto;
+}
+
+.header {
+    background-color: #4b6c9e;
+    color: #ffffff;
+    padding: 10px;
+}
+
+.header .title {
+    float: left;
+    width: 600px;
+}
+
+.header .title h1 {
+    color: #fff;
+    margin: 0;
+    padding: 0;
+}
+
+.loginDisplay {
+    float: right;
+    font-size: 1.1em;
+    text-align: right;
+    padding: 10px;
+    color: #fff;
+}
+
+.loginDisplay a:link, .loginDisplay a:visited {
+    color: #fff;
+    text-decoration: underline;
+}
+
+.clear {
+    clear: both;
+}
+
+.navigationMenu {
+    margin: 15px 0 10px 0;
+}
+
+.menu {
+    padding: 4px 0 4px 8px;
+}
+
+.menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.menu li {
+    display: inline;
+    list-style: none;
+    padding: 0 10px;
+}
+
+.menu a {
+    color: #fff;
+    text-decoration: none;
+    padding: 5px 8px;
+}
+
+.menu a:hover {
+    background-color: #3a5483;
+    text-decoration: none;
+}
+
+.menu a.selected {
+    background-color: #3a5483;
+    color: #fff;
+}
+
+.main {
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    margin-top: 20px;
+}
+
+.content {
+    padding: 10px;
+}
+
+.footer {
+    padding: 10px;
+    text-align: center;
+    color: #666;
+    font-size: 0.9em;
+    margin-top: 20px;
+}
+
+/* Forms */
+input, select, textarea {
+    font-size: 1.0em;
+    border: 1px solid #aaa;
+    padding: 4px;
+    margin: 2px 0;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-control {
+    width: 300px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    cursor: pointer;
+    background-color: #4b6c9e;
+    color: #fff;
+    border: 1px solid #3a5483;
+    border-radius: 4px;
+}
+
+.btn:hover {
+    background-color: #3a5483;
+    text-decoration: none;
+    color: #fff;
+}
+
+.btn-primary {
+    background-color: #4b6c9e;
+    color: #fff;
+}
+
+/* User Info Display */
+.userInfo {
+    background-color: #f5f5f5;
+    padding: 10px;
+    border: 1px solid #ddd;
+    margin-bottom: 20px;
+}
+
+.secureData {
+    background-color: #f0f7ff;
+    padding: 10px;
+    border: 1px solid #cce5ff;
+}
+
+/* Error Styles */
+.text-danger {
+    color: #dc3545;
+}
+
+.validation-summary-errors {
+    color: #dc3545;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+}
+
+.validation-summary-errors ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.error {
+    color: #dc3545;
+}
+
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+.alert-danger {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+
+/* Checkbox styling */
+.checkbox {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.checkbox label {
+    margin-left: 5px;
+}
+
+/* Date/Time Display */
+.dateTime {
+    font-style: italic;
+    color: #666;
+    margin-top: 20px;
+    padding-top: 10px;
+    border-top: 1px dotted #ccc;
+}

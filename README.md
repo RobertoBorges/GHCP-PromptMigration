@@ -10,11 +10,27 @@ The GitHub Copilot Migration & Modernization for Azure project provides a struct
 2. Migrate code to modern frameworks
 3. Generate Azure infrastructure as code
 4. Validate code and infrastructure
-
 5. Deploy applications to Azure
 6. Set up CI/CD pipelines for automated deployment
 
 Through a guided, AI-assisted workflow, developers can efficiently transform legacy applications into modern, cloud-native solutions running on Azure.
+
+## Infrastructure & Deployment
+
+This project includes fully automated infrastructure deployment using:
+
+- **Terraform**: For Infrastructure as Code (IaC) definition
+- **Azure DevOps Pipelines**: For CI/CD automation
+- **Cloud Management Framework (CMF)**: For standardized naming conventions
+
+The deployment follows these key steps:
+
+1. Set up Terraform backend storage in Azure (see `infrastructure/terraform/setup-terraform-backend.ps1`)
+2. Configure Azure DevOps pipelines with variable groups (see `infrastructure/cicd/PIPELINE-SETUP-GUIDE.md`)
+3. Run the CI/CD pipeline to deploy infrastructure and application (see `infrastructure/cicd/cicd-pipeline.yml`)
+4. Monitor and validate the deployment (see `infrastructure/terraform/DEPLOYMENT-GUIDE.md`)
+
+For detailed deployment instructions, refer to the documentation in the `infrastructure/` directory.
 
 ## Requirements
 

@@ -1,0 +1,420 @@
+# Simplified Azure DevOps Pipeline for Terraform Deployment
+# This pipeline uses Azure CLI instead of Terraform extension tasks
+
+trigger:
+  branches:
+    include:
+      - main
+      - pipeline-branch
+  paths:
+    exclude:
+      - README.md
+      - docs/*
+
+# PR trigger
+pr:
+  branches:
+    include:
+      - main
+      - pipeline-branch
+  paths:
+    exclude:
+      - README.md
+      - docs/*
+
+# Pipeline variables
+variables:
+  - name: vmImageName
+    value: 'ubuntu-latest'
+  - name: buildConfiguration
+    value: 'Release'
+  - name: dotnetSdkVersion
+    value: '8.0.x'
+  - name: projectPath
+    value: 'src/StoreApp/StoreApp.csproj'
+  - name: testProjectPattern
+    value: 'src/**/*Tests.csproj'
+  - name: publishPath
+    value: '$(Build.ArtifactStagingDirectory)/app'
+  - name: infraPath
+    value: 'infrastructure/terraform'
+  - name: isDevelopment
+    value: $[eq(variables['Build.SourceBranch'], 'refs/heads/pipeline-branch')]
+  - name: isProduction
+    value: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
+  - group: AzureServicePrincipal
+  - group: TerraformConfig
+
+# ==============================================
+# STAGES
+# ==============================================
+
+stages:
+# =============== CI STAGES ===============
+- stage: CI
+  displayName: 'Continuous Integration'
+  jobs:
+  - job: Build
+    displayName: 'Build and Test'
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+    - task: UseDotNet@2
+      displayName: 'Use .NET SDK $(dotnetSdkVersion)'
+      inputs:
+        packageType: 'sdk'
+        version: '$(dotnetSdkVersion)'
+        
+    - task: DotNetCoreCLI@2
+      displayName: 'Restore NuGet packages'
+      inputs:
+        command: 'restore'
+        projects: '$(projectPath)'
+        
+    - task: DotNetCoreCLI@2
+      displayName: 'Build application'
+      inputs:
+        command: 'build'
+        projects: '$(projectPath)'
+        arguments: '--configuration $(buildConfiguration) --no-restore'
+        
+    - task: DotNetCoreCLI@2
+      displayName: 'Run unit tests'
+      inputs:
+        command: 'test'
+        projects: '$(testProjectPattern)'
+        arguments: '--configuration $(buildConfiguration) --no-build'
+        testRunTitle: 'Unit Tests'
+        
+    - task: DotNetCoreCLI@2
+      displayName: 'Publish application'
+      inputs:
+        command: 'publish'
+        publishWebProjects: false
+        projects: '$(projectPath)'
+        arguments: '--configuration $(buildConfiguration) --output $(publishPath) --no-build'
+        zipAfterPublish: true
+        
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish app artifacts'
+      inputs:
+        PathtoPublish: '$(publishPath)'
+        ArtifactName: 'app'
+        
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish infrastructure files'
+      inputs:
+        PathtoPublish: '$(infraPath)'
+        ArtifactName: 'terraform'
+
+# =============== INFRASTRUCTURE VALIDATION STAGE ===============
+- stage: Validate_Infrastructure
+  displayName: 'Validate Infrastructure'
+  dependsOn: CI
+  jobs:
+  - job: TerraformValidate
+    displayName: 'Validate Terraform Configuration'
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - task: DownloadBuildArtifacts@1
+      displayName: 'Download Terraform files'
+      inputs:
+        buildType: 'current'
+        downloadType: 'specific'
+        itemPattern: 'terraform/**'
+        downloadPath: '$(System.ArtifactsDirectory)'
+        
+    # Install Terraform using script instead of TerraformInstaller task
+    - task: Bash@3
+      displayName: 'Install Terraform'
+      inputs:
+        targetType: 'inline'
+        script: |
+          sudo apt-get update
+          sudo apt-get install -y unzip
+          wget https://releases.hashicorp.com/terraform/1.6.3/terraform_1.6.3_linux_amd64.zip
+          unzip terraform_1.6.3_linux_amd64.zip
+          sudo mv terraform /usr/local/bin/
+          terraform --version
+    
+    # Set up Service Principal authentication
+    - task: AzureCLI@2
+      displayName: 'Set up Azure authentication'
+      inputs:
+        azureSubscription: 'azure-service-connection'
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          echo "##vso[task.setvariable variable=ARM_CLIENT_ID]$(ARM_CLIENT_ID)"
+          echo "##vso[task.setvariable variable=ARM_CLIENT_SECRET]$(ARM_CLIENT_SECRET)"
+          echo "##vso[task.setvariable variable=ARM_TENANT_ID]$(ARM_TENANT_ID)"
+          echo "##vso[task.setvariable variable=ARM_SUBSCRIPTION_ID]$(ARM_SUBSCRIPTION_ID)"
+        
+    # Use Bash task for Terraform init
+    - task: Bash@3
+      displayName: 'Terraform Init'
+      inputs:
+        targetType: 'inline'
+        workingDirectory: '$(System.ArtifactsDirectory)/terraform'
+        script: |
+          terraform init \
+            -backend-config="resource_group_name=$(TF_STATE_RESOURCE_GROUP_NAME)" \
+            -backend-config="storage_account_name=$(TF_STATE_STORAGE_ACCOUNT_NAME)" \
+            -backend-config="container_name=$(TF_STATE_CONTAINER_NAME)" \
+            -backend-config="key=$(TF_STATE_KEY)"
+        
+    # Use Bash task for Terraform validate
+    - task: Bash@3
+      displayName: 'Terraform Validate'
+      inputs:
+        targetType: 'inline'
+        workingDirectory: '$(System.ArtifactsDirectory)/terraform'
+        script: 'terraform validate'
+
+# =============== CD STAGES ===============
+# Development Environment Deployment
+- stage: Deploy_Dev
+  displayName: 'Deploy to Development'
+  dependsOn: Validate_Infrastructure
+  condition: and(succeeded(), eq(variables.isDevelopment, true))
+  jobs:
+  - job: DeployInfrastructure
+    displayName: 'Deploy Infrastructure to Dev'
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - task: DownloadBuildArtifacts@1
+      displayName: 'Download Terraform files'
+      inputs:
+        buildType: 'current'
+        downloadType: 'specific'
+        itemPattern: 'terraform/**'
+        downloadPath: '$(System.ArtifactsDirectory)'
+        
+    # Install Terraform using script
+    - task: Bash@3
+      displayName: 'Install Terraform'
+      inputs:
+        targetType: 'inline'
+        script: |
+          sudo apt-get update
+          sudo apt-get install -y unzip
+          wget https://releases.hashicorp.com/terraform/1.6.3/terraform_1.6.3_linux_amd64.zip
+          unzip terraform_1.6.3_linux_amd64.zip
+          sudo mv terraform /usr/local/bin/
+          terraform --version
+          
+    # Set up Service Principal authentication
+    - task: AzureCLI@2
+      displayName: 'Set up Azure authentication'
+      inputs:
+        azureSubscription: 'azure-service-connection'
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          echo "##vso[task.setvariable variable=ARM_CLIENT_ID]$(ARM_CLIENT_ID)"
+          echo "##vso[task.setvariable variable=ARM_CLIENT_SECRET]$(ARM_CLIENT_SECRET)"
+          echo "##vso[task.setvariable variable=ARM_TENANT_ID]$(ARM_TENANT_ID)"
+          echo "##vso[task.setvariable variable=ARM_SUBSCRIPTION_ID]$(ARM_SUBSCRIPTION_ID)"
+    
+    # Use Bash task for Terraform init
+    - task: Bash@3
+      displayName: 'Terraform Init'
+      inputs:
+        targetType: 'inline'
+        workingDirectory: '$(System.ArtifactsDirectory)/terraform'
+        script: |
+          terraform init \
+            -backend-config="resource_group_name=$(TF_STATE_RESOURCE_GROUP_NAME)" \
+            -backend-config="storage_account_name=$(TF_STATE_STORAGE_ACCOUNT_NAME)" \
+            -backend-config="container_name=$(TF_STATE_CONTAINER_NAME)" \
+            -backend-config="key=$(TF_STATE_KEY)"
+    
+    # Use Bash task for Terraform plan
+    - task: Bash@3
+      displayName: 'Terraform Plan'
+      inputs:
+        targetType: 'inline'
+        workingDirectory: '$(System.ArtifactsDirectory)/terraform'
+        script: |
+          terraform plan -var="environment=dev" -out=tfplan
+    
+    # Use Bash task for Terraform apply
+    - task: Bash@3
+      displayName: 'Terraform Apply'
+      inputs:
+        targetType: 'inline'
+        workingDirectory: '$(System.ArtifactsDirectory)/terraform'
+        script: |
+          terraform apply -auto-approve tfplan
+          
+    # Get Terraform outputs
+    - task: Bash@3
+      displayName: 'Get Terraform Outputs'
+      inputs:
+        targetType: 'inline'
+        workingDirectory: '$(System.ArtifactsDirectory)/terraform'
+        script: |
+          terraform output -json > $(Build.ArtifactStagingDirectory)/terraform-output.json
+          
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Terraform outputs'
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)/terraform-output.json'
+        ArtifactName: 'terraform-output'
+        
+  - job: DeployApplication
+    displayName: 'Deploy Application to Dev'
+    dependsOn: DeployInfrastructure
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - task: DownloadBuildArtifacts@1
+      displayName: 'Download app artifacts'
+      inputs:
+        buildType: 'current'
+        downloadType: 'specific'
+        itemPattern: 'app/**'
+        downloadPath: '$(System.ArtifactsDirectory)'
+        
+    - task: DownloadBuildArtifacts@1
+      displayName: 'Download Terraform outputs'
+      inputs:
+        buildType: 'current'
+        downloadType: 'specific'
+        itemPattern: 'terraform-output/**'
+        downloadPath: '$(System.ArtifactsDirectory)'
+        
+    # Deploy to Azure App Service
+    - task: AzureWebApp@1
+      displayName: 'Deploy to App Service'
+      inputs:
+        azureSubscription: 'azure-service-connection'
+        appType: 'webApp'
+        appName: '$(app_name)-dev'
+        package: '$(System.ArtifactsDirectory)/app/*.zip'
+        deploymentMethod: 'auto'
+
+# Production Environment Deployment
+- stage: Deploy_Prod
+  displayName: 'Deploy to Production'
+  dependsOn: Validate_Infrastructure
+  condition: and(succeeded(), eq(variables.isProduction, true))
+  jobs:
+  - job: DeployInfrastructure
+    displayName: 'Deploy Infrastructure to Prod'
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - task: DownloadBuildArtifacts@1
+      displayName: 'Download Terraform files'
+      inputs:
+        buildType: 'current'
+        downloadType: 'specific'
+        itemPattern: 'terraform/**'
+        downloadPath: '$(System.ArtifactsDirectory)'
+        
+    # Install Terraform using script
+    - task: Bash@3
+      displayName: 'Install Terraform'
+      inputs:
+        targetType: 'inline'
+        script: |
+          sudo apt-get update
+          sudo apt-get install -y unzip
+          wget https://releases.hashicorp.com/terraform/1.6.3/terraform_1.6.3_linux_amd64.zip
+          unzip terraform_1.6.3_linux_amd64.zip
+          sudo mv terraform /usr/local/bin/
+          terraform --version
+          
+    # Set up Service Principal authentication
+    - task: AzureCLI@2
+      displayName: 'Set up Azure authentication'
+      inputs:
+        azureSubscription: 'azure-service-connection'
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          echo "##vso[task.setvariable variable=ARM_CLIENT_ID]$(ARM_CLIENT_ID)"
+          echo "##vso[task.setvariable variable=ARM_CLIENT_SECRET]$(ARM_CLIENT_SECRET)"
+          echo "##vso[task.setvariable variable=ARM_TENANT_ID]$(ARM_TENANT_ID)"
+          echo "##vso[task.setvariable variable=ARM_SUBSCRIPTION_ID]$(ARM_SUBSCRIPTION_ID)"
+    
+    # Use Bash task for Terraform init
+    - task: Bash@3
+      displayName: 'Terraform Init'
+      inputs:
+        targetType: 'inline'
+        workingDirectory: '$(System.ArtifactsDirectory)/terraform'
+        script: |
+          terraform init \
+            -backend-config="resource_group_name=$(TF_STATE_RESOURCE_GROUP_NAME)" \
+            -backend-config="storage_account_name=$(TF_STATE_STORAGE_ACCOUNT_NAME)" \
+            -backend-config="container_name=$(TF_STATE_CONTAINER_NAME)" \
+            -backend-config="key=$(TF_STATE_KEY)"
+    
+    # Use Bash task for Terraform plan
+    - task: Bash@3
+      displayName: 'Terraform Plan'
+      inputs:
+        targetType: 'inline'
+        workingDirectory: '$(System.ArtifactsDirectory)/terraform'
+        script: |
+          terraform plan -var="environment=prod" -out=tfplan
+    
+    # Use Bash task for Terraform apply
+    - task: Bash@3
+      displayName: 'Terraform Apply'
+      inputs:
+        targetType: 'inline'
+        workingDirectory: '$(System.ArtifactsDirectory)/terraform'
+        script: |
+          terraform apply -auto-approve tfplan
+          
+    # Get Terraform outputs
+    - task: Bash@3
+      displayName: 'Get Terraform Outputs'
+      inputs:
+        targetType: 'inline'
+        workingDirectory: '$(System.ArtifactsDirectory)/terraform'
+        script: |
+          terraform output -json > $(Build.ArtifactStagingDirectory)/terraform-output.json
+          
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Terraform outputs'
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)/terraform-output.json'
+        ArtifactName: 'terraform-output'
+        
+  - job: DeployApplication
+    displayName: 'Deploy Application to Prod'
+    dependsOn: DeployInfrastructure
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - task: DownloadBuildArtifacts@1
+      displayName: 'Download app artifacts'
+      inputs:
+        buildType: 'current'
+        downloadType: 'specific'
+        itemPattern: 'app/**'
+        downloadPath: '$(System.ArtifactsDirectory)'
+        
+    - task: DownloadBuildArtifacts@1
+      displayName: 'Download Terraform outputs'
+      inputs:
+        buildType: 'current'
+        downloadType: 'specific'
+        itemPattern: 'terraform-output/**'
+        downloadPath: '$(System.ArtifactsDirectory)'
+        
+    # Deploy to Azure App Service
+    - task: AzureWebApp@1
+      displayName: 'Deploy to App Service'
+      inputs:
+        azureSubscription: 'azure-service-connection'
+        appType: 'webApp'
+        appName: '$(app_name)-prod'
+        package: '$(System.ArtifactsDirectory)/app/*.zip'
+        deploymentMethod: 'auto'

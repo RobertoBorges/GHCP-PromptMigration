@@ -1,0 +1,26 @@
+@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home";
+}
+
+<h2>Welcome to your new site!</h2>
+<p>
+    This is a simple home page created for your ASP.NET Core 8.0 application.
+</p>
+<p>
+    You can use this as a starting point for your web application.
+</p>
+<h3>Getting Started</h3>
+<p>
+    To get started with ASP.NET Core, you can:
+</p>
+<ul>
+    <li>Add more pages to your site</li>
+    <li>Create forms to collect user input</li>
+    <li>Connect to databases using Entity Framework Core</li>
+    <li>Use tag helpers to create rich user interfaces</li>
+</ul>
+<p class="dateTime">
+    @Model.DateTimeInfo
+</p>

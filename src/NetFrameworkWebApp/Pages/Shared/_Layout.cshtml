@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - My ASP.NET Application</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <div class="header">
+        <div class="title">
+            <h1>Welcome to My ASP.NET Application</h1>
+        </div>
+        <div class="loginDisplay">
+            @if (User.Identity?.IsAuthenticated == true)
+            {
+                <span>Welcome <span class="bold">@User.Identity.Name</span>!</span>
+                <span>[ <a href="/Account/Logout">Log Out</a> ]</span>
+            }
+            else
+            {
+                <span>[ <a href="/Account/Login">Log In</a> ]</span>
+            }
+        </div>
+        <div class="clear"></div>
+        <div class="navigationMenu">
+            <div class="menu">
+                <ul>
+                    <li><a asp-page="/Index" class="@(ViewContext.RouteData.Values["page"]?.ToString() == "/Index" ? "selected" : "")">Home</a></li>
+                    <li><a asp-page="/About" class="@(ViewContext.RouteData.Values["page"]?.ToString() == "/About" ? "selected" : "")">About</a></li>
+                    <li><a asp-page="/Secure" class="@(ViewContext.RouteData.Values["page"]?.ToString() == "/Secure" ? "selected" : "")">Secure Page</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="main">
+        <div class="content">
+            @RenderBody()
+        </div>
+    </div>
+    <div class="footer">
+        <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+    </div>
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
