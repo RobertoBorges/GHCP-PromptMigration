@@ -27,6 +27,8 @@ variables:
   # App names
   netFxAppName: 'contoso-app-netframeworkwebapp-d-eus-01'
   storeAppName: 'contoso-app-storeapp-d-eus-01'
+  # Service connection name
+  azureServiceConnection: 'Azure-Service-Connection'
 
 stages:
 - stage: Build
@@ -98,7 +100,7 @@ stages:
           - task: AzureWebApp@1
             displayName: 'Deploy NetFrameworkWebApp'
             inputs:
-              azureSubscription: 'Azure-Service-Connection'
+              azureSubscription: '$(azureServiceConnection)'
               appType: 'webApp'
               appName: '$(netFxAppName)'
               resourceGroupName: '$(resourceGroupName)'
@@ -109,7 +111,7 @@ stages:
           - task: AzureWebApp@1
             displayName: 'Deploy StoreApp'
             inputs:
-              azureSubscription: 'Azure-Service-Connection'
+              azureSubscription: '$(azureServiceConnection)'
               appType: 'webApp'
               appName: '$(storeAppName)'
               resourceGroupName: '$(resourceGroupName)'
