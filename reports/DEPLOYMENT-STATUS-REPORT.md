@@ -2,7 +2,7 @@
 
 ## Deployment Summary
 
-The StoreApp application is being deployed to Azure using Azure DevOps CI/CD pipeline.
+The StoreApp application has been successfully deployed to Azure using Azure DevOps CI/CD pipeline.
 
 ### Deployment Details
 
@@ -11,7 +11,7 @@ The StoreApp application is being deployed to Azure using Azure DevOps CI/CD pip
 - **Location**: Central US
 - **Application URL**: https://contoso-app-netframeworkwebapp-d-cus-01.azurewebsites.net
 - **Pipeline**: AppDeployment (ID: 4)
-- **Pipeline Status**: Updated for StoreApp deployment
+- **Pipeline Run**: ID 28 (https://dev.azure.com/learnadoz/ghcpnew/_build?definitionId=4)
 - **Application Type**: StoreApp (.NET 8)
 
 ## Deployment Verification
@@ -19,7 +19,7 @@ The StoreApp application is being deployed to Azure using Azure DevOps CI/CD pip
 - **Web App Status**: Running
 - **HTTP Response**: 200 OK
 - **Deployment Method**: Azure DevOps CI/CD Pipeline
-- **Application Health**: To be verified after deployment
+- **Application Health**: Verified
 
 ## Next Steps
 
