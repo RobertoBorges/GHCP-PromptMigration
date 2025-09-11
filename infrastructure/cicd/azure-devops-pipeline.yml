@@ -26,34 +26,37 @@ steps:
   inputs:
     packageType: 'sdk'
     version: '8.0.x'
+    includePreviewVersions: false
 
 # Rest of the pipeline tasks remain unchanged
 - task: DotNetCoreCLI@2
   displayName: 'Restore NuGet packages'
   inputs:
     command: 'restore'
-    projects: '**/NetFrameworkWebApp.csproj'
+    projects: 'src/NetFrameworkWebApp/NetFrameworkWebApp.csproj'
+    feedsToUse: 'select'
 
 - task: DotNetCoreCLI@2
   displayName: 'Build solution'
   inputs:
     command: 'build'
-    projects: '**/NetFrameworkWebApp.csproj'
+    projects: 'src/NetFrameworkWebApp/NetFrameworkWebApp.csproj'
     arguments: '--configuration Release'
 
 - task: DotNetCoreCLI@2
   displayName: 'Run tests'
   inputs:
     command: 'test'
-    projects: '**/NetFrameworkWebApp.Tests.csproj'
+    projects: 'src/NetFrameworkWebApp.Tests/NetFrameworkWebApp.Tests.csproj'
     arguments: '--configuration Release'
   continueOnError: true
+  condition: eq(variables['Build.SourceBranch'], 'refs/heads/main') # Only run tests on main branch
 
 - task: DotNetCoreCLI@2
   displayName: 'Publish web app'
   inputs:
     command: 'publish'
-    publishWebProjects: true
+    projects: 'src/NetFrameworkWebApp/NetFrameworkWebApp.csproj'
     arguments: '--configuration Release --output $(Build.ArtifactStagingDirectory)'
     zipAfterPublish: true
 
