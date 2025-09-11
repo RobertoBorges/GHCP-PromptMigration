@@ -25,7 +25,7 @@ az storage container create --name $terraformStateContainer --account-name $terr
 
 ## Step 2: Create Variable Group in Azure DevOps
 
-1. Go to https://dev.azure.com/learnadoz/ghcp/_library?itemType=VariableGroups
+1. Go to https://dev.azure.com/learnadoz/ghcpnew/_library?itemType=VariableGroups
 2. Click **+ Variable group**
 3. Name it: `TerraformBackend`
 4. Add the following variables:
@@ -36,7 +36,7 @@ az storage container create --name $terraformStateContainer --account-name $terr
 
 ## Step 3: Create Environments in Azure DevOps
 
-1. Go to https://dev.azure.com/learnadoz/ghcp/_environments
+1. Go to https://dev.azure.com/learnadoz/ghcpnew/_environments
 2. Click **New environment**
 3. Name: `Dev`
 4. Resource: `None`
@@ -45,7 +45,7 @@ az storage container create --name $terraformStateContainer --account-name $terr
 
 ## Step 4: Create Service Connection in Azure DevOps
 
-1. Go to https://dev.azure.com/learnadoz/ghcp/_settings/adminservices
+1. Go to https://dev.azure.com/learnadoz/ghcpnew/_settings/adminservices
 2. Click **New service connection**
 3. Select **Azure Resource Manager**
 4. Choose **Service principal (automatic)**
@@ -57,10 +57,10 @@ az storage container create --name $terraformStateContainer --account-name $terr
 
 ## Step 5: Create Pipeline in Azure DevOps
 
-1. Go to https://dev.azure.com/learnadoz/ghcp/_build
+1. Go to https://dev.azure.com/learnadoz/ghcpnew/_build
 2. Click **New pipeline**
 3. Select **Azure Repos Git**
-4. Select the repository **ghcp**
+4. Select the repository **ghcpnew**
 5. On the "Configure your pipeline" page, select **Existing Azure Pipelines YAML file**
 6. Select the branch: `main`
 7. Path: `/infrastructure/cicd/azure-pipelines.yml`
@@ -71,7 +71,7 @@ az storage container create --name $terraformStateContainer --account-name $terr
 
 ## Step 6: Run the Pipeline
 
-1. Go to https://dev.azure.com/learnadoz/ghcp/_build
+1. Go to https://dev.azure.com/learnadoz/ghcpnew/_build
 2. Select your newly created pipeline
 3. Click **Run pipeline**
 4. Select the **main** branch

@@ -2,7 +2,7 @@
 # Run this script to test Git connectivity from your local machine to diagnose Git fetch issues
 
 param(
-    [string]$RepoUrl = "https://dev.azure.com/learnadoz/ghcpnew/_git/ghcpnew",
+    [string]$RepoUrl = "https://dev.azure.com/learnadoz/ghcpnew",
     [string]$TestDir = "$env:TEMP\git-test-$(Get-Random)"
 )
 

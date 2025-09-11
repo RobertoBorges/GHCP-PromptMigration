@@ -10,7 +10,7 @@ This guide provides detailed steps to create a pipeline in Azure DevOps that wil
 
 ## Step 1: Access Azure DevOps Pipelines
 
-1. Open a web browser and navigate to: `https://dev.azure.com/learnadoz/ghcp/_build`
+1. Open a web browser and navigate to: `https://dev.azure.com/learnadoz/ghcpnew/_build`
 2. Sign in with your Azure DevOps credentials if prompted
 
 ## Step 2: Create a New Pipeline
