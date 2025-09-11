@@ -22,11 +22,11 @@ steps:
     includePreviewVersions: false
 
 - task: DotNetCoreCLI@2
-  displayName: 'Build .NET Application'
+  displayName: 'Build StoreApp'
   inputs:
     command: 'publish'
     publishWebProjects: false
-    projects: 'src/NetFrameworkWebApp/NetFrameworkWebApp.csproj'
+    projects: 'src/StoreApp/StoreApp.csproj'
     arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
     zipAfterPublish: true
 
@@ -37,7 +37,7 @@ steps:
     artifactName: 'drop'
 
 - task: AzureWebApp@1
-  displayName: 'Deploy to Azure Web App'
+  displayName: 'Deploy StoreApp to Azure Web App'
   inputs:
     azureSubscription: 'azure-service-connection'
     appType: 'webApp'
