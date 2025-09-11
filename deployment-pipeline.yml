@@ -1,10 +1,8 @@
-# Azure DevOps Pipeline for Application Deployment
+# Simplified Azure DevOps Pipeline for Application Deployment
 
 trigger:
   branches:
     include:
-      - main
-      - master
       - pipeline-branch
 
 pool:
@@ -12,86 +10,38 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
-  artifactName: 'migrated-apps'
-  publishOutput: '$(Build.ArtifactStagingDirectory)'
-  # Resource group and app names
   resourceGroupName: 'rg-infra-app-emea-vpmamidi-demo'
-  netFxAppName: 'contoso-app-netframeworkwebapp-d-cus-01'
-  # Service connection name
-  azureServiceConnection: 'azure-service-connection'
+  webAppName: 'contoso-app-netframeworkwebapp-d-cus-01'
 
-stages:
-- stage: Build
-  displayName: 'Build Applications'
-  jobs:
-  - job: BuildApps
-    displayName: 'Build .NET Applications'
-    steps:
-    # Install .NET SDK
-    - task: UseDotNet@2
-      displayName: 'Install .NET SDK'
-      inputs:
-        packageType: 'sdk'
-        version: '8.0.x'
-        includePreviewVersions: false
-    
-    # Build NetFrameworkWebApp
-    - task: DotNetCoreCLI@2
-      displayName: 'Build NetFrameworkWebApp'
-      inputs:
-        command: 'publish'
-        publishWebProjects: false
-        projects: 'src/NetFrameworkWebApp/NetFrameworkWebApp.csproj'
-        arguments: '--configuration $(buildConfiguration) --output $(publishOutput)/NetFrameworkWebApp'
-        zipAfterPublish: true
-    
-    # Publish artifacts
-    - task: PublishBuildArtifacts@1
-      displayName: 'Publish Build Artifacts'
-      inputs:
-        pathtoPublish: '$(publishOutput)'
-        artifactName: '$(artifactName)'
+steps:
+- task: UseDotNet@2
+  displayName: 'Install .NET SDK'
+  inputs:
+    packageType: 'sdk'
+    version: '8.0.x'
+    includePreviewVersions: false
 
-- stage: Deploy
-  displayName: 'Deploy to Azure'
-  dependsOn: Build
-  jobs:
-  - deployment: DeployApps
-    displayName: 'Deploy Applications'
-    environment: 'Development'
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-          # Download artifacts
-          - download: current
-            artifact: '$(artifactName)'
-          
-          # Show what we're deploying
-          - task: PowerShell@2
-            displayName: 'List Deployment Artifacts'
-            inputs:
-              targetType: 'inline'
-              script: |
-                Write-Host "Deploying applications to Azure App Services..."
-                Get-ChildItem -Path "$(Pipeline.Workspace)/$(artifactName)" -Recurse | Where-Object { $_.Extension -eq ".zip" }
-          
-          # Deploy NetFrameworkWebApp
-          - task: AzureWebApp@1
-            displayName: 'Deploy NetFrameworkWebApp'
-            inputs:
-              azureSubscription: '$(azureServiceConnection)'
-              appType: 'webApp'
-              appName: '$(netFxAppName)'
-              resourceGroupName: '$(resourceGroupName)'
-              package: '$(Pipeline.Workspace)/$(artifactName)/NetFrameworkWebApp/*.zip'
-              deploymentMethod: 'zipDeploy'
-          
-          # Verify deployment
-          - task: PowerShell@2
-            displayName: 'Verify Deployment'
-            inputs:
-              targetType: 'inline'
-              script: |
-                Write-Host "Deployment completed!"
-                Write-Host "NetFrameworkWebApp URL: https://$(netFxAppName).azurewebsites.net"
+- task: DotNetCoreCLI@2
+  displayName: 'Build .NET Application'
+  inputs:
+    command: 'publish'
+    publishWebProjects: false
+    projects: 'src/NetFrameworkWebApp/NetFrameworkWebApp.csproj'
+    arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+    zipAfterPublish: true
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Build Artifacts'
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    artifactName: 'drop'
+
+- task: AzureWebApp@1
+  displayName: 'Deploy to Azure Web App'
+  inputs:
+    azureSubscription: 'azure-service-connection'
+    appType: 'webApp'
+    appName: '$(webAppName)'
+    resourceGroupName: '$(resourceGroupName)'
+    package: '$(Build.ArtifactStagingDirectory)/**/*.zip'
+    deploymentMethod: 'zipDeploy'
