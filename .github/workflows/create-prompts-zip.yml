@@ -26,13 +26,28 @@ jobs:
         mkdir -p temp-archive/.github/prompts
         mkdir -p temp-archive/.github/chatmodes
         
+    - name: Debug - Check source directories
+      run: |
+        echo "Checking source directories:"
+        ls -la .github/ || echo ".github directory not found"
+        echo "Prompts directory:"
+        ls -la .github/prompts/ || echo "prompts directory not found"
+        echo "Chatmodes directory:"
+        ls -la .github/chatmodes/ || echo "chatmodes directory not found"
+        
     - name: Copy prompts and chatmodes to temporary structure
       run: |
-        if [ -d ".github/prompts" ]; then
-          cp -r .github/prompts/* temp-archive/.github/prompts/ 2>/dev/null || echo "No files in prompts directory"
+        if [ -d ".github/prompts" ] && [ "$(ls -A .github/prompts)" ]; then
+          cp -r .github/prompts/. temp-archive/.github/prompts/
+          echo "Copied prompts directory"
+        else
+          echo "No files in prompts directory or directory doesn't exist"
         fi
-        if [ -d ".github/chatmodes" ]; then
-          cp -r .github/chatmodes/* temp-archive/.github/chatmodes/ 2>/dev/null || echo "No files in chatmodes directory"
+        if [ -d ".github/chatmodes" ] && [ "$(ls -A .github/chatmodes)" ]; then
+          cp -r .github/chatmodes/. temp-archive/.github/chatmodes/
+          echo "Copied chatmodes directory"
+        else
+          echo "No files in chatmodes directory or directory doesn't exist"
         fi
         
     - name: Verify directory structure
