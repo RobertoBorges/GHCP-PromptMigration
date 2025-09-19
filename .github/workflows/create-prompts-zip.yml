@@ -2,6 +2,12 @@ name: Create Prompts and Chatmodes Archive
 
 on:
   workflow_dispatch:
+    inputs:
+      create_release:
+        description: 'Create a GitHub release with the archive'
+        required: false
+        default: false
+        type: boolean
   push:
     branches: [main, update-2-sa-team-feedback]
     paths:
@@ -83,26 +89,27 @@ jobs:
         if-no-files-found: error
         
     - name: Create zip for release
-      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      if: inputs.create_release == true
       run: |
         cd temp-archive
         zip -r ../github-prompts-chatmodes.zip .github/
         cd ..
         
-    - name: Create release (on main branch only)
-      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    - name: Create release (optional)
+      if: inputs.create_release == true
       uses: softprops/action-gh-release@v1
       with:
         tag_name: prompts-v${{ github.run_number }}
         name: GitHub Prompts and Chatmodes v${{ github.run_number }}
         body: |
-          Automated release of GitHub prompts and chatmodes
+          Release of GitHub prompts and chatmodes
           
           This archive contains:
           - `.github/prompts/` - All prompt files
           - `.github/chatmodes/` - All chatmode files
           
           Generated from commit: ${{ github.sha }}
+          Branch: ${{ github.ref_name }}
         files: github-prompts-chatmodes.zip
         draft: false
         prerelease: false
