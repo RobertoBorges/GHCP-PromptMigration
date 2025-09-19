@@ -35,23 +35,24 @@ jobs:
           cp -r .github/chatmodes/* temp-archive/.github/chatmodes/ 2>/dev/null || echo "No files in chatmodes directory"
         fi
         
-    - name: Create zip archive
+    - name: Verify directory structure
+      run: |
+        echo "Directory structure:"
+        find temp-archive -type f
+        
+    - name: Upload artifact (GitHub will auto-zip)
+      uses: actions/upload-artifact@v4
+      with:
+        name: github-prompts-chatmodes-${{ github.sha }}
+        path: temp-archive/.github/
+        retention-days: 30
+        
+    - name: Create zip for release
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
       run: |
         cd temp-archive
         zip -r ../github-prompts-chatmodes.zip .github/
         cd ..
-        
-    - name: Verify archive contents
-      run: |
-        echo "Archive contents:"
-        unzip -l github-prompts-chatmodes.zip
-        
-    - name: Upload artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: github-prompts-chatmodes-${{ github.sha }}
-        path: github-prompts-chatmodes.zip
-        retention-days: 30
         
     - name: Create release (on main branch only)
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
