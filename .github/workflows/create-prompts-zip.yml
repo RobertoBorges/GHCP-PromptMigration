@@ -37,30 +37,50 @@ jobs:
         
     - name: Copy prompts and chatmodes to temporary structure
       run: |
-        if [ -d ".github/prompts" ] && [ "$(ls -A .github/prompts)" ]; then
-          cp -r .github/prompts/. temp-archive/.github/prompts/
-          echo "Copied prompts directory"
+        # Copy prompts if directory exists and has files
+        if [ -d ".github/prompts" ]; then
+          if [ "$(find .github/prompts -type f | wc -l)" -gt 0 ]; then
+            cp -r .github/prompts/. temp-archive/.github/prompts/
+            echo "✓ Copied $(find .github/prompts -type f | wc -l) files from prompts directory"
+          else
+            echo "⚠ Prompts directory exists but is empty"
+          fi
         else
-          echo "No files in prompts directory or directory doesn't exist"
+          echo "⚠ Prompts directory does not exist"
         fi
-        if [ -d ".github/chatmodes" ] && [ "$(ls -A .github/chatmodes)" ]; then
-          cp -r .github/chatmodes/. temp-archive/.github/chatmodes/
-          echo "Copied chatmodes directory"
+        
+        # Copy chatmodes if directory exists and has files
+        if [ -d ".github/chatmodes" ]; then
+          if [ "$(find .github/chatmodes -type f | wc -l)" -gt 0 ]; then
+            cp -r .github/chatmodes/. temp-archive/.github/chatmodes/
+            echo "✓ Copied $(find .github/chatmodes -type f | wc -l) files from chatmodes directory"
+          else
+            echo "⚠ Chatmodes directory exists but is empty"
+          fi
         else
-          echo "No files in chatmodes directory or directory doesn't exist"
+          echo "⚠ Chatmodes directory does not exist"
         fi
         
     - name: Verify directory structure
       run: |
-        echo "Directory structure:"
-        find temp-archive -type f
+        echo "Directory structure after copy:"
+        find temp-archive -type f || echo "No files found"
+        echo "Listing temp-archive/.github contents:"
+        ls -la temp-archive/.github/ || echo "temp-archive/.github/ is empty or doesn't exist"
+        echo "Listing temp-archive/.github/prompts contents:"
+        ls -la temp-archive/.github/prompts/ || echo "temp-archive/.github/prompts/ is empty or doesn't exist"
+        echo "Listing temp-archive/.github/chatmodes contents:"
+        ls -la temp-archive/.github/chatmodes/ || echo "temp-archive/.github/chatmodes/ is empty or doesn't exist"
         
     - name: Upload artifact (GitHub will auto-zip)
       uses: actions/upload-artifact@v4
       with:
         name: github-prompts-chatmodes-${{ github.sha }}
-        path: temp-archive/.github/
+        path: |
+          temp-archive/.github/prompts/
+          temp-archive/.github/chatmodes/
         retention-days: 30
+        if-no-files-found: error
         
     - name: Create zip for release
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
