@@ -1,0 +1,74 @@
+name: Create Prompts and Chatmodes Archive
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, update-2-sa-team-feedback]
+    paths:
+      - '.github/prompts/**'
+      - '.github/chatmodes/**'
+  pull_request:
+    branches: [main, update-2-sa-team-feedback]
+    paths:
+      - '.github/prompts/**'
+      - '.github/chatmodes/**'
+
+jobs:
+  create-archive:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Create temporary directory structure
+      run: |
+        mkdir -p temp-archive/.github/prompts
+        mkdir -p temp-archive/.github/chatmodes
+        
+    - name: Copy prompts and chatmodes to temporary structure
+      run: |
+        if [ -d ".github/prompts" ]; then
+          cp -r .github/prompts/* temp-archive/.github/prompts/ 2>/dev/null || echo "No files in prompts directory"
+        fi
+        if [ -d ".github/chatmodes" ]; then
+          cp -r .github/chatmodes/* temp-archive/.github/chatmodes/ 2>/dev/null || echo "No files in chatmodes directory"
+        fi
+        
+    - name: Create zip archive
+      run: |
+        cd temp-archive
+        zip -r ../github-prompts-chatmodes.zip .github/
+        cd ..
+        
+    - name: Verify archive contents
+      run: |
+        echo "Archive contents:"
+        unzip -l github-prompts-chatmodes.zip
+        
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: github-prompts-chatmodes-${{ github.sha }}
+        path: github-prompts-chatmodes.zip
+        retention-days: 30
+        
+    - name: Create release (on main branch only)
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: prompts-v${{ github.run_number }}
+        name: GitHub Prompts and Chatmodes v${{ github.run_number }}
+        body: |
+          Automated release of GitHub prompts and chatmodes
+          
+          This archive contains:
+          - `.github/prompts/` - All prompt files
+          - `.github/chatmodes/` - All chatmode files
+          
+          Generated from commit: ${{ github.sha }}
+        files: github-prompts-chatmodes.zip
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
