@@ -14,6 +14,8 @@ If the user does not provide a database, suggest Azure SQL Database (for transac
 
 JUST CONTINUE THIS PROMPT IF THE USER CONFIRMS THE HOSTING PLATFORM, INFRASTRUCTURE AS CODE TYPE, AND DATABASE.
 
+Build the original solution to be sure you have all external components and dependencies. 
+
 In the final answer provide a risk assessment based on the current application versus the target architecture.
 
 # Rules for Assessment of Application

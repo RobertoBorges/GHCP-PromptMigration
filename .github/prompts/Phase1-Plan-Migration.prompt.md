@@ -23,6 +23,8 @@ Create two files under the root-folder/reports: Report-Status.md and Application
 
   - Those files must be created and must have the collected information from the user and a high-level plan that will be used by the Phase2-AssessProject.prompt.md
 
+- At the start, ask the user Which modernization path(s) do you want to follow? (Select all that apply: version upgrade only, code remediation for cloud readiness, full code migration/modernization)
+ 
 Suggest that the next step is to do the assessment, and mention `/phase2-assessproject` is the command to start the migration process.
 
 ## Agent Role
