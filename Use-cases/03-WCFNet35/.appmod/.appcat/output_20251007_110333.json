@@ -1,0 +1,608 @@
+{
+  "settings": {
+    "components": {
+      "code": true,
+      "binaries": false
+    },
+    "targetId": "Any",
+    "runConfig": {
+      "analysis": {
+        "settings": {
+          "binaries": {
+            "useDefaultExclusions": true,
+            "include": [],
+            "exclude": [
+              "**/csc.*",
+              "**/csi.*",
+              "**/EntityFramework.*",
+              "**/EntityFramework*",
+              "**/Microsoft*",
+              "**/mscorlib.*",
+              "**/netstandard.*",
+              "**/System*",
+              "**/vbc.*",
+              "**/VBCSCompiler.*",
+              "**/Yarp.ReverseProxy*"
+            ]
+          }
+        },
+        "rules": [
+          {
+            "id": "Database.0101",
+            "description": "You are using Amazone S3 database that is not supported in Azure. You can use Azure Blob Storage instead. The following is the details link about Azure Blob Storage.",
+            "label": "Amazone S3 dependency detected",
+            "severity": "Potential",
+            "effort": 5,
+            "state": "Active",
+            "links": [
+              {
+                "title": "Azure Blob Storage",
+                "url": "https://learn.microsoft.com/azure/storage/blobs"
+              }
+            ],
+            "enabled": true
+          },
+          {
+            "id": "Database.0102",
+            "description": "You are using Oracle database that is not supported in Azure. You can use Azure PostgreSQL instead. The following is the details link about Azure PostgreSQL.",
+            "label": "Oracle dependency detected",
+            "severity": "Potential",
+            "effort": 5,
+            "state": "Active",
+            "links": [
+              {
+                "title": "Azure PostgreSQL",
+                "url": "https://learn.microsoft.com/azure/postgresql/flexible-server"
+              }
+            ],
+            "enabled": true
+          },
+          {
+            "id": "Database.0103",
+            "description": "You are using DB2 database that is not supported in Azure. You can use Azure PostgreSQL instead. The following is the details link about Azure PostgreSQL.",
+            "label": "DB2 dependency detected",
+            "severity": "Potential",
+            "effort": 5,
+            "state": "Active",
+            "links": [
+              {
+                "title": "Azure PostgreSQL",
+                "url": "https://learn.microsoft.com/azure/postgresql/flexible-server"
+              }
+            ],
+            "enabled": true
+          },
+          {
+            "id": "Database.0104",
+            "description": "You are using minio storage that is not supported in Azure. You can use Azure Blob Storage instead. The following is the details link about Azure Blob Storage.",
+            "label": "Minio dependency detected",
+            "severity": "Potential",
+            "effort": 5,
+            "state": "Active",
+            "links": [
+              {
+                "title": "Azure Blob Storage",
+                "url": "https://learn.microsoft.com/azure/storage/blobs"
+              }
+            ],
+            "enabled": true
+          },
+          {
+            "id": "Database.0105",
+            "description": "System.Data.SqlClient dependency is detected. While System.Data.SqlClient will work in Azure, the newer Microsoft.Data.SqlClient package is the primary .NET SQL client moving forward and receiving the latest features. For example, Microsoft.Data.SqlClient easily allows use of Azure Managed Identity from a connection string.",
+            "label": "System.Data.SqlClient dependency detected",
+            "severity": "Optional",
+            "effort": 3,
+            "state": "Active",
+            "links": [
+              {
+                "url": "https://go.microsoft.com/fwlink/?LinkID=2242668"
+              }
+            ],
+            "enabled": true
+          },
+          {
+            "id": "Logging.0101",
+            "description": "Windows Event Log detected. Consider using OpenTelemetry for modern, cloud-native logging and observability. OpenTelemetry provides better portability, structured logging, and integration with Azure Monitor and Application Insights.",
+            "label": "Windows Event Log for logging detected",
+            "severity": "Potential",
+            "effort": 3,
+            "state": "Active",
+            "links": [
+              {
+                "title": "OpenTelemetry for .NET",
+                "url": "https://learn.microsoft.com/dotnet/core/diagnostics/observability-with-otel"
+              },
+              {
+                "title": "Azure Monitor OpenTelemetry",
+                "url": "https://learn.microsoft.com/azure/azure-monitor/app/opentelemetry-overview"
+              },
+              {
+                "title": "Migrate from Event Log to OpenTelemetry",
+                "url": "https://opentelemetry.io/docs/languages/net/getting-started/"
+              }
+            ],
+            "enabled": true
+          },
+          {
+            "id": "Logging.0102",
+            "description": "Serilog logging framework detected. While Serilog is a popular logging framework, consider migrating to OpenTelemetry for better cloud-native observability and standardized telemetry. OpenTelemetry provides unified logging, metrics, and tracing with better Azure integration.",
+            "label": "Serilog logging framework detected",
+            "severity": "Optional",
+            "effort": 4,
+            "state": "Active",
+            "links": [
+              {
+                "title": "OpenTelemetry for .NET",
+                "url": "https://learn.microsoft.com/dotnet/core/diagnostics/observability-with-otel"
+              },
+              {
+                "title": "Migrate from Serilog to OpenTelemetry",
+                "url": "https://opentelemetry.io/docs/languages/net/getting-started/"
+              },
+              {
+                "title": "Azure Monitor OpenTelemetry",
+                "url": "https://learn.microsoft.com/azure/azure-monitor/app/opentelemetry-overview"
+              }
+            ],
+            "enabled": true
+          },
+          {
+            "id": "Logging.0103",
+            "description": "Log4Net logging framework detected. Log4Net is an older logging framework with limited cloud-native capabilities. Consider migrating to OpenTelemetry for modern observability, better performance, and seamless Azure Monitor integration.",
+            "label": "Log4Net logging framework detected",
+            "severity": "Optional",
+            "effort": 5,
+            "state": "Active",
+            "links": [
+              {
+                "title": "OpenTelemetry for .NET",
+                "url": "https://learn.microsoft.com/dotnet/core/diagnostics/observability-with-otel"
+              },
+              {
+                "title": "Migrate from Log4Net to OpenTelemetry",
+                "url": "https://opentelemetry.io/docs/languages/net/getting-started/"
+              },
+              {
+                "title": "Azure Monitor OpenTelemetry",
+                "url": "https://learn.microsoft.com/azure/azure-monitor/app/opentelemetry-overview"
+              }
+            ],
+            "enabled": true
+          },
+          {
+            "id": "Queue.0101",
+            "description": "You are using local Kafka that is not supported in Azure. You can use Azure Kafka or Azure Event Hubs for Apache Kafka instead. The following is the details link about Azure Kafka and Azure Event Hubs for Apache Kafka.",
+            "label": "Local kafka dependency detected",
+            "severity": "Potential",
+            "effort": 5,
+            "state": "Active",
+            "links": [
+              {
+                "title": "Azure Kafka",
+                "url": "https://learn.microsoft.com/en-us/azure/partner-solutions/apache-kafka-confluent-cloud/overview"
+              },
+              {
+                "title": "Azure Event Hubs for Apache Kafka",
+                "url": "https://learn.microsoft.com/en-us/azure/event-hubs/azure-event-hubs-apache-kafka-overview"
+              }
+            ],
+            "enabled": true
+          },
+          {
+            "id": "Security.0101",
+            "description": "Windows Authentication (Negotiate) detected. The application is using Windows Authentication via Negotiate protocol which may not work as expected in Azure App Service. Consider using Azure Active Directory (Azure AD) authentication instead for better cloud compatibility and security.",
+            "label": "Windows Authentication (Negotiate) detected",
+            "severity": "Potential",
+            "effort": 5,
+            "state": "Active",
+            "links": [
+              {
+                "title": "Azure AD authentication for ASP.NET Core",
+                "url": "https://learn.microsoft.com/azure/active-directory/develop/quickstart-v2-aspnet-core-webapp"
+              },
+              {
+                "title": "Migrate from Windows Authentication to Azure AD",
+                "url": "https://learn.microsoft.com/azure/active-directory/develop/scenario-web-app-sign-user-overview"
+              }
+            ],
+            "enabled": true
+          }
+        ],
+        "analyzers": [
+          {
+            "ruleId": "Database.0101",
+            "id": "Database.0101.Namespace",
+            "traits": "",
+            "state": "Active",
+            "kind": "namespace",
+            "properties": {
+              "namespaces": [
+                "Amazon.S3.*"
+              ]
+            },
+            "enabled": true
+          },
+          {
+            "ruleId": "Database.0102",
+            "id": "Database.0102.Types",
+            "traits": "",
+            "state": "Active",
+            "kind": "type",
+            "properties": {
+              "fullTypes": [
+                "Oracle.DataAccess.Client.OracleConnection",
+                "Oracle.DataAccess.Client.DataTable",
+                "Oracle.DataAccess.Client.OracleDataAdapter"
+              ]
+            },
+            "enabled": true
+          },
+          {
+            "ruleId": "Database.0103",
+            "id": "Database.0103.Types",
+            "traits": "",
+            "state": "Active",
+            "kind": "type",
+            "properties": {
+              "fullTypes": [
+                "IBM.Data.DB2.DB2Command",
+                "IBM.Data.DB2.DB2Connection",
+                "IBM.Data.DB2.DB2DataReader"
+              ]
+            },
+            "enabled": true
+          },
+          {
+            "ruleId": "Database.0104",
+            "id": "Database.0104.Namespace",
+            "traits": "",
+            "state": "Active",
+            "kind": "namespace",
+            "properties": {
+              "namespaces": [
+                "Minio",
+                "Minio.*"
+              ]
+            },
+            "enabled": true
+          },
+          {
+            "ruleId": "Queue.0101",
+            "id": "Queue.0101.Types",
+            "traits": "",
+            "state": "Active",
+            "kind": "type",
+            "properties": {
+              "fullTypes": [
+                "Confluent.Kafka.IProducer",
+                "Confluent.Kafka.Producer",
+                "Confluent.Kafka.ProducerBuilder",
+                "Confluent.Kafka.ProducerConfig"
+              ]
+            },
+            "enabled": true
+          },
+          {
+            "ruleId": "Queue.0101",
+            "id": "Queue.0101.Namespace",
+            "traits": "",
+            "state": "Active",
+            "kind": "namespace",
+            "properties": {
+              "namespaces": [
+                "Confluent.Kafka.*"
+              ]
+            },
+            "enabled": true
+          },
+          {
+            "ruleId": "Security.0003",
+            "id": "Security.0003.PasswordInCode",
+            "traits": "",
+            "state": "Active",
+            "kind": "literal",
+            "properties": {
+              "strings": [
+                "password",
+                "pwd",
+                "Password",
+                "Pwd",
+                "secret",
+                "Secret"
+              ]
+            },
+            "enabled": true
+          },
+          {
+            "ruleId": "Security.0003",
+            "id": "Security.0003.PasswordInJson1",
+            "traits": "",
+            "state": "Active",
+            "kind": "json",
+            "properties": {
+              "file": "appSettings.json|appsettings.*.json",
+              "path": "password"
+            },
+            "enabled": true
+          },
+          {
+            "ruleId": "Security.0003",
+            "id": "Security.0003.PasswordInJson2",
+            "traits": "",
+            "state": "Active",
+            "kind": "json",
+            "properties": {
+              "file": "appSettings.json|appsettings.*.json",
+              "path": "Password"
+            },
+            "enabled": true
+          },
+          {
+            "ruleId": "Security.0003",
+            "id": "Security.0003.PasswordInJson3",
+            "traits": "",
+            "state": "Active",
+            "kind": "json",
+            "properties": {
+              "file": "appSettings.json|appsettings.*.json",
+              "path": "pwd"
+            },
+            "enabled": true
+          },
+          {
+            "ruleId": "Security.0003",
+            "id": "Security.0003.PasswordInJson4",
+            "traits": "",
+            "state": "Active",
+            "kind": "json",
+            "properties": {
+              "file": "appSettings.json|appsettings.*.json",
+              "path": "Pwd"
+            },
+            "enabled": true
+          },
+          {
+            "ruleId": "Security.0101",
+            "id": "Security.0101.Namespace",
+            "traits": "",
+            "state": "Active",
+            "kind": "namespace",
+            "properties": {
+              "namespaces": [
+                "Microsoft.AspNetCore.Authentication.Negotiate",
+                "Microsoft.AspNetCore.Authentication.Negotiate.*"
+              ]
+            },
+            "enabled": true
+          },
+          {
+            "ruleId": "Security.0101",
+            "id": "Security.0101.WebConfigAuth",
+            "traits": "",
+            "state": "Active",
+            "kind": "xml",
+            "properties": {
+              "paths": [
+                "authentication",
+                "location/authentication",
+                "system.web/authentication",
+                "location/system.web/authentication"
+              ],
+              "attributes": {
+                "mode": "Windows"
+              }
+            },
+            "enabled": true
+          },
+          {
+            "ruleId": "Database.0105",
+            "id": "Database.0105.Namespace",
+            "traits": "",
+            "state": "Active",
+            "kind": "namespace",
+            "properties": {
+              "namespaces": [
+                "System.Data.SqlClient"
+              ]
+            },
+            "enabled": true
+          },
+          {
+            "ruleId": "Database.0105",
+            "id": "Database.0105.WebConfig",
+            "traits": "",
+            "state": "Active",
+            "kind": "xml",
+            "properties": {
+              "file": "web*.config",
+              "paths": [
+                "connectionStrings/add",
+                "entityFramework/providers/provider"
+              ],
+              "attributes": {
+                "providerName": "System.Data.SqlClient"
+              }
+            },
+            "enabled": true
+          },
+          {
+            "ruleId": "Logging.0101",
+            "id": "Logging.0101.Types",
+            "traits": "",
+            "state": "Active",
+            "kind": "type",
+            "properties": {
+              "fullTypes": [
+                "System.Diagnostics.EventLog",
+                "System.Diagnostics.EventLogEntry",
+                "System.Diagnostics.EventLogEntryCollection",
+                "System.Diagnostics.EventLogEntryType",
+                "System.Diagnostics.EventLogTraceListener",
+                "System.Diagnostics.EventLogPermission",
+                "System.Diagnostics.EventLogPermissionAccess",
+                "System.Diagnostics.EventLogPermissionAttribute",
+                "System.Diagnostics.EventLogPermissionEntry",
+                "System.Diagnostics.EventLogPermissionEntryCollection",
+                "System.Diagnostics.EventSourceCreationData",
+                "System.Diagnostics.EventInstance",
+                "System.Diagnostics.OverflowAction",
+                "System.Diagnostics.EventLogInstaller"
+              ]
+            },
+            "enabled": true
+          },
+          {
+            "ruleId": "Logging.0102",
+            "id": "Logging.0102.Namespace",
+            "traits": "",
+            "state": "Active",
+            "kind": "namespace",
+            "properties": {
+              "namespaces": [
+                "Serilog",
+                "Serilog.*"
+              ]
+            },
+            "enabled": true
+          },
+          {
+            "ruleId": "Logging.0103",
+            "id": "Logging.0103.Namespace",
+            "traits": "",
+            "state": "Active",
+            "kind": "namespace",
+            "properties": {
+              "namespaces": [
+                "log4net",
+                "log4net.*"
+              ]
+            },
+            "enabled": true
+          }
+        ]
+      },
+      "hash": "dbb4e3e7"
+    }
+  },
+  "analysisStartTime": "2025-10-07T15:04:14.1306153Z",
+  "analysisEndTime": "2025-10-07T15:04:15.9927024Z",
+  "privacyMode": "Unrestricted",
+  "privacyModeHelpUrl": "https://go.microsoft.com/fwlink/?linkid=2271074",
+  "stats": {
+    "summary": {
+      "projects": 3,
+      "issues": 1,
+      "incidents": 1,
+      "effort": 1
+    },
+    "charts": {
+      "severity": {
+        "Mandatory": 0,
+        "Optional": 0,
+        "Potential": 1,
+        "Information": 0
+      },
+      "category": {
+        "Local": 1
+      }
+    }
+  },
+  "projects": [
+    {
+      "path": "WCFDemo.Client\\WCFDemo.Client.csproj",
+      "startingProject": true,
+      "issues": 1,
+      "storyPoints": 1,
+      "properties": {
+        "appName": "WCFDemo.Client",
+        "frameworks": [
+          ".NETFramework,Version=v3.5"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ]
+      },
+      "ruleInstances": [
+        {
+          "incidentId": "e34a8b1f-1d9d-4458-89df-446329045573",
+          "ruleId": "Local.0006",
+          "projectPath": "WCFDemo.Client\\WCFDemo.Client.csproj",
+          "state": "Active",
+          "location": {
+            "kind": "File",
+            "path": "WCFDemo.Client\\Program.cs",
+            "snippet": "var address = new EndpointAddress(\u0022http://localhost:8080/CustomerService\u0022);",
+            "label": "http://",
+            "line": 25,
+            "column": 50
+          }
+        }
+      ]
+    },
+    {
+      "path": "WCFDemo.Host\\WCFDemo.Host.csproj",
+      "startingProject": true,
+      "issues": 0,
+      "storyPoints": 0,
+      "properties": {
+        "appName": "WCFDemo.Host",
+        "frameworks": [
+          ".NETFramework,Version=v3.5"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ]
+      },
+      "ruleInstances": []
+    },
+    {
+      "path": "WCFDemo.Service\\WCFDemo.Service.csproj",
+      "startingProject": true,
+      "issues": 0,
+      "storyPoints": 0,
+      "properties": {
+        "appName": "WCFDemo.Service",
+        "frameworks": [
+          ".NETFramework,Version=v3.5"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ]
+      },
+      "ruleInstances": []
+    }
+  ],
+  "rules": {
+    "Local.0006": {
+      "id": "Local.0006",
+      "description": "Your application has hardcoded URLs that might correspond to services that are not accessible on Azure.\n\nReview and ensure that the application is attempting to access URLs that would be available from Azure. You might need to migrate those services to Azure too, this way you will get the benefit of lower latency in the cloud.\n\nIf your application needs to depend on services that run on-premises, you can connect your Azure and local networks with ExpressRoute, Hybrid Connections, or VPN solutions.",
+      "label": "Hardcoded URLs detected",
+      "severity": "Potential",
+      "effort": 1,
+      "links": [
+        {
+          "title": "ExpressRoute",
+          "url": "https://go.microsoft.com/fwlink/?LinkID=2250577"
+        },
+        {
+          "title": "Hybrid Connections",
+          "url": "https://go.microsoft.com/fwlink/?LinkID=2242588"
+        },
+        {
+          "title": "Connect an on-prem network",
+          "url": "https://go.microsoft.com/fwlink/?LinkID=2242591"
+        }
+      ]
+    }
+  }
+}
