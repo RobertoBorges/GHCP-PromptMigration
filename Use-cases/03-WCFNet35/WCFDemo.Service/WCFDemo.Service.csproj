@@ -3,6 +3,11 @@
     <TargetFramework>net8.0</TargetFramework>
     <OutputType>Library</OutputType>
     <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyTitle>WCFDemo.Service</AssemblyTitle>
+    <Description>WCF Demo Service Library for .NET Framework 3.5</Description>
+    <Product>WCF Demo</Product>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Update="System.Core">
