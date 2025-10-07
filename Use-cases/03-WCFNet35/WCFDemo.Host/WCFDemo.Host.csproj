@@ -3,6 +3,11 @@
     <TargetFramework>net8.0</TargetFramework>
     <OutputType>Exe</OutputType>
     <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyTitle>WCFDemo.Host</AssemblyTitle>
+    <Description>WCF Demo Service Host for .NET Framework 3.5</Description>
+    <Product>WCF Demo</Product>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Update="System.Core">
