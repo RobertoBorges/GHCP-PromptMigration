@@ -8,17 +8,18 @@
     <Reference Update="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="System.ServiceModel">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
     <Reference Update="System.Xml.Linq">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Data.DataSetExtensions">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\WCFDemo.Service\WCFDemo.Service.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="CoreWCF.Primitives" Version="1.8.0" />
+    <PackageReference Include="CoreWCF.ConfigurationManager" Version="1.8.0" />
+    <PackageReference Include="CoreWCF.Http" Version="1.8.0" />
+    <PackageReference Include="CoreWCF.WebHttp" Version="1.8.0" />
+    <PackageReference Include="CoreWCF.NetTcp" Version="1.8.0" />
   </ItemGroup>
 </Project>
