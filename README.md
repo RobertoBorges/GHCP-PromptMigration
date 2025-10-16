@@ -10,16 +10,21 @@ The GitHub Copilot Migration & Modernization for Azure project provides a struct
 2. Migrate code to modern frameworks
 3. Generate Azure infrastructure as code
 4. Validate code and infrastructure
-
 5. Deploy applications to Azure
 6. Set up CI/CD pipelines for automated deployment
 
 Through a guided, AI-assisted workflow, developers can efficiently transform legacy applications into modern, cloud-native solutions running on Azure.
 
+>
+> Note: If your workload have many repositories, consider using the Phase0-Multi-repo-assessment.prompt.md to assess multiple repositories in a single workflow.
+> Start by creating a file named `codebase-repos.md` in the root folder, listing all the repositories to assess.
+> Then, use the command `/phase0-multirepoassessment` to start the multi-repo assessment process.
+>
+
 ## Requirements
 
 - GitHub Copilot License
-- Model Claude Sonnet 3.7+ (Included in GitHub Copilot)
+- Model Claude Sonnet 4.5+ (Included in GitHub Copilot)
 - Azure MCP Server Extension
 - GitHub Copilot for Azure Extension
 - GitHub Copilot Extension 1.35+
@@ -162,11 +167,30 @@ The custom prompts have been significantly enhanced with:
 
 ### Technical Improvements
 
-- **Enhanced Azure Integration**: Better support for Azure resource validation and deployment
-- **Comprehensive Validation**: More thorough code and infrastructure validation checks
-- **Database Migration**: Improved guidance for database migration scenarios
-- **Security Focus**: Enhanced security validation and configuration for Azure resources
-- **Cost Optimization**: Added recommendations for optimizing cost in Azure deployments
+- GitHub Copilot Migration \& Modernization for Azure
+  - Overview
+  - Requirements
+  - Avoiding Hallucinations
+  - Repository Structure
+  - Migration \& Modernization Process
+    - Phase 1: Plan Migration
+    - Phase 2: Assessment
+    - Phase 3: Code Migration
+    - Phase 4: Infrastructure Generation
+    - Phase 5: Deployment to Azure
+    - Phase 6: CI/CD Pipeline Setup
+  - Key Features
+  - Migration Status Tracking
+  - Getting Started
+  - Target Azure Hosting Platforms
+  - Authentication \& Authorization
+  - Use Cases
+  - Improved Prompt Structure
+    - Enhanced Structured Workflow
+    - Technical Improvements
+    - Documentation and Reporting
+  - Contributing
+  - License
 
 ### Documentation and Reporting
 
