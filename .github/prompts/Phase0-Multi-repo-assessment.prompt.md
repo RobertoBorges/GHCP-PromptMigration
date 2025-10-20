@@ -66,8 +66,8 @@ For each repository listed in `codebase-analysis.md`:
 2. **Dependency Analysis**
    - External services used (OnPrem/GCP/AWS/Azure services/etc.)
    - Databases (DynamoDB, RDS, CosmosDB, etc.)
-   - Messaging (SQS, SNS, Service Bus, Kafka, etc.)
-   - Storage (S3, Blob Storage, etc.)
+   - Messaging (SBS, SNS, Service Bus, Kafka, etc.)
+   - Storage (S3, Storage accounts, Blob Storage, etc.)
    - Authentication/Authorization (IAM, Managed Identity, etc.)
    - External or internal APIs
    - Other relevant dependencies
@@ -160,7 +160,7 @@ After analyzing each repository, **create an individual file** in the `reports/`
 ### Asynchronous Communication
 | Type | Name | Action | Purpose |
 |------|------|--------|---------|
-| Publishes | SQS Queue X | Sends message | [Description] |
+| Publishes | SBS Queue X | Sends message | [Description] |
 | Consumes | SNS Topic Y | Receives event | [Description] |
  
 ### Communication Diagram
@@ -168,7 +168,7 @@ After analyzing each repository, **create an individual file** in the `reports/`
 ```mermaid
 graph LR
     A[Application Name] -->|HTTP POST| B[External API]
-    A -->|Publishes| C[SQS Queue]
+    A -->|Publishes| C[SBS Queue]
     A -->|Query| D[(DynamoDB)]
     E[Other Service] -->|HTTP GET| A
     C -->|Consumes| F[Worker XYZ]
@@ -312,13 +312,13 @@ graph TB
     end
    
     subgraph "Storage Layer"
-        S3_1[S3 - Documents]
-        S3_2[S3 - Images]
+        Storage_1[Storage - Documents]
+        Storage_2[S - Images]
     end
    
     subgraph "Messaging Layer"
-        SQS1[SQS - Processing Queue]
-        SQS2[SQS - Notifications Queue]
+        SBS1[SBS - Processing Queue]
+        SBS2[SBS - Notifications Queue]
         SNS1[SNS - Auth Events]
         SNS2[SNS - Payment Events]
     end
@@ -342,7 +342,7 @@ graph TB
     API1 -->|Publish| SNS1
     API2 -->|Query| DB2
     API2 -->|Call| EXT1
-    API2 -->|Upload| S3_2
+    API2 -->|Upload| STORAGE_2
     API3 -->|Query/Write| DB1
     API3 -->|Call| EXT2
     API3 -->|Publish| SNS2
@@ -352,14 +352,14 @@ graph TB
     API2 -.->|Cache| DB3
    
     %% Messaging flows
-    SNS1 -->|Subscribe| SQS1
-    SNS2 -->|Subscribe| SQS2
-    SQS1 -->|Poll| WK1
-    SQS2 -->|Poll| WK2
+    SNS1 -->|Subscribe| SBS1
+    SNS2 -->|Subscribe| SBS2
+    SBS1 -->|Poll| WK1
+    SBS2 -->|Poll| WK2
    
     %% Worker connections
     WK1 -->|Write| DB1
-    WK1 -->|Upload| S3_1
+    WK1 -->|Upload| STORAGE_1
     WK2 -->|Query| DB1
     WK2 -->|Send| EXT1
 ```
@@ -427,8 +427,8 @@ graph TB
 | API Gateway | Auth Service | HTTP | REST | Token validation |
 | Auth Service | PostgreSQL | TCP | Query | Fetch user |
 | Business Service | DynamoDB | SDK | NoSQL | Store data |
-| Business Service | SQS | SDK | Async | Send event |
-| Worker | S3 | SDK | Storage | Upload file |
+| Business Service | SBS | SDK | Async | Send event |
+| Worker | STORAGE | SDK | Storage | Upload file |
  
 ### External Dependencies
  
@@ -461,9 +461,9 @@ graph TB
  
 #### 2. Event-Driven Architecture
 **Repositories**: [repo-auth, repo-payment, worker-notifications]
-**Description**: Asynchronous communication via messaging (SNS/SQS/RabbitMQ/etc.)
+**Description**: Asynchronous communication via messaging (SNS/SBS/RabbitMQ/etc.)
 **Benefits**: Decoupling, scalability, resilience
-**Multi-Cloud Considerations**: Migration SNS→Service Bus Topic, SQS→Service Bus Queue
+**Multi-Cloud Considerations**: Migration SNS→Service Bus Topic, SBS→Service Bus Queue
  
 #### 3. CQRS (Command Query Responsibility Segregation)
 **Repositories**: [repo-business-service]
