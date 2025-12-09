@@ -37,7 +37,7 @@ If infrastructure generation fails, provide detailed error analysis and alternat
 
 Make the infrastructure section in the migration report human-readable and in markdown format, using headings, bullet points, and other formatting options as appropriate.
 
-Suggest that the next step is to validate the migrated code, and mention `/phase5-deploytoazure` is the command to start the code validation process.
+Suggest that the next step is to deploy to Azure, and mention `/phase4-deploytoazure` is the command to start the deployment process.
 
 At the end, update the status report file reports/Report-Status.md with the status of the assessment step, including:
   - Infrastructure components created

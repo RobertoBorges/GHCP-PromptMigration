@@ -48,7 +48,7 @@ Based on the assessed application type (.NET or Java):
 - Document any changes made to the project structure or code in the migration report.
 - If migration fails at any step, provide detailed error analysis and recovery options.
 
-Suggest that the next step is to generate infrastructure files, and mention `/phase4-generateinfra` is the command to start the infra generation process.
+Suggest that the next step is to generate infrastructure files, and mention `/phase3-generateinfra` is the command to start the infra generation process.
 
 At the end, update the status report file reports/Report-Status.md with the status of the migration step.
 

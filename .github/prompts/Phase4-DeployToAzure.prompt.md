@@ -18,7 +18,7 @@ At the end, generate a comprehensive deployment summary report in the reports fo
 - Cost analysis and optimization recommendations
 - Next steps for ongoing maintenance and optimization
 
-- Suggest that the next step is to set up CI/CD pipelines, and mention `/phase6-setupcicd` is the command to start the CI/CD setup process.
+- Suggest that the next step is to set up CI/CD pipelines, and mention `/phase5-setupcicd` is the command to start the CI/CD setup process.
 - At the end, update the status report file reports/Report-Status.md with the status of the deployment step.
 
 ## Pre-Deployment Checklist

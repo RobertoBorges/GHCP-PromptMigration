@@ -13,12 +13,11 @@ Retrieve status of the modernization process
   - Selected Azure hosting platform (App Service, AKS, or Container Apps)
   - Selected Infrastructure as Code type (Bicep or Terraform)
   - Completed phases with timestamps:
-    * Phase 1: Planning
-    * Phase 2: Assessment
-    * Phase 3: Code Migration
-    * Phase 4: Infrastructure Generation
-    * Phase 5: Deployment to Azure
-    * Phase 6: CI/CD Pipeline Setup
+    * Phase 1: Planning & Assessment
+    * Phase 2: Code Migration
+    * Phase 3: Infrastructure Generation
+    * Phase 4: Deployment to Azure
+    * Phase 5: CI/CD Pipeline Setup
   - Current phase in progress
   - Overall completion percentage
   - Quality scores for each completed phase

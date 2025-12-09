@@ -6,12 +6,11 @@ This repository showcases how GitHub Copilot using custom prompts and chat mode 
 
 The GitHub Copilot Migration & Modernization for Azure project provides a structured approach to:
 
-1. Assess legacy applications for cloud readiness
+1. Plan and assess legacy applications for cloud readiness
 2. Migrate code to modern frameworks
 3. Generate Azure infrastructure as code
-4. Validate code and infrastructure
-5. Deploy applications to Azure
-6. Set up CI/CD pipelines for automated deployment
+4. Deploy applications to Azure
+5. Set up CI/CD pipelines for automated deployment
 
 Through a guided, AI-assisted workflow, developers can efficiently transform legacy applications into modern, cloud-native solutions running on Azure.
 
@@ -66,29 +65,25 @@ Pro tip3: Don't assume anything, always verify with the documentation.
 
 ## Migration & Modernization Process
 
-The repository implements a structured 6-phase approach to application migration:
+The repository implements a structured 5-phase approach to application migration:
 
-### Phase 1: Plan Migration
+### Phase 1: Planning & Assessment
 
-Plan your migration by asking key questions about your migration project requirements, hosting preferences, and database needs to create a tailored migration strategy.
+Plan your migration by gathering requirements (hosting platform, IaC preferences, database needs) and generate a comprehensive assessment report analyzing the current application structure, dependencies, architecture, risk analysis, and effort estimation.
 
-### Phase 2: Assessment
-
-Generate a comprehensive report assessing the current application structure, dependencies, and architecture with detailed risk analysis and effort estimation.
-
-### Phase 3: Code Migration
+### Phase 2: Code Migration
 
 Upgrade application code to the latest framework versions compatible with Azure, with automated transformations and incremental validation.
 
-### Phase 4: Infrastructure Generation
+### Phase 3: Infrastructure Generation
 
 Create infrastructure as code (IaC) files (Bicep or Terraform) for deploying to Azure, incorporating best practices and security configurations.
 
-### Phase 5: Deployment to Azure
+### Phase 4: Deployment to Azure
 
 Deploy the validated application to Azure services with comprehensive deployment monitoring and validation.
 
-### Phase 6: CI/CD Pipeline Setup
+### Phase 5: CI/CD Pipeline Setup
 
 Configure automated deployment pipelines for continuous integration and delivery, with environment-specific configurations and security gates.
 
@@ -128,7 +123,7 @@ Status reports are stored in the `reports/Report-Status.md` file, providing a ce
 1. Clone this repository
 2. Install [GitHub Copilot](https://copilot.github.com/) in your Visual Studio Code
 3. Open one of the use case projects in VS Code
-4. Start a chat with GitHub Copilot using the prompt:  "`/phase1-planmigration` under the folder #file:02-NetFramework30-ASPNET-WEB" to begin the migration planning
+4. Start a chat with GitHub Copilot using the prompt:  "`/phase1-planandassess` under the folder #file:02-NetFramework30-ASPNET-WEB" to begin the migration planning and assessment
 5. Use `/getstatus` at any time to check the current migration status
 6. Follow the guided prompts to complete each phase of the migration process
 
@@ -173,12 +168,11 @@ The custom prompts have been significantly enhanced with:
   - Avoiding Hallucinations
   - Repository Structure
   - Migration \& Modernization Process
-    - Phase 1: Plan Migration
-    - Phase 2: Assessment
-    - Phase 3: Code Migration
-    - Phase 4: Infrastructure Generation
-    - Phase 5: Deployment to Azure
-    - Phase 6: CI/CD Pipeline Setup
+    - Phase 1: Planning \& Assessment
+    - Phase 2: Code Migration
+    - Phase 3: Infrastructure Generation
+    - Phase 4: Deployment to Azure
+    - Phase 5: CI/CD Pipeline Setup
   - Key Features
   - Migration Status Tracking
   - Getting Started

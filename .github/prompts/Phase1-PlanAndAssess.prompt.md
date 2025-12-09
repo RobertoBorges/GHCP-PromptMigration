@@ -216,4 +216,4 @@ Before completing, ensure:
 - [ ] Migration plan with phases and timeline
 - [ ] Change report with all required modifications
 - [ ] `Report-Status.md` updated with assessment status
-- [ ] Next steps clearly communicated: `/phase3-migratecode`
+- [ ] Next steps clearly communicated: `/phase2-migratecode`
