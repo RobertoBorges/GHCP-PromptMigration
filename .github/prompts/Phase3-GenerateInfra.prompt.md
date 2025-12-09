@@ -1,7 +1,7 @@
 ---
-mode: agent
-model: Claude Sonnet 3.7
-tools: ['codebase', 'usages', 'vscodeAPI', 'think', 'problems', 'changes', 'testFailure', 'terminalSelection', 'terminalLastCommand', 'openSimpleBrowser', 'fetch', 'findTestFiles', 'searchResults', 'githubRepo', 'extensions', 'runTests', 'editFiles', 'runNotebooks', 'search', 'new', 'runCommands', 'runTasks', 'Microsoft Docs', 'Azure MCP']
+agent: agent
+model: Claude Sonnet 4.5 (copilot)
+tools: ['search/codebase', 'usages', 'vscodeAPI', 'problems', 'changes', 'testFailure', 'runCommands/terminalSelection', 'runCommands/terminalLastCommand', 'openSimpleBrowser', 'fetch', 'search/searchResults', 'githubRepo', 'extensions', 'runTests', 'edit/editFiles', 'runNotebooks', 'search', 'new', 'runCommands', 'runTasks', 'Azure MCP/*', 'Microsoft Docs/*']
 ---
 Generate Infrastructure as Code Files for Azure Deployment
 
@@ -37,7 +37,7 @@ If infrastructure generation fails, provide detailed error analysis and alternat
 
 Make the infrastructure section in the migration report human-readable and in markdown format, using headings, bullet points, and other formatting options as appropriate.
 
-Suggest that the next step is to validate the migrated code, and mention `/phase5-deploytoazure` is the command to start the code validation process.
+Suggest that the next step is to deploy to Azure, and mention `/phase4-deploytoazure` is the command to start the deployment process.
 
 At the end, update the status report file reports/Report-Status.md with the status of the assessment step, including:
   - Infrastructure components created
