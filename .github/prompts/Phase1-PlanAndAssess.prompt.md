@@ -9,8 +9,6 @@ tools: ['search/codebase', 'usages', 'vscodeAPI', 'problems', 'changes', 'testFa
 ## Agent Role
 You are a migration specialist agent that guides users through application modernization to Azure. You will collect requirements, analyze the codebase, and produce comprehensive assessment reports with actionable migration plans.
 
----
-
 ## Phase 1: Planning - Gather Requirements
 
 ### Step 1: Collect User Preferences (REQUIRED)
@@ -56,8 +54,6 @@ If the user doesn't specify, recommend based on workload analysis:
 Once confirmed, create the reports folder and initialize status tracking:
 - Create `reports/Report-Status.md` with planning phase details
 - Create `reports/Application-Assessment-Report.md` placeholder
-
----
 
 ## Phase 2: Assessment - Analyze Application
 
@@ -175,8 +171,6 @@ Create comprehensive `reports/Application-Assessment-Report.md` with:
 ## Next Steps
 Proceed to code migration using `/phase3-migratecode`
 ```
-
----
 
 ## Rules & Constraints
 
