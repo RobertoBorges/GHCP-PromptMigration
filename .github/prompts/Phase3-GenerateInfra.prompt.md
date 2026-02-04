@@ -1,9 +1,16 @@
 ---
-agent: agent
+name: Phase 3 - Generate Infrastructure
+description: Generate Bicep or Terraform infrastructure as code for Azure deployment
+agent: Azure Migration Agent
 model: Claude Sonnet 4.5 (copilot)
-tools: ['search/codebase', 'usages', 'vscodeAPI', 'problems', 'changes', 'testFailure', 'runCommands/terminalSelection', 'runCommands/terminalLastCommand', 'openSimpleBrowser', 'fetch', 'search/searchResults', 'githubRepo', 'extensions', 'runTests', 'edit/editFiles', 'runNotebooks', 'search', 'new', 'runCommands', 'runTasks', 'Azure MCP/*', 'Microsoft Docs/*']
+tools: ['edit/editFiles', 'search/codebase', 'read/problems', 'search/usages', 'search/changes', 'execute/testFailure', 'execute/runTests', 'read/terminalSelection', 'read/terminalLastCommand', 'vscode/openSimpleBrowser', 'web/fetch', 'web/githubRepo']
+
 ---
+
 Generate Infrastructure as Code Files for Azure Deployment
+
+Load the **azure-infrastructure** skill for Bicep/Terraform templates and Azure Verified Modules patterns.
+Load the **azure-containerization** skill if containerization was selected in the assessment.
 
 Use `azure_development-summarize_topic` tool to get high-level instructions to follow.
 

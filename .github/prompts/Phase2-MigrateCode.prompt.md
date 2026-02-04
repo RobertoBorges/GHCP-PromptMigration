@@ -1,9 +1,18 @@
 ---
-agent: agent
-model: Claude Sonnet 4.5 (copilot)
-tools: ['search/codebase', 'usages', 'vscodeAPI', 'problems', 'changes', 'testFailure', 'runCommands/terminalSelection', 'runCommands/terminalLastCommand', 'openSimpleBrowser', 'fetch', 'search/searchResults', 'githubRepo', 'extensions', 'runTests', 'edit/editFiles', 'runNotebooks', 'search', 'new', 'runCommands', 'runTasks', 'Azure MCP/*', 'Microsoft Docs/*']
+name: Phase 2 - Migrate Code
+description: Upgrade legacy .NET or Java application code to modern framework versions
+agent: Azure Migration Agent
+tools: ['edit/editFiles', 'search/codebase', 'read/problems', 'search/usages', 'search/changes', 'execute/testFailure', 'execute/runTests', 'read/terminalSelection', 'read/terminalLastCommand', 'vscode/openSimpleBrowser', 'web/fetch', 'web/githubRepo']
+
 ---
+
 Migrate application code to modern framework version compatible with Azure.
+
+Load the appropriate skill based on application type:
+- For .NET applications: Use **dotnet-modernization** skill for patterns and templates
+- For Java applications: Use **java-modernization** skill for patterns and templates  
+- For WCF services: Use **wcf-to-rest-migration** skill for service conversion
+- For config files: Use **config-transformation** skill for settings migration
 
 Ensure appropriate Azure extensions for the target framework are installed in VS Code.
 
@@ -29,7 +38,7 @@ Before starting the migration create a 'backup' folder in the workspace to store
 
 If the 'backup' folder already exists, ask the user if they want to overwrite it.
 
-Use the guidance provided in #file:Code-Migration-Modernization.chatmode.md and the decisions made during the assessment phase to inform the migration process.
+Use the guidance from the assessment report (reports/Application-Assessment-Report.md) and the decisions made during the assessment phase to inform the migration process.
 
 Copy media files from the original project directory to the new project directory at same relative paths.
 

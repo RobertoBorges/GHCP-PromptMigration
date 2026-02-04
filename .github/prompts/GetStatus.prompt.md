@@ -1,6 +1,9 @@
 ---
-agent: agent
+name: Get Migration Status
+description: Check the current migration status and progress
+agent: Azure Migration Agent
 ---
+
 Retrieve status of the modernization process
 
 # Rules for Status Tracking
