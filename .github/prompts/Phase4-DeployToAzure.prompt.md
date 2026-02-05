@@ -1,7 +1,8 @@
 ---
 name: Phase 4 - Deploy to Azure
 description: Deploy the validated project to Azure using Azure Developer CLI
-agent: Azure Migration Agent
+argument-hint: "Specify environment if needed, e.g., 'Deploy to dev environment' or 'Deploy to production'"
+agent: Code Migration Modernization Agent
 model: Claude Sonnet 4.5 (copilot)
 tools: ['edit/editFiles', 'search/codebase', 'read/problems', 'search/usages', 'search/changes', 'execute/testFailure', 'execute/runTests', 'read/terminalSelection', 'read/terminalLastCommand', 'vscode/openSimpleBrowser', 'web/fetch', 'web/githubRepo']
 

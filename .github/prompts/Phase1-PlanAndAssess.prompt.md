@@ -1,13 +1,31 @@
 ---
 name: Phase 1 - Plan and Assess
 description: Start planning and generate an assessment report for your application
-agent: Azure Migration Agent
+argument-hint: "Specify the folder path to your legacy application, e.g., 'Assess the app in Use-cases/02-NetFramework30-ASPNET-WEB'"
+agent: Code Migration Modernization Agent
 model: Claude Sonnet 4.5 (copilot)
 tools: ['edit/editFiles', 'search/codebase', 'read/problems', 'search/usages', 'search/changes', 'execute/testFailure', 'execute/runTests', 'read/terminalSelection', 'read/terminalLastCommand', 'vscode/openSimpleBrowser', 'web/fetch', 'web/githubRepo']
 
 ---
 
 # Migration Planning & Assessment Prompt
+
+## Migration Scope
+
+This guided migration helps you:
+- ✅ **Upgrade** your application to a framework version compatible with Azure
+- ✅ **Modernize** code patterns for cloud-native deployment
+- ✅ **Generate** infrastructure as code for your target platform
+- ✅ **Set up** CI/CD pipelines for automated deployment
+
+This migration does **NOT** include:
+- ❌ **Data Migration** — Use Azure Database Migration Service (DMS) or Data Migration Assistant
+- ❌ **Binary/Dependency Scanning** — Use .NET Upgrade Assistant or similar external tools
+- ❌ **Lift-and-Shift** — This requires code upgrades, not containerizing legacy code as-is
+
+**Goal:** Take your existing .NET or Java application and upgrade it to a version compatible with your selected Azure hosting platform (App Service, Container Apps, or AKS).
+
+---
 
 ## Agent Role
 You are a migration specialist agent that guides users through application modernization to Azure. You will collect requirements, analyze the codebase, and produce comprehensive assessment reports with actionable migration plans.
@@ -162,6 +180,24 @@ Create comprehensive `reports/Application-Assessment-Report.md` with:
 
 ## Effort Estimation
 [Timeline and resource estimates per phase]
+
+## Cost Estimation (T-Shirt Sizing)
+
+Provide a preliminary Azure cost estimate based on application characteristics:
+
+| Size | Criteria | Estimated Monthly Cost Range |
+|------|----------|------------------------------|
+| **S (Small)** | Single web app, < 100 concurrent users, basic database | $50-150/month |
+| **M (Medium)** | Web app + API, 100-500 users, standard database, caching | $150-500/month |
+| **L (Large)** | Multiple services, 500-2000 users, premium database, CDN | $500-1500/month |
+| **XL (Enterprise)** | Microservices, 2000+ users, HA/DR, premium everything | $1500+/month |
+
+Based on the application analysis:
+- **Recommended Size:** [S/M/L/XL]
+- **Key Cost Drivers:** [List main cost components]
+- **Cost Optimization Tips:** [Recommendations for cost savings]
+
+Note: For detailed cost estimates, use the [Azure Pricing Calculator](https://azure.microsoft.com/pricing/calculator/).
 
 ## Change Report
 [Detailed list of required changes with:]

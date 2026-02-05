@@ -1,18 +1,53 @@
 ---
 name: Phase 2 - Migrate Code
 description: Upgrade legacy .NET or Java application code to modern framework versions
-agent: Azure Migration Agent
+argument-hint: "Specify target framework if not already assessed, e.g., 'Migrate to .NET 8' or 'Upgrade to Spring Boot 3'"
+agent: Code Migration Modernization Agent
 tools: ['edit/editFiles', 'search/codebase', 'read/problems', 'search/usages', 'search/changes', 'execute/testFailure', 'execute/runTests', 'read/terminalSelection', 'read/terminalLastCommand', 'vscode/openSimpleBrowser', 'web/fetch', 'web/githubRepo']
 
 ---
 
 Migrate application code to modern framework version compatible with Azure.
 
-Load the appropriate skill based on application type:
+## Skills to Load
+
+Load the appropriate skills based on application type:
+- **business-logic-mapping** skill — **ALWAYS** use to track and preserve business logic during migration
 - For .NET applications: Use **dotnet-modernization** skill for patterns and templates
 - For Java applications: Use **java-modernization** skill for patterns and templates  
 - For WCF services: Use **wcf-to-rest-migration** skill for service conversion
 - For config files: Use **config-transformation** skill for settings migration
+
+## Business Logic Preservation (Critical)
+
+Before making any code changes:
+1. **Create** `reports/Business-Logic-Mapping.md` to track all business logic
+2. **Identify** all business logic in the legacy application (see business-logic-mapping skill)
+3. **Document** each business logic item with source location
+4. **Update** the mapping document as you migrate each item
+5. **Verify** each migrated item produces the same results
+
+Categories to track:
+- Calculations (pricing, tax, discounts, etc.)
+- Validations (business rules, constraints)
+- Workflows (state machines, approval chains)
+- Transformations (data conversions, aggregations)
+- Integrations (external APIs, third-party services)
+- Authorization (business-level permissions)
+- Notifications (email triggers, alerts)
+- Scheduling (batch jobs, timed operations)
+
+## Media and Asset Preservation
+
+Track and copy all media assets:
+- Images, CSS, JavaScript, fonts
+- User uploads and documents
+- Email templates, report templates
+- Localization/resource files
+
+Update `reports/Business-Logic-Mapping.md` with asset migration status.
+
+---
 
 Ensure appropriate Azure extensions for the target framework are installed in VS Code.
 

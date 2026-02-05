@@ -1,6 +1,10 @@
 ---
 name: dotnet-modernization
-description: .NET Framework to .NET 8+ modernization patterns. Use when upgrading legacy .NET Framework applications to modern .NET, migrating web.config to appsettings.json, updating Entity Framework 6 to EF Core, or modernizing authentication to Entra ID.
+description: |
+  .NET Framework to .NET 8+ modernization patterns.
+  **Use when:** User has a .NET Framework 4.x application and needs to upgrade to .NET 8 LTS.
+  **Triggers on:** .csproj files with TargetFrameworkVersion, web.config files, System.Web references, Entity Framework 6.
+  **Covers:** Project file transformation, web.config to appsettings.json, EF6 to EF Core, Windows/Forms auth to Entra ID.
 ---
 
 # .NET Modernization Skill

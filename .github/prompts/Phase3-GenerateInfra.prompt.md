@@ -1,7 +1,8 @@
 ---
 name: Phase 3 - Generate Infrastructure
 description: Generate Bicep or Terraform infrastructure as code for Azure deployment
-agent: Azure Migration Agent
+argument-hint: "Specify IaC preference if not already set, e.g., 'Generate Bicep for App Service' or 'Create Terraform for AKS'"
+agent: Code Migration Modernization Agent
 model: Claude Sonnet 4.5 (copilot)
 tools: ['edit/editFiles', 'search/codebase', 'read/problems', 'search/usages', 'search/changes', 'execute/testFailure', 'execute/runTests', 'read/terminalSelection', 'read/terminalLastCommand', 'vscode/openSimpleBrowser', 'web/fetch', 'web/githubRepo']
 

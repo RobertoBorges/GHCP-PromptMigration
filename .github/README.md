@@ -1,6 +1,6 @@
 # GitHub Copilot Customization for Azure Migration
 
-This folder contains VS Code GitHub Copilot customization files for the **Azure Migration Agent** - a guided workflow for migrating legacy .NET and Java applications to Azure.
+This folder contains VS Code GitHub Copilot customization files for the **Code Migration Modernization Agent** - a guided workflow for migrating legacy .NET and Java applications to Azure.
 
 ## 📁 Folder Structure
 
@@ -32,7 +32,7 @@ This folder contains VS Code GitHub Copilot customization files for the **Azure 
 ### Using the Agent
 
 1. Open VS Code Command Palette (`Ctrl+Shift+P`)
-2. Type `@Azure Migration Agent` in Copilot Chat
+2. Type `@Code Migration Modernization Agent` in Copilot Chat
 3. Describe your migration scenario or use a handoff:
    - **Phase 1: Plan & Assess** - Analyze your application
    - **Phase 2: Migrate Code** - Modernize your codebase
@@ -58,6 +58,7 @@ Skills are automatically loaded based on context. Each skill provides:
 
 | Skill | Purpose |
 |-------|---------|
+| `business-logic-mapping` | **NEW** - Track and preserve business logic during migration |
 | `dotnet-modernization` | .NET Framework → .NET 8+ LTS upgrade patterns |
 | `java-modernization` | Java EE → Spring Boot 3.x with Java 21 |
 | `azure-infrastructure` | Bicep/Terraform using Azure Verified Modules |

@@ -1,6 +1,10 @@
 ---
 name: azure-containerization
-description: Docker containerization patterns for .NET and Java applications targeting Azure. Use when creating Dockerfiles, docker-compose files, or deploying to Azure Container Apps, App Service containers, or AKS.
+description: |
+  Docker containerization patterns for .NET and Java applications targeting Azure.
+  **Use when:** Creating Dockerfiles or deploying to Container Apps, App Service containers, or AKS.
+  **Triggers on:** Container Apps or AKS selected as hosting platform, Docker-related requests.
+  **Covers:** Multi-stage Dockerfiles, docker-compose, Container Apps configuration, health checks, resource limits.
 ---
 
 # Azure Containerization Skill

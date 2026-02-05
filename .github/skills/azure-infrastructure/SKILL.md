@@ -1,6 +1,10 @@
 ---
 name: azure-infrastructure
-description: Azure Infrastructure as Code patterns using Bicep and Terraform. Use when generating IaC for App Service, Container Apps, AKS deployments, setting up managed identities, configuring monitoring with Application Insights, or creating azd-compatible projects.
+description: |
+  Azure Infrastructure as Code patterns using Bicep and Terraform.
+  **Use when:** Generating IaC for App Service, Container Apps, or AKS deployments.
+  **Triggers on:** Phase 3 infrastructure generation, azd init, Bicep/Terraform file creation.
+  **Covers:** Azure Verified Modules, managed identities, Key Vault with RBAC, Application Insights, networking.
 ---
 
 # Azure Infrastructure Skill

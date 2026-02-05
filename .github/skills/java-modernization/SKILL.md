@@ -1,6 +1,10 @@
 ---
 name: java-modernization
-description: Java EE and legacy Java to modern Spring Boot migration patterns. Use when upgrading Java applications to Spring Boot 3.x, converting XML configuration to Java/YAML config, migrating EJB to Spring beans, or modernizing JAAS authentication to Spring Security with OAuth2.
+description: |
+  Java EE and legacy Java to modern Spring Boot migration patterns.
+  **Use when:** User has a Java EE, J2EE, or legacy Java 8/11 application and needs to upgrade to Spring Boot 3.x with Java 21.
+  **Triggers on:** pom.xml with javax.* dependencies, web.xml files, EJB annotations, JAAS configuration.
+  **Covers:** EJB to Spring beans, XML to Java/YAML config, JAAS to Spring Security OAuth2, JPA/Hibernate updates.
 ---
 
 # Java Modernization Skill

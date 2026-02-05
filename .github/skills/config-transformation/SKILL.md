@@ -1,6 +1,10 @@
 ---
 name: config-transformation
-description: Configuration file transformation patterns for .NET and Java modernization. Use when converting web.config to appsettings.json, app.config to JSON configuration, or migrating Java XML configs to YAML/properties files for cloud-native applications.
+description: |
+  Configuration file transformation patterns for .NET and Java modernization.
+  **Use when:** Converting legacy config files to modern cloud-native formats.
+  **Triggers on:** web.config, app.config, applicationContext.xml, persistence.xml files.
+  **Covers:** web.config to appsettings.json, XML to YAML/properties, connection string externalization.
 ---
 
 # Configuration Transformation Skill

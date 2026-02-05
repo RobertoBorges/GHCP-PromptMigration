@@ -1,6 +1,11 @@
 ---
 name: wcf-to-rest-migration
-description: WCF to REST API migration patterns for .NET modernization. Use when converting WCF ServiceContracts to ASP.NET Core controllers, transforming DataContracts to DTOs, or migrating SOAP services to RESTful APIs with OpenAPI documentation.
+description: |
+  WCF to REST API migration patterns for .NET modernization.
+  **Use when:** Converting WCF services to ASP.NET Core REST APIs.
+  **Triggers on:** .svc files, ServiceContract attributes, OperationContract, DataContract, WCF bindings.
+  **Covers:** ServiceContract to controllers, DataContract to DTOs, FaultContract to Problem Details, OpenAPI generation.
+  **Important:** This is a rewrite, not a compatibility layer. Existing WCF clients will need updates.
 ---
 
 # WCF to REST Migration Skill
