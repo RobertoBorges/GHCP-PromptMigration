@@ -4,8 +4,6 @@ description: Start planning and generate an assessment report for your applicati
 argument-hint: "Specify the folder path to your legacy application, e.g., 'Assess the app in Use-cases/02-NetFramework30-ASPNET-WEB'"
 agent: Code Migration Modernization Agent
 model: Claude Sonnet 4.5 (copilot)
-tools: ['edit/editFiles', 'search/codebase', 'read/problems', 'search/usages', 'search/changes', 'execute/testFailure', 'execute/runTests', 'read/terminalSelection', 'read/terminalLastCommand', 'vscode/openSimpleBrowser', 'web/fetch', 'web/githubRepo']
-
 ---
 
 # Migration Planning & Assessment Prompt

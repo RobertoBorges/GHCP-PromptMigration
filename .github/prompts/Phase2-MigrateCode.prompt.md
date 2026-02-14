@@ -3,8 +3,6 @@ name: Phase 2 - Migrate Code
 description: Upgrade legacy .NET or Java application code to modern framework versions
 argument-hint: "Specify target framework if not already assessed, e.g., 'Migrate to .NET 8' or 'Upgrade to Spring Boot 3'"
 agent: Code Migration Modernization Agent
-tools: ['edit/editFiles', 'search/codebase', 'read/problems', 'search/usages', 'search/changes', 'execute/testFailure', 'execute/runTests', 'read/terminalSelection', 'read/terminalLastCommand', 'vscode/openSimpleBrowser', 'web/fetch', 'web/githubRepo']
-
 ---
 
 Migrate application code to modern framework version compatible with Azure.

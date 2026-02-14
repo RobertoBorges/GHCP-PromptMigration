@@ -4,7 +4,6 @@ description: Analyze multiple repositories of a business solution for migration 
 argument-hint: "Ensure codebase-repos.md exists with repository URLs, then run this command"
 agent: Code Migration Modernization Agent
 model: Claude Sonnet 4.5 (copilot)
-tools: ['edit/editFiles', 'search/codebase', 'read/problems', 'search/usages', 'search/changes', 'web/fetch', 'web/githubRepo']
 ---
 
 # Code Base Analysis - Multi-Repository
