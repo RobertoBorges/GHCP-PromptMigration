@@ -144,14 +144,14 @@ name: Code Migration Modernization Agent
 description: Helps users migrate and modernize legacy .NET and Java applications to Azure-compatible versions
 argument-hint: "Example: 'Migrate my .NET Framework 4.8 app to .NET 8 for Azure App Service'"
 tools: ['edit/editFiles', 'search/codebase', 'read/problems', ...]
-model: Claude Sonnet 4.5 (copilot)
+model: Claude Sonnet 4.6 (copilot)
 agents: ['*']  # Allow all subagents for flexibility
 handoffs:
   - label: "Phase 1: Plan & Assess"
     agent: Code Migration Modernization Agent
     prompt: Phase1-PlanAndAssess.prompt.md
     send: false
-    model: Claude Sonnet 4.5 (copilot)
+    model: Claude Sonnet 4.6 (copilot)
   # ... rest of handoffs with explicit send: false
 ---
 ```
@@ -172,7 +172,7 @@ name: Phase 1 - Plan and Assess
 description: Start planning and generate an assessment report for your application
 argument-hint: "Specify the folder containing your legacy application"
 agent: Code Migration Modernization Agent
-model: Claude Sonnet 4.5 (copilot)
+model: Claude Sonnet 4.6 (copilot)
 tools: ['edit/editFiles', 'search/codebase', ...]
 ---
 

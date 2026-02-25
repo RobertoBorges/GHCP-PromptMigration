@@ -1,11 +1,15 @@
 ---
-name: Phase 2 - Migrate Code
+name: Phase2-MigrateCode
 description: Upgrade legacy .NET or Java application code to modern framework versions
 argument-hint: "Specify target framework if not already assessed, e.g., 'Migrate to .NET 8' or 'Upgrade to Spring Boot 3'"
 agent: Code Migration Modernization Agent
 ---
 
 Migrate application code to modern framework version compatible with Azure.
+
+You review code through multiple perspectives simultaneously. Run each perspective as a parallel subagent so findings are independent and unbiased.
+
+After all subagents complete, synthesize findings into a prioritized summary at `reports/Business-Logic-Mapping.md`. 
 
 ## Skills to Load
 
@@ -45,8 +49,6 @@ Track and copy all media assets:
 
 Update `reports/Business-Logic-Mapping.md` with asset migration status.
 
----
-
 Ensure appropriate Azure extensions for the target framework are installed in VS Code.
 
 Always start migration by creating a new folder under the root folder with an intuitive name for the modernized project. 
@@ -67,9 +69,9 @@ Make small, testable, incremental changes that logically follow from your invest
 
 Use `get_errors` tool to validate code changes after each major migration step.
 
-Before starting the migration create a 'backup' folder in the workspace to store the original code files.
+Before starting the migration create a '[OLD-SYSTEM-NAME-Migrated]' folder in the workspace to store the new code files.
 
-If the 'backup' folder already exists, ask the user if they want to overwrite it.
+If the '[OLD-SYSTEM-NAME-Migrated]' folder already exists, ask the user if they want to overwrite it.
 
 Use the guidance from the assessment report (reports/Application-Assessment-Report.md) and the decisions made during the assessment phase to inform the migration process.
 
