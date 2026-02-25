@@ -336,9 +336,10 @@ app.UseSwaggerUI();
 
 ## Template Files
 
-- [SampleController.cs](./templates/SampleController.cs) - REST controller template
-- [SampleDtos.cs](./templates/SampleDtos.cs) - DTO examples with validation
-- [GlobalExceptionHandler.cs](./templates/GlobalExceptionHandler.cs) - Exception to Problem Details
+- [ControllerTemplate.cs](./templates/ControllerTemplate.cs) - REST controller template
+- [ServiceImplementationTemplate.cs](./templates/ServiceImplementationTemplate.cs) - Service implementation with DTO patterns
+- [ExceptionMiddleware.cs](./templates/ExceptionMiddleware.cs) - Exception to Problem Details middleware
+- [WcfMigrationGuide.md](./templates/WcfMigrationGuide.md) - Step-by-step migration guide
 
 ## Migration Checklist
 
