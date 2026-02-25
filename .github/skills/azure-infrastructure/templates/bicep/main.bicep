@@ -26,6 +26,16 @@ param location string = 'eastus2'
 @description('Tags to apply to all resources')
 param tags object = {}
 
+@description('SQL Server administrator login name. Required when sqlUseEntraIdOnly is false.')
+param sqlAdministratorLogin string = ''
+
+@description('SQL Server administrator login password. Required when sqlUseEntraIdOnly is false.')
+@secure()
+param sqlAdministratorLoginPassword string = ''
+
+@description('When true, SQL Server uses Entra ID-only authentication (no SQL admin login required).')
+param sqlUseEntraIdOnly bool = true
+
 // =============================================================================
 // Variables
 // =============================================================================
@@ -124,7 +134,9 @@ module sqlServer 'br/public:avm/res/sql/server:0.4.1' = {
   params: {
     name: 'sql-${workloadName}-${environmentName}'
     location: location
-    administratorLoginPassword: '' // Use managed identity or Key Vault
+    administratorLogin: sqlUseEntraIdOnly ? null : sqlAdministratorLogin
+    administratorLoginPassword: sqlUseEntraIdOnly ? null : sqlAdministratorLoginPassword
+    azureADOnlyAuthentication: sqlUseEntraIdOnly
     databases: [
       {
         name: '${workloadName}db'
