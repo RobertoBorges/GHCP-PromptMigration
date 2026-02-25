@@ -1,8 +1,11 @@
 ---
-agent: agent
-model: Claude Sonnet 4.5 (copilot)
-tools: ['search/codebase', 'usages', 'vscodeAPI', 'problems', 'changes', 'testFailure', 'runCommands/terminalSelection', 'runCommands/terminalLastCommand', 'openSimpleBrowser', 'fetch', 'search/searchResults', 'githubRepo', 'extensions', 'runTests', 'edit/editFiles', 'runNotebooks', 'search', 'new', 'runCommands', 'runTasks', 'Azure MCP/*', 'Microsoft Docs/*']
+name: Phase5-SetupCICD
+description: Configure GitHub Actions or Azure DevOps pipelines for automated deployment
+argument-hint: "Specify CI/CD platform, e.g., 'Setup GitHub Actions' or 'Configure Azure DevOps pipelines'"
+agent: Code Migration Modernization Agent
+model: Claude Sonnet 4.6 (copilot)
 ---
+
 Set up CI/CD pipelines for automated deployment and continuous integration
 
 # Rules for CI/CD Pipeline Setup

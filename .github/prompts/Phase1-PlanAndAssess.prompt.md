@@ -1,10 +1,29 @@
 ---
-agent: agent
-model: Claude Sonnet 4.5 (copilot)
-tools: ['search/codebase', 'usages', 'vscodeAPI', 'problems', 'changes', 'testFailure', 'runCommands/terminalSelection', 'runCommands/terminalLastCommand', 'openSimpleBrowser', 'fetch', 'search/searchResults', 'githubRepo', 'extensions', 'runTests', 'edit/editFiles', 'runNotebooks', 'search', 'new', 'runCommands', 'runTasks', 'Azure MCP/*', 'Microsoft Docs/*']
+name: Phase1-PlanAndAssess
+description: Start planning and generate an assessment report for your application
+argument-hint: "Specify the folder path to your legacy application, e.g., 'Assess the app in Use-cases/02-NetFramework30-ASPNET-WEB'"
+agent: Code Migration Modernization Agent
+model: Claude Sonnet 4.6 (copilot)
 ---
 
 # Migration Planning & Assessment Prompt
+
+## Migration Scope
+
+This guided migration helps you:
+- ✅ **Upgrade** your application to a framework version compatible with Azure
+- ✅ **Modernize** code patterns for cloud-native deployment
+- ✅ **Generate** infrastructure as code for your target platform
+- ✅ **Set up** CI/CD pipelines for automated deployment
+
+This migration does **NOT** include:
+- ❌ **Data Migration** — Use Azure Database Migration Service (DMS) or Data Migration Assistant
+- ❌ **Binary/Dependency Scanning** — Use .NET Upgrade Assistant or similar external tools
+- ❌ **Lift-and-Shift** — This requires code upgrades, not containerizing legacy code as-is
+
+**Goal:** Take your existing .NET or Java application and upgrade it to a version compatible with your selected Azure hosting platform (App Service, Container Apps, or AKS).
+
+---
 
 ## Agent Role
 You are a migration specialist agent that guides users through application modernization to Azure. You will collect requirements, analyze the codebase, and produce comprehensive assessment reports with actionable migration plans.
@@ -16,7 +35,7 @@ Before proceeding with any analysis, gather the following information from the u
 
 #### 1.1 Modernization Scope
 Ask: **"Which modernization path(s) do you want to follow?"** (Select all that apply)
-- [ ] Version upgrade only (e.g., .NET Framework → .NET 8, Java 8 → Java 21)
+- [ ] Version upgrade only (e.g., .NET Framework → .NET 10, Java 8 → Java 21)
 - [ ] Code remediation for cloud readiness (minimal changes for Azure compatibility)
 - [ ] Full code migration/modernization (refactoring, architectural improvements)
 
@@ -159,6 +178,24 @@ Create comprehensive `reports/Application-Assessment-Report.md` with:
 
 ## Effort Estimation
 [Timeline and resource estimates per phase]
+
+## Cost Estimation (T-Shirt Sizing)
+
+Provide a preliminary Azure cost estimate based on application characteristics:
+
+| Size | Criteria | Estimated Monthly Cost Range |
+|------|----------|------------------------------|
+| **S (Small)** | Single web app, < 100 concurrent users, basic database | $50-150/month |
+| **M (Medium)** | Web app + API, 100-500 users, standard database, caching | $150-500/month |
+| **L (Large)** | Multiple services, 500-2000 users, premium database, CDN | $500-1500/month |
+| **XL (Enterprise)** | Microservices, 2000+ users, HA/DR, premium everything | $1500+/month |
+
+Based on the application analysis:
+- **Recommended Size:** [S/M/L/XL]
+- **Key Cost Drivers:** [List main cost components]
+- **Cost Optimization Tips:** [Recommendations for cost savings]
+
+Note: For detailed cost estimates, use the [Azure Pricing Calculator](https://azure.microsoft.com/pricing/calculator/).
 
 ## Change Report
 [Detailed list of required changes with:]

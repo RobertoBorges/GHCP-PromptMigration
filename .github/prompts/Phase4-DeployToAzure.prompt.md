@@ -1,8 +1,11 @@
 ---
-agent: agent
-model: Claude Sonnet 4.5 (copilot)
-tools: ['search/codebase', 'usages', 'vscodeAPI', 'problems', 'changes', 'testFailure', 'runCommands/terminalSelection', 'runCommands/terminalLastCommand', 'openSimpleBrowser', 'fetch', 'search/searchResults', 'githubRepo', 'extensions', 'runTests', 'edit/editFiles', 'runNotebooks', 'search', 'new', 'runCommands', 'runTasks', 'Azure MCP/*', 'Microsoft Docs/*']
+name: Phase4-DeployToAzure
+description: Deploy the validated project to Azure using Azure Developer CLI
+argument-hint: "Specify environment if needed, e.g., 'Deploy to dev environment' or 'Deploy to production'"
+agent: Code Migration Modernization Agent
+model: Claude Sonnet 4.6 (copilot)
 ---
+
 Deploy application to Azure, using Azure Developer CLI (azd) for streamlined deployment. 
 
 # Rules for deployment using user's desktop

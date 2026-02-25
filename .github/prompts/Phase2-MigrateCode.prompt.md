@@ -1,9 +1,53 @@
 ---
-agent: agent
-model: Claude Sonnet 4.5 (copilot)
-tools: ['search/codebase', 'usages', 'vscodeAPI', 'problems', 'changes', 'testFailure', 'runCommands/terminalSelection', 'runCommands/terminalLastCommand', 'openSimpleBrowser', 'fetch', 'search/searchResults', 'githubRepo', 'extensions', 'runTests', 'edit/editFiles', 'runNotebooks', 'search', 'new', 'runCommands', 'runTasks', 'Azure MCP/*', 'Microsoft Docs/*']
+name: Phase2-MigrateCode
+description: Upgrade legacy .NET or Java application code to modern framework versions
+argument-hint: "Specify target framework if not already assessed, e.g., 'Migrate to .NET 10' or 'Upgrade to Spring Boot 3'"
+agent: Code Migration Modernization Agent
 ---
+
 Migrate application code to modern framework version compatible with Azure.
+
+You review code through multiple perspectives simultaneously. Run each perspective as a parallel subagent so findings are independent and unbiased.
+
+After all subagents complete, synthesize findings into a prioritized summary at `reports/Business-Logic-Mapping.md`. 
+
+## Skills to Load
+
+Load the appropriate skills based on application type:
+- **business-logic-mapping** skill — **ALWAYS** use to track and preserve business logic during migration
+- For .NET applications: Use **dotnet-modernization** skill for patterns and templates
+- For Java applications: Use **java-modernization** skill for patterns and templates  
+- For WCF services: Use **wcf-to-rest-migration** skill for service conversion
+- For config files: Use **config-transformation** skill for settings migration
+
+## Business Logic Preservation (Critical)
+
+Before making any code changes:
+1. **Create** `reports/Business-Logic-Mapping.md` to track all business logic
+2. **Identify** all business logic in the legacy application (see business-logic-mapping skill)
+3. **Document** each business logic item with source location
+4. **Update** the mapping document as you migrate each item
+5. **Verify** each migrated item produces the same results
+
+Categories to track:
+- Calculations (pricing, tax, discounts, etc.)
+- Validations (business rules, constraints)
+- Workflows (state machines, approval chains)
+- Transformations (data conversions, aggregations)
+- Integrations (external APIs, third-party services)
+- Authorization (business-level permissions)
+- Notifications (email triggers, alerts)
+- Scheduling (batch jobs, timed operations)
+
+## Media and Asset Preservation
+
+Track and copy all media assets:
+- Images, CSS, JavaScript, fonts
+- User uploads and documents
+- Email templates, report templates
+- Localization/resource files
+
+Update `reports/Business-Logic-Mapping.md` with asset migration status.
 
 Ensure appropriate Azure extensions for the target framework are installed in VS Code.
 
@@ -25,11 +69,11 @@ Make small, testable, incremental changes that logically follow from your invest
 
 Use `get_errors` tool to validate code changes after each major migration step.
 
-Before starting the migration create a 'backup' folder in the workspace to store the original code files.
+Before starting the migration create a '[OLD-SYSTEM-NAME-Migrated]' folder in the workspace to store the new code files.
 
-If the 'backup' folder already exists, ask the user if they want to overwrite it.
+If the '[OLD-SYSTEM-NAME-Migrated]' folder already exists, ask the user if they want to overwrite it.
 
-Use the guidance provided in #file:Code-Migration-Modernization.chatmode.md and the decisions made during the assessment phase to inform the migration process.
+Use the guidance from the assessment report (reports/Application-Assessment-Report.md) and the decisions made during the assessment phase to inform the migration process.
 
 Copy media files from the original project directory to the new project directory at same relative paths.
 

@@ -1,9 +1,15 @@
 ---
-agent: agent
-model: Claude Sonnet 4.5 (copilot)
-tools: ['search/codebase', 'usages', 'vscodeAPI', 'problems', 'changes', 'testFailure', 'runCommands/terminalSelection', 'runCommands/terminalLastCommand', 'openSimpleBrowser', 'fetch', 'search/searchResults', 'githubRepo', 'extensions', 'runTests', 'edit/editFiles', 'runNotebooks', 'search', 'new', 'runCommands', 'runTasks', 'Azure MCP/*', 'Microsoft Docs/*']
+name: Phase3-GenerateInfra
+description: Generate Bicep or Terraform infrastructure as code for Azure deployment
+argument-hint: "Specify IaC preference if not already set, e.g., 'Generate Bicep for App Service' or 'Create Terraform for AKS'"
+agent: Code Migration Modernization Agent
+model: Claude Sonnet 4.6 (copilot)
 ---
+
 Generate Infrastructure as Code Files for Azure Deployment
+
+Load the **azure-infrastructure** skill for Bicep/Terraform templates and Azure Verified Modules patterns.
+Load the **azure-containerization** skill if containerization was selected in the assessment.
 
 Use `azure_development-summarize_topic` tool to get high-level instructions to follow.
 

@@ -1,0 +1,164 @@
+# =============================================================================
+# Spring Boot Application Configuration
+# =============================================================================
+# Replaces legacy XML configuration files and properties
+
+spring:
+  application:
+    name: my-application
+
+  # =============================================================================
+  # Database Configuration
+  # =============================================================================
+  datasource:
+    url: jdbc:sqlserver://${DB_HOST:localhost}:1433;database=${DB_NAME:myapp};encrypt=true;trustServerCertificate=${DB_TRUST_CERT:false}
+    username: ${DB_USER:}
+    password: ${DB_PASSWORD:}
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    hikari:
+      maximum-pool-size: ${DB_POOL_SIZE:10}
+      minimum-idle: 5
+      idle-timeout: 300000
+      connection-timeout: 20000
+
+  # =============================================================================
+  # JPA / Hibernate Configuration
+  # =============================================================================
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: ${SHOW_SQL:false}
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.SQLServerDialect
+        format_sql: true
+        jdbc:
+          batch_size: 25
+        order_inserts: true
+        order_updates: true
+
+  # =============================================================================
+  # Azure Active Directory (Entra ID) Configuration
+  # =============================================================================
+  cloud:
+    azure:
+      active-directory:
+        enabled: true
+        credential:
+          client-id: ${AZURE_CLIENT_ID:}
+          client-secret: ${AZURE_CLIENT_SECRET:}
+        profile:
+          tenant-id: ${AZURE_TENANT_ID:}
+
+  # =============================================================================
+  # Security Configuration
+  # =============================================================================
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://login.microsoftonline.com/${AZURE_TENANT_ID}/v2.0
+
+  # =============================================================================
+  # Cache Configuration
+  # =============================================================================
+  cache:
+    type: redis
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      ssl:
+        enabled: ${REDIS_SSL:true}
+
+# =============================================================================
+# Server Configuration
+# =============================================================================
+server:
+  port: ${SERVER_PORT:8080}
+  servlet:
+    context-path: /
+  compression:
+    enabled: true
+    mime-types: application/json,application/xml,text/html,text/plain
+
+# =============================================================================
+# Actuator / Health Configuration
+# =============================================================================
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: when_authorized
+      probes:
+        enabled: true
+  health:
+    livenessstate:
+      enabled: true
+    readinessstate:
+      enabled: true
+    db:
+      enabled: true
+    redis:
+      enabled: true
+
+# =============================================================================
+# Logging Configuration
+# =============================================================================
+logging:
+  level:
+    root: INFO
+    com.example: ${LOG_LEVEL:INFO}
+    org.springframework.security: WARN
+    org.hibernate.SQL: ${SQL_LOG_LEVEL:WARN}
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
+# =============================================================================
+# Application Insights (Azure Monitor)
+# =============================================================================
+azure:
+  application-insights:
+    connection-string: ${APPLICATIONINSIGHTS_CONNECTION_STRING:}
+    enabled: ${APPINSIGHTS_ENABLED:true}
+
+---
+# =============================================================================
+# Development Profile
+# =============================================================================
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    url: jdbc:sqlserver://localhost:1433;database=myapp_dev;trustServerCertificate=true
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+logging:
+  level:
+    com.example: DEBUG
+    org.hibernate.SQL: DEBUG
+
+---
+# =============================================================================
+# Production Profile
+# =============================================================================
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    url: jdbc:sqlserver://${DB_HOST}.database.windows.net:1433;database=${DB_NAME};encrypt=true;authentication=ActiveDirectoryDefault
+
+logging:
+  level:
+    root: WARN
+    com.example: INFO
