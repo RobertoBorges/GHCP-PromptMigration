@@ -85,6 +85,12 @@ public class ProductService : IProductService
         int page, 
         int pageSize)
     {
+        // Validate and clamp pagination parameters to safe defaults
+        const int MaxPageSize = 100;
+        if (page <= 0) page = 1;
+        if (pageSize <= 0) pageSize = 10;
+        if (pageSize > MaxPageSize) pageSize = MaxPageSize;
+
         var query = _context.Products
             .AsNoTracking()
             .Where(p => p.IsActive);
