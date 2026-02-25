@@ -9,7 +9,7 @@ This project provides guided migration assistance to help users upgrade .NET and
 ## Migration Scope
 
 ### What This Project Does ✅
-- Upgrades .NET Framework applications to .NET 8 LTS
+- Upgrades .NET Framework applications to .NET 10 LTS
 - Upgrades Java EE/legacy Java to Spring Boot 3.x with Java 21
 - Converts WCF services to REST APIs
 - Transforms legacy configuration (web.config → appsettings.json)
@@ -59,8 +59,8 @@ This project provides guided migration assistance to help users upgrade .NET and
 
 | Source | Target |
 |--------|--------|
-| .NET Framework 4.x | .NET 8 LTS |
-| .NET Core 2.1/3.1 | .NET 8 LTS |
+| .NET Framework 2.x | .NET 10 LTS |
+| .NET Core 2.1/3.1 | .NET 10 LTS |
 | Java 8/11 | Java 21 LTS |
 | Java EE 7/8 | Spring Boot 3.x |
 | Spring 4.x/5.x | Spring Boot 3.x |

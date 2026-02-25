@@ -35,7 +35,7 @@ Before proceeding with any analysis, gather the following information from the u
 
 #### 1.1 Modernization Scope
 Ask: **"Which modernization path(s) do you want to follow?"** (Select all that apply)
-- [ ] Version upgrade only (e.g., .NET Framework → .NET 8, Java 8 → Java 21)
+- [ ] Version upgrade only (e.g., .NET Framework → .NET 10, Java 8 → Java 21)
 - [ ] Code remediation for cloud readiness (minimal changes for Azure compatibility)
 - [ ] Full code migration/modernization (refactoring, architectural improvements)
 

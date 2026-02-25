@@ -1,32 +1,32 @@
 ---
 name: dotnet-modernization
 description: |
-  .NET Framework to .NET 8+ modernization patterns.
-  **Use when:** User has a .NET Framework 4.x application and needs to upgrade to .NET 8 LTS.
+  .NET Framework to .NET 10+ modernization patterns.
+  **Use when:** User has a .NET Framework 4.x application and needs to upgrade to .NET 10 LTS.
   **Triggers on:** .csproj files with TargetFrameworkVersion, web.config files, System.Web references, Entity Framework 6.
   **Covers:** Project file transformation, web.config to appsettings.json, EF6 to EF Core, Windows/Forms auth to Entra ID.
 ---
 
 # .NET Modernization Skill
 
-Use this skill when modernizing .NET Framework applications to .NET 8+ for Azure compatibility.
+Use this skill when modernizing .NET Framework applications to .NET 10+ for Azure compatibility.
 
 ## When to Use This Skill
 
-- Upgrading .NET Framework 4.x to .NET 8+
+- Upgrading .NET Framework 4.x to .NET 10+
 - Converting web.config/app.config to appsettings.json
 - Migrating Entity Framework 6 to EF Core
 - Modernizing Windows/Forms authentication to Entra ID
 - Replacing System.Web dependencies
-- Updating NuGet packages for .NET 8+ compatibility
+- Updating NuGet packages for .NET 10+ compatibility
 
 ## Framework Version Mapping
 
 | Legacy Version | Target Version | Notes |
 |----------------|----------------|-------|
-| .NET Framework 4.5-4.8 | .NET 8 LTS | Recommended for production |
-| .NET Core 2.1/3.1 | .NET 8 LTS | Straightforward upgrade |
-| .NET 5/6/7 | .NET 8 LTS | Minor breaking changes |
+| .NET Framework 4.5-4.8 | .NET 10 LTS | Recommended for production |
+| .NET Core 2.1/3.1 | .NET 10 LTS | Straightforward upgrade |
+| .NET 5/6/7 | .NET 10 LTS | Minor breaking changes |
 
 ## Project File Transformation
 
@@ -46,7 +46,7 @@ Use this skill when modernizing .NET Framework applications to .NET 8+ for Azure
 <!-- Modern SDK-style -->
 <Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
@@ -166,9 +166,9 @@ builder.Services.AddDbContext<ModernContext>(options =>
 
 ## Template Files
 
-- [Program.cs](./templates/Program.cs) - Modern .NET 8 entry point
+- [Program.cs](./templates/Program.cs) - Modern .NET 10 entry point
 - [appsettings.json](./templates/appsettings.json) - Configuration template
-- [Dockerfile](./templates/Dockerfile) - Container template for .NET 8
+- [Dockerfile](./templates/Dockerfile) - Container template for .NET 10
 
 ## Best Practices
 

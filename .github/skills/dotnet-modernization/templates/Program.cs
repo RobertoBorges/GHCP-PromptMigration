@@ -1,5 +1,5 @@
 // =============================================================================
-// .NET 8 Program.cs Template
+// .NET 10 Program.cs Template
 // =============================================================================
 // Modern entry point for ASP.NET Core applications
 // Replaces Global.asax, Startup.cs, and web.config configuration

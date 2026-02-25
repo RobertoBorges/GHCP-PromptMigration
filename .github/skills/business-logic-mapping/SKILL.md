@@ -14,7 +14,7 @@ Use this skill to discover, map, track, and verify business logic preservation d
 
 ## When to Use This Skill
 
-- Migrating .NET Framework to .NET 8+ applications
+- Migrating .NET Framework to .NET 10+ applications
 - Migrating Java EE to Spring Boot applications
 - Any migration where business logic preservation is critical
 - When you need to track what logic has been migrated vs. what remains
@@ -148,7 +148,7 @@ Create a `reports/Business-Logic-Mapping.md` file to track all business logic:
 - [ ] All media assets accessible in new application
 ```
 
-## Business Logic Patterns: .NET Framework → .NET 8
+## Business Logic Patterns: .NET Framework → .NET 10
 
 ### Service Layer Mapping
 
@@ -177,7 +177,7 @@ public class OrderService
 }
 
 // =============================================================================
-// MODERN: .NET 8 Service (Preserve same logic, modernize patterns)
+// MODERN: .NET 10 Service (Preserve same logic, modernize patterns)
 // =============================================================================
 public interface IOrderCalculationService
 {
@@ -251,7 +251,7 @@ public class OrderValidator
 }
 
 // =============================================================================
-// MODERN: .NET 8 with FluentValidation (Same rules, modern pattern)
+// MODERN: .NET 10 with FluentValidation (Same rules, modern pattern)
 // =============================================================================
 public class OrderValidator : AbstractValidator<Order>
 {
@@ -359,7 +359,7 @@ public class InvoiceService {
 
 ### Asset Types to Track
 
-| Asset Type | .NET Framework Location | .NET 8 Location | Notes |
+| Asset Type | .NET Framework Location | .NET 10 Location | Notes |
 |------------|------------------------|-----------------|-------|
 | Images | `/Content/images/` | `/wwwroot/images/` | Copy as-is |
 | CSS | `/Content/css/` | `/wwwroot/css/` | May need path updates |
@@ -497,8 +497,8 @@ See the [examples](./examples/) directory for:
 - [Business-Logic-Mapping-Template.md](./examples/Business-Logic-Mapping-Template.md) - Copy to `reports/` and fill in during migration
 
 ### .NET Code Conversion Examples
-- [controller-example.cs](./examples/controller-example.cs) - .NET Framework MVC to .NET 8 controller
-- [service-example.cs](./examples/service-example.cs) - .NET Framework service to .NET 8 with caching and logging
+- [controller-example.cs](./examples/controller-example.cs) - .NET Framework MVC to .NET 10 controller
+- [service-example.cs](./examples/service-example.cs) - .NET Framework service to .NET 10 with caching and logging
 - [model-example.cs](./examples/model-example.cs) - EF6 entity to EF Core with business methods
 
 ### Java Code Conversion Examples

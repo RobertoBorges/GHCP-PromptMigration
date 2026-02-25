@@ -1,5 +1,5 @@
 // =============================================================================
-// .NET Framework to .NET 8 Service Conversion Example
+// .NET Framework to .NET 10 Service Conversion Example
 // =============================================================================
 
 // -----------------------------------------------------------------------------
@@ -131,7 +131,7 @@ namespace ProjectName.Services
 */
 
 // -----------------------------------------------------------------------------
-// AFTER: .NET 8 Service Interface (Services/Interfaces/IProductService.cs)
+// AFTER: .NET 10 Service Interface (Services/Interfaces/IProductService.cs)
 // -----------------------------------------------------------------------------
 
 using ProjectName.Models.DTOs;
@@ -150,7 +150,7 @@ public interface IProductService
 }
 
 // -----------------------------------------------------------------------------
-// AFTER: .NET 8 Service Implementation (Services/ProductService.cs)
+// AFTER: .NET 10 Service Implementation (Services/ProductService.cs)
 // -----------------------------------------------------------------------------
 
 using Microsoft.Extensions.Caching.Memory;

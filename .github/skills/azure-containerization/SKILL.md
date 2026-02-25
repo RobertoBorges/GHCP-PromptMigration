@@ -13,7 +13,7 @@ Use this skill when containerizing .NET or Java applications for Azure deploymen
 
 ## When to Use This Skill
 
-- Creating Dockerfiles for .NET 8+ or Java 21+ applications
+- Creating Dockerfiles for .NET 10+ or Java 21+ applications
 - Setting up docker-compose for local development
 - Deploying to Azure Container Apps
 - Deploying to Azure App Service (container mode)
@@ -22,11 +22,11 @@ Use this skill when containerizing .NET or Java applications for Azure deploymen
 
 ## .NET Container Best Practices
 
-### Multi-Stage Dockerfile for .NET 8
+### Multi-Stage Dockerfile for .NET 10
 
 ```dockerfile
 # Build stage
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 
 # Copy csproj and restore dependencies
@@ -43,7 +43,7 @@ FROM build AS publish
 RUN dotnet publish -c Release -o /app/publish /p:UseAppHost=false
 
 # Runtime stage
-FROM mcr.microsoft.com/dotnet/aspnet:8.0-alpine AS final
+FROM mcr.microsoft.com/dotnet/aspnet:10.0-alpine AS final
 WORKDIR /app
 
 # Create non-root user
@@ -302,7 +302,7 @@ management:
 
 ## Template Files
 
-- [Dockerfile.dotnet](./templates/Dockerfile.dotnet) - .NET 8 multi-stage Dockerfile
+- [Dockerfile.dotnet](./templates/Dockerfile.dotnet) - .NET 10 multi-stage Dockerfile
 - [Dockerfile.java](./templates/Dockerfile.java) - Java 21 multi-stage Dockerfile
 - [docker-compose.yml](./templates/docker-compose.yml) - Local development compose
 - [.dockerignore](./templates/.dockerignore) - Files to exclude

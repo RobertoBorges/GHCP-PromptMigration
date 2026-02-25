@@ -1,11 +1,11 @@
 # =============================================================================
-# .NET 8 Multi-Stage Dockerfile for Azure Container Apps / AKS
+# .NET 10 Multi-Stage Dockerfile for Azure Container Apps / AKS
 # =============================================================================
 # Optimized for production with security best practices
 # =============================================================================
 
 # Build stage
-FROM mcr.microsoft.com/dotnet/sdk:8.0-alpine AS build
+FROM mcr.microsoft.com/dotnet/sdk:10.0-alpine AS build
 WORKDIR /src
 
 # Copy csproj files first for layer caching
@@ -27,7 +27,7 @@ RUN dotnet publish -c Release -o /app/publish \
 # =============================================================================
 # Runtime stage - Alpine for smaller image size
 # =============================================================================
-FROM mcr.microsoft.com/dotnet/aspnet:8.0-alpine AS final
+FROM mcr.microsoft.com/dotnet/aspnet:10.0-alpine AS final
 WORKDIR /app
 
 # Install curl for health checks (Alpine)

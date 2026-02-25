@@ -45,7 +45,7 @@ The current folder has **no `.github/skills/` directory**. The following skills 
 
 | Skill Name | Purpose | Source Content |
 |------------|---------|----------------|
-| `dotnet-modernization` | .NET Framework → .NET 8+ patterns | Agent rules + Phase2 prompt |
+| `dotnet-modernization` | .NET Framework → .NET 10+ patterns | Agent rules + Phase2 prompt |
 | `java-modernization` | Java EE → Spring Boot patterns | Agent rules + Phase2 prompt |
 | `azure-infrastructure` | Bicep/Terraform IaC patterns | Phase3 prompt content |
 | `azure-containerization` | Docker + Azure container patterns | Agent containerization section |
@@ -136,7 +136,7 @@ Per VS Code documentation, tools should use specific formats:
 **File**: `.github/skills/dotnet-modernization/SKILL.md`
 
 **Content to extract from current files:**
-- .NET Framework → .NET 8+ upgrade patterns
+- .NET Framework → .NET 10+ upgrade patterns
 - web.config → appsettings.json transformation
 - WCF → REST API migration patterns
 - Entity Framework 6 → EF Core migration
@@ -145,7 +145,7 @@ Per VS Code documentation, tools should use specific formats:
 
 **Template files to include:**
 - `templates/appsettings.json` - Modern config template
-- `templates/Program.cs` - .NET 8 entry point
+- `templates/Program.cs` - .NET 10 entry point
 - `templates/Dockerfile` - .NET container template
 - `examples/wcf-to-controller.cs` - WCF conversion example
 

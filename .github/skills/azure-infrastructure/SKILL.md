@@ -231,13 +231,6 @@ resource "azurerm_role_assignment" "app_to_keyvault" {
 6. **Diagnostic settings** - Log to Log Analytics
 7. **Resource locks** - Prevent accidental deletion
 
-## Template Files
-
-- [main.bicep](./templates/bicep/main.bicep) - Bicep entry point
-- [appService.bicep](./templates/bicep/modules/appService.bicep) - App Service module
-- [main.tf](./templates/terraform/main.tf) - Terraform entry point
-- [azure.yaml](./templates/azure.yaml) - azd configuration
-
 ## Naming Conventions
 
 Use consistent naming with resource abbreviations:

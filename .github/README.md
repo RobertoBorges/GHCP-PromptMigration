@@ -17,7 +17,7 @@ This folder contains VS Code GitHub Copilot customization files for the **Code M
 │   ├── Phase5-SetupCICD.prompt.md
 │   └── GetStatus.prompt.md
 ├── skills/                              # Reusable migration skills
-│   ├── dotnet-modernization/           # .NET Framework → .NET 8+ patterns
+│   ├── dotnet-modernization/           # .NET Framework → .NET 10+ patterns
 │   ├── java-modernization/             # Java EE → Spring Boot 3.x patterns
 │   ├── azure-infrastructure/           # Bicep/Terraform IaC templates
 │   ├── azure-containerization/         # Docker and Container Apps patterns
@@ -59,7 +59,7 @@ Skills are automatically loaded based on context. Each skill provides:
 | Skill | Purpose |
 |-------|---------|
 | `business-logic-mapping` | **NEW** - Track and preserve business logic during migration |
-| `dotnet-modernization` | .NET Framework → .NET 8+ LTS upgrade patterns |
+| `dotnet-modernization` | .NET Framework → .NET 10+ LTS upgrade patterns |
 | `java-modernization` | Java EE → Spring Boot 3.x with Java 21 |
 | `azure-infrastructure` | Bicep/Terraform using Azure Verified Modules |
 | `azure-containerization` | Multi-stage Dockerfiles, Container Apps |
@@ -70,7 +70,7 @@ Skills are automatically loaded based on context. Each skill provides:
 ## 🎯 Supported Migration Paths
 
 ### .NET Migrations
-- .NET Framework 3.0-4.8 → .NET 8+ LTS
+- .NET Framework 3.0-4.8 → .NET 10+ LTS
 - ASP.NET Web Forms/MVC → ASP.NET Core MVC/Razor Pages
 - WCF Services → ASP.NET Core Web APIs
 - Entity Framework 6 → Entity Framework Core

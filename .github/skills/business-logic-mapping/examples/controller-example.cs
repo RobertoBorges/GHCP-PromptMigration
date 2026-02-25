@@ -1,5 +1,5 @@
 // =============================================================================
-// .NET Framework to .NET 8 Controller Conversion Example
+// .NET Framework to .NET 10 Controller Conversion Example
 // =============================================================================
 
 // -----------------------------------------------------------------------------
@@ -83,7 +83,7 @@ namespace ProjectName.Controllers
 */
 
 // -----------------------------------------------------------------------------
-// AFTER: .NET 8 Controller (Controllers/ProductController.cs)
+// AFTER: .NET 10 Controller (Controllers/ProductController.cs)
 // -----------------------------------------------------------------------------
 
 using Microsoft.AspNetCore.Mvc;

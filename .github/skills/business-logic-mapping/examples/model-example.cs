@@ -1,5 +1,5 @@
 // =============================================================================
-// .NET Framework EF6 to .NET 8 EF Core Entity Conversion Example
+// .NET Framework EF6 to .NET 10 EF Core Entity Conversion Example
 // =============================================================================
 
 // -----------------------------------------------------------------------------
@@ -138,7 +138,7 @@ namespace ProjectName.Data
 */
 
 // -----------------------------------------------------------------------------
-// AFTER: .NET 8 EF Core Entity (Models/Entities/Product.cs)
+// AFTER: .NET 10 EF Core Entity (Models/Entities/Product.cs)
 // -----------------------------------------------------------------------------
 
 using System.ComponentModel.DataAnnotations;
