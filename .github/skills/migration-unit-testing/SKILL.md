@@ -445,11 +445,9 @@ public class BusinessLogicValidationTests
 
 ## Template Files
 
-- [templates/dotnet/TestBase.cs](./templates/dotnet/TestBase.cs) - .NET test base class
-- [templates/dotnet/SampleServiceTests.cs](./templates/dotnet/SampleServiceTests.cs) - Service test examples
-- [templates/dotnet/SampleControllerTests.cs](./templates/dotnet/SampleControllerTests.cs) - Controller test examples
-- [templates/java/TestBase.java](./templates/java/TestBase.java) - Java test base class
-- [templates/java/SampleServiceTest.java](./templates/java/SampleServiceTest.java) - Service test examples
+- [templates/dotnet/UnitTestExamples.cs](./templates/dotnet/UnitTestExamples.cs) - .NET unit test examples
+- [templates/dotnet/IntegrationTestBase.cs](./templates/dotnet/IntegrationTestBase.cs) - .NET integration test base class
+- [templates/java/TestExamples.java](./templates/java/TestExamples.java) - Java test examples
 
 ## Test Execution Commands
 
