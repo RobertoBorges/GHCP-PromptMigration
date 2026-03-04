@@ -258,9 +258,9 @@ graph LR
  
 ### Phase 4: Consolidation and Overview
  
-After analyzing **all repositories**, create the `codebase-summary.md` file in the project root consolidating all information:
+After analyzing **all repositories**, create the `reports/codebase-summary.md` file consolidating all information:
  
-#### Structure of `codebase-summary.md`
+#### Structure of `reports/codebase-summary.md`
  
 ```markdown
 # Code Base Summary - [BS-NAME] Solution
@@ -278,14 +278,14 @@ After analyzing **all repositories**, create the `codebase-summary.md` file in t
 - **Language**: [Main language]
 - **Purpose**: [Summary in 1-2 lines]
 - **Main Dependencies**: [Summary list]
-- **[Complete details](./reports/repository-name-1.md)**
+- **[Complete details](./repository-name-1.md)**
  
 ### [Repository Name 2]
 - **Type**: [API/Worker/Frontend/etc]
 - **Language**: [Main language]
 - **Purpose**: [Summary in 1-2 lines]
 - **Main Dependencies**: [Summary list]
-- **[Complete details](./reports/repository-name-2.md)**
+- **[Complete details](./repository-name-2.md)**
  
 [Repeat for all repositories...]
  
@@ -584,7 +584,7 @@ graph TB
 - **Repositories with <50%**: X
  
 ## Appendices
-- [Details of each repository](./reports/)
+- [Details of each repository](./)
 - [Detailed architecture diagrams](./diagrams/)
 - [Comparative cost spreadsheet](./costs/)
 ```
@@ -605,7 +605,7 @@ graph TB
    - Each analysis will generate a separate markdown file in the `reports/` folder
  
 3. **Final consolidation - Overview**:
-   - Execute: "Analyze all files in the reports/ folder and generate codebase-summary.md with the complete summary and architecture diagram"
+   - Execute: "Analyze all files in the reports/ folder and generate reports/codebase-summary.md with the complete summary and architecture diagram"
    - Copilot will consolidate all information and create the complete communication diagram between microservices
  
 ## Limitations and Considerations
@@ -618,8 +618,8 @@ graph TB
 - **Detail**: Be specific about versions, configurations and dependencies in each individual assessment
 - **Multi-cloud**: Identify services that need AWS → Azure adaptation in each repository and consolidate in the summary
 - **Organization**: Keep files organized:
-  - `reports/` → Detailed individual analyses
-  - `codebase-summary.md` → Consolidated and strategic view
+  - `reports/` → Detailed individual analyses and consolidated summary
+  - `reports/codebase-summary.md` → Consolidated and strategic view
   - `codebase-analysis.md` → Task control
  
 ## Expected Output
@@ -631,8 +631,8 @@ At the end of the process you will have:
 project/
 ├── codebase-repos.md                    # Input: Repository list
 ├── codebase-analysis.md                 # Work guide with tasks
-├── codebase-summary.md                  # ✅ Final consolidation with complete diagram
-├── reports/                         # ✅ Folder with individual assessments
+├── reports/                         # ✅ Folder with individual assessments and summary
+│   ├── codebase-summary.md              # ✅ Final consolidation with complete diagram
 │   ├── repo-auth-service.md            # ✅ Authentication service assessment
 │   ├── repo-payment-service.md         # ✅ Payment service assessment
 │   ├── repo-biometrics-worker.md       # ✅ Biometrics worker assessment
@@ -653,7 +653,7 @@ project/
    - Configuration and environment variables
    - Infrastructure and testing analysis
    - Points of attention for migration
-3. ✅ **codebase-summary.md** - Consolidated view with:
+3. ✅ **reports/codebase-summary.md** - Consolidated view with:
    - Executive summary of all applications
    - Complete architecture diagram (all microservices)
    - Communication matrix between services
@@ -690,7 +690,7 @@ Prompt 4: "Analyze notification-service and generate reports/notification-servic
  
 **Step 4**: Final consolidation
 ```
-Prompt: "Analyze all files in reports/ and generate codebase-summary.md with complete diagram"
+Prompt: "Analyze all files in reports/ and generate reports/codebase-summary.md with complete diagram"
 ```
  
 **Result**: Complete documentation with individual and consolidated view of the architecture!
