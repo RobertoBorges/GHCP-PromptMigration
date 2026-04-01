@@ -1,0 +1,12 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "type": "command",
+        "command": "bash .github/hooks/scripts/auto-validate.sh",
+        "windows": "pwsh -ExecutionPolicy Bypass -File .github/hooks/scripts/auto-validate.ps1",
+        "timeout": 30
+      }
+    ]
+  }
+}

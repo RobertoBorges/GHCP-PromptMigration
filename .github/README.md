@@ -24,6 +24,16 @@ This folder contains VS Code GitHub Copilot customization files for the **Code M
 │   ├── wcf-to-rest-migration/          # WCF → REST API conversion
 │   ├── config-transformation/          # web.config → appsettings.json
 │   └── migration-unit-testing/         # Unit testing for validation
+├── hooks/                               # Agent lifecycle hooks
+│   ├── security.json                   # PreToolUse: block secrets & dangerous commands
+│   ├── validation.json                 # PostToolUse: auto-validate after edits
+│   ├── session-lifecycle.json          # SessionStart + Stop hooks
+│   └── scripts/                        # Hook scripts (PowerShell + Bash)
+│       ├── block-secrets.ps1/.sh       # Detect hardcoded credentials
+│       ├── block-dangerous-commands.ps1/.sh  # Block destructive operations
+│       ├── auto-validate.ps1/.sh       # Validation reminders after edits
+│       ├── load-migration-state.ps1/.sh     # Inject migration context
+│       └── update-status-report.ps1/.sh     # Append session timestamps
 └── README.md                            # This file
 ```
 
@@ -91,6 +101,20 @@ Skills are automatically loaded based on context. Each skill provides:
 The agent creates and maintains reports in the `reports/` folder:
 - `Report-Status.md` - Migration progress tracking
 - `Application-Assessment-Report.md` - Comprehensive assessment
+
+## 🪝 Agent Hooks
+
+Hooks enforce guardrails deterministically at the OS level, running shell scripts at key lifecycle points. Located in `.github/hooks/`.
+
+| Hook | Event | What It Does | Context Cost |
+|------|-------|-------------|-------------|
+| **Block Secrets** | `PreToolUse` | Denies code edits containing hardcoded passwords, API keys, connection strings, or SAS tokens | Zero |
+| **Block Dangerous Commands** | `PreToolUse` | Denies destructive terminal commands (`rm -rf /`, `terraform destroy`, `az group delete`, `git push --force`, etc.) | Zero |
+| **Auto-Validate** | `PostToolUse` | Provides validation reminders after edits to `.bicep`, `.tf`, `.csproj`, or `Dockerfile` files | ~80 chars |
+| **Load Migration State** | `SessionStart` | Reads `reports/Report-Status.md` and detects project type (`.csproj`, `pom.xml`, `web.config`, `.svc`) to inject concise context | ~200 chars |
+| **Update Status Report** | `Stop` | Appends a session-end timestamp to `reports/Report-Status.md` for audit trail | Zero |
+
+**Prerequisites:** Bash scripts require [`jq`](https://jqlang.github.io/jq/) for JSON parsing. PowerShell scripts use built-in `ConvertFrom-Json`.
 
 ## 🔒 Agent Guardrails
 
