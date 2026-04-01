@@ -3,7 +3,6 @@ name: Phase1-PlanAndAssess
 description: Start planning and generate an assessment report for your application
 argument-hint: "Specify the folder path to your legacy application, e.g., 'Assess the app in Use-cases/02-NetFramework30-ASPNET-WEB'"
 agent: Code Migration Modernization Agent
-model: Claude Sonnet 4.6 (copilot)
 ---
 
 # Migration Planning & Assessment Prompt

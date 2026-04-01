@@ -3,7 +3,6 @@ name: Phase3-GenerateInfra
 description: Generate Bicep or Terraform infrastructure as code for Azure deployment
 argument-hint: "Specify IaC preference if not already set, e.g., 'Generate Bicep for App Service' or 'Create Terraform for AKS'"
 agent: Code Migration Modernization Agent
-model: Claude Sonnet 4.6 (copilot)
 ---
 
 Generate Infrastructure as Code Files for Azure Deployment
