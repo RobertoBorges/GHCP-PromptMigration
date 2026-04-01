@@ -15,7 +15,7 @@ if (-not $cwd) { $cwd = Get-Location }
 $statusPath = Join-Path $cwd "reports" "Report-Status.md"
 
 if (Test-Path $statusPath) {
-    $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss UTC"
+    $timestamp = (Get-Date).ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss") + " UTC"
     $sessionId = $hookInput.sessionId
     if (-not $sessionId) { $sessionId = "unknown" }
 

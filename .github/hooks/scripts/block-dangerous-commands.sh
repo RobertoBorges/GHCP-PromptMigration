@@ -18,7 +18,7 @@ if [ -z "$COMMAND" ]; then
 fi
 
 if echo "$COMMAND" | grep -qiE \
-    'rm\s+-rf\s+/|rmdir\s+/s\s+/q|az\s+group\s+delete|az\s+resource\s+delete|terraform\s+destroy|DROP\s+(TABLE|DATABASE|SCHEMA)|DELETE\s+FROM\s+\w+\s*;?\s*$|TRUNCATE\s+TABLE|git\s+push\s+.*--force|git\s+push\s+-f\s|azd\s+down\s+--force|kubectl\s+delete\s+(namespace|ns)\s'; then
+    'rm[[:space:]]+-rf[[:space:]]+/|rmdir[[:space:]]+/s[[:space:]]+/q|az[[:space:]]+group[[:space:]]+delete|az[[:space:]]+resource[[:space:]]+delete|terraform[[:space:]]+destroy|DROP[[:space:]]+(TABLE|DATABASE|SCHEMA)|DELETE[[:space:]]+FROM[[:space:]]+[[:alnum:]_]+[[:space:]]*;?[[:space:]]*$|TRUNCATE[[:space:]]+TABLE|git[[:space:]]+push[[:space:]]+.*--force|git[[:space:]]+push[[:space:]]+-f[[:space:]]|azd[[:space:]]+down[[:space:]]+--force|kubectl[[:space:]]+delete[[:space:]]+(namespace|ns)[[:space:]]'; then
     echo '{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":"Destructive command blocked. This operation requires explicit user consent. Run manually if intended."}}'
     exit 0
 fi

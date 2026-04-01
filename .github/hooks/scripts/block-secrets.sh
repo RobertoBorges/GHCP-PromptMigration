@@ -13,7 +13,7 @@ fi
 CONTENT=$(echo "$INPUT" | jq -c '.tool_input // empty' 2>/dev/null)
 
 if echo "$CONTENT" | grep -qiE \
-    'Password\s*[:=]\s*["'"'"'][^"'"'"'\s]{8,}|ConnectionString\s*[:=]\s*["'"'"']Server=|[Aa]pi[_-]?[Kk]ey\s*[:=]\s*["'"'"'][^"'"'"'\s]{8,}|SharedAccessKey=[A-Za-z0-9+/=]{20,}|AccountKey=[A-Za-z0-9+/=]{20,}|sk-[A-Za-z0-9]{20,}|DefaultEndpointsProtocol=https;AccountName=|Server=.*Password=[^;]{8,}|Data Source=.*Password=[^;]{8,}|client[_-]?secret\s*[:=]\s*["'"'"'][^"'"'"'\s]{8,}'; then
+    'Password[[:space:]]*[:=][[:space:]]*["'"'"'][^"'"'"'[:space:]]{8,}|ConnectionString[[:space:]]*[:=][[:space:]]*["'"'"']Server=|[Aa]pi[_-]?[Kk]ey[[:space:]]*[:=][[:space:]]*["'"'"'][^"'"'"'[:space:]]{8,}|SharedAccessKey=[A-Za-z0-9+/=]{20,}|AccountKey=[A-Za-z0-9+/=]{20,}|sk-[A-Za-z0-9]{20,}|DefaultEndpointsProtocol=https;AccountName=|Server=.*Password=[^;]{8,}|Data Source=.*Password=[^;]{8,}|client[_-]?secret[[:space:]]*[:=][[:space:]]*["'"'"'][^"'"'"'[:space:]]{8,}'; then
     echo '{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":"Potential secret detected. Use Azure Key Vault or environment variables instead of hardcoding credentials."}}'
     exit 0
 fi

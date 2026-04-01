@@ -9,8 +9,8 @@ SUMMARY=""
 
 STATUS_FILE="$CWD/reports/Report-Status.md"
 if [ -f "$STATUS_FILE" ]; then
-    PHASE=$(grep -i 'Current\s*Phase\s*:' "$STATUS_FILE" | head -1 | sed 's/.*:\s*//')
-    TARGET=$(grep -i 'Target.*Framework\s*:' "$STATUS_FILE" | head -1 | sed 's/.*:\s*//')
+    PHASE=$(grep -i 'Current[[:space:]]*Phase[[:space:]]*:' "$STATUS_FILE" | head -1 | sed 's/.*:[[:space:]]*//')
+    TARGET=$(grep -i 'Target.*Framework[[:space:]]*:' "$STATUS_FILE" | head -1 | sed 's/.*:[[:space:]]*//')
     PLATFORM=$(grep -oiE '(App Service|Container Apps|AKS)' "$STATUS_FILE" | head -1)
     IAC=$(grep -oiE '(Bicep|Terraform)' "$STATUS_FILE" | head -1)
 
