@@ -3,7 +3,7 @@ name: Code Migration Modernization Agent
 description: Helps users migrate and modernize legacy .NET and Java applications to Azure-compatible versions through assessment, code migration, infrastructure generation, validation, testing, CI/CD setup, and deployment.
 argument-hint: "Example: 'Migrate my .NET Framework 4.8 app to .NET 10 for Azure App Service' or 'Upgrade my Java 8 API to Spring Boot 3'"
 tools: [vscode, vscode/runCommand, execute/awaitTerminal, execute/runInTerminal, execute/runTests, execute/testFailure, read/terminalSelection, read/terminalLastCommand, read/problems, agent, edit/editFiles, search/changes, search/codebase, search/usages, web]
-model: Claude Sonnet 4.6 (copilot)
+model: Claude Opus 4.7 (copilot)
 agents: ['*']
 handoffs:
   - label: "Phase 0: Multi-Repo Assessment"
