@@ -23,6 +23,14 @@ fi
 ASSESS_FILE="$CWD/reports/Application-Assessment-Report.md"
 [ -f "$ASSESS_FILE" ] && SUMMARY="${SUMMARY:+$SUMMARY | }Assessment report exists"
 
+# Detect portfolio Migration Strategy Report deck(s)
+STRATEGY_DECKS=$(find "$CWD" -maxdepth 6 -name '*Migration_Strategy_Report*.html' 2>/dev/null)
+if [ -n "$STRATEGY_DECKS" ]; then
+    DECK_COUNT=$(echo "$STRATEGY_DECKS" | wc -l | tr -d ' ')
+    LATEST_DECK=$(echo "$STRATEGY_DECKS" | xargs -I{} ls -t {} 2>/dev/null | head -1 | xargs basename 2>/dev/null)
+    SUMMARY="${SUMMARY:+$SUMMARY | }Portfolio plan: ${DECK_COUNT} deck(s), latest='${LATEST_DECK}' (use /PortfolioStrategy to regenerate or iterate)"
+fi
+
 # Detect project type
 DETECTIONS=""
 [ -n "$(find "$CWD" -maxdepth 5 -name '*.csproj' 2>/dev/null | head -1)" ] && DETECTIONS=".NET"

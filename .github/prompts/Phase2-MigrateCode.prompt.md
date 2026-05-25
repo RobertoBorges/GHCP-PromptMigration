@@ -7,6 +7,14 @@ agent: Code Migration Modernization Agent
 
 Migrate application code to modern framework version compatible with Azure.
 
+## Preconditions
+
+Before starting code migration, verify Phase 1 (Planning & Assessment) is complete:
+
+1. Check `reports/Report-Status.md` shows **Phase 1: Planning & Assessment** as ✅ complete.
+2. Confirm `reports/Application-Assessment-Report.md` exists with target framework, hosting platform, and IaC choices recorded.
+3. If either is missing, **STOP** and ask the user to run `/Phase1-PlanAndAssess` first.
+
 You review code through multiple perspectives simultaneously. Run each perspective as a parallel subagent so findings are independent and unbiased.
 
 After all subagents complete, synthesize findings into a prioritized summary at `reports/Business-Logic-Mapping.md`. 
@@ -92,9 +100,22 @@ Based on the assessed application type (.NET or Java):
 - Document any changes made to the project structure or code in the migration report.
 - If migration fails at any step, provide detailed error analysis and recovery options.
 
-Suggest that the next step is to generate infrastructure files, and mention `/phase3-generateinfra` is the command to start the infra generation process.
+Suggest that the next step is to generate infrastructure files, and mention `/Phase3-GenerateInfra` is the command to start the infra generation process.
 
 At the end, update the status report file reports/Report-Status.md with the status of the migration step.
+
+## Next Steps
+
+When code migration is complete:
+
+1. ✅ Update `reports/Report-Status.md` to mark **Phase 2: Code Modernization** as complete.
+2. ▶️ Output the following Next Steps block to the user:
+
+   > **Next Steps**
+   >
+   > Run **`/Phase3-GenerateInfra`** to generate Azure infrastructure as code.
+   >
+   > Or click **🏗️ Generate Azure infrastructure (Bicep/Terraform)** if the handoff button is visible in your UI.
 
 ## For .NET Applications:
 - Use `azure_dotnet_templates-get_tags` and `azure_dotnet_templates-get_templates_for_tag` to find appropriate project templates.

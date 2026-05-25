@@ -45,6 +45,17 @@ if (Test-Path $assessPath) {
     $summary += "Assessment report exists"
 }
 
+# Detect portfolio Migration Strategy Report deck(s) (HTML)
+try {
+    $strategyDecks = Get-ChildItem $cwd -Recurse -Filter "*Migration_Strategy_Report*.html" -Depth 5 -ErrorAction SilentlyContinue
+    if ($strategyDecks -and $strategyDecks.Count -gt 0) {
+        $deckCount = $strategyDecks.Count
+        $latestDeck = $strategyDecks | Sort-Object LastWriteTime -Descending | Select-Object -First 1
+        $deckName = $latestDeck.Name
+        $summary += "Portfolio plan: $deckCount deck(s), latest='$deckName' (use /PortfolioStrategy to regenerate or iterate)"
+    }
+} catch { }
+
 # Detect project type from workspace
 $detections = @()
 if (Get-ChildItem $cwd -Recurse -Filter "*.csproj" -Depth 4 -ErrorAction SilentlyContinue | Select-Object -First 1) {

@@ -3,7 +3,6 @@ name: Phase0-Multi-repo-assessment
 description: Analyze multiple repositories of a business solution for migration planning
 argument-hint: "Ensure codebase-repos.md exists with repository URLs, then run this command"
 agent: Code Migration Modernization Agent
-model: Claude Sonnet 4.6 (copilot)
 ---
 
 # Code Base Analysis - Multi-Repository
@@ -694,5 +693,20 @@ Prompt: "Analyze all files in reports/ and generate reports/codebase-summary.md 
 ```
  
 **Result**: Complete documentation with individual and consolidated view of the architecture!
+
+## Next Steps
+
+After multi-repo assessment is complete:
+
+1. ✅ Update `reports/Report-Status.md` to mark **Phase 0: Multi-Repo Assessment** as complete.
+2. ▶️ Modernize each application individually using the per-app flow:
+
+   > Run **`/Phase1-PlanAndAssess`** on each repository's code folder.
+   >
+   > Or click **🚀 Modernize a single application** if the handoff button is visible in your UI.
+
+**Suggested order:** Follow the migration sequencing identified in the cross-repository dependency analysis (Phase 4 of this assessment). Start with leaf nodes (no upstream dependencies), work toward roots.
+
+**Tip:** If a Portfolio Strategy Report exists (`/PortfolioStrategy` was previously run), `Phase 1` automatically reads `reports/portfolio-handoff.json` to pre-fill setup choices when modernizing each app.
  
  

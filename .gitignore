@@ -16,6 +16,17 @@
 *.publishsettings
 orleans.codegen.cs
 
+# Customer data — portfolio migration engagements (Migration Strategy Report skill)
+Customers/**
+!Customers/
+
+# Confidential Microsoft Cloud Accelerate Factory reference documents
+Cloud Accelerate Factory*.PDF
+Cloud Accelerate Factory*.pdf
+
+# Migration Strategy Report scratch artifacts
+extracted_text.txt
+
 # Visual Studio Code
 .vscode/*
 !.vscode/settings.json
