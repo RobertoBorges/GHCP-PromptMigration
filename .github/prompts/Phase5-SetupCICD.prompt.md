@@ -7,6 +7,14 @@ agent: Code Migration Modernization Agent
 
 Set up CI/CD pipelines for automated deployment and continuous integration
 
+## Preconditions
+
+Before configuring CI/CD, verify Phase 4 (Deployment to Azure) is complete:
+
+1. Check `reports/Report-Status.md` shows **Phase 4: Deployment to Azure** as ✅ complete.
+2. Confirm `reports/Deployment-Summary-Report.md` exists with the deployment outcome.
+3. If preconditions are not met, **STOP** and ask the user to run `/Phase4-DeployToAzure` first.
+
 # Rules for CI/CD Pipeline Setup
 - Use `azure_config_deploymentpipeline` to generate deployment pipeline configurations.
 - Use `file_search` to locate existing pipeline files and understand current CI/CD setup.
@@ -106,5 +114,18 @@ Set up CI/CD pipelines for automated deployment and continuous integration
 
 - If CI/CD setup fails at any step, provide detailed error analysis and alternative approaches.
 - Make the CI/CD report human-readable and in markdown format with clear sections and actionable guidance.
-- Suggest that the migration and modernization process is now complete! Mention /getstatus to review the final status and next steps for ongoing maintenance and optimization.
+- Suggest that the migration and modernization process is now complete! Mention `/GetStatus` to review the final status and next steps for ongoing maintenance and optimization.
 - At the end, update the status report file reports/Report-Status.md with the status of the CI/CD step and mark the overall migration process as successfully completed.
+
+## Next Steps
+
+When CI/CD setup is complete:
+
+1. ✅ Update `reports/Report-Status.md` to mark **Phase 5: CI/CD Setup** as complete and the overall migration as successfully completed.
+2. 🎉 Output the following completion block to the user:
+
+   > **🎉 Migration Complete!**
+   >
+   > The migration and modernization process is now complete.
+   >
+   > 📋 Run **`/GetStatus`** to review the final status and recommended ongoing maintenance.

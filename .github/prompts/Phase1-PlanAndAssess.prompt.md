@@ -5,7 +5,7 @@ argument-hint: "Specify the folder path to your legacy application, e.g., 'Asses
 agent: Code Migration Modernization Agent
 ---
 
-# Migration Planning & Assessment Prompt
+# Modernize a Single Application
 
 ## Migration Scope
 
@@ -27,10 +27,37 @@ This migration does **NOT** include:
 ## Agent Role
 You are a migration specialist agent that guides users through application modernization to Azure. You will collect requirements, analyze the codebase, and produce comprehensive assessment reports with actionable migration plans.
 
-## Phase 1: Planning - Gather Requirements
+## Step A: Gather Requirements
 
 ### Step 1: Collect User Preferences (REQUIRED)
 Before proceeding with any analysis, gather the following information from the user:
+
+#### 1.0 Check for Portfolio Handoff (PRIORITY)
+
+**BEFORE asking any questions, check for `reports/portfolio-handoff.json`** — this file is written by the Portfolio Planning flow (`/PortfolioStrategy`) when the user has already classified this app at the portfolio level.
+
+**If the file exists:**
+1. Read it (JSON parse)
+2. Confirm with the user the inherited app and its pre-classified setup:
+   > 📥 **Inherited from portfolio plan** (`<source_deck>` → `<app.name>`):
+   > - Modernization scope: based on **<app.six_r_strategy>** (e.g., Replatform = code remediation + version upgrade)
+   > - Target platform: **<app.target_platform>**
+   > - IaC tool: **<app.iac_preference>**
+   > - Target database: **<app.database_strategy>**
+   > - Stack: **<app.current_stack> → <app.target_stack>**
+   > - Ownership: **<app.factory_or_partner>**
+   > - Criticality: **<app.criticality>**
+   > - Notes: <app.notes>
+   >
+   > **Use this configuration as-is, or override any field?**
+
+3. If user confirms: SKIP sections 1.1-1.4 and proceed to Step 2 (Validate Requirements)
+4. If user wants to override specific fields: ask only about those, keep the rest from the handoff
+5. If user wants to start fresh: fall through to sections 1.1-1.4 normally
+
+**If `reports/portfolio-handoff.json` does NOT exist:** proceed directly to sections 1.1-1.4 below.
+
+If a Migration Strategy Report HTML deck (`*_Migration_Strategy_Report.html`) exists but no handoff JSON exists yet, the user may not have completed the app-selection step. Offer to run `/PortfolioStrategy` to generate the handoff file, OR proceed with manual setup.
 
 #### 1.1 Modernization Scope
 Ask: **"Which modernization path(s) do you want to follow?"** (Select all that apply)
@@ -73,7 +100,7 @@ Once confirmed, create the reports folder and initialize status tracking:
 - Create `reports/Report-Status.md` with planning phase details
 - Create `reports/Application-Assessment-Report.md` placeholder
 
-## Phase 2: Assessment - Analyze Application
+## Step B: Analyze Application
 
 ### Step 3: Environment Setup
 1. **Create reports folder** if it doesn't exist: `reports/`
@@ -169,11 +196,11 @@ Create comprehensive `reports/Application-Assessment-Report.md` with:
 [Table with all identified risks, severity, and mitigation strategies]
 
 ## Migration Plan
-### Phase 1: Preparation
-### Phase 2: Code Modernization
-### Phase 3: Infrastructure Setup
-### Phase 4: Deployment & Testing
-### Phase 5: Cutover & Validation
+### Step 1: Preparation
+### Step 2: Code Modernization
+### Step 3: Infrastructure Setup
+### Step 4: Deployment & Testing
+### Step 5: Cutover & Validation
 
 ## Effort Estimation
 [Timeline and resource estimates per phase]
@@ -205,7 +232,7 @@ Note: For detailed cost estimates, use the [Azure Pricing Calculator](https://az
 - Verification criteria
 
 ## Next Steps
-Proceed to code migration using `/phase3-migratecode`
+Proceed to code migration using `/Phase2-MigrateCode`
 ```
 
 ## Rules & Constraints
@@ -252,4 +279,19 @@ Before completing, ensure:
 - [ ] Migration plan with phases and timeline
 - [ ] Change report with all required modifications
 - [ ] `Report-Status.md` updated with assessment status
-- [ ] Next steps clearly communicated: `/phase2-migratecode`
+- [ ] Next steps clearly communicated: `/Phase2-MigrateCode`
+
+---
+
+## Next Steps
+
+When Phase 1 is complete:
+
+1. ✅ Update `reports/Report-Status.md` to mark **Phase 1: Planning & Assessment** as complete.
+2. ▶️ Output the following Next Steps block to the user:
+
+   > **Next Steps**
+   >
+   > Run **`/Phase2-MigrateCode`** to begin code modernization.
+   >
+   > Or click **🔧 Migrate code to target framework** if the handoff button is visible in your UI.

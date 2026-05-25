@@ -693,5 +693,20 @@ Prompt: "Analyze all files in reports/ and generate reports/codebase-summary.md 
 ```
  
 **Result**: Complete documentation with individual and consolidated view of the architecture!
+
+## Next Steps
+
+After multi-repo assessment is complete:
+
+1. ✅ Update `reports/Report-Status.md` to mark **Phase 0: Multi-Repo Assessment** as complete.
+2. ▶️ Modernize each application individually using the per-app flow:
+
+   > Run **`/Phase1-PlanAndAssess`** on each repository's code folder.
+   >
+   > Or click **🚀 Modernize a single application** if the handoff button is visible in your UI.
+
+**Suggested order:** Follow the migration sequencing identified in the cross-repository dependency analysis (Phase 4 of this assessment). Start with leaf nodes (no upstream dependencies), work toward roots.
+
+**Tip:** If a Portfolio Strategy Report exists (`/PortfolioStrategy` was previously run), `Phase 1` automatically reads `reports/portfolio-handoff.json` to pre-fill setup choices when modernizing each app.
  
  

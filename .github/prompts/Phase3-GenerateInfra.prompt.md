@@ -7,6 +7,15 @@ agent: Code Migration Modernization Agent
 
 Generate Infrastructure as Code Files for Azure Deployment
 
+## Preconditions
+
+Before generating infrastructure, verify Phase 2 (Code Modernization) is complete:
+
+1. Check `reports/Report-Status.md` shows **Phase 2: Code Modernization** as ✅ complete.
+2. Confirm a migrated project folder exists (e.g., `<OriginalName>-Migrated/`) with successfully building code.
+3. Confirm `reports/Business-Logic-Mapping.md` exists.
+4. If preconditions are not met, **STOP** and ask the user to run `/Phase2-MigrateCode` first.
+
 Load the **azure-infrastructure** skill for Bicep/Terraform templates and Azure Verified Modules patterns.
 Load the **azure-containerization** skill if containerization was selected in the assessment.
 
@@ -42,13 +51,26 @@ If infrastructure generation fails, provide detailed error analysis and alternat
 
 Make the infrastructure section in the migration report human-readable and in markdown format, using headings, bullet points, and other formatting options as appropriate.
 
-Suggest that the next step is to deploy to Azure, and mention `/phase4-deploytoazure` is the command to start the deployment process.
+Suggest that the next step is to deploy to Azure, and mention `/Phase4-DeployToAzure` is the command to start the deployment process.
 
-At the end, update the status report file reports/Report-Status.md with the status of the assessment step, including:
+At the end, update the status report file reports/Report-Status.md with the status of the infrastructure generation step, including:
   - Infrastructure components created
   - Security configurations implemented  
   - Monitoring and logging setup
   - Any issues encountered during generation
+
+## Next Steps
+
+When infrastructure generation is complete:
+
+1. ✅ Update `reports/Report-Status.md` to mark **Phase 3: Infrastructure Generation** as complete.
+2. ▶️ Output the following Next Steps block to the user:
+
+   > **Next Steps**
+   >
+   > Run **`/Phase4-DeployToAzure`** to deploy to Azure.
+   >
+   > Or click **☁️ Deploy to Azure** if the handoff button is visible in your UI.
 
 Set up proper monitoring with Application Insights and Log Analytics.
 

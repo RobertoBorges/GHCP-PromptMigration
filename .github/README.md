@@ -15,6 +15,7 @@ This folder contains VS Code GitHub Copilot customization files for the **Code M
 │   ├── Phase3-GenerateInfra.prompt.md
 │   ├── Phase4-DeployToAzure.prompt.md
 │   ├── Phase5-SetupCICD.prompt.md
+│   ├── PortfolioStrategy.prompt.md      # Portfolio Planning flow entry point
 │   └── GetStatus.prompt.md
 ├── skills/                              # Reusable migration skills
 │   ├── dotnet-modernization/           # .NET Framework → .NET 10+ patterns
@@ -23,17 +24,20 @@ This folder contains VS Code GitHub Copilot customization files for the **Code M
 │   ├── azure-containerization/         # Docker and Container Apps patterns
 │   ├── wcf-to-rest-migration/          # WCF → REST API conversion
 │   ├── config-transformation/          # web.config → appsettings.json
-│   └── migration-unit-testing/         # Unit testing for validation
+│   ├── migration-unit-testing/         # Unit testing for validation
+│   └── migration-strategy-report/      # Portfolio strategy HTML deck generator
 ├── hooks/                               # Agent lifecycle hooks
 │   ├── security.json                   # PreToolUse: block secrets & dangerous commands
 │   ├── validation.json                 # PostToolUse: auto-validate after edits
 │   ├── session-lifecycle.json          # SessionStart + Stop hooks
+│   ├── customer-data-isolation.json    # PreToolUse: enforce customer NDA isolation
 │   └── scripts/                        # Hook scripts (PowerShell + Bash)
 │       ├── block-secrets.ps1/.sh       # Detect hardcoded credentials
 │       ├── block-dangerous-commands.ps1/.sh  # Block destructive operations
 │       ├── auto-validate.ps1/.sh       # Validation reminders after edits
-│       ├── load-migration-state.ps1/.sh     # Inject migration context
-│       └── update-status-report.ps1/.sh     # Append session timestamps
+│       ├── load-migration-state.ps1/.sh     # Inject migration + portfolio context
+│       ├── update-status-report.ps1/.sh     # Append session timestamps
+│       └── customer-data-isolation.ps1/.sh  # Block cross-customer reads
 └── README.md                            # This file
 ```
 
@@ -53,12 +57,14 @@ This folder contains VS Code GitHub Copilot customization files for the **Code M
 ### Using Prompts Directly
 
 Type `/` in Copilot Chat followed by the prompt name:
-- `/phase1-planandassess`
-- `/phase2-migratecode`
-- `/phase3-generateinfra`
-- `/phase4-deploytoazure`
-- `/phase5-setupcicd`
-- `/getstatus`
+- `/PortfolioStrategy` — Portfolio Planning flow entry point — generates executive Migration Strategy Report from customer portfolio artifacts and writes handoff file for per-app execution
+- `/Phase0-Multi-repo-assessment`
+- `/Phase1-PlanAndAssess`
+- `/Phase2-MigrateCode`
+- `/Phase3-GenerateInfra`
+- `/Phase4-DeployToAzure`
+- `/Phase5-SetupCICD`
+- `/GetStatus`
 
 ## 📚 Skills Reference
 
@@ -76,6 +82,7 @@ Skills are automatically loaded based on context. Each skill provides:
 | `wcf-to-rest-migration` | WCF service → REST API conversion |
 | `config-transformation` | web.config → appsettings.json transformation |
 | `migration-unit-testing` | xUnit/JUnit 5 patterns for validation |
+| `migration-strategy-report` | **NEW** - Portfolio-level Migration Strategy Report generator (HTML executive deck from CMDB/RVTools/DMA artifacts; CAF-aligned 6 Rs + Factory/Partner/Unknown classification) |
 
 ## 🎯 Supported Migration Paths
 
@@ -110,8 +117,9 @@ Hooks enforce guardrails deterministically at the OS level, running shell script
 |------|-------|-------------|-------------|
 | **Block Secrets** | `PreToolUse` | Denies code edits containing hardcoded passwords, API keys, connection strings, or SAS tokens | Zero |
 | **Block Dangerous Commands** | `PreToolUse` | Denies destructive terminal commands (`rm -rf /`, `terraform destroy`, `az group delete`, `git push --force`, etc.) | Zero |
+| **Customer Data Isolation** | `PreToolUse` | Blocks cross-customer Read/edit access when `COPILOT_CUSTOMER_CONTEXT` is set (enforces NDA isolation for the Migration Strategy Report skill) | Zero |
 | **Auto-Validate** | `PostToolUse` | Provides validation reminders after edits to `.bicep`, `.tf`, `.csproj`, or `Dockerfile` files | ~80 chars |
-| **Load Migration State** | `SessionStart` | Reads `reports/Report-Status.md` and detects project type (`.csproj`, `pom.xml`, `web.config`, `.svc`) to inject concise context | ~200 chars |
+| **Load Migration State** | `SessionStart` | Reads `reports/Report-Status.md` and detects project type (`.csproj`, `pom.xml`, `web.config`, `.svc`) AND any Migration Strategy Report decks to inject concise context | ~200 chars |
 | **Update Status Report** | `Stop` | Appends a session-end timestamp to `reports/Report-Status.md` for audit trail | Zero |
 
 **Prerequisites:** Bash scripts require [`jq`](https://jqlang.github.io/jq/) for JSON parsing. PowerShell scripts use built-in `ConvertFrom-Json`.
