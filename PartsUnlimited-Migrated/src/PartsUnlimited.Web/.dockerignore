@@ -1,0 +1,14 @@
+**/.dockerignore
+**/.env
+**/.git
+**/.gitignore
+**/.vs
+**/.vscode
+**/bin
+**/obj
+**/secrets.dev.yaml
+**/values.dev.yaml
+Dockerfile*
+**/*.user
+**/*.suo
+**/.idea

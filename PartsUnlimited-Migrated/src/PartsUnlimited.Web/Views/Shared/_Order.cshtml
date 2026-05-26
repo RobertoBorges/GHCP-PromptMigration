@@ -1,0 +1,52 @@
+@model PartsUnlimited.ViewModels.OrderDetailsViewModel
+
+<section id="order-detail-page">
+    @if (Model != null)
+    {
+        <h2>Order #@Model.Order.OrderId</h2>
+        <div class="row">
+            <div class="col-md-12">
+                <h4>Order Details</h4>
+                <div class="order-header">
+                    <div class="row">
+                        <div class="hidden-xs col-sm-8 no-gutter-sm-left"><strong>Product</strong></div>
+                        <div class="hidden-xs col-sm-2"><strong>Quantity</strong></div>
+                        <div class="hidden-xs col-sm-2 text-right"><strong>Price</strong></div>
+                    </div>
+                </div>
+                @foreach (var orderDetail in Model.Order.OrderDetails)
+                {
+                    <div class="order-detail">
+                        <div class="row">
+                            <div class="col-xs-2 col-sm-2 col-sm-push-8 text-center-xs">@orderDetail.Count</div>
+                            <div class="col-xs-6 col-sm-8 col-sm-pull-2">@orderDetail.Product.Title</div>
+                            <div class="col-xs-4 col-sm-2 text-right">@orderDetail.UnitPrice.ToString("C")</div>
+                        </div>
+                    </div>
+                }
+                @await Html.PartialAsync("_OrderCostSummary", Model.OrderCostSummary)
+            </div>
+            <div class="col-md-12">
+                <h4>Purchase Details</h4>
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <dl class="dl-horizontal">
+                            <dt>@Html.DisplayNameFor(m => m.Order.Username)</dt><dd>@Html.DisplayFor(m => m.Order.Username)</dd>
+                            <dt>@Html.DisplayNameFor(m => m.Order.OrderDate)</dt><dd>@Html.DisplayFor(m => m.Order.OrderDate)</dd>
+                            <dt>@Html.DisplayNameFor(m => m.Order.Name)</dt><dd>@Html.DisplayFor(m => m.Order.Name)</dd>
+                            <dt>@Html.DisplayNameFor(m => m.Order.Address)</dt><dd>@Html.DisplayFor(m => m.Order.Address)</dd>
+                            <dt>@Html.DisplayNameFor(m => m.Order.City)</dt><dd>@Html.DisplayFor(m => m.Order.City)</dd>
+                            <dt>@Html.DisplayNameFor(m => m.Order.Country)</dt><dd>@Html.DisplayFor(m => m.Order.Country)</dd>
+                            <dt>@Html.DisplayNameFor(m => m.Order.Email)</dt><dd>@Html.DisplayFor(m => m.Order.Email)</dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <br />
+        <div class="alert alert-danger">No order found.</div>
+    }
+</section>

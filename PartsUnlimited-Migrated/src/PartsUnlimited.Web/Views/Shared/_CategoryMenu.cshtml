@@ -1,0 +1,9 @@
+@model IEnumerable<PartsUnlimited.Models.Category>
+@if (Model != null)
+{
+    foreach (var genre in Model)
+    {
+        <li><a asp-controller="Store" asp-action="Browse" asp-route-categoryId="@genre.CategoryId">@genre.Name</a></li>
+    }
+}
+<li><a asp-controller="Store" asp-action="Index">More</a></li>

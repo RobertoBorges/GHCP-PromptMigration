@@ -1,0 +1,18 @@
+@model PartsUnlimited.Models.Order
+
+@{
+    ViewBag.Title = "Checkout Complete";
+}
+<section id="complete-page">
+    <h2>Checkout Complete</h2>
+    <div class="row">
+        <div class="col-sm-12">
+            <p>Thanks for your order!</p>
+            <p>Your order number is: @Model.OrderId</p>
+            <p>Order Date: @Model.OrderDate.ToShortDateString()</p>
+            <p>You can <a asp-controller="Orders" asp-action="Details" asp-route-id="@Model.OrderId" class="action-link">view your order</a> from your account page.</p>
+            <br />
+            <p><a asp-controller="Home" asp-action="Index" class="btn">Keep Shopping</a></p>
+        </div>
+    </div>
+</section>

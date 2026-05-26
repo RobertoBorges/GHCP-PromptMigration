@@ -1,0 +1,6 @@
+@model PartsUnlimited.ViewModels.OrderDetailsViewModel
+@{
+    ViewBag.Title = Model == null ? "Unknown order" : string.Format("Order history for {0}", Model.Order.OrderId);
+}
+
+@await Html.PartialAsync("_Order", Model)

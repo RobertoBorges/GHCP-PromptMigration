@@ -1,0 +1,104 @@
+@model PartsUnlimited.ViewModels.ShoppingCartViewModel
+@{
+    ViewBag.Title = "Shopping Cart";
+}
+
+@section Scripts {
+    <script type="text/javascript">
+        $(function () {
+            $(".remove-link").click(function () {
+                var recordToDelete = $(this).attr("data-id");
+                var postToUrl = $(this).attr("data-url");
+                if (recordToDelete != '') {
+                    var form = $('#__AjaxAntiForgeryForm');
+                    var token = $('input[name="__RequestVerificationToken"]', form).val();
+                    $.post(postToUrl + "?id=" + recordToDelete, { "__RequestVerificationToken": token },
+                        function (data) {
+                            if (data.cartCount == 0) {
+                                $('#cart-summary').hide();
+                                $('#cart-count').hide();
+                                $('#empty-cart').show();
+                            } else {
+                                if (data.itemCount == 0) {
+                                    $('#row-' + data.deleteId).fadeOut('slow');
+                                } else {
+                                    $('#item-count-' + data.deleteId).text(data.itemCount);
+                                }
+                            }
+                            $('#cart-sub-total').text(data.cartSubTotal);
+                            $('#cart-shipping').text(data.cartShipping);
+                            $('#cart-tax').text(data.cartTax);
+                            $('#cart-total').text(data.cartTotal);
+                            $('#update-message').text(data.message);
+                            $('#cart-status').text('Cart (' + data.cartCount + ')');
+                            $('#cart-count').text(data.cartCount);
+                        });
+                }
+            });
+        });
+    </script>
+}
+
+<form id="__AjaxAntiForgeryForm" method="post">
+    @Html.AntiForgeryToken()
+</form>
+
+<div id="shopping-cart-page">
+    <section>
+        <h2>Review your Cart</h2>
+        <div id="update-message"></div>
+        @if (Model.CartCount > 0)
+        {
+            <div id="cart-summary">
+                <div class="hidden-xs cart-summary-header">
+                    <div class="row">
+                        <div class="col-sm-8 col-md-8 no-gutter-md-left no-gutter-sm-left">Product Description</div>
+                        <div class="col-sm-2 col-md-2 text-center">Quantity</div>
+                        <div class="col-sm-2 col-md-2 text-center">Price</div>
+                    </div>
+                </div>
+
+                @foreach (var item in Model.CartItems)
+                {
+                    <div id="row-@item.CartItemId" class="cart-item">
+                        <div class="row">
+                            <div class="col-xs-1 no-gutter-xs-right text-center-xs col-sm-2 col-sm-push-8 text-center-sm">
+                                <div class="item-label item-inventory">@item.Count</div>
+                            </div>
+                            <div class="col-xs-3 col-sm-3 col-sm-pull-2 col-md-2">
+                                <img src="~/Images/@item.Product.ProductArtUrl" alt="@item.Product.Title" />
+                            </div>
+                            <div class="col-xs-6 col-sm-2 col-sm-push-5 text-center-sm col-md-push-6">
+                                <div class="visible-xs item-label">@item.Product.Title</div>
+                                <div class="item-price">@item.Product.Price.ToString("C")</div>
+                            </div>
+                            <div class="visible-xs col-xs-2 text-right no-gutter-xs-left">
+                                <a href="#" class="remove-link" data-id="@item.CartItemId" data-url='@Url.Content("~/ShoppingCart/RemoveFromCart")'>
+                                    <img src="~/Images/remove_icon.png" alt="remove from cart icon" />
+                                </a>
+                            </div>
+                            <div class="col-xs-12 col-sm-5 col-sm-pull-4 col-md-6 description">
+                                <div class="hidden-xs"><strong><a asp-controller="Store" asp-action="Details" asp-route-id="@item.ProductId">@item.Product.Title</a></strong></div>
+                                <div class="visible-xs item-label">Description</div>
+                                <p class="text-content">@item.Product.Description</p>
+                            </div>
+                            <div class="hidden-xs remove-cart-item">
+                                <a href="#" class="remove-link btn" data-id="@item.CartItemId" data-url='@Url.Content("~/ShoppingCart/RemoveFromCart")'>Remove</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                @await Html.PartialAsync("_OrderCostSummary", Model.OrderCostSummary)
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6 col-sm-offset-6 col-md-4 col-md-offset-8">
+                        <div>
+                            <a asp-controller="Checkout" asp-action="AddressAndPayment" class="btn pull-right checkout">Checkout</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        <h4 id="empty-cart" style="@(Model.CartCount > 0 ? "display:none;" : "")">Your cart is currently empty</h4>
+    </section>
+</div>

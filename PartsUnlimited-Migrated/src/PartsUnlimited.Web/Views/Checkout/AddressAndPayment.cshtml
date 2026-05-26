@@ -1,0 +1,38 @@
+@model PartsUnlimited.Models.Order
+
+@{
+    ViewBag.Title = "Address And Payment";
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
+<section>
+    <h2>Address And Payment</h2>
+    <form asp-action="AddressAndPayment" method="post">
+        @Html.AntiForgeryToken()
+        <div class="row">
+            <div class="col-sm-12 col-md-6 col-border-md-right no-gutter-xs">
+                <div class="col-xs-12 no-gutter-sm"><h4>Shipping Information</h4></div>
+                <div class="form-group col-sm-8 col-md-10 no-gutter-sm"><input asp-for="Name" class="form-control" placeholder="Name" /><span asp-validation-for="Name" class="text-danger"></span></div>
+                <div class="form-group col-sm-8 col-md-10 no-gutter-sm"><input asp-for="Phone" class="form-control" placeholder="Phone" /><span asp-validation-for="Phone" class="text-danger"></span></div>
+                <div class="form-group col-sm-8 col-md-10 no-gutter-sm"><input asp-for="Email" class="form-control" placeholder="Email Address" /><span asp-validation-for="Email" class="text-danger"></span></div>
+                <div class="form-group col-sm-8 col-md-10 no-gutter-sm"><input asp-for="Address" class="form-control" placeholder="Address" /><span asp-validation-for="Address" class="text-danger"></span></div>
+                <div class="form-group col-sm-8 col-md-10 no-gutter-sm"><input asp-for="City" class="form-control" placeholder="City" /><span asp-validation-for="City" class="text-danger"></span></div>
+                <div class="form-group col-sm-8 col-md-10 no-gutter-sm"><input asp-for="State" class="form-control" placeholder="State" /><span asp-validation-for="State" class="text-danger"></span></div>
+                <div class="form-group col-sm-8 col-md-10 no-gutter-sm"><input asp-for="PostalCode" class="form-control" placeholder="Postal Code" /><span asp-validation-for="PostalCode" class="text-danger"></span></div>
+                <div class="form-group col-sm-8 col-md-10 no-gutter-sm"><input asp-for="Country" class="form-control" placeholder="Country" /><span asp-validation-for="Country" class="text-danger"></span></div>
+            </div>
+            <div class="col-sm-12 col-md-6 wide-col-padding no-gutter-xs">
+                <div class="col-xs-12  no-gutter-sm"><h4>Payment</h4></div>
+                <div class="col-md-12 no-gutter-sm">
+                    <p>We're running a promotion.</p>
+                    <p>All parts are free with the promo code: "FREE"</p>
+                </div>
+                <div class="form-group col-sm-8 col-md-10 no-gutter-sm"><input type="text" name="PromoCode" class="form-control" placeholder="Promo Code" /></div>
+                <div class="col-md-12 no-gutter-sm"><input type="submit" value="Submit Order" /></div>
+            </div>
+        </div>
+    </form>
+</section>

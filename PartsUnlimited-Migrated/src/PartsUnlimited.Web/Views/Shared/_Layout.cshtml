@@ -1,0 +1,140 @@
+@using PartsUnlimited.Models
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title – Parts Unlimited</title>
+    <link rel="stylesheet" href="~/Content/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/Content/Site.css" />
+    <link rel="stylesheet" href="~/Content/jquery-ui-1.10.4.custom.min.css" />
+    <script src="~/Scripts/modernizr-2.6.2.js"></script>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/jquery-ui-1.10.4.custom.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/Site.js"></script>
+    @{
+        var aiConn = Configuration["ApplicationInsights:ConnectionString"];
+    }
+    @if (!string.IsNullOrEmpty(aiConn))
+    {
+        <script type="text/javascript">
+            var appInsights=window.appInsights||function(config){function r(config){t[config]=function(){var i=arguments;t.queue.push(function(){t[config].apply(t,i)})}}var t={config:config},u=document,e=window,o="script",s=u.createElement(o),i,f;for(s.src=config.url||"//az416426.vo.msecnd.net/scripts/a/ai.0.js",u.getElementsByTagName(o)[0].parentNode.appendChild(s),t.cookie=u.cookie,t.queue=[],i=["Event","Exception","Metric","PageView","Trace"];i.length;)r("track"+i.pop());return r("setAuthenticatedUserContext"),r("clearAuthenticatedUserContext"),config.disableExceptionTracking||(i="onerror",r("_"+i),f=e[i],e[i]=function(config,r,u,e,o){var s=f&&f(config,r,u,e,o);return s!==!0&&t["_"+i](config,r,u,e,o),s}),t}({ connectionString:"@aiConn" });
+            window.appInsights=appInsights;
+            appInsights.trackPageView();
+        </script>
+    }
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-default">
+            <div class="container">
+                <div class="primary-menu">
+                    <div class="pull-left logo">
+                        <a class="block logo-image" asp-controller="Home" asp-action="Index">
+                            <img src="~/Images/unlimited_logo.png" alt="Parts Unlimited logo" />
+                        </a>
+                        <a class="block" asp-controller="Home" asp-action="Index">
+                            <h1>Parts Unlimited</h1>
+                            <h2>a Fabrikam subsidiary</h2>
+                        </a>
+                        <div class="visible-xs cart">
+                            <a asp-controller="ShoppingCart" asp-action="Index" class="head-link" id="shopping-cart-link"></a>
+                        </div>
+                    </div>
+                    <div class="pull-right navigation">
+                        <div class="navbar-header">
+                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#collapse-header-nav">
+                                <span class="sr-only">Toggle navigation</span>
+                                <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+                            </button>
+                        </div>
+                        <div class="collapse navbar-collapse" id="collapse-header-nav">
+                            <ul class="nav navbar-nav navbar-right">
+                                <li class="hidden-xs">
+                                    <div id="search-link-box">
+                                        <form asp-controller="Search" asp-action="Index" method="get">
+                                            <input class="form-control" id="search-box" name="q" placeholder="Keyword" />
+                                            <input type="submit" id="search-link" value="Search" />
+                                        </form>
+                                    </div>
+                                </li>
+                                <li><a asp-controller="Home" asp-action="Index" class="head-link" id="home-link">Home</a></li>
+                                @await Html.PartialAsync("_CartSummary", (IEnumerable<string>)ViewBag.CartSummary)
+                                @await Html.PartialAsync("_AdminMenu")
+                                @await Html.PartialAsync("_Login")
+                                <li class="dropdown visible-xs">
+                                    <a asp-controller="Store" asp-action="Index" class="dropdown-toggle head-link" data-toggle="dropdown">Categories&nbsp;<b class="caret"></b></a>
+                                    <ul class="dropdown-menu">
+                                        @await Html.PartialAsync("_CategoryMenu", (IEnumerable<Category>)ViewBag.Categories)
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="category-menu">
+                <div class="container">
+                    <div class="hidden-xs">
+                        <ul>
+                            @await Html.PartialAsync("_CategoryMenu", (IEnumerable<Category>)ViewBag.Categories)
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            @await Html.PartialAsync("_Announcement", (Product)ViewBag.Product)
+        </nav>
+        <div class="visible-xs search-box">
+            <form asp-controller="Search" asp-action="Index" method="get">
+                <input class="form-control" name="q" placeholder="Search" />
+                <input type="submit" value="" />
+            </form>
+        </div>
+    </header>
+
+    @RenderSection("prebody", false)
+    <div class="container">
+        @RenderBody()
+    </div>
+    <div class="clearfix"></div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="row">
+                    <div class="col-md-3"><h4>Site Menu</h4><ul>
+                        <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+                        <li><a asp-controller="Store" asp-action="Index">Browse</a></li>
+                    </ul></div>
+                    <div class="col-md-3"><h4>Account</h4><ul>
+                        <li><a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Manage Account</a></li>
+                        <li><a asp-controller="ShoppingCart" asp-action="Index">Shopping Cart</a></li>
+                        <li><a asp-controller="Orders" asp-action="Index">View Orders</a></li>
+                    </ul></div>
+                    <div class="col-md-3"><h4>Additional Info</h4><ul>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms and Conditions</a></li>
+                    </ul></div>
+                    <div class="col-md-3"><h4>Develop</h4><ul>
+                        <li><a>GitHub Source</a></li>
+                        <li><a>License Agreement</a></li>
+                        <li><a href="http://asp.net/" target="_blank">ASP.NET</a></li>
+                    </ul>
+                    <p>Deploy to Azure</p>
+                    <a class="deploy-azure"><img src="~/Images/deploy_button.png" alt="deploy to azure image" /></a>
+                    </div>
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="col-md-6"><div class="pull-left-sm">© @DateTime.UtcNow.Year Microsoft. Based on The Phoenix Project by <a href="http://www.realgenekim.me/" class="footer-link">Gene Kim</a>.</div></div>
+                    <div class="col-md-6"><div class="pull-left-sm pull-right-md">All rights reserved. Your payments are safe and secure.</div></div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script src="~/Scripts/respond.min.js"></script>
+    @await RenderSectionAsync("scripts", required: false)
+</body>
+</html>
