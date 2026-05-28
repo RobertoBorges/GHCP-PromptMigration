@@ -1,0 +1,12 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/Azure/azure-dev/main/schemas/v1.0/azure.yaml.json
+name: partsunlimited
+metadata:
+  template: partsunlimited@1.0.0
+services:
+  web:
+    project: ./src/PartsUnlimited.Web
+    language: dotnet
+    host: containerapp
+    docker:
+      path: ./Dockerfile
+      context: .

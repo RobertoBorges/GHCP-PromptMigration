@@ -24,8 +24,8 @@
 |---|---|---|
 | Phase 1 — Plan & Assess | ✅ Complete | `reports/Application-Assessment-Report.md` |
 | Phase 2 — Migrate Code | ✅ Complete | `PartsUnlimited-Migrated/` + `reports/Business-Logic-Mapping.md` |
-| Phase 3 — Generate Infra | ⏳ Not started | — |
-| Phase 4 — Deploy to Azure | ⏳ Not started | — |
+| Phase 3 — Generate Infra | ✅ Complete | `PartsUnlimited-Migrated/infra/` + `azure.yaml` |
+| Phase 4 — Deploy to Azure | 🟡 Ready (azd env provisioned, awaiting `azd up`) | `reports/Deployment-Summary-Report.md` |
 | Phase 5 — Setup CI/CD | ⏳ Not started | — |
 
 ---
@@ -50,7 +50,54 @@
 
 ## Next Action
 
-Run `/Phase3-GenerateInfra` to generate Azure infrastructure as code (Bicep) for Azure Container Apps + Azure SQL Database.
+Run `azd up` from `PartsUnlimited-Migrated/` to provision and deploy. After successful deploy, run the SQL `CREATE USER ... FROM EXTERNAL PROVIDER` step from `reports/Deployment-Summary-Report.md` §10, then proceed to `/Phase5-SetupCICD`.
+
+---
+
+## Phase 4 Summary
+
+- **Mode:** User-executed. Per safety policy, the agent did not invoke `azd up` directly (creates billable resources).
+- **azd environment:** `partsunlimited-dev` created in `PartsUnlimited-Migrated/.azure/partsunlimited-dev/`.
+- **Target region:** `westeurope`.
+- **Target subscription:** Azure Migrate Demo Subscription (`6785ea1f-ac40-4244-a9ce-94b12fd832ca`).
+- **Pre-set env values:** `AZURE_ENV_NAME`, `AZURE_LOCATION`, `AZURE_SUBSCRIPTION_ID`, `AZURE_PRINCIPAL_ID`, `AZURE_PRINCIPAL_NAME`, `SQL_ADMIN_LOGIN`.
+- **Pre-flight:** azd 1.23.13 ✅, az 2.80.0 ✅, signed in as `roborges@microsoft.com` ✅, Phase 2 build ✅, Phase 3 bicep ✅.
+- **Deployment runbook:** `reports/Deployment-Summary-Report.md` covers resource inventory, security review, monitoring, post-deploy verification, performance baseline template, cost estimate (~$25-35/month idle), troubleshooting playbook, and the required post-deploy step to grant the Managed Identity database access (`CREATE USER ... FROM EXTERNAL PROVIDER`).
+- **Known gap to close after first deploy:** Bicep firewall rule `AllowAllWindowsAzureIps` is broad — migrate to private endpoints + VNet integration before production.
+
+---
+
+## Phase 3 Summary
+
+- **IaC type:** Bicep (compiles clean — `az bicep build` 0 errors).
+- **Target topology:** Azure Container Apps + Azure SQL Database (serverless GP_S_Gen5_2) + Azure Container Registry + Azure Key Vault + User-Assigned Managed Identity + Application Insights + Log Analytics.
+- **Files generated:**
+  - `PartsUnlimited-Migrated/azure.yaml` — azd service map (`web` → Container Apps, builds `./Dockerfile`).
+  - `PartsUnlimited-Migrated/infra/main.bicep` — orchestration + outputs consumed by azd.
+  - `PartsUnlimited-Migrated/infra/main.parameters.json` — azd-resolved parameters (`AZURE_ENV_NAME`, `AZURE_LOCATION`, `AZURE_PRINCIPAL_ID`).
+  - `infra/modules/monitoring.bicep` — Log Analytics + Application Insights + Metrics Publisher RBAC.
+  - `infra/modules/identity.bicep` — User-Assigned Managed Identity.
+  - `infra/modules/registry.bicep` — ACR (Basic) + AcrPull RBAC for the identity.
+  - `infra/modules/keyvault.bicep` — Key Vault (RBAC-only, soft-delete + purge protection) + Secrets User RBAC.
+  - `infra/modules/sql.bicep` — Azure SQL Server with Entra ID admin + serverless DB (auto-pause 60 min, 0.5 vCore min).
+  - `infra/modules/containerApp.bicep` — Container Apps Environment + Container App (port 8080, http scaling, liveness/readiness probes).
+- **Security:**
+  - User-Assigned Managed Identity used for ACR pull, Key Vault secret access, and SQL AAD authentication.
+  - SQL connection string uses `Authentication=Active Directory Default` (no passwords in env).
+  - Key Vault enforces RBAC (no access policies); soft-delete + purge protection on.
+  - Container Apps ingress: external HTTPS-only (`allowInsecure: false`), TLS termination at edge.
+  - ACR admin user disabled; anonymous pull disabled.
+  - SQL minimum TLS 1.2.
+- **Scaling:** HTTP-based KEDA scaler (50 concurrent requests/replica), 1–3 replicas; serverless SQL auto-pauses when idle.
+- **Cost optimization:** Container Apps consumption plan, ACR Basic, SQL Serverless GP_S_Gen5_2 with 0.5 vCore min + 60 min auto-pause, Log Analytics PerGB2018 30-day retention.
+- **Monitoring:** App Insights connection string injected as `ApplicationInsights__ConnectionString` env var; container `stderr/stdout` streamed to Log Analytics via Container Apps log destination; Metrics Publisher role granted to the app identity.
+- **Outputs (consumed by azd):** `SERVICE_WEB_NAME`, `SERVICE_WEB_URI`, `AZURE_CONTAINER_REGISTRY_ENDPOINT`, `AZURE_SQL_SERVER_FQDN`, `AZURE_KEY_VAULT_ENDPOINT`, `AZURE_APPLICATION_INSIGHTS_CONNECTION_STRING`, `AZURE_CLIENT_ID`.
+- **Validation:** `az bicep build --file main.bicep` succeeds with 0 errors (1 cosmetic length warning on ACR name — `uniqueString` produces 13 chars at runtime).
+- **Open items / Phase 4 prerequisites:**
+  - Deployer must have permission to assign roles in the resource group (RBAC contributor).
+  - `AZURE_PRINCIPAL_ID` (and optionally `AZURE_PRINCIPAL_NAME`) must be set so the SQL Entra ID admin is configured.
+  - After first deploy, the `web` service `azd-service-name` tag tells azd which Container App to update with the freshly built image — `containerImage` parameter defaults to a quickstart placeholder for initial provision.
+  - Database schema is created on app startup via `db.Database.EnsureCreated()` for the migrated demo; production should switch to EF Core migrations + a deployment job.
 
 ---
 **Session ended:** 2026-05-25 19:38:07 UTC | Session: unknown
@@ -58,4 +105,12 @@ Run `/Phase3-GenerateInfra` to generate Azure infrastructure as code (Bicep) for
 
 ---
 **Session ended:** 2026-05-25 21:21:03 UTC | Session: unknown
+
+
+---
+**Session ended:** 2026-05-26 00:27:36 UTC | Session: unknown
+
+
+---
+**Session ended:** 2026-05-26 00:35:44 UTC | Session: unknown
 
