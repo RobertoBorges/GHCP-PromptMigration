@@ -56,28 +56,6 @@ python .github/skills/migration-strategy-report/scripts/export_to_pdf.py "Custom
 | (Optional) Python 3.8+ + Playwright | Only needed if exporting to PDF |
 | (Optional) WorkIQ configuration | Enriches reports with meeting context, decisions, blockers, vendor commitments |
 
-## Customer Folder Convention
-
-The skill does NOT hard-code a folder path. The user provides it per-invocation:
-
-```
-/PortfolioStrategy Generate a migration strategy report for path/to/customer-folder
-```
-
-If you adopt a `Customers/<Name>/` convention in your workspace, set `COPILOT_CUSTOMER_CONTEXT` to the active customer path to enable the `customer-data-isolation` hook (blocks accidental cross-customer reads):
-
-```powershell
-# PowerShell
-$env:COPILOT_CUSTOMER_CONTEXT = "Customers/Contoso"
-```
-
-```bash
-# Bash
-export COPILOT_CUSTOMER_CONTEXT="Customers/Contoso"
-```
-
-> ⚠️ **Customer data isolation is ABSOLUTE.** Each customer folder is a separate NDA. The skill (and enforcement hook) will refuse to cross-reference customer folders for ANY reason — including template or style examples.
-
 ## How the Skill Works
 
 1. **Artifact Discovery** — recursively scans the customer folder, classifies every file by type

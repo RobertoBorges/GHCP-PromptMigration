@@ -117,7 +117,6 @@ Hooks enforce guardrails deterministically at the OS level, running shell script
 |------|-------|-------------|-------------|
 | **Block Secrets** | `PreToolUse` | Denies code edits containing hardcoded passwords, API keys, connection strings, or SAS tokens | Zero |
 | **Block Dangerous Commands** | `PreToolUse` | Denies destructive terminal commands (`rm -rf /`, `terraform destroy`, `az group delete`, `git push --force`, etc.) | Zero |
-| **Customer Data Isolation** | `PreToolUse` | Blocks cross-customer Read/edit access when `COPILOT_CUSTOMER_CONTEXT` is set (enforces NDA isolation for the Migration Strategy Report skill) | Zero |
 | **Auto-Validate** | `PostToolUse` | Provides validation reminders after edits to `.bicep`, `.tf`, `.csproj`, or `Dockerfile` files | ~80 chars |
 | **Load Migration State** | `SessionStart` | Reads `reports/Report-Status.md` and detects project type (`.csproj`, `pom.xml`, `web.config`, `.svc`) AND any Migration Strategy Report decks to inject concise context | ~200 chars |
 | **Update Status Report** | `Stop` | Appends a session-end timestamp to `reports/Report-Status.md` for audit trail | Zero |

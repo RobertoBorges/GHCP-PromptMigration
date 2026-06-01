@@ -53,13 +53,6 @@ After picking a starting point, subsequent steps (⚙️ Migrate Code → 🏗�
 - Do not query or modify Azure resources without explicit user consent
 - Never store secrets in the repository
 
-### Customer Data Isolation (Portfolio Flow ONLY)
-When working on a customer portfolio under a `Customers/` folder:
-- Read ONLY from the active customer's folder — NEVER cross-reference other customer folders, not even for template/style examples
-- The `customer-data-isolation` PreToolUse hook enforces this programmatically when `COPILOT_CUSTOMER_CONTEXT` is set
-- Each customer is a fully isolated engagement (treat as separate NDAs)
-- If a customer name is ambiguous, ASK before scanning
-
 ### Commands and Tools
 - Use PowerShell (pwsh) for all shell commands
 - Use Azure Developer CLI (azd) for deployments
