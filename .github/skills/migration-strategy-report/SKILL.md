@@ -26,8 +26,6 @@ These rules ALWAYS apply when this skill is active. They are absolute. Violating
 - Report template, CSS, slide structure, and generation logic come ONLY from THIS SKILL — never from another customer's generated report.
 - **Cross-customer access has caused real incidents.** A single accidental read of another customer's folder constitutes a confidentiality breach and must never recur.
 
-> **Enforcement:** The `customer-data-isolation` hook (PreToolUse on Read) blocks cross-customer file access programmatically when a customer context is set in session. Do not attempt to bypass it.
-
 ### 2. Excel Sheet Completeness
 - When loading Excel files, **list ALL sheet names first** and load every sheet that contains data.
 - Do NOT assume single-sheet workbooks — always check `sheetnames` programmatically before loading.

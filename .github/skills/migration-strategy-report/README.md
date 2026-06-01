@@ -80,8 +80,6 @@ Generated reports follow strict executive rules:
 
 ## Critical Rules
 
-🔒 **Customer data isolation** — see above; enforced by the `customer-data-isolation` PreToolUse hook
-
 💲 **Never use PowerShell to write the HTML** — PowerShell heredocs (`@"..."@`) strip dollar signs from cost figures (`$702K/mo` becomes `/mo`). Use the `create` / `editFiles` tool or Python `open(path, 'w', encoding='utf-8')`. If `$` signs are accidentally stripped, `scripts/export_to_pdf.py` auto-detects and repairs them on its next run.
 
 📊 **Math must add up** — classification counts MUST sum to the in-scope total. If they don't, recount — do NOT adjust numbers.

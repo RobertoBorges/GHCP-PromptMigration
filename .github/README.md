@@ -27,17 +27,14 @@ This folder contains VS Code GitHub Copilot customization files for the **Code M
 │   ├── migration-unit-testing/         # Unit testing for validation
 │   └── migration-strategy-report/      # Portfolio strategy HTML deck generator
 ├── hooks/                               # Agent lifecycle hooks
-│   ├── security.json                   # PreToolUse: block secrets & dangerous commands
 │   ├── validation.json                 # PostToolUse: auto-validate after edits
 │   ├── session-lifecycle.json          # SessionStart + Stop hooks
-│   ├── customer-data-isolation.json    # PreToolUse: enforce customer NDA isolation
 │   └── scripts/                        # Hook scripts (PowerShell + Bash)
 │       ├── block-secrets.ps1/.sh       # Detect hardcoded credentials
 │       ├── block-dangerous-commands.ps1/.sh  # Block destructive operations
 │       ├── auto-validate.ps1/.sh       # Validation reminders after edits
 │       ├── load-migration-state.ps1/.sh     # Inject migration + portfolio context
 │       ├── update-status-report.ps1/.sh     # Append session timestamps
-│       └── customer-data-isolation.ps1/.sh  # Block cross-customer reads
 └── README.md                            # This file
 ```
 
@@ -115,8 +112,6 @@ Hooks enforce guardrails deterministically at the OS level, running shell script
 
 | Hook | Event | What It Does | Context Cost |
 |------|-------|-------------|-------------|
-| **Block Secrets** | `PreToolUse` | Denies code edits containing hardcoded passwords, API keys, connection strings, or SAS tokens | Zero |
-| **Block Dangerous Commands** | `PreToolUse` | Denies destructive terminal commands (`rm -rf /`, `terraform destroy`, `az group delete`, `git push --force`, etc.) | Zero |
 | **Auto-Validate** | `PostToolUse` | Provides validation reminders after edits to `.bicep`, `.tf`, `.csproj`, or `Dockerfile` files | ~80 chars |
 | **Load Migration State** | `SessionStart` | Reads `reports/Report-Status.md` and detects project type (`.csproj`, `pom.xml`, `web.config`, `.svc`) AND any Migration Strategy Report decks to inject concise context | ~200 chars |
 | **Update Status Report** | `Stop` | Appends a session-end timestamp to `reports/Report-Status.md` for audit trail | Zero |

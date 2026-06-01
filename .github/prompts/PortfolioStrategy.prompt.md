@@ -84,7 +84,6 @@ Also offer:
 
 ## Critical Reminders
 
-- 🔒 **Customer data isolation is enforced by a PreToolUse hook** (`customer-data-isolation`). Do not attempt to bypass it.
 - 💲 **Never use PowerShell to write the HTML** — it strips dollar signs from cost figures. Use the `create` or `editFiles` tool, or Python with `open()`.
 - 📊 **The math must add up.** Classification counts MUST sum to the in-scope total. If they don't, recount — do NOT adjust numbers.
 - 📝 **8 outstanding evidence-backed slides > 12 padded slides.** Skip slides where evidence is thin; flag gaps as findings.
