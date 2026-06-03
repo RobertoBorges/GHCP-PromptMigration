@@ -1,0 +1,200 @@
+name: Generate PPTX Decks
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      generator:
+        description: "Generator to run (`all`, a generator stem like `snap_deck`, or a file name like `generate_snap_deck.py`)"
+        required: false
+        default: "all"
+
+permissions:
+  contents: write
+
+jobs:
+  generate-pptx:
+    runs-on: ubuntu-latest
+    env:
+      PYTHONUNBUFFERED: "1"
+      INPUT_GENERATOR: ${{ github.event.inputs.generator || 'all' }}
+      LATAM_TEMPLATE_PATH: ${{ vars.LATAM_TEMPLATE_PATH }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install PPTX dependencies
+        run: pip install python-pptx python-dotenv
+
+      - name: Resolve LATAM template path
+        id: template
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          # The LATAM PPTX template must be available either in the repo or via LATAM_TEMPLATE_PATH.
+          candidates=()
+          if [[ -n "${LATAM_TEMPLATE_PATH:-}" ]]; then
+            candidates+=("$LATAM_TEMPLATE_PATH")
+          fi
+          candidates+=(
+            "docs/pptx/LATAM-MCSA-AccountStatus_0410.pptx"
+            "docs/LATAM-MCSA-AccountStatus_0410.pptx"
+          )
+
+          template=""
+          for candidate in "${candidates[@]}"; do
+            if [[ -n "$candidate" && -f "$candidate" ]]; then
+              template="$candidate"
+              break
+            fi
+          done
+
+          if [[ -n "$template" ]]; then
+            echo "Using template: $template"
+            echo "LATAM_TEMPLATE_PATH=$template" >> "$GITHUB_ENV"
+            echo "path=$template" >> "$GITHUB_OUTPUT"
+          else
+            echo "::warning::LATAM template file not found. Set LATAM_TEMPLATE_PATH as a repo/environment variable or commit the template into the repository. PPTX generation will be skipped."
+            echo "path=" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Run PPTX generators
+        id: generate
+        shell: bash
+        env:
+          RESOLVED_TEMPLATE_PATH: ${{ steps.template.outputs.path }}
+        run: |
+          set -u
+          shopt -s nullglob
+
+          mkdir -p docs/pptx/decks
+          find docs/pptx/decks -maxdepth 1 -type f -name '*.pptx' -delete
+
+          if [[ -z "${RESOLVED_TEMPLATE_PATH:-}" ]]; then
+            echo "generated=false" >> "$GITHUB_OUTPUT"
+            echo "count=0" >> "$GITHUB_OUTPUT"
+            echo "failures=0" >> "$GITHUB_OUTPUT"
+            {
+              echo "files<<EOF"
+              echo "EOF"
+            } >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          requested="${INPUT_GENERATOR:-all}"
+          declare -A selected=()
+
+          if [[ -z "$requested" || "$requested" == "all" ]]; then
+            for generator in docs/pptx/generators/generate_*.py; do
+              selected["$generator"]=1
+            done
+          else
+            requested_no_py="${requested%.py}"
+            candidates=(
+              "docs/pptx/generators/$requested"
+              "docs/pptx/generators/${requested}.py"
+              "docs/pptx/generators/${requested_no_py}.py"
+              "docs/pptx/generators/generate_${requested}.py"
+              "docs/pptx/generators/generate_${requested_no_py}.py"
+            )
+
+            for candidate in "${candidates[@]}"; do
+              if [[ -f "$candidate" ]]; then
+                selected["$candidate"]=1
+              fi
+            done
+          fi
+
+          generators=()
+          for generator in "${!selected[@]}"; do
+            generators+=("$generator")
+          done
+          IFS=$'\n' generators=($(printf '%s\n' "${generators[@]}" | sort))
+          unset IFS
+
+          if (( ${#generators[@]} == 0 )); then
+            echo "::warning::No matching PPTX generator was found for input '$requested'."
+            echo "generated=false" >> "$GITHUB_OUTPUT"
+            echo "count=0" >> "$GITHUB_OUTPUT"
+            echo "failures=0" >> "$GITHUB_OUTPUT"
+            {
+              echo "files<<EOF"
+              echo "EOF"
+            } >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          failures=0
+          for generator in "${generators[@]}"; do
+            echo "::group::Running $generator"
+            if python "$generator"; then
+              echo "Completed $generator"
+            else
+              echo "::warning::Generator failed and will be skipped: $generator"
+              failures=$((failures + 1))
+            fi
+            echo "::endgroup::"
+          done
+
+          outputs=(docs/pptx/decks/*.pptx)
+          count=${#outputs[@]}
+
+          if (( count == 0 )); then
+            echo "::warning::No PPTX files were generated."
+            generated=false
+          else
+            generated=true
+          fi
+
+          echo "generated=$generated" >> "$GITHUB_OUTPUT"
+          echo "count=$count" >> "$GITHUB_OUTPUT"
+          echo "failures=$failures" >> "$GITHUB_OUTPUT"
+          {
+            echo "files<<EOF"
+            for file in "${outputs[@]}"; do
+              echo "$file"
+            done
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Upload generated decks as release assets
+        if: github.event_name == 'release' && steps.generate.outputs.generated == 'true'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ steps.generate.outputs.files }}
+          fail_on_unmatched_files: false
+
+      - name: Upload generated decks as workflow artifact
+        if: github.event_name == 'workflow_dispatch' && steps.generate.outputs.generated == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: pptx-decks-${{ github.run_number }}
+          path: ${{ steps.generate.outputs.files }}
+          if-no-files-found: warn
+
+      - name: Summarize result
+        if: always()
+        shell: bash
+        env:
+          GENERATED: ${{ steps.generate.outputs.generated }}
+          COUNT: ${{ steps.generate.outputs.count }}
+          FAILURES: ${{ steps.generate.outputs.failures }}
+          REQUESTED: ${{ env.INPUT_GENERATOR }}
+        run: |
+          {
+            echo "## PPTX generation"
+            echo ""
+            echo "- Requested generator: ${REQUESTED:-all}"
+            echo "- Generated decks: ${COUNT:-0}"
+            echo "- Generator failures: ${FAILURES:-0}"
+            if [[ "${GENERATED:-false}" != "true" ]]; then
+              echo "- Result: skipped or no decks produced"
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"

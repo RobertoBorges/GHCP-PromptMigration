@@ -219,3 +219,7 @@ bld/
 msbuild.log
 msbuild.err
 msbuild.wrn
+
+# === Merged from squad-converted copy ===
+# PowerPoint temp files
+~$*.pptx
