@@ -1,203 +1,284 @@
 # GitHub Copilot Migration & Modernization for Azure
 
-This repository showcases how GitHub Copilot using custom prompts and chat mode can be leveraged to migrate solutions from various languages and frameworks to Azure. The current focus is on .NET and Java applications, demonstrating end-to-end migration journeys. The project now includes enhanced modernization tracking, status reporting, and a more structured approach to the migration process.
+> **Universal Mode (v2 — 2026-06-01):** Migrate **any application** to Azure — regardless of where it runs today or what it's built in. Discovery-first, evidence-bound, squad-orchestrated.
+
+This repository turns GitHub Copilot into a structured migration system: a Discovery Engineer characterizes any application; an Architect approves the strategy; specialist agents execute Phases 1–6 to land it on Azure. The Universal Discovery flow handles **on-premise, AWS, GCP, Oracle, VMware, Kubernetes, container registries, GitHub repos, ZIPs, and mainframes** across **.NET, Java, Python, Node.js, PHP, Ruby, Go, Perl, Rust, COBOL, Oracle Forms, PowerBuilder, Delphi/VB6, Scala/Kotlin, and C++ Windows** stacks.
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Three Ways to Start](#three-ways-to-start)
+- [The Universal Migration Flow](#the-universal-migration-flow)
+- [Requirements](#requirements)
+- [What's in the Repository](#whats-in-the-repository)
+- [Migration Phases](#migration-phases)
+- [The Squad — 15 Specialists](#the-squad--15-specialists)
+- [Source / Stack / Workload Adapters](#source--stack--workload-adapters)
+- [Avoiding Hallucinations](#avoiding-hallucinations)
+- [Status Tracking](#status-tracking)
+- [Use-Case Walkthroughs](#use-case-walkthroughs)
+- [Contributing](#contributing)
+- [License](#license)
 
 ## Overview
 
-The GitHub Copilot Migration & Modernization for Azure project provides a structured approach to:
+The project provides a structured, evidence-bound approach to:
 
-1. Plan and assess legacy applications for cloud readiness
-2. Migrate code to modern frameworks
-3. Generate Azure infrastructure as code
-4. Deploy applications to Azure
-5. Set up CI/CD pipelines for automated deployment
+0. **Discover** any application — characterize source, stack, workload, data, integrations with confidence labels
+1. **Plan & assess** with a Capability Matrix that every phase consumes
+2. **Migrate code** to modern Azure-compatible runtimes (when modernization is in scope)
+3. **Generate infrastructure as code** (Bicep / Terraform)
+4. **Deploy to Azure** with managed identities, Key Vault, observability baked in
+5. **Set up CI/CD** for automated, repeatable deployments
+6. **Post-migration ops** — dashboards, alerts, runbooks, cost guardrails
 
-Through a guided, AI-assisted workflow, developers can efficiently transform legacy applications into modern, cloud-native solutions running on Azure.
+Through a guided, AI-assisted workflow, developers and architects transform legacy applications into modern, cloud-native solutions running on Azure.
 
->
-> Note: If your workload have many repositories, consider using the Phase0-Multi-repo-assessment.prompt.md to assess multiple repositories in a single workflow.
-> Start by creating a file named `codebase-repos.md` in the root folder, listing all the repositories to assess.
-> Then, use the command `/phase0-multirepoassessment` to start the multi-repo assessment process.
->
+## Three Ways to Start
+
+```
+Got an unknown app and want the squad to figure it out?
+  → /assess-any-application       (Universal Mode — recommended)
+
+Got a customer portfolio (CMDB / RVTools / DMA / 10+ apps)?
+  → /PortfolioStrategy            (Portfolio Planning flow)
+
+Got multiple repos that form ONE business solution?
+  → /Phase0-Multi-repo-assessment
+
+Know the stack and target — just want execution?
+  → /Phase1-PlanAndAssess         (skip discovery; accept risk in .squad/decisions.md)
+```
+
+The Universal Mode is the default for any new application. It auto-detects what the app is, where it lives, and recommends a migration strategy (Rehost / Replatform / Refactor / Rearchitect / Rebuild / Retire / Retain) using a 12-branch decision tree — not just a 6Rs label.
+
+## The Universal Migration Flow
+
+```
+USER ──► /assess-any-application
+            │
+            ▼
+   ┌──────────────────────────────┐
+   │  Discovery Engineer          │  ← intake + classification + evidence
+   │  (Saul Bloom Jr.)            │
+   │                              │
+   │  Outputs:                    │
+   │   • Discovery Dossier        │  reports/Discovery-Dossier.md
+   │   • Capability Matrix        │  reports/Capability-Matrix.yaml
+   │   • Strategy recommendation  │
+   └────────────┬─────────────────┘
+                │ handoff (evidence-bound)
+                ▼
+   ┌──────────────────────────────┐
+   │  Architect (Danny Ocean)     │  ← approves/refines strategy
+   │  /build-migration-plan       │     finalizes target Azure architecture
+   └────────────┬─────────────────┘     produces reports/Migration-Plan.md
+                │
+                ▼
+   Phase 1 → Phase 2 → Phase 3 → Phase 4 → Phase 5 → Phase 6
+   (each phase consumes the Capability Matrix and dispatches the right
+    squad specialists per the source/stack/workload axes)
+```
+
+The **Capability Matrix** is the contract: every Phase 1–6 prompt reads it to know which source adapter, stack adapter, and workload pattern to load — and which specialists to dispatch.
 
 ## Requirements
 
 - GitHub Copilot License
-- Model Claude Sonnet 4.5+ (Included in GitHub Copilot)
+- Model **Claude Sonnet 4.5 or 4.6** (included in GitHub Copilot) — Sonnet 4.6 recommended for Discovery
 - Azure MCP Server Extension
 - GitHub Copilot for Azure Extension
 - GitHub Copilot Extension 1.35+
 - GitHub Copilot Chat Extension 0.30+
-- Visual Studio code 1.101+
+- Visual Studio Code 1.101+
 - AZD CLI
 - AZ CLI
-- Development tools that fit to your application
+- Development tools that fit your application's stack
+
+## What's in the Repository
+
+```
+.
+├── .github/
+│   ├── chatmodes/              ← 9 chatmodes (Discovery-Intake, Migration-Orchestrator,
+│   │                              Code-Migration-Modernization, Azure-Infrastructure,
+│   │                              Security-Review, Cost-Optimization, Debug-Migration,
+│   │                              Onboarding, Quick-Assessment)
+│   ├── prompts/                ← Universal + Phase prompts (Phase 0–6, PortfolioStrategy,
+│   │                              Assess-Any-Application, Build-Migration-Plan, …)
+│   │   └── legacy/             ← Deprecated narrow Assess-* prompts (kept for reference)
+│   ├── skills/                 ← 60+ reusable skills
+│   │   ├── stack-detection.md
+│   │   ├── migration-strategy-decision-tree.md
+│   │   ├── capability-matrix.md
+│   │   ├── discovery-dossier-template.md
+│   │   ├── migration-plan-template.md
+│   │   ├── source-*.md         ← 11 source adapters (on-premise, AWS, GCP, K8s, …)
+│   │   ├── stack-*.md          ← 15 stack adapters (.NET, Java, Python, COBOL, …)
+│   │   ├── workload-*.md       ← 9 workload patterns (webapp, api, batch, …)
+│   │   └── (nested skill dirs with SKILL.md + templates)
+│   ├── hooks/                  ← agent-dispatch, phase-gates, quality-checklist, …
+│   ├── workflows/              ← GitHub Actions: pptx-generate, squad-health
+│   └── copilot-instructions.md ← Universal Mode behavioral contract
+│
+├── .squad/                     ← Squad orchestration layer
+│   ├── agents/                 ← 15 agent charters (incl. discovery-engineer)
+│   ├── team.md                 ← Roster + targets
+│   ├── routing.md              ← Capability-based routing rules
+│   ├── decisions.md            ← Durable decision log
+│   └── ...
+│
+├── docs/                       ← Architecture, guides, onboarding, walkthroughs,
+│                                  PPTX decks, use-case cheatsheets
+│
+├── skills/                     ← Top-level mirror of flat skill files (for cross-mode access)
+│
+├── Use-cases/                  ← 7 reference applications (see Walkthroughs section)
+│
+├── README.md                   ← You are here
+├── README-Squad.md             ← "Ocean's Fourteen" branded deep-dive on squad orchestration
+├── AGENTS.md, CLAUDE.md,
+│ JOURNAL.md, PORTFOLIO.md      ← Squad operating documents
+└── .env.example
+```
+
+## Migration Phases
+
+| Phase | Prompt | Lead Agent | Produces |
+|-------|--------|-----------|----------|
+| **Discovery** | `/assess-any-application` | Discovery Engineer | Discovery Dossier + Capability Matrix |
+| **Plan** | `/build-migration-plan` | Architect | Migration Plan |
+| **0** | `/Phase0-Multi-repo-assessment` | Discovery Engineer | Repo inventory + sequencing |
+| **1** | `/Phase1-PlanAndAssess` | Architect | Application-Assessment-Report |
+| **2** | `/Phase2-MigrateCode` | Coder | Modernized code + Migration-Change-Log |
+| **DB** | `/DatabaseMigration` | Database Specialist | Database-Migration-Report |
+| **3** | `/Phase3-GenerateInfra` | Azure Specialist | Bicep / Terraform IaC |
+| **Sec** | `/SecurityHardening` | Security Auditor | Security-Review-Report |
+| **4** | `/Phase4-DeployToAzure` | DevOps Engineer | Deployed environment |
+| **5** | `/Phase5-SetupCICD` | DevOps Engineer | CI/CD pipelines |
+| **6** | `/Phase6-PostMigrationOps` | Observability Engineer | Runbooks + dashboards + alerts |
+| **Cost** | `/CostOptimization` | Cost Engineer | Cost-Optimization-Report |
+| **Rollback** | `/Phase-Rollback` | Cutover Commander | Rollback execution |
+| **Status** | `/GetStatus` | Tester | Status snapshot |
+
+Each phase has a **quality gate** defined in `.squad/routing.md`. A phase does not advance until the gate is satisfied.
+
+## The Squad — 15 Specialists
+
+| # | Agent | Alias | Best for |
+|---|-------|-------|----------|
+| 1 | **Discovery Engineer** | Saul Bloom Jr. | Intake, classification, 6Rs recommendation, Capability Matrix |
+| 2 | Architect | Danny Ocean | Migration strategy approval, target architecture, sequencing |
+| 3 | Coder | Rusty Ryan | Code modernization, framework upgrades, refactoring |
+| 4 | Tester | Linus Caldwell | Validation, smoke testing, prompt QA |
+| 5 | Azure Specialist | Basher Tarr | Azure hosting, identity, landing zones |
+| 6 | DevOps Engineer | Turk Malloy | CI/CD, deployment automation |
+| 7 | Observability Engineer | Livingston Dell | Monitoring, App Insights, alerts |
+| 8 | Database Specialist | The Amazing Yen | Schema migration, cutover, data validation |
+| 9 | Performance Engineer | Virgil Malloy | Load, baselines, scaling |
+| 10 | Security Auditor | Frank Catton | Auth, secrets, RBAC, compliance |
+| 11 | Evaluator | Saul Bloom | Prompt quality, regression review |
+| 12 | Cutover Commander | Reuben Tishkoff | Rollout, rollback, go-live |
+| 13 | Scribe | Roman Nagel | Journal, decision log |
+| 14 | Presentation Specialist | Tess Ocean | Status decks, executive summaries |
+| 15 | Cost Engineer | The Accountant | Cost models, right-sizing, FinOps |
+
+Full charters: `.squad/agents/<name>/charter.md`. Routing rules: `.squad/routing.md`.
+
+## Source / Stack / Workload Adapters
+
+The system characterizes any application along three orthogonal axes — every skill is a small, focused markdown file the Discovery Engineer loads dynamically based on what it detects.
+
+**Source adapters (11)** — where the application lives today:
+
+`source-github-repo`, `source-on-premise`, `source-aws`, `source-gcp`, `source-oracle-db`, `source-vmware-rvtools`, `source-mainframe`, `source-kubernetes-cluster`, `source-container-registry`, `source-zip-filesystem`, `source-unsupported-escalation` (Salesforce / SAP / Lotus Notes catch-all)
+
+**Stack adapters (15)** — what the application is built in:
+
+`stack-dotnet`, `stack-java`, `stack-python`, `stack-nodejs`, `stack-php`, `stack-ruby`, `stack-go`, `stack-perl`, `stack-rust`, `stack-cobol-mainframe`, `stack-oracle-forms`, `stack-powerbuilder`, `stack-delphi-vb6`, `stack-scala-kotlin`, `stack-cpp-windows`
+
+**Workload patterns (9)** — runtime / architectural shape:
+
+`workload-webapp`, `workload-api-service`, `workload-batch-job`, `workload-event-driven`, `workload-serverless`, `workload-data-pipeline`, `workload-desktop-client-server`, `workload-packaged-app`, `workload-mainframe-transactional`
+
+Strategy is decided by the `migration-strategy-decision-tree` skill — a 12-branch decision engine that weighs business priority, source constraints, code mutability, data gravity, integration complexity, target Azure options, cutover constraints, and team readiness. The 6Rs label is **one output field**, not the whole engine.
 
 ## Avoiding Hallucinations
 
-To reduce hallucinations during the migration, the guided prompts use two files in the repository's `reports/` folder:
+To keep migration grounded, the squad relies on **evidence-bound artifacts** in `reports/`:
 
-- `reports/Report-Status.md` — overall migration status dashboard
-- `reports/Application-Assessment-Report.md` — application assessment summary
+| Artifact | Purpose |
+|----------|---------|
+| `reports/Discovery-Dossier.md` | Narrative discovery output with evidence + confidence labels |
+| `reports/Capability-Matrix.yaml` | Machine-readable contract consumed by every Phase prompt |
+| `reports/Migration-Plan.md` | Architect-approved execution plan |
+| `reports/Application-Assessment-Report.md` | Phase 1 detailed assessment |
+| `reports/Report-Status.md` | Overall status dashboard |
 
-You can update these files at any phase to fit your requirements.
+Every classification carries an `evidence_confidence: high | medium | low` label tied to a file path, command output, or quoted user statement. Low-confidence axes must list `unresolved_questions` with a recommended next probe. A Phase prompt that can't find a Capability Matrix refuses to proceed and routes back to Discovery.
 
-During each phase, read the summary carefully to understand what will be delivered by the model and what inputs are needed.
+**Pro tips:**
 
-Pro tip: for the rewrite migration process, some unnecessary files may be created (Class1.cs); clean them up before your final check-in.
-Pro tip2: use the @terminal command to ask the agent to solve issues during your tests.
-Pro tip3: Don't assume anything, always verify with the documentation.
+- For rewrite migrations, scaffolded files (`Class1.cs`, default templates) may be created. Clean them up before final check-in.
+- Use the `@terminal` command to ask the agent to diagnose issues during tests.
+- Don't assume — verify with documentation. Every Discovery Engineer recommendation lists alternatives considered.
 
-## Repository Structure
+## Status Tracking
 
-- **`.github/`**: Contains custom prompts and chat modes that enable GitHub Copilot to assist with migration
-  - **`chatmodes/`**: Defines specialized chat experiences for migration scenarios
-  - **`prompts/`**: Structured prompts for each phase of the migration process
+Check progress at any time with:
 
-- **`Use-cases/`**: Example applications representing different migration scenarios
-  - **`01-ASPClassicApp/`**: Classic ASP application with e-commerce functionality
-  - **`02-NetFramework30-ASPNET-WEB/`**: .NET Framework 3.0 ASP.NET Web Application
-  - **`03-WCFNet35/`**: WCF services using .NET Framework 3.5
-  - **`04-ContosoUniversityDiPS/`**: Sample university application with multiple components
-  - **`05-BookShop/`**: Bookshop ASP.Net 3.5 Web Forms application for migration demonstration
-  - **`06-Java-API-BusReservation/`**: Java 8 API for bus reservation system
+- `/GetStatus` — current status snapshot
+- `@squad show migration status` — squad-mode equivalent
+- `reports/Report-Status.md` — durable status dashboard
 
+The status report includes:
 
-## Migration & Modernization Process
+- Overall completion percentage and per-phase status
+- Quality scores for each completed phase
+- Timestamps for phase transitions
+- Identified risks with severity
+- Recommended next steps
+- Resource links (architecture diagrams, IaC, runbooks)
 
-The repository implements a structured 5-phase approach to application migration:
+## Use-Case Walkthroughs
 
-### Phase 1: Planning & Assessment
+The `Use-cases/` folder contains **seven reference applications** that demonstrate the universal flow against well-understood inputs. They are not a fixed catalog — the squad migrates anything — but they're the easiest way to see the system end-to-end.
 
-Plan your migration by gathering requirements (hosting platform, IaC preferences, database needs) and generate a comprehensive assessment report analyzing the current application structure, dependencies, architecture, risk analysis, and effort estimation.
+| # | Use-Case | Source | Demonstrates |
+|---|----------|--------|--------------|
+| 1 | `01-ASPClassicApp` | Classic ASP | Strangler rewrite to ASP.NET Core |
+| 2 | `02-NetFramework30-ASPNET-WEB` | .NET Framework 3.0 | Full-stack modernization to .NET 10 |
+| 3 | `03-WCFNet35` | WCF .NET 3.5 | SOAP-to-REST API conversion |
+| 4 | `04-ContosoUniversityDiPS` | ASP.NET MVC + multiple components | Multi-component App Service migration |
+| 5 | `05-BookShop` | .NET 3.5 WebForms | Razor Pages + Container Apps + Bicep |
+| 6 | `06-Java-API-BusReservation` | Java 8 + Spring | Spring Boot 3.x + PostgreSQL |
+| 7 | `07-PartsUnlimited-aspnet45` | ASP.NET 4.5 | Mature .NET modernization + observability |
 
-### Phase 2: Code Migration
+Step-by-step walkthroughs and cheatsheets live in `docs/walkthroughs/` and `docs/use-case-cheatsheets/`.
 
-Upgrade application code to the latest framework versions compatible with Azure, with automated transformations and incremental validation.
+## See Also
 
-### Phase 3: Infrastructure Generation
-
-Create infrastructure as code (IaC) files (Bicep or Terraform) for deploying to Azure, incorporating best practices and security configurations.
-
-### Phase 4: Deployment to Azure
-
-Deploy the validated application to Azure services with comprehensive deployment monitoring and validation.
-
-### Phase 5: CI/CD Pipeline Setup
-
-Configure automated deployment pipelines for continuous integration and delivery, with environment-specific configurations and security gates.
-
-## Key Features
-
-- **Comprehensive Assessment**: Analyze existing .NET Framework or Java applications for cloud readiness
-- **Automated Code Migration**: Transform legacy code to modern versions compatible with Azure
-- **Infrastructure as Code**: Generate Bicep or Terraform files for Azure resources
-- **Multi-Platform Support**: Target different Azure hosting options (App Service, AKS, Container Apps)
-- **Authentication Modernization**: Convert on-premises authentication to Azure Entra ID
-- **Service Migration**: Transform WCF services to modern REST APIs and SOAP services to RESTful endpoints
-- **Configuration Transformation**: Convert legacy configuration files to modern formats
-- **CI/CD Integration**: Set up GitHub Actions or Azure DevOps pipelines for automated deployment
-- **Validation & Best Practices**: Ensure migrated applications follow Azure best practices
-- **Status Tracking**: Comprehensive modernization status reporting with progress tracking and quality metrics
-- **Structured Migration Planning**: Guided approach to planning migration with targeted questions and requirements gathering
-- **Risk Assessment & Mitigation**: Identification and mitigation strategies for potential migration issues
-- **Deployment Monitoring**: Real-time validation and monitoring during application deployment
-- **Incremental Validation**: Step-by-step validation throughout the migration process
-
-## Migration Status Tracking
-
-The project now includes comprehensive migration status tracking through the `/getstatus` command:
-
-- **Progress Monitoring**: Track overall migration progress with completion percentages and phase status
-- **Quality Metrics**: View quality scores for each completed phase
-- **Timeline Tracking**: Timestamps for completed phases to monitor project timeline
-- **Risk Management**: Identification and tracking of potential issues with severity levels
-- **Next Steps Guidance**: Clear recommendations for the next steps in the migration process
-- **Resource Links**: Quick access to relevant documentation and resources
-- **Executive Summary**: At-a-glance view of key migration metrics and status
-
-Status reports are stored in the `reports/Report-Status.md` file, providing a central location for tracking migration progress across all phases.
-
-## Getting Started
-
-1. Clone this repository
-2. Install [GitHub Copilot](https://copilot.github.com/) in your Visual Studio Code
-3. Open one of the use case projects in VS Code
-4. Start a chat with GitHub Copilot using the prompt:  "`/phase1-planandassess` under the folder #file:02-NetFramework30-ASPNET-WEB" to begin the migration planning and assessment
-5. Use `/getstatus` at any time to check the current migration status
-6. Follow the guided prompts to complete each phase of the migration process
-
-## Target Azure Hosting Platforms
-
-The migration process supports multiple Azure hosting options:
-
-- **Azure App Service**: For web applications and APIs
-- **Azure Kubernetes Service (AKS)**: For containerized applications
-- **Azure Container Apps**: For microservices and containerized applications
-
-## Authentication & Authorization
-
-The repository includes support for migrating from various authentication systems to Azure Entra ID, ensuring secure access to modernized applications.
-
-## Use Cases
-
-This repository contains example applications that can be used to test prompts and understand how GitHub Copilot works in the context of migration and modernization:
-
-- **ASP Classic Apps**: Migration path for legacy ASP applications
-- **.NET Framework Web Apps**: Upgrading to modern .NET versions
-- **WCF Services**: Converting to RESTful APIs
-- **Java Applications**: Modernizing for Azure compatibility
-
-## Improved Prompt Structure
-
-The custom prompts have been significantly enhanced with:
-
-### Enhanced Structured Workflow
-
-- **Planning Phase**: Added a dedicated planning phase to gather requirements before starting the assessment
-- **Status Command**: New `/getstatus` command to check migration progress at any time
-- **Report Generation**: Automatic creation of assessment, validation, and status reports
-- **Incremental Validation**: Step-by-step validation checks throughout the migration process
-- **Context Preservation**: Better context retention between phases of the migration
-
-### Technical Improvements
-
-- GitHub Copilot Migration \& Modernization for Azure
-  - Overview
-  - Requirements
-  - Avoiding Hallucinations
-  - Repository Structure
-  - Migration \& Modernization Process
-    - Phase 1: Planning \& Assessment
-    - Phase 2: Code Migration
-    - Phase 3: Infrastructure Generation
-    - Phase 4: Deployment to Azure
-    - Phase 5: CI/CD Pipeline Setup
-  - Key Features
-  - Migration Status Tracking
-  - Getting Started
-  - Target Azure Hosting Platforms
-  - Authentication \& Authorization
-  - Use Cases
-  - Improved Prompt Structure
-    - Enhanced Structured Workflow
-    - Technical Improvements
-    - Documentation and Reporting
-  - Contributing
-  - License
-
-### Documentation and Reporting
-
-- **Detailed Reports**: More comprehensive reports with actionable recommendations
-- **Visual Progress**: Visual progress tracking with completion percentages
-- **Risk Management**: Enhanced risk identification and mitigation guidance
-- **Architecture Diagrams**: Support for generating before/after architecture diagrams
-- **Performance Metrics**: Added performance baseline recommendations and validation
+- **`README-Squad.md`** — "Ocean's Fourteen" deep-dive on squad orchestration (the why behind multi-agent over single-prompt)
+- **`.squad/team.md`** — full squad roster
+- **`.squad/routing.md`** — capability-based routing rules
+- **`.github/copilot-instructions.md`** — universal behavioral contract for GitHub Copilot
+- **`AGENTS.md`** — universal squad instructions
+- **`docs/onboarding/`** — onboarding guides and training exercises
+- **`docs/architecture/`** — system architecture and prompt catalog
+- **`.github/prompts/legacy/README.md`** — mapping from deprecated `Assess-*` prompts to current adapters
 
 ## Contributing
 
-Contributions to improve the prompts, chat modes, or add new use cases are welcome. Please feel free to submit pull requests or open issues to discuss potential improvements.
+Contributions are welcome:
+
+- Add a new source adapter, stack adapter, or workload pattern under `.github/skills/`
+- Improve the `migration-strategy-decision-tree` with new branches
+- Add use-case walkthroughs under `docs/walkthroughs/`
+- Sharpen agent charters in `.squad/agents/`
+- Add example `Capability-Matrix.yaml` fixtures for testing
+
+Please open an issue or PR. The `Evaluator` agent reviews prompt/skill changes for consistency.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
