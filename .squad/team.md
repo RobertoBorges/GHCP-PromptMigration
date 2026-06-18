@@ -75,6 +75,33 @@
 |------|------|---------|--------|
 | @copilot | Coding Agent | — | 🤖 Coding Agent |
 
+### Capabilities
+
+**🟢 Good fit — auto-route when enabled:**
+- Bug fixes with clear reproduction steps
+- Documentation fixes and README updates
+- Prompt and skill file edits with clear specs
+- Adding or updating agent charters from templates
+- Small isolated configuration changes (Bicep parameters, appsettings, YAML)
+- Boilerplate/scaffolding generation for new use-cases
+- Routing and hook document updates
+
+**🟡 Needs review — route to @copilot but flag for squad member PR review:**
+- New prompt or chatmode authoring (needs Evaluator review)
+- Migration code changes across multiple files
+- Infrastructure-as-Code generation (Bicep/Terraform)
+- CI/CD pipeline modifications
+- Security-related configuration changes
+- New skill file creation
+
+**🔴 Not a fit — comment on issue suggesting reassignment:**
+- Live Azure resource provisioning or modification
+- Database migration execution (schema changes, data movement)
+- Production deployment or cutover operations
+- Cost optimization requiring Azure portal analysis
+- Security audit requiring vulnerability scanning tools
+- Performance testing requiring load generation
+
 ## The Targets 🎯
 
 The squad migrates **any** application to Azure. Discovery is the universal entry point.

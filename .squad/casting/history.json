@@ -1,0 +1,65 @@
+{
+  "assignment_cast_snapshots": {
+    "oceans-twelve-azure-heist-2026-05-28": {
+      "created_at": "2026-05-28T00:00:00Z",
+      "agents": [
+        "Architect",
+        "Coder",
+        "Tester",
+        "Azure Specialist",
+        "DevOps Engineer",
+        "Observability Engineer",
+        "Database Specialist",
+        "Performance Engineer",
+        "Security Auditor",
+        "Evaluator",
+        "Cutover Commander",
+        "Scribe"
+      ],
+      "universe": "Ocean's Eleven",
+      "status": "active"
+    },
+    "oceans-fourteen-expansion-2026-05-29": {
+      "created_at": "2026-05-29T00:00:00Z",
+      "agents": [
+        "Presentation Specialist",
+        "Cost Engineer"
+      ],
+      "universe": "Ocean's Eleven",
+      "status": "active",
+      "notes": "Agents #13 and #14 added per D-031 and D-047"
+    },
+    "universal-mode-2026-06-01": {
+      "created_at": "2026-06-01T00:00:00Z",
+      "agents": [
+        "Discovery Engineer"
+      ],
+      "universe": "Ocean's Eleven",
+      "status": "active",
+      "notes": "Agent #15 added for universal intake per Universal Mode v2.0"
+    }
+  },
+  "universe_usage_history": [
+    {
+      "assignment_id": "oceans-twelve-azure-heist-2026-05-28",
+      "assigned_at": "2026-05-28T00:00:00Z",
+      "universe": "Ocean's Eleven",
+      "agent_count": 12,
+      "status": "active"
+    },
+    {
+      "assignment_id": "oceans-fourteen-expansion-2026-05-29",
+      "assigned_at": "2026-05-29T00:00:00Z",
+      "universe": "Ocean's Eleven",
+      "agent_count": 14,
+      "status": "active"
+    },
+    {
+      "assignment_id": "universal-mode-2026-06-01",
+      "assigned_at": "2026-06-01T00:00:00Z",
+      "universe": "Ocean's Eleven",
+      "agent_count": 15,
+      "status": "active"
+    }
+  ]
+}
