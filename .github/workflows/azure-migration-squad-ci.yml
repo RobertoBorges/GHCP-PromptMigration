@@ -106,3 +106,35 @@ jobs:
       - name: npm pack smoke test
         working-directory: packages/azure-migration-squad
         run: npm pack --dry-run
+
+      # ────────────────────────────────────────────────────────────────────
+      # VS CODE EXTENSION (azure-migration-squad-vscode)
+      # Build the .vsix and run extension activation tests in a headless
+      # VS Code Insiders instance. Insiders is used to avoid mutex conflicts
+      # with any host VS Code install on developer machines.
+      # ────────────────────────────────────────────────────────────────────
+      - name: Build VS Code extension
+        working-directory: packages/azure-migration-squad-vscode
+        run: npm run build
+
+      - name: Package VS Code extension (.vsix)
+        working-directory: packages/azure-migration-squad-vscode
+        run: npm run package
+
+      - name: Run VS Code extension tests (headless)
+        working-directory: packages/azure-migration-squad-vscode
+        env:
+          DISPLAY: ':99.0'
+        run: |
+          # xvfb is needed for headless VS Code on Linux CI runners
+          sudo apt-get update && sudo apt-get install -y xvfb
+          Xvfb :99 -screen 0 1024x768x24 &
+          npm test
+
+      - name: Upload .vsix artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: azure-migration-squad-vscode-vsix
+          path: packages/azure-migration-squad-vscode/*.vsix
+          if-no-files-found: error
+          retention-days: 30
