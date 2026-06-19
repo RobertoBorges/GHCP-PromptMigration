@@ -284,6 +284,22 @@ async function cmdInit(flags) {
     });
   }
 
+  // Welcome doc — install once, never overwrite (user may annotate it / delete it).
+  // Lives at the repo root so VS Code Explorer surfaces it next to README.md.
+  const welcomeSrc = path.join(templatesDir, 'MIGRATION-START-HERE.md');
+  const welcomeDest = path.join(cwd, 'MIGRATION-START-HERE.md');
+  let welcomeJustWritten = false;
+  if (existsSync(welcomeSrc)) {
+    if (existsSync(welcomeDest)) {
+      skipped.push('MIGRATION-START-HERE.md');
+    } else {
+      await ensureDir(path.dirname(welcomeDest));
+      await fs.copyFile(welcomeSrc, welcomeDest);
+      copied.push('MIGRATION-START-HERE.md');
+      welcomeJustWritten = true;
+    }
+  }
+
   // Manifest
   const manifestPath = path.join(cwd, '.azure-migration-squad', 'manifest.json');
   await ensureDir(path.dirname(manifestPath));
@@ -309,11 +325,21 @@ async function cmdInit(flags) {
     log(`  ${DIM}(Use --overwrite to replace existing files.)${RESET}`);
   }
   success(`Manifest written to .azure-migration-squad/manifest.json`);
+  if (welcomeJustWritten) {
+    success(`Welcome guide written to MIGRATION-START-HERE.md — open it for your 60-second quickstart.`);
+  }
   log('');
   heading('Next steps');
-  log(`  1. Open GitHub Copilot Chat`);
-  log(`  2. Run:  ${BOLD}/assess-any-application${RESET}`);
-  log(`  3. The Discovery Engineer (Saul Bloom Jr.) will walk you through intake.`);
+  if (welcomeJustWritten) {
+    log(`  1. Open ${BOLD}MIGRATION-START-HERE.md${RESET} for the 60-second quickstart.`);
+    log(`  2. Open GitHub Copilot Chat (${BOLD}Ctrl+Alt+I${RESET} in VS Code).`);
+    log(`  3. Run:  ${BOLD}/assess-any-application${RESET}`);
+    log(`  4. The Discovery Engineer (Saul Bloom Jr.) will walk you through intake.`);
+  } else {
+    log(`  1. Open GitHub Copilot Chat (${BOLD}Ctrl+Alt+I${RESET} in VS Code).`);
+    log(`  2. Run:  ${BOLD}/assess-any-application${RESET}`);
+    log(`  3. The Discovery Engineer (Saul Bloom Jr.) will walk you through intake.`);
+  }
   log('');
 
   await trackInstall(

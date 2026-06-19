@@ -29,6 +29,7 @@ const COPY_MAP = [
   { src: '.squad/team.md', dest: 'squad/team.md' },
   { src: '.squad/routing.md', dest: 'squad/routing.md' },
   { src: 'AGENTS.md', dest: 'AGENTS.md' },
+  { src: 'MIGRATION-START-HERE.md', dest: 'MIGRATION-START-HERE.md' },
 ];
 
 const EXCLUDE_PATTERNS = [
