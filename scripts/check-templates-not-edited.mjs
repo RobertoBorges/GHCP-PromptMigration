@@ -74,6 +74,7 @@ async function snapshot(dir) {
 
 console.log('[check-templates-not-edited] taking snapshot of current templates/...');
 const before = await snapshot(templatesDir);
+console.log(`[check-templates-not-edited] BEFORE snapshot has ${Object.keys(before).length} file(s).`);
 
 console.log('[check-templates-not-edited] running sync to see what templates/ SHOULD look like...');
 // Copy current templates to a temp location, run sync, then compare
@@ -104,6 +105,7 @@ try {
 
 console.log('[check-templates-not-edited] taking snapshot after sync...');
 const after = await snapshot(templatesDir);
+console.log(`[check-templates-not-edited] AFTER snapshot has ${Object.keys(after).length} file(s).`);
 
 // Compare
 const issues = [];

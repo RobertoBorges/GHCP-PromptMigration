@@ -29,7 +29,7 @@ AGENTS.md              ← Squad operating instructions
 
 ### Step 1 — Open GitHub Copilot Chat
 
-> 💡 **Easiest path:** Install the [**Azure Migration Squad VS Code extension**](https://marketplace.visualstudio.com/items?itemName=robertoborges.azure-migration-squad) — it gives you a sidebar tree view, status bar, and one-click "Open Discovery" command. *(coming soon)*
+> 💡 **Easiest path:** Install the [**Azure Migration Squad VS Code extension**](https://marketplace.visualstudio.com/items?itemName=robertoborges.azure-migration-squad-vscode) — it gives you a sidebar tree view, status bar, Command Palette commands, and one-click "Open Discovery".
 
 - **VS Code:** `Ctrl+Shift+P` → "Reload Window", then `Ctrl+Alt+I` to open Copilot Chat
 - **Copilot CLI:** `gh copilot suggest` or `gh copilot explain`
@@ -157,7 +157,7 @@ If you used `npx`, you can run `npx @robertoborges/azure-migration-squad@latest 
 - **Project README** — high-level overview of how everything fits together
 - **`.squad/team.md`** — full squad roster + roles
 - **`.github/copilot-instructions.md`** — universal mode operating rules
-- **`docs/vscode-quickstart.md`** — VS Code-specific walkthrough *(coming soon)*
+- **[docs/vscode-quickstart.md](https://github.com/RobertoBorges/GHCP-PromptMigration/blob/main/docs/vscode-quickstart.md)** — VS Code-specific walkthrough (CLI + extension paths)
 - **[GitHub repo](https://github.com/RobertoBorges/GHCP-PromptMigration)** — source, issues, contributions
 
 ---

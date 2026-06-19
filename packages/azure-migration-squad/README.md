@@ -3,10 +3,13 @@
 > **Azure migration agents for GitHub Copilot + Squad.** Any source. Any stack. One command.
 
 [![npm](https://img.shields.io/npm/v/@robertoborges/azure-migration-squad?label=npm&color=blue)](https://www.npmjs.com/package/@robertoborges/azure-migration-squad)
+[![VS Code](https://img.shields.io/visual-studio-marketplace/v/robertoborges.azure-migration-squad-vscode?label=VS%20Code&color=blueviolet&logo=visualstudiocode)](https://marketplace.visualstudio.com/items?itemName=robertoborges.azure-migration-squad-vscode)
 [![Squad](https://img.shields.io/badge/squad--cli-compatible-blueviolet?logo=githubcopilot)](https://github.com/bradygaster/squad)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 A drop-in extension for [Squad](https://github.com/bradygaster/squad) that turns it into a universal Azure migration platform: 15 specialist agents, 60+ skills, and a Discovery-first workflow that handles **any application, from any source, in any stack** — and produces an evidence-bound migration plan ready for Azure.
+
+> 💡 **Using VS Code?** Install the [**Azure Migration Squad VS Code extension**](https://marketplace.visualstudio.com/items?itemName=robertoborges.azure-migration-squad-vscode) instead. It includes everything in this CLI plus a sidebar tree view, status bar, and Command Palette commands — no terminal required.
 
 ---
 

@@ -3,22 +3,37 @@
 > **Universal Azure migration agents for GitHub Copilot + Squad.** Any source. Any stack. One command.
 
 [![npm](https://img.shields.io/npm/v/@robertoborges/azure-migration-squad?label=npm&color=blue)](https://www.npmjs.com/package/@robertoborges/azure-migration-squad)
+[![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/robertoborges.azure-migration-squad-vscode?label=VS%20Code&color=blueviolet&logo=visualstudiocode)](https://marketplace.visualstudio.com/items?itemName=robertoborges.azure-migration-squad-vscode)
 [![Squad](https://img.shields.io/badge/squad--cli-compatible-blueviolet?logo=githubcopilot)](https://github.com/bradygaster/squad)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 This is the **canonical docs hub** for the Azure Migration Squad. The squad migrates **any application** — regardless of where it runs today or what it's built in — to Azure. Discovery-first, evidence-bound, squad-orchestrated.
 
 The squad ships as:
-- An **npm package**: [`@robertoborges/azure-migration-squad`](https://www.npmjs.com/package/@robertoborges/azure-migration-squad) — primary install path
+- A **VS Code extension**: [`robertoborges.azure-migration-squad-vscode`](https://marketplace.visualstudio.com/items?itemName=robertoborges.azure-migration-squad-vscode) — easiest path for VS Code users
+- An **npm package**: [`@robertoborges/azure-migration-squad`](https://www.npmjs.com/package/@robertoborges/azure-migration-squad) — CLI, also powers the extension
 - A **Squad plugin marketplace** entry — for Squad-discovery-first users (see `plugin.manifest.json`)
 - A **GitHub template** (coming in Wave D) — for new engagements that want sample code included
-- This **monorepo** — the canonical source of truth; the npm package is built from this repo's `.github/` + `.squad/` content
+- This **monorepo** — the canonical source of truth; both the npm package and extension are built from this repo's `.github/` + `.squad/` content
 
 ---
 
-## Three ways to install
+## Four ways to install
 
-### 🥇 Option 1 — npm (primary, recommended)
+### 🥇 Option 1 — VS Code extension (easiest for VS Code users)
+
+One-click install gives you a sidebar with all 15 agents + 26 prompts + 60+ skills, a status bar showing your current migration phase, and Command Palette commands for Initialize / Upgrade / Doctor / Open Discovery.
+
+```bash
+# In VS Code:
+Ctrl+Shift+X → search "Azure Migration Squad" → Install
+# Or from terminal:
+code --install-extension robertoborges.azure-migration-squad-vscode
+```
+
+After install, open any project folder and a welcome notification offers to set everything up. See [**docs/vscode-quickstart.md**](./docs/vscode-quickstart.md) for the full walkthrough with screenshots.
+
+### 🥈 Option 2 — npm CLI (for terminal-first workflows)
 
 ```bash
 # 1. Set up Squad (one-time)
@@ -47,7 +62,7 @@ ams init                                                  # short alias for the 
 
 > 💡 **`ams` is the short alias** for `azure-migration-squad` — both work for all commands. Use whichever you prefer. After `npm install -g`, both binaries are on your `PATH`.
 
-### 🥈 Option 2 — Squad plugin marketplace
+### 🥉 Option 3 — Squad plugin marketplace
 
 ```bash
 # 1. Register this repo as a marketplace
@@ -56,7 +71,7 @@ squad plugin marketplace add RobertoBorges/GHCP-PromptMigration
 # 2. Install the plugin (curated subset: agents + universal skills + routing as Squad knowledge)
 squad plugin install azure-migration-squad
 
-# 3. For full Copilot integration (chatmodes + prompts + .github/skills), follow Option 1
+# 3. For full Copilot integration (chatmodes + prompts + .github/skills), follow Option 2
 ```
 
 **Trade-off:** Squad plugin install lands files under `.squad/` per Squad's plugin contract. For full Copilot Chat integration (chatmodes, slash commands), you still want the npm package.
