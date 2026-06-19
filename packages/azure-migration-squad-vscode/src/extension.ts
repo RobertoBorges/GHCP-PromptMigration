@@ -5,32 +5,76 @@
  * applications to Azure using the @robertoborges/azure-migration-squad npm
  * package as the source of truth for prompts, skills, and agents.
  *
- * Phase 2 (this file): bootstrap activate/deactivate + one hello command
- * so the rest of the package can be built and validated incrementally.
- *
- * Phases 3-5 add: tree view, status bar, settings, welcome WebView,
- * first-run detector, walkthrough, auto-prompt for Copilot Chat install.
+ * Phase 2: bootstrap activate/deactivate + smoke test command
+ * Phase 3 (this file): tree view + commands + first useful UX
  */
 
 import * as vscode from 'vscode';
+import { AgentsProvider } from './treeProviders/agentsProvider';
+import { PromptsProvider } from './treeProviders/promptsProvider';
+import { SkillsProvider } from './treeProviders/skillsProvider';
+import { registerCommands } from './commands';
 
 export function activate(context: vscode.ExtensionContext): void {
   console.log('[azure-migration-squad] extension activated');
 
-  // Smoke test command — proves the extension loads. Will be removed in Phase 3
-  // once we have real commands (Initialize, Open Discovery, etc.).
-  const helloCommand = vscode.commands.registerCommand(
-    'azureMigrationSquad.hello',
-    () => {
-      vscode.window.showInformationMessage(
-        'Azure Migration Squad is loaded! 🎉  Phase 3 commands coming soon.'
-      );
-    }
+  // Tree views — one per content type (agents / prompts / skills)
+  const agentsProvider = new AgentsProvider();
+  const promptsProvider = new PromptsProvider();
+  const skillsProvider = new SkillsProvider();
+
+  context.subscriptions.push(
+    vscode.window.createTreeView('azureMigrationSquadAgents', {
+      treeDataProvider: agentsProvider,
+      showCollapseAll: true,
+    }),
+    vscode.window.createTreeView('azureMigrationSquadPrompts', {
+      treeDataProvider: promptsProvider,
+      showCollapseAll: true,
+    }),
+    vscode.window.createTreeView('azureMigrationSquadSkills', {
+      treeDataProvider: skillsProvider,
+      showCollapseAll: true,
+    })
   );
 
-  context.subscriptions.push(helloCommand);
+  // Refresh all trees when the workspace's AMS state may have changed.
+  const refreshAll = () => {
+    agentsProvider.refresh();
+    promptsProvider.refresh();
+    skillsProvider.refresh();
+  };
+
+  // Auto-refresh when files in .squad/ or .github/ change.
+  const watcher = vscode.workspace.createFileSystemWatcher(
+    '**/{.squad,.github}/**/*.md'
+  );
+  context.subscriptions.push(
+    watcher,
+    watcher.onDidCreate(refreshAll),
+    watcher.onDidDelete(refreshAll),
+    watcher.onDidChange(refreshAll)
+  );
+
+  // Also refresh on workspace folder change (multi-root projects).
+  context.subscriptions.push(
+    vscode.workspace.onDidChangeWorkspaceFolders(refreshAll)
+  );
+
+  // Register all commands (Initialize, Upgrade, Doctor, Open Discovery, etc.)
+  registerCommands(context, refreshAll);
+
+  // Smoke test command kept from Phase 2 for backward compat / debugging.
+  context.subscriptions.push(
+    vscode.commands.registerCommand('azureMigrationSquad.hello', () => {
+      vscode.window.showInformationMessage(
+        'Azure Migration Squad extension is active — open the sidebar to browse agents, prompts, and skills.'
+      );
+    })
+  );
 }
 
 export function deactivate(): void {
-  // Nothing to clean up in Phase 2.
+  // Subscriptions handle their own disposal.
 }
+

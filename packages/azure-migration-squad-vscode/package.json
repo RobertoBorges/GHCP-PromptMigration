@@ -41,10 +41,98 @@
     "onStartupFinished"
   ],
   "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "azureMigrationSquad",
+          "title": "Azure Migration Squad",
+          "icon": "media/activity-bar-icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "azureMigrationSquad": [
+        {
+          "id": "azureMigrationSquadAgents",
+          "name": "Agents",
+          "icon": "media/activity-bar-icon.svg",
+          "contextualTitle": "Azure Migration Squad — Agents"
+        },
+        {
+          "id": "azureMigrationSquadPrompts",
+          "name": "Prompts",
+          "icon": "media/activity-bar-icon.svg",
+          "contextualTitle": "Azure Migration Squad — Prompts"
+        },
+        {
+          "id": "azureMigrationSquadSkills",
+          "name": "Skills",
+          "icon": "media/activity-bar-icon.svg",
+          "contextualTitle": "Azure Migration Squad — Skills"
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "azureMigrationSquad.refreshTree",
+          "when": "view == azureMigrationSquadAgents || view == azureMigrationSquadPrompts || view == azureMigrationSquadSkills",
+          "group": "navigation"
+        }
+      ]
+    },
     "commands": [
       {
+        "command": "azureMigrationSquad.initialize",
+        "title": "Initialize in this workspace",
+        "category": "Azure Migration",
+        "icon": "$(rocket)"
+      },
+      {
+        "command": "azureMigrationSquad.upgrade",
+        "title": "Upgrade to latest version",
+        "category": "Azure Migration",
+        "icon": "$(cloud-download)"
+      },
+      {
+        "command": "azureMigrationSquad.doctor",
+        "title": "Run health check (doctor)",
+        "category": "Azure Migration",
+        "icon": "$(pulse)"
+      },
+      {
+        "command": "azureMigrationSquad.openDiscovery",
+        "title": "Open Discovery (/assess-any-application)",
+        "category": "Azure Migration",
+        "icon": "$(search)"
+      },
+      {
+        "command": "azureMigrationSquad.showCatalog",
+        "title": "Show prompt catalog (MIGRATION-START-HERE.md)",
+        "category": "Azure Migration",
+        "icon": "$(book)"
+      },
+      {
+        "command": "azureMigrationSquad.openSettings",
+        "title": "Open settings",
+        "category": "Azure Migration",
+        "icon": "$(settings-gear)"
+      },
+      {
+        "command": "azureMigrationSquad.refreshTree",
+        "title": "Refresh",
+        "category": "Azure Migration",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "azureMigrationSquad.openFile",
+        "title": "Open file (internal)",
+        "category": "Azure Migration",
+        "enablement": "false"
+      },
+      {
         "command": "azureMigrationSquad.hello",
-        "title": "Azure Migration: Hello (smoke test)",
+        "title": "Hello (smoke test)",
         "category": "Azure Migration"
       }
     ]
