@@ -1,7 +1,7 @@
 {
   "id": "azure-migration-squad",
   "name": "Azure Migration Squad",
-  "version": "0.1.0-insider.3",
+  "version": "0.1.0-insider.5",
   "description": "Universal Azure migration squad: 15 specialist agents + 60+ source/stack/workload adapters + migration-strategy-decision-tree. Discovery-first, evidence-bound, Squad-orchestrated.",
   "authors": [
     "Roberto Borges"

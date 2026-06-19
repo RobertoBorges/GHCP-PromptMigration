@@ -1,10 +1,85 @@
 # Changelog
 
+## 0.1.0-insider.6
+
+### Patch Changes
+
+- **Release auth migrated to npm Trusted Publisher (OIDC).** No more `NPM_TOKEN` rotation pain.
+
+  The `.github/workflows/release.yml` now publishes via short-lived OIDC tokens (npm CLI 11.5.1+ auto-detects the GitHub Actions OIDC env vars). Benefits:
+
+  - No `NPM_TOKEN` secret to rotate (npm's UI now caps Granular tokens at 365 days)
+  - Workflow-scoped — only `release.yml` can publish; a leak in another workflow can't be used
+  - Provenance attestation is auto-generated (the npm page will show "Built and signed on GitHub Actions")
+  - 5-minute publish tokens minted on demand; no long-lived secret can leak
+
+  **One-time maintainer action required:** configure Trusted Publisher in the npm UI at https://www.npmjs.com/package/@robertoborges/azure-migration-squad/access — full step-by-step in `docs/release-automation.md`.
+
+  After enabling Trusted Publisher, you can also revoke the existing `NPM_TOKEN` GitHub secret and enable "disallow tokens" on the package for maximum hardening.
+
+  This is a docs + workflow change only — no behavior change for end users of the package.
+
+## 0.1.0-insider.5
+
+### Patch Changes
+
+- Source-of-truth clarity + edit-guard:
+
+  **Docs**
+
+  - Root `README.md` now opens with a "Source-of-truth rule" section + table mapping every editable area to its canonical location
+  - Repository structure tree marks every directory as ✏️ EDIT or ❌ DO NOT EDIT
+  - Package `README.md` gains a "For contributors — source-of-truth rule" section
+  - New `packages/azure-migration-squad/templates/README.md` is a big DO-NOT-EDIT sign at the entry of the auto-generated folder
+  - `docs/contributing-adapters.md` opens with a "Critical first rule — where to edit" section
+
+  **CI guard**
+
+  - New `scripts/check-templates-not-edited.mjs` snapshots `templates/`, re-runs sync, and fails the build if any file differs (i.e., someone edited `templates/` directly instead of the canonical root location)
+  - Wired into both `azure-migration-squad-ci.yml` and `release.yml` as a step BEFORE sync/build
+  - New root script: `npm run validate:templates-not-edited`
+  - `validate:all` now includes the guard
+
+  **Workflow comments**
+
+  - Both GitHub Actions workflows (`azure-migration-squad-ci.yml` and `release.yml`) gain a prominent ASCII-bordered comment at the top describing the source-of-truth rule so anyone reading the workflow YAML sees it
+
+  **Misc**
+
+  - `clean-templates.mjs` now preserves `README.md` and `.npmignore` across syncs (in addition to `.gitkeep`) — they're intentional, not noise
+  - `.npmignore` inside `templates/` excludes `README.md` from the published tarball (it's a repo-only warning sign, not user content)
+
+## 0.1.0-insider.4
+
+### Minor Changes
+
+- Wave B/E/F shipping together:
+
+  **B — Release automation**
+
+  - Added Changesets (`@changesets/cli`) at monorepo root; pre-release mode entered with `insider` tag
+  - New `.github/workflows/release.yml` runs on push to `main`: opens "version packages" PR or auto-publishes to npm when consumed
+  - New `docs/release-automation.md` documents the NPM_TOKEN secret setup + day-to-day flow
+  - New root scripts: `npm run changeset`, `npm run changeset:version`, `npm run changeset:publish`
+
+  **E — Capability Matrix hard gates**
+
+  - All 9 phase prompts (Phase 1–6 + Database Migration + Security Hardening + Cost Optimization) now have a mandatory opening check that refuses to proceed without `reports/Discovery-Dossier.md` + `reports/Capability-Matrix.yaml` + `reports/Migration-Plan.md`
+  - Gate is auto-managed by `scripts/inject-capability-matrix-gates.mjs` (idempotent; re-run anytime; sentinel-bounded for safe in-place updates)
+  - Eval suite extended with hard-gate enforcement test — fails CI if the gate sentinel goes missing from any of the 9 prompts
+
+  **F — `ams` short alias polish**
+
+  - README + package README now lead with `ams init` instead of the long `azure-migration-squad init`
+  - CLI `help` output reordered: `ams` shown first, with `azure-migration-squad` as the equivalent long form
+  - New EXAMPLES section in `help` showing the 5 most common invocations
+
 All notable changes to `@robertoborges/azure-migration-squad` are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 Dist tags:
+
 - `latest` — current stable release
 - `insider` — preview / early-access builds (may break between minor versions)
 
@@ -44,7 +119,7 @@ In v0.1.0-insider.0/1/2, users who installed via Copilot CLI hit a dead-end when
 
 ### Fixed (HOTFIX)
 
-- **`.github/skills/migration-strategy-report/SKILL.md` description was 1273 chars** — exceeded the 1024-char limit GitHub Copilot / Squad enforce when loading skills. Caused the squad loader to print: *"The following skills failed to load: .github\skills\migration-strategy-report\SKILL.md: Skill description must be at most 1024 characters."* Trimmed to 955 chars while preserving all the trigger phrases and use-when content.
+- **`.github/skills/migration-strategy-report/SKILL.md` description was 1273 chars** — exceeded the 1024-char limit GitHub Copilot / Squad enforce when loading skills. Caused the squad loader to print: _"The following skills failed to load: .github\skills\migration-strategy-report\SKILL.md: Skill description must be at most 1024 characters."_ Trimmed to 955 chars while preserving all the trigger phrases and use-when content.
 
 ### Added
 

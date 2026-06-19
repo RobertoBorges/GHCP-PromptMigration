@@ -204,3 +204,27 @@ test('Coverage: Phase 1-6 prompts all present', () => {
     assert.ok(exists, `Phase ${n} prompt missing`);
   }
 });
+
+test('Hard gates: every Phase/DB/Security/Cost prompt has the Capability Matrix gate', () => {
+  const GATED_PROMPTS = [
+    'Phase1-PlanAndAssess.prompt.md',
+    'Phase2-MigrateCode.prompt.md',
+    'Phase3-GenerateInfra.prompt.md',
+    'Phase4-DeployToAzure.prompt.md',
+    'Phase5-SetupCICD.prompt.md',
+    'Phase6-PostMigrationOps.prompt.md',
+    'DatabaseMigration.prompt.md',
+    'SecurityHardening.prompt.md',
+    'CostOptimization.prompt.md',
+  ];
+  const promptsDir = path.join(templatesDir, 'github', 'prompts');
+  for (const f of GATED_PROMPTS) {
+    const fp = path.join(promptsDir, f);
+    assert.ok(existsSync(fp), `prompt missing: ${f}`);
+    const content = readFileSync(fp, 'utf-8');
+    assert.match(content, /BEGIN: capability-matrix-gate/, `${f}: gate sentinel missing — re-run scripts/inject-capability-matrix-gates.mjs`);
+    assert.match(content, /reports\/Capability-Matrix\.yaml/, `${f}: gate doesn't reference Capability-Matrix.yaml`);
+    assert.match(content, /reports\/Discovery-Dossier\.md/, `${f}: gate doesn't reference Discovery-Dossier.md`);
+    assert.match(content, /MANDATORY OPENING CHECK/, `${f}: gate doesn't have the mandatory-opening-check heading`);
+  }
+});

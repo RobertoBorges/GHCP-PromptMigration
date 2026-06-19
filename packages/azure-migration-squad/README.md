@@ -39,18 +39,29 @@ A drop-in extension for [Squad](https://github.com/bradygaster/squad) that turns
 npm install -g @bradygaster/squad-cli
 squad init
 
-# 2. Add the migration agents
-npx @robertoborges/azure-migration-squad@insider init
+# 2. Add the migration agents (one-shot — no install)
+npx @robertoborges/azure-migration-squad@latest init
 
-# 3. Open Copilot Chat → /assess-any-application
+# 3a. VS Code Copilot Chat: /assess-any-application
+# 3b. Copilot CLI:           "assess this application"
 ```
 
-### Global install (for repeated use)
+### Global install (for repeated use — get the `ams` shortcut)
 
 ```bash
-npm install -g @robertoborges/azure-migration-squad@insider
-azure-migration-squad init     # or:  ams init
+npm install -g @robertoborges/azure-migration-squad@latest
+
+ams init                              # ← short alias
+ams doctor
+ams list
+ams telemetry status
+ams upgrade
+
+# Both names are equivalent:
+azure-migration-squad init            # ← long form
 ```
+
+`ams` ships as a second `bin` entry — same binary, fewer keystrokes.
 
 ### Insider channel vs stable
 
@@ -64,13 +75,13 @@ npm install -g @robertoborges/azure-migration-squad@insider   # preview builds
 ## Commands
 
 ```
-azure-migration-squad <command> [options]
-ams <command> [options]                       # short alias
+ams <command> [options]                       # short alias (recommended)
+azure-migration-squad <command> [options]     # full name (same binary)
 
 Commands:
   init                  Scaffold the migration squad into the current repo
   upgrade               Refresh squad content to the latest version
-  doctor                Validate squad integrity
+  doctor                Validate squad integrity (incl. Capability Matrix schema)
   list                  List installed adapters
   telemetry <sub>       Manage telemetry — sub: on | off | status
   help                  Show this help
@@ -164,11 +175,35 @@ export DO_NOT_TRACK=1
 
 ---
 
+## For contributors — source-of-truth rule
+
+> If you're using the package, ignore this section. If you're contributing to this monorepo, **read it before editing any prompt / skill / charter file**.
+
+The npm package's `templates/` folder is a **build artifact**, not a source. Editing files there will silently lose your work the next time `npm run sync` runs (which happens automatically before every publish + in CI).
+
+**Always edit at the monorepo root:**
+
+| To change... | Edit here ✅ | NOT here ❌ |
+|--------------|-------------|--------------|
+| Prompts (Phase 1–6, etc.) | `.github/prompts/` | `packages/azure-migration-squad/templates/github/prompts/` |
+| Skills (adapters, decision tree) | `.github/skills/` | `packages/azure-migration-squad/templates/github/skills/` |
+| Chatmodes | `.github/chatmodes/` | `packages/azure-migration-squad/templates/github/chatmodes/` |
+| Agent charters | `.squad/agents/<name>/charter.md` | `packages/azure-migration-squad/templates/squad/agents/` |
+| Squad team/routing | `.squad/team.md`, `.squad/routing.md` | `packages/azure-migration-squad/templates/squad/` |
+| Top-level Copilot/Squad guidance | `AGENTS.md`, `.github/copilot-instructions.md` | `templates/AGENTS.md`, `templates/github/copilot-instructions.md` |
+
+After editing, run `npm run sync` to refresh `templates/`. The pre-publish hook does this automatically. CI also fails the build if `templates/` was edited by hand (see `scripts/check-templates-not-edited.mjs`).
+
+Full guide: [docs/contributing-adapters.md](https://github.com/RobertoBorges/GHCP-PromptMigration/blob/main/docs/contributing-adapters.md)
+
+---
+
 ## See also
 
 - [GHCP-PromptMigration](https://github.com/RobertoBorges/GHCP-PromptMigration) — docs hub, walkthroughs, 7 sample use-cases
 - [Squad](https://github.com/bradygaster/squad) — the multi-agent runtime
 - [GitHub Copilot CLI](https://github.com/github/copilot-cli)
+- [Release automation](https://github.com/RobertoBorges/GHCP-PromptMigration/blob/main/docs/release-automation.md) — how new versions ship
 
 ## License
 

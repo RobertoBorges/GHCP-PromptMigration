@@ -25,8 +25,11 @@ The squad ships as:
 npm install -g @bradygaster/squad-cli
 squad init
 
-# 2. Add the Azure Migration Squad
-npx @robertoborges/azure-migration-squad@insider init
+# 2. Add the Azure Migration Squad — pick either:
+npx @robertoborges/azure-migration-squad@latest init     # one-shot, no install
+# OR
+npm install -g @robertoborges/azure-migration-squad@latest
+ams init                                                  # short alias for the rest of this session
 
 # 3a. If using VS Code with GitHub Copilot Chat:
 #     Slash commands work directly:
@@ -42,7 +45,7 @@ npx @robertoborges/azure-migration-squad@insider init
 #     .github/copilot-instructions.md and dispatches the right specialist.
 ```
 
-**Why the difference?** VS Code Copilot Chat auto-discovers `.github/prompts/*.prompt.md` as slash commands. GitHub Copilot CLI does not — it loads `AGENTS.md` + `.github/copilot-instructions.md` + `.github/agents/*.agent.md` as instructions only. The squad behaves identically on both surfaces; only the invocation syntax differs.
+> 💡 **`ams` is the short alias** for `azure-migration-squad` — both work for all commands. Use whichever you prefer. After `npm install -g`, both binaries are on your `PATH`.
 
 ### 🥈 Option 2 — Squad plugin marketplace
 
@@ -100,25 +103,79 @@ Picks migration strategy via a **12-branch decision tree** (Rehost/Replatform/Re
 
 ---
 
+## 🚨 Source-of-truth rule — READ THIS BEFORE EDITING
+
+This is a **monorepo** where the npm package is built from canonical content at the repo root. There are TWO locations that look similar — one is the source of truth, the other is a build artifact.
+
+### Where to edit what
+
+| If you want to change... | ✅ Edit here (source of truth) | ❌ NEVER edit here (auto-generated) |
+|--------------------------|--------------------------------|--------------------------------------|
+| Prompts (Phase 1–6, Assess-Any-Application, etc.) | `.github/prompts/` | `packages/azure-migration-squad/templates/github/prompts/` |
+| Skills (source/stack/workload adapters, decision tree, etc.) | `.github/skills/` | `packages/azure-migration-squad/templates/github/skills/` |
+| Chatmodes (Discovery-Intake, Migration-Orchestrator, …) | `.github/chatmodes/` | `packages/azure-migration-squad/templates/github/chatmodes/` |
+| Hooks (agent-dispatch, phase-gates, etc.) | `.github/hooks/` | `packages/azure-migration-squad/templates/github/hooks/` |
+| Agent charters (15 specialists) | `.squad/agents/<name>/charter.md` | `packages/azure-migration-squad/templates/squad/agents/` |
+| Squad team + routing | `.squad/team.md`, `.squad/routing.md` | `packages/azure-migration-squad/templates/squad/` |
+| Top-level operating docs | `AGENTS.md`, `.github/copilot-instructions.md` | `packages/azure-migration-squad/templates/AGENTS.md`, `templates/github/copilot-instructions.md` |
+
+### Why this layout exists
+
+- `.github/` and `.squad/` are also **actively used by Copilot/Squad when you're working in this repo itself** — that's how we dogfood the squad on its own codebase.
+- `packages/azure-migration-squad/templates/` is what ships to npm — it must match the canonical content exactly. A sync script regenerates it before every publish.
+
+### The sync flow
+
+```
+.github/   .squad/   AGENTS.md       ← ✏️  edit these
+       │       │         │
+       └───────┴─────────┘
+                 │
+                 ▼
+       npm run sync          ← copy + flatten into templates/
+                 │
+                 ▼
+   templates/   (build artifact — DO NOT EDIT BY HAND)
+                 │
+                 ▼
+            npm publish     ← consumed by end users
+```
+
+The sync runs:
+- **Automatically** before every `npm pack` / `npm publish` (via the `prepack` → `prebuild` → `presync` → `sync` script chain)
+- **In CI** on every PR (see `.github/workflows/azure-migration-squad-ci.yml`)
+- **On demand** anytime: `cd packages/azure-migration-squad && npm run sync`
+
+### Safety nets we ship
+
+1. **Every file under `templates/` has a top-of-file warning** noting it's auto-generated.
+2. **`packages/azure-migration-squad/templates/README.md`** is a big "DO NOT EDIT" sign for anyone opening the folder.
+3. **CI guard** (`scripts/check-templates-not-edited.mjs`) — fails the build if PR commits touch `templates/` without a matching source-of-truth change.
+4. **Sync script is idempotent** — running it always wipes-then-rebuilds `templates/`, so manual edits there are silently lost. Better to fail loudly than silently.
+
+**TL;DR:** edit at the root (`.github/`, `.squad/`, `AGENTS.md`). Never touch `packages/azure-migration-squad/templates/`.
+
+---
+
 ## Repository structure
 
 ```
 GHCP-PromptMigration/                            ← this monorepo
 ├── README.md                                    ← docs hub (you are here)
-├── plugin.manifest.json                         ← Squad plugin marketplace metadata
+├── plugin.manifest.json                         ← Squad plugin marketplace metadata (auto-generated)
 ├── package.json                                 ← npm workspaces root
 │
 ├── packages/
 │   └── azure-migration-squad/                   ← published npm package
 │       ├── package.json                         (@robertoborges/azure-migration-squad)
-│       ├── bin/cli.js                           (init, upgrade, doctor, list, telemetry)
-│       ├── lib/                                 (telemetry + opt-out consent)
-│       ├── schemas/                             (Capability Matrix + Discovery Dossier JSON Schemas)
-│       ├── scripts/                             (sync, validate, lint)
-│       ├── templates/                           (synced from root .github/ + .squad/agents/)
+│       ├── bin/cli.js                           ← ✏️ EDIT (CLI source)
+│       ├── lib/                                 ← ✏️ EDIT (telemetry + opt-out consent)
+│       ├── schemas/                             ← ✏️ EDIT (JSON Schemas)
+│       ├── scripts/                             ← ✏️ EDIT (sync, validate, lint)
+│       ├── templates/                           ← ❌ DO NOT EDIT (auto-generated from root .github/ + .squad/)
 │       └── WAVE-A-HANDOFF.md                    (publish runbook)
 │
-├── .github/                                     ← canonical content (source of truth)
+├── .github/                                     ← ✏️ SOURCE OF TRUTH (canonical content)
 │   ├── chatmodes/                               (9 Copilot chatmodes)
 │   ├── prompts/                                 (26 prompts: Assess-Any-Application, Phase 0-6, ...)
 │   ├── skills/                                  (60+ source/stack/workload + universal skills)
@@ -126,22 +183,23 @@ GHCP-PromptMigration/                            ← this monorepo
 │   ├── copilot-instructions.md
 │   └── workflows/                               (CI: azure-migration-squad-ci.yml + others)
 │
-├── .squad/                                      ← Squad orchestration layer
+├── .squad/                                      ← ✏️ SOURCE OF TRUTH (Squad orchestration layer)
 │   ├── agents/                                  (15 specialist charters)
 │   ├── team.md                                  (roster)
 │   ├── routing.md                               (capability-based routing)
 │   └── decisions.md                             (durable decision log)
 │
-├── docs/                                        ← extended documentation
+├── docs/                                        ← ✏️ EDIT (extended documentation)
 │   ├── telemetry.md                             (data we collect + opt-out matrix)
 │   ├── privacy-policy.md                        (privacy stance)
+│   ├── release-automation.md                    (how releases ship via Changesets + GitHub Actions)
 │   ├── contributing-adapters.md                 (how to add a new adapter)
 │   ├── architecture/                            (system architecture)
 │   ├── guides/                                  (onboarding + skills map)
 │   ├── walkthroughs/                            (7 reference walkthroughs)
 │   └── use-case-cheatsheets/                    (7 quick-reference cards)
 │
-├── Use-cases/                                   ← 7 reference applications (samples)
+├── Use-cases/                                   ← ✏️ EDIT (7 reference applications, samples)
 │   ├── 01-ASPClassicApp/                        (Classic ASP)
 │   ├── 02-NetFramework30-ASPNET-WEB/            (.NET Framework 3.0)
 │   ├── 03-WCFNet35/                             (WCF .NET 3.5)
@@ -150,7 +208,7 @@ GHCP-PromptMigration/                            ← this monorepo
 │   ├── 06-Java-API-BusReservation/              (Java 8 + Spring)
 │   └── 07-PartsUnlimited-aspnet45/              (ASP.NET 4.5)
 │
-└── AGENTS.md, CLAUDE.md, JOURNAL.md, PORTFOLIO.md   ← squad operating docs
+└── AGENTS.md, CLAUDE.md, JOURNAL.md, PORTFOLIO.md   ← ✏️ EDIT (squad operating docs)
 ```
 
 ---

@@ -5,6 +5,59 @@ argument-hint: "Specify CI/CD platform, e.g., 'Setup GitHub Actions' or 'Configu
 agent: Code Migration Modernization Agent
 ---
 
+
+<!-- BEGIN: capability-matrix-gate (auto-managed by inject-capability-matrix-gates.mjs) -->
+
+## 🚦 MANDATORY OPENING CHECK — Capability Matrix Required
+
+**Before doing ANY work for Phase 5 — Setup CI/CD, verify the Discovery contract:**
+
+| Required artifact | Location | If missing |
+|-------------------|----------|------------|
+| Discovery Dossier | `reports/Discovery-Dossier.md` | **STOP** — route to Discovery Engineer |
+| Capability Matrix | `reports/Capability-Matrix.yaml` | **STOP** — route to Discovery Engineer |
+| Approved Migration Plan | `reports/Migration-Plan.md` | **STOP** — route to Architect (run `/build-migration-plan`) |
+
+### If ANY of those three artifacts is missing
+
+Reply with exactly:
+
+```
+🚨 Phase 5 — Setup CI/CD cannot proceed without the Discovery contract.
+
+Missing artifacts:
+  - reports/Discovery-Dossier.md          [missing/present]
+  - reports/Capability-Matrix.yaml         [missing/present]
+  - reports/Migration-Plan.md              [missing/present]
+
+Required steps before re-running this phase:
+  1. Open Copilot Chat → /assess-any-application  (or in CLI: "assess this application")
+  2. Then: /build-migration-plan                  (or in CLI: "build the migration plan")
+  3. Then: /phase...
+
+To override (skip Discovery and accept risk), log a waiver in .squad/decisions.md
+with `Waiver-<app>: skip-discovery=<reason>` and re-invoke this prompt with the
+`--accept-risk` natural-language flag in your request.
+```
+
+**Do NOT proceed past this gate unless:**
+- All three artifacts exist, OR
+- A waiver entry exists in `.squad/decisions.md` AND the user explicitly said "skip discovery" or similar
+
+### When the gate passes
+
+1. Read `reports/Capability-Matrix.yaml` and extract these fields you must honor:
+   - `source.primary_adapter` → load the matching `source-*` skill
+   - `stack.primary_stack` + `stack.secondary_stacks` → load matching `stack-*` skills
+   - `workload.primary_pattern` → load matching `workload-*` skill
+   - `migration_strategy.recommendation` → adjust phase emphasis per the strategy table in `.squad/routing.md`
+   - `risk_flags` → auto-dispatch the specialists listed in `.squad/routing.md`
+   - `required_specialists` → ensure all are in the room
+   - `unresolved_questions` → if any remain unanswered, surface them BEFORE starting work
+2. Read `reports/Migration-Plan.md` for the Architect's approved sequencing and any app-specific extra gates.
+3. Confirm Phase prerequisites are met (see standard gates in `.squad/routing.md`).
+
+<!-- END: capability-matrix-gate -->
 Set up CI/CD pipelines for automated deployment and continuous integration
 
 ## Preconditions

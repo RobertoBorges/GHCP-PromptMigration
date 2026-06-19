@@ -4,5 +4,9 @@
   "initialVersions": {
     "@robertoborges/azure-migration-squad": "0.1.0-insider.3"
   },
-  "changesets": []
+  "changesets": [
+    "source-of-truth-docs-2026-06-19",
+    "trusted-publisher-2026-06-19",
+    "wave-b-e-f-2026-06-19"
+  ]
 }
