@@ -1,0 +1,474 @@
+{
+  "id": "azure-migration-squad",
+  "name": "Azure Migration Squad",
+  "version": "0.1.0-insider.5",
+  "description": "Universal Azure migration squad: 15 specialist agents + 60+ source/stack/workload adapters + migration-strategy-decision-tree. Discovery-first, evidence-bound, Squad-orchestrated.",
+  "authors": [
+    "Roberto Borges"
+  ],
+  "license": "MIT",
+  "squad": ">=0.10.0",
+  "components": {
+    "agents": [
+      "architect",
+      "azure-specialist",
+      "coder",
+      "cost-engineer",
+      "cutover-commander",
+      "database-specialist",
+      "devops-engineer",
+      "discovery-engineer",
+      "evaluator",
+      "observability-engineer",
+      "performance-engineer",
+      "presentation-specialist",
+      "scribe",
+      "security-auditor",
+      "tester"
+    ],
+    "knowledge": [
+      "azure-migration"
+    ],
+    "routing": [
+      "azure-migration-routing"
+    ],
+    "instructions": [
+      "azure-migration-instructions"
+    ]
+  },
+  "repository": {
+    "type": "github",
+    "url": "https://github.com/RobertoBorges/GHCP-PromptMigration"
+  },
+  "upstream": {
+    "package": "@robertoborges/azure-migration-squad",
+    "registry": "npm",
+    "installCommand": "npx @robertoborges/azure-migration-squad@insider init",
+    "docs": "https://github.com/RobertoBorges/GHCP-PromptMigration#readme"
+  },
+  "providers": [
+    {
+      "id": "azure-migration-knowledge",
+      "type": "knowledge",
+      "mode": "read",
+      "protocol": "static-artifact",
+      "description": "Static knowledge artifacts covering source/stack/workload adapters and the migration-strategy-decision-tree.",
+      "artifact": "knowledge/azure-migration/universal/migration-strategy-decision-tree.md",
+      "capabilities": [
+        "migration-strategy",
+        "discovery",
+        "capability-matrix",
+        "source-classification",
+        "stack-classification",
+        "workload-classification"
+      ]
+    }
+  ],
+  "files": [
+    {
+      "source": ".squad/agents/architect/charter.md",
+      "target": "agents/architect/charter.md",
+      "type": "agent"
+    },
+    {
+      "source": ".squad/agents/azure-specialist/charter.md",
+      "target": "agents/azure-specialist/charter.md",
+      "type": "agent"
+    },
+    {
+      "source": ".squad/agents/coder/charter.md",
+      "target": "agents/coder/charter.md",
+      "type": "agent"
+    },
+    {
+      "source": ".squad/agents/cost-engineer/charter.md",
+      "target": "agents/cost-engineer/charter.md",
+      "type": "agent"
+    },
+    {
+      "source": ".squad/agents/cutover-commander/charter.md",
+      "target": "agents/cutover-commander/charter.md",
+      "type": "agent"
+    },
+    {
+      "source": ".squad/agents/database-specialist/charter.md",
+      "target": "agents/database-specialist/charter.md",
+      "type": "agent"
+    },
+    {
+      "source": ".squad/agents/devops-engineer/charter.md",
+      "target": "agents/devops-engineer/charter.md",
+      "type": "agent"
+    },
+    {
+      "source": ".squad/agents/discovery-engineer/charter.md",
+      "target": "agents/discovery-engineer/charter.md",
+      "type": "agent"
+    },
+    {
+      "source": ".squad/agents/evaluator/charter.md",
+      "target": "agents/evaluator/charter.md",
+      "type": "agent"
+    },
+    {
+      "source": ".squad/agents/observability-engineer/charter.md",
+      "target": "agents/observability-engineer/charter.md",
+      "type": "agent"
+    },
+    {
+      "source": ".squad/agents/performance-engineer/charter.md",
+      "target": "agents/performance-engineer/charter.md",
+      "type": "agent"
+    },
+    {
+      "source": ".squad/agents/presentation-specialist/charter.md",
+      "target": "agents/presentation-specialist/charter.md",
+      "type": "agent"
+    },
+    {
+      "source": ".squad/agents/scribe/charter.md",
+      "target": "agents/scribe/charter.md",
+      "type": "agent"
+    },
+    {
+      "source": ".squad/agents/security-auditor/charter.md",
+      "target": "agents/security-auditor/charter.md",
+      "type": "agent"
+    },
+    {
+      "source": ".squad/agents/tester/charter.md",
+      "target": "agents/tester/charter.md",
+      "type": "agent"
+    },
+    {
+      "source": ".squad/team.md",
+      "target": "routing/team.md",
+      "type": "doc"
+    },
+    {
+      "source": ".squad/routing.md",
+      "target": "routing/routing.md",
+      "type": "doc"
+    },
+    {
+      "source": ".github/skills/asp-classic-to-dotnet.md",
+      "target": "knowledge/azure-migration/universal/asp-classic-to-dotnet.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/skills/azure-app-service.md",
+      "target": "knowledge/azure-migration/universal/azure-app-service.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/skills/azure-container-apps.md",
+      "target": "knowledge/azure-migration/universal/azure-container-apps.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/skills/azure-defender-compliance.md",
+      "target": "knowledge/azure-migration/universal/azure-defender-compliance.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/skills/azure-entra-id.md",
+      "target": "knowledge/azure-migration/universal/azure-entra-id.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/skills/azure-keyvault-secrets.md",
+      "target": "knowledge/azure-migration/universal/azure-keyvault-secrets.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/skills/azure-network-security.md",
+      "target": "knowledge/azure-migration/universal/azure-network-security.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/skills/bicep-modules.md",
+      "target": "knowledge/azure-migration/universal/bicep-modules.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/skills/capability-matrix.md",
+      "target": "knowledge/azure-migration/universal/capability-matrix.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/skills/config-transformation.md",
+      "target": "knowledge/azure-migration/universal/config-transformation.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/skills/discovery-dossier-template.md",
+      "target": "knowledge/azure-migration/universal/discovery-dossier-template.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/skills/docker-containerize.md",
+      "target": "knowledge/azure-migration/universal/docker-containerize.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/skills/dotnet-framework-to-dotnet8.md",
+      "target": "knowledge/azure-migration/universal/dotnet-framework-to-dotnet8.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/skills/ef-migration.md",
+      "target": "knowledge/azure-migration/universal/ef-migration.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/skills/java8-to-java21.md",
+      "target": "knowledge/azure-migration/universal/java8-to-java21.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/skills/managed-identity.md",
+      "target": "knowledge/azure-migration/universal/managed-identity.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/skills/migration-handoff.md",
+      "target": "knowledge/azure-migration/universal/migration-handoff.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/skills/migration-plan-template.md",
+      "target": "knowledge/azure-migration/universal/migration-plan-template.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/skills/migration-report-template.md",
+      "target": "knowledge/azure-migration/universal/migration-report-template.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/skills/migration-strategy-decision-tree.md",
+      "target": "knowledge/azure-migration/universal/migration-strategy-decision-tree.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/skills/owasp-top10-review.md",
+      "target": "knowledge/azure-migration/universal/owasp-top10-review.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/skills/pptx-generation.md",
+      "target": "knowledge/azure-migration/universal/pptx-generation.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/skills/rbac-least-privilege.md",
+      "target": "knowledge/azure-migration/universal/rbac-least-privilege.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/skills/rollback-strategy.md",
+      "target": "knowledge/azure-migration/universal/rollback-strategy.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/skills/secret-management.md",
+      "target": "knowledge/azure-migration/universal/secret-management.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/skills/source-aws.md",
+      "target": "knowledge/azure-migration/source/source-aws.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/skills/source-container-registry.md",
+      "target": "knowledge/azure-migration/source/source-container-registry.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/skills/source-gcp.md",
+      "target": "knowledge/azure-migration/source/source-gcp.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/skills/source-github-repo.md",
+      "target": "knowledge/azure-migration/source/source-github-repo.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/skills/source-kubernetes-cluster.md",
+      "target": "knowledge/azure-migration/source/source-kubernetes-cluster.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/skills/source-mainframe.md",
+      "target": "knowledge/azure-migration/source/source-mainframe.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/skills/source-on-premise.md",
+      "target": "knowledge/azure-migration/source/source-on-premise.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/skills/source-oracle-db.md",
+      "target": "knowledge/azure-migration/source/source-oracle-db.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/skills/source-unsupported-escalation.md",
+      "target": "knowledge/azure-migration/source/source-unsupported-escalation.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/skills/source-vmware-rvtools.md",
+      "target": "knowledge/azure-migration/source/source-vmware-rvtools.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/skills/source-zip-filesystem.md",
+      "target": "knowledge/azure-migration/source/source-zip-filesystem.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/skills/stack-cobol-mainframe.md",
+      "target": "knowledge/azure-migration/stack/stack-cobol-mainframe.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/skills/stack-cpp-windows.md",
+      "target": "knowledge/azure-migration/stack/stack-cpp-windows.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/skills/stack-delphi-vb6.md",
+      "target": "knowledge/azure-migration/stack/stack-delphi-vb6.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/skills/stack-detection.md",
+      "target": "knowledge/azure-migration/universal/stack-detection.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/skills/stack-dotnet.md",
+      "target": "knowledge/azure-migration/stack/stack-dotnet.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/skills/stack-go.md",
+      "target": "knowledge/azure-migration/stack/stack-go.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/skills/stack-java.md",
+      "target": "knowledge/azure-migration/stack/stack-java.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/skills/stack-nodejs.md",
+      "target": "knowledge/azure-migration/stack/stack-nodejs.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/skills/stack-oracle-forms.md",
+      "target": "knowledge/azure-migration/stack/stack-oracle-forms.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/skills/stack-perl.md",
+      "target": "knowledge/azure-migration/stack/stack-perl.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/skills/stack-php.md",
+      "target": "knowledge/azure-migration/stack/stack-php.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/skills/stack-powerbuilder.md",
+      "target": "knowledge/azure-migration/stack/stack-powerbuilder.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/skills/stack-python.md",
+      "target": "knowledge/azure-migration/stack/stack-python.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/skills/stack-ruby.md",
+      "target": "knowledge/azure-migration/stack/stack-ruby.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/skills/stack-rust.md",
+      "target": "knowledge/azure-migration/stack/stack-rust.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/skills/stack-scala-kotlin.md",
+      "target": "knowledge/azure-migration/stack/stack-scala-kotlin.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/skills/wcf-to-rest-api.md",
+      "target": "knowledge/azure-migration/universal/wcf-to-rest-api.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/skills/webforms-to-razor.md",
+      "target": "knowledge/azure-migration/universal/webforms-to-razor.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/skills/workload-api-service.md",
+      "target": "knowledge/azure-migration/workload/workload-api-service.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/skills/workload-batch-job.md",
+      "target": "knowledge/azure-migration/workload/workload-batch-job.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/skills/workload-data-pipeline.md",
+      "target": "knowledge/azure-migration/workload/workload-data-pipeline.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/skills/workload-desktop-client-server.md",
+      "target": "knowledge/azure-migration/workload/workload-desktop-client-server.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/skills/workload-event-driven.md",
+      "target": "knowledge/azure-migration/workload/workload-event-driven.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/skills/workload-mainframe-transactional.md",
+      "target": "knowledge/azure-migration/workload/workload-mainframe-transactional.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/skills/workload-packaged-app.md",
+      "target": "knowledge/azure-migration/workload/workload-packaged-app.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/skills/workload-serverless.md",
+      "target": "knowledge/azure-migration/workload/workload-serverless.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/skills/workload-webapp.md",
+      "target": "knowledge/azure-migration/workload/workload-webapp.md",
+      "type": "knowledge"
+    },
+    {
+      "source": ".github/copilot-instructions.md",
+      "target": "instructions/azure-migration-instructions.md",
+      "type": "instruction"
+    }
+  ]
+}

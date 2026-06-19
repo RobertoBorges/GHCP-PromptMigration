@@ -1,0 +1,58 @@
+# Prompt Catalog
+
+Verified against `.github/prompts/` on 2026-05-28. This catalog covers all **20** prompt entrypoints currently on disk.
+
+## Group Summary
+
+| Group | Count | Files |
+|---|---:|---|
+| Main Workflow (Phase 0-6) | 7 | `Phase0-Multi-repo-assessment.prompt.md`<br>`Phase1-PlanAndAssess.prompt.md`<br>`Phase2-MigrateCode.prompt.md`<br>`Phase3-GenerateInfra.prompt.md`<br>`Phase4-DeployToAzure.prompt.md`<br>`Phase5-SetupCICD.prompt.md`<br>`Phase6-PostMigrationOps.prompt.md` |
+| Technology Assessments | 5 | `Assess-ClassicASP-Migration.prompt.md`<br>`Assess-DotNet-Upgrade.prompt.md`<br>`Assess-Java-Upgrade.prompt.md`<br>`Assess-WCF-Migration.prompt.md`<br>`Assess-WebForms-Migration.prompt.md` |
+| Specialist Reviews | 5 | `CostOptimization.prompt.md`<br>`DatabaseMigration.prompt.md`<br>`Phase-Rollback.prompt.md`<br>`QuickAssessment.prompt.md`<br>`SecurityHardening.prompt.md` |
+| Utility | 3 | `GetStatus.prompt.md`<br>`QuickTriage.prompt.md`<br>`TeamSkillAssessment.prompt.md` |
+
+## Main Workflow (Phase 0-6)
+
+| Slash command | Prompt file | Description | Lead agent | Skills referenced | Output artifacts | Best chatmodes |
+|---|---|---|---|---|---|---|
+| `/phase0-multirepoassessment` | `Phase0-Multi-repo-assessment.prompt.md` | Assesses multiple repositories and sequences portfolio migration work. | Architect | `#file:.github/skills/migration-handoff.md` | `codebase-analysis.md`<br>`codebase-summary.md`<br>`reports/[repo-name].md`<br>`reports/Report-Status.md` | `Migration-Orchestrator` |
+| `/phase1-planandassess` | `Phase1-PlanAndAssess.prompt.md` | Plans the migration and captures architecture, risk, and readiness. | Architect | `#file:skills/migration-report-template.md`<br>`#file:.github/skills/dotnet-framework-to-dotnet8.md`<br>`#file:.github/skills/wcf-to-rest-api.md`<br>`#file:.github/skills/webforms-to-razor.md`<br>`#file:.github/skills/config-transformation.md`<br>`#file:.github/skills/ef-migration.md`<br>`#file:.github/skills/java8-to-java21.md`<br>`#file:.github/skills/azure-app-service.md`<br>`#file:.github/skills/azure-entra-id.md`<br>`#file:.github/skills/migration-handoff.md` | `reports/Application-Assessment-Report.md`<br>`reports/Report-Status.md` | `Migration-Orchestrator`<br>`Quick-Assessment` |
+| `/phase2-migratecode` | `Phase2-MigrateCode.prompt.md` | Guides application code migration and modernization for Azure. | Coder | `#file:.github/skills/dotnet-framework-to-dotnet8.md`<br>`#file:.github/skills/config-transformation.md`<br>`#file:.github/skills/ef-migration.md`<br>`#file:.github/skills/wcf-to-rest-api.md`<br>`#file:.github/skills/webforms-to-razor.md`<br>`#file:.github/skills/java8-to-java21.md`<br>`#file:.github/skills/azure-entra-id.md`<br>`#file:.github/skills/migration-handoff.md` | `reports/Report-Status.md` | `Code-Migration-Modernization`<br>`Migration-Orchestrator` |
+| `/phase3-generateinfra` | `Phase3-GenerateInfra.prompt.md` | Generates and reviews Azure infrastructure-as-code for the target app. | Azure Specialist | `#file:.github/skills/bicep-modules.md`<br>`#file:.github/skills/azure-app-service.md`<br>`#file:.github/skills/azure-entra-id.md`<br>`#file:.github/skills/migration-handoff.md` | `infra/`<br>`azure.yaml`<br>`reports/Report-Status.md` | `Azure-Infrastructure`<br>`Migration-Orchestrator` |
+| `/phase4-deploytoazure` | `Phase4-DeployToAzure.prompt.md` | Deploys the migrated application to Azure and validates the release. | DevOps Engineer | `#file:.github/skills/azure-app-service.md`<br>`#file:.github/skills/azure-entra-id.md`<br>`#file:.github/skills/rollback-strategy.md`<br>`#file:.github/skills/migration-handoff.md` | `reports/deployment_summary_report.md`<br>`reports/Report-Status.md` | `Migration-Orchestrator`<br>`Azure-Infrastructure`<br>`Debug-Migration` |
+| `/phase5-setupcicd` | `Phase5-SetupCICD.prompt.md` | Sets up CI/CD automation and prepares handoff to Phase 6 operations. | DevOps Engineer | `#file:.github/skills/azure-app-service.md`<br>`#file:.github/skills/azure-entra-id.md`<br>`#file:.github/skills/bicep-modules.md`<br>`#file:.github/skills/rollback-strategy.md`<br>`#file:.github/skills/migration-handoff.md` | `reports/cicd_setup_report.md`<br>`.github/workflows/`<br>`azure-pipelines.yml`<br>`reports/Report-Status.md` | `Migration-Orchestrator`<br>`Azure-Infrastructure` |
+| `/phase6-postmigrationops` | `Phase6-PostMigrationOps.prompt.md` | Establishes post-migration monitoring, performance, and operational readiness. | Observability Engineer | `#file:.github/skills/azure-app-service.md`<br>`#file:.github/skills/azure-entra-id.md`<br>`#file:.github/skills/rollback-strategy.md`<br>`#file:.github/skills/migration-handoff.md` | `reports/Post-Migration-Ops-Report.md`<br>`reports/Operational-Runbook.md`<br>`reports/Report-Status.md` | `Migration-Orchestrator`<br>`Cost-Optimization` |
+
+## Technology Assessments
+
+| Slash command | Prompt file | Description | Lead agent | Skills referenced | Output artifacts | Best chatmodes |
+|---|---|---|---|---|---|---|
+| `/assess-classicasp-migration` | `Assess-ClassicASP-Migration.prompt.md` | Assesses Classic ASP applications for Azure migration readiness. | Architect | `#file:skills/migration-report-template.md`<br>`#file:skills/asp-classic-to-dotnet.md`<br>`#file:skills/ef-migration.md`<br>`#file:skills/azure-entra-id.md`<br>`#file:skills/config-transformation.md` | `reports/ClassicASP-Migration-Report.md`<br>`reports/Report-Status.md` | `Migration-Orchestrator`<br>`Quick-Assessment` |
+| `/assess-dotnet-upgrade` | `Assess-DotNet-Upgrade.prompt.md` | Assesses .NET applications and upgrade paths for Azure migration. | Architect | `#file:skills/migration-report-template.md`<br>`#file:skills/dotnet-framework-to-dotnet8.md`<br>`#file:skills/config-transformation.md`<br>`#file:skills/ef-migration.md`<br>`#file:skills/azure-entra-id.md`<br>`#file:skills/wcf-to-rest-api.md`<br>`#file:skills/webforms-to-razor.md`<br>`#file:skills/asp-classic-to-dotnet.md` | `reports/DotNet-Upgrade-Report.md`<br>`reports/Report-Status.md` | `Migration-Orchestrator`<br>`Quick-Assessment` |
+| `/assess-java-upgrade` | `Assess-Java-Upgrade.prompt.md` | Assesses Java applications and upgrade paths for Azure migration. | Architect | `#file:skills/migration-report-template.md`<br>`#file:skills/java8-to-java21.md`<br>`#file:skills/docker-containerize.md`<br>`#file:skills/azure-container-apps.md`<br>`#file:skills/azure-entra-id.md` | `reports/Java-Upgrade-Report.md`<br>`reports/Report-Status.md` | `Migration-Orchestrator`<br>`Quick-Assessment` |
+| `/assess-wcf-migration` | `Assess-WCF-Migration.prompt.md` | Assesses WCF services for API modernization and Azure migration. | Architect | `#file:skills/migration-report-template.md`<br>`#file:skills/wcf-to-rest-api.md`<br>`#file:skills/config-transformation.md`<br>`#file:skills/azure-entra-id.md` | `reports/WCF-Migration-Report.md`<br>`reports/Report-Status.md` | `Migration-Orchestrator`<br>`Quick-Assessment` |
+| `/assess-webforms-migration` | `Assess-WebForms-Migration.prompt.md` | Assesses Web Forms applications for modernization and Azure migration. | Architect | `#file:skills/migration-report-template.md`<br>`#file:skills/webforms-to-razor.md`<br>`#file:skills/dotnet-framework-to-dotnet8.md`<br>`#file:skills/config-transformation.md`<br>`#file:skills/azure-entra-id.md`<br>`#file:skills/ef-migration.md` | `reports/WebForms-Migration-Report.md`<br>`reports/Report-Status.md` | `Migration-Orchestrator`<br>`Quick-Assessment` |
+
+## Specialist Reviews
+
+| Slash command | Prompt file | Description | Lead agent | Skills referenced | Output artifacts | Best chatmodes |
+|---|---|---|---|---|---|---|
+| `/costoptimization` | `CostOptimization.prompt.md` | Identifies Azure cost risks and optimization opportunities after migration. | Cost Engineer | `#file:.github/skills/azure-app-service.md`<br>`#file:.github/skills/bicep-modules.md`<br>`#file:.github/skills/migration-handoff.md` | `reports/Cost-Optimization-Report.md`<br>`reports/Report-Status.md` | `Cost-Optimization`<br>`Migration-Orchestrator` |
+| `/databasemigration` | `DatabaseMigration.prompt.md` | Plans database migration, validation, and cutover for Azure targets. | Database Specialist | `#file:.github/skills/ef-migration.md`<br>`#file:.github/skills/config-transformation.md`<br>`#file:.github/skills/rollback-strategy.md`<br>`#file:.github/skills/migration-handoff.md` | `reports/Database-Migration-Plan.md`<br>`reports/Database-Validation-Report.md`<br>`reports/Report-Status.md` | `Migration-Orchestrator`<br>`Code-Migration-Modernization` |
+| `/phase-rollback` | `Phase-Rollback.prompt.md` | Defines rollback strategy, triggers, and recovery steps for migrations. | Cutover Commander | `#file:.github/skills/rollback-strategy.md`<br>`#file:.github/skills/migration-handoff.md` | `reports/Rollback-Execution-Plan.md`<br>`reports/Rollback-Validation-Report.md`<br>`reports/Rollback-Communications.md`<br>`reports/Post-Mortem-Analysis.md`<br>`reports/Report-Status.md` | `Migration-Orchestrator`<br>`Security-Review`<br>`Debug-Migration` |
+| `/quickassessment` | `QuickAssessment.prompt.md` | Provides a fast migration triage and recommended next step. | Architect | `#file:.github/skills/dotnet-framework-to-dotnet8.md`<br>`#file:.github/skills/wcf-to-rest-api.md`<br>`#file:.github/skills/webforms-to-razor.md`<br>`#file:.github/skills/java8-to-java21.md`<br>`#file:.github/skills/migration-handoff.md` | `reports/Quick-Assessment-Report.md`<br>`reports/Report-Status.md` | `Quick-Assessment`<br>`Migration-Orchestrator` |
+| `/securityhardening` | `SecurityHardening.prompt.md` | Applies security hardening guidance for Azure migration targets. | Security Auditor | `#file:.github/skills/azure-entra-id.md`<br>`#file:.github/skills/azure-app-service.md`<br>`#file:.github/skills/rollback-strategy.md`<br>`#file:.github/skills/migration-handoff.md` | `reports/Security-Hardening-Report.md`<br>`reports/Report-Status.md` | `Security-Review`<br>`Migration-Orchestrator` |
+
+## Utility
+
+| Slash command | Prompt file | Description | Lead agent | Skills referenced | Output artifacts | Best chatmodes |
+|---|---|---|---|---|---|---|
+| `/getstatus` | `GetStatus.prompt.md` | Summarizes migration progress, blockers, and the next recommended command. | Tester | `#file:.github/skills/migration-handoff.md` | `reports/Report-Status.md` | `Migration-Orchestrator`<br>`Debug-Migration` |
+| `/quicktriage` | `QuickTriage.prompt.md` | Performs rapid intake triage for legacy application migration scenarios. | Architect | `#file:skills/dotnet-framework-to-dotnet8.md`<br>`#file:skills/wcf-to-rest-api.md`<br>`#file:skills/java8-to-java21.md`<br>`#file:skills/asp-classic-to-dotnet.md`<br>`#file:skills/migration-report-template.md` | `reports/Quick-Triage-Report.md`<br>`reports/Report-Status.md` | `Quick-Assessment`<br>`Migration-Orchestrator` |
+| `/teamskillassessment` | `TeamSkillAssessment.prompt.md` | Assesses team readiness and skill gaps for Azure migration delivery. | Architect | — | `reports/Team-Skill-Assessment.md`<br>`reports/Training-Recommendations.md`<br>`reports/Report-Status.md` | `Migration-Orchestrator`<br>`Quick-Assessment` |
+
+## Notes
+
+- The **13 orchestrated workflow prompts** (QuickAssessment, Phase0-6, DatabaseMigration, SecurityHardening, CostOptimization, Phase-Rollback, GetStatus) consistently reference `.github/skills/` plus `.github/hooks/`.
+- The **7 targeted/support prompts** (five `Assess-*` prompts, `QuickTriage`, `TeamSkillAssessment`) either reference root `skills/` or no skill files at all.
+- `Phase0-Multi-repo-assessment.prompt.md` uses the slash command `/phase0-multirepoassessment`, which does not match the filename exactly.

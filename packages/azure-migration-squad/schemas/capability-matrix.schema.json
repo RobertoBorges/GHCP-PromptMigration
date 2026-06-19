@@ -1,0 +1,242 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/RobertoBorges/GHCP-PromptMigration/schemas/capability-matrix.schema.json",
+  "title": "Capability Matrix",
+  "description": "Machine-readable contract produced by Discovery Engineer and consumed by every Phase prompt. Schema v1.0.",
+  "type": "object",
+  "required": ["schema_version", "application", "source", "stack", "workload", "data", "migration_strategy"],
+  "properties": {
+    "schema_version": { "type": "number", "const": 1.0 },
+    "authored_date": { "type": "string", "format": "date" },
+    "approved_date": { "type": ["string", "null"] },
+
+    "application": {
+      "type": "object",
+      "required": ["name", "business_priority"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "owner": { "type": ["string", "null"] },
+        "purpose": { "type": ["string", "null"] },
+        "criticality": { "enum": ["mission-critical", "important", "nice-to-have"] },
+        "business_priority": { "enum": ["speed", "modernize", "cost", "risk"] }
+      }
+    },
+
+    "source": {
+      "type": "object",
+      "required": ["primary_adapter", "evidence_confidence"],
+      "properties": {
+        "primary_adapter": {
+          "enum": [
+            "source-github-repo",
+            "source-zip-filesystem",
+            "source-on-premise",
+            "source-aws",
+            "source-gcp",
+            "source-oracle-db",
+            "source-vmware-rvtools",
+            "source-mainframe",
+            "source-kubernetes-cluster",
+            "source-container-registry",
+            "source-unsupported-escalation"
+          ]
+        },
+        "access_method": { "type": "string" },
+        "secondary_adapters": { "type": "array", "items": { "type": "string" } },
+        "evidence_confidence": { "enum": ["high", "medium", "low"] },
+        "evidence_paths": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+
+    "stack": {
+      "type": "object",
+      "required": ["primary_stack", "evidence_confidence"],
+      "properties": {
+        "primary_stack": {
+          "enum": [
+            "dotnet", "java", "python", "nodejs", "php", "ruby", "go", "perl", "rust",
+            "cobol-mainframe", "oracle-forms", "powerbuilder", "delphi-vb6",
+            "scala-kotlin", "cpp-windows", "unknown"
+          ]
+        },
+        "primary_framework": { "type": ["string", "null"] },
+        "secondary_stacks": { "type": "array", "items": { "type": "string" } },
+        "build_system": { "type": ["string", "null"] },
+        "runtime_version_detected": { "type": ["string", "null"] },
+        "evidence_confidence": { "enum": ["high", "medium", "low"] },
+        "evidence_paths": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+
+    "workload": {
+      "type": "object",
+      "required": ["primary_pattern", "evidence_confidence"],
+      "properties": {
+        "primary_pattern": {
+          "enum": [
+            "webapp", "api-service", "batch-job", "event-driven", "serverless",
+            "desktop-client-server", "packaged-app", "data-pipeline",
+            "mainframe-transactional"
+          ]
+        },
+        "secondary_patterns": { "type": "array", "items": { "type": "string" } },
+        "entry_points": { "type": "array", "items": { "type": "string" } },
+        "evidence_confidence": { "enum": ["high", "medium", "low"] }
+      }
+    },
+
+    "data": {
+      "type": "object",
+      "required": ["data_gravity", "evidence_confidence"],
+      "properties": {
+        "primary_datastore": { "type": "string" },
+        "datastore_version": { "type": ["string", "null"] },
+        "data_gravity": { "enum": ["none", "small", "medium", "large", "very-large"] },
+        "schema_highlights": { "type": "array", "items": { "type": "string" } },
+        "evidence_confidence": { "enum": ["high", "medium", "low"] }
+      }
+    },
+
+    "integrations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "direction", "protocol", "criticality"],
+        "properties": {
+          "name": { "type": "string" },
+          "direction": { "enum": ["inbound", "outbound", "bidirectional"] },
+          "protocol": { "type": "string" },
+          "criticality": { "enum": ["high", "medium", "low"] },
+          "notes": { "type": "string" }
+        }
+      }
+    },
+
+    "identity": {
+      "type": "object",
+      "properties": {
+        "current_provider": { "type": "string" },
+        "target_provider": { "type": "string" }
+      }
+    },
+
+    "network": {
+      "type": "object",
+      "properties": {
+        "on_prem_dependencies": { "type": "array", "items": { "type": "string" } },
+        "private_endpoints_needed": { "type": "boolean" },
+        "egress_constraints": { "type": "string" }
+      }
+    },
+
+    "risk_flags": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "regulated-data", "production-only-system", "large-data-gravity",
+          "no-source-code-available", "unsupported-runtime", "vendor-licensed-runtime",
+          "tight-cutover-window", "mainframe", "saas-embedded",
+          "high-integration-fanout", "low-evidence-confidence", "secrets-in-source"
+        ]
+      }
+    },
+
+    "compliance": {
+      "type": "object",
+      "properties": {
+        "regulations": {
+          "type": "array",
+          "items": { "enum": ["pii", "pci", "hipaa", "gdpr", "sox", "fedramp", "other"] }
+        },
+        "residency_requirement": { "type": "string" },
+        "audit_logging_required": { "type": "boolean" }
+      }
+    },
+
+    "operational": {
+      "type": "object",
+      "properties": {
+        "rto": { "type": "string" },
+        "rpo": { "type": "string" },
+        "cutover_window": { "type": "string" },
+        "current_sla": { "type": "string" }
+      }
+    },
+
+    "migration_strategy": {
+      "type": "object",
+      "required": ["recommendation", "rationale"],
+      "properties": {
+        "recommendation": {
+          "enum": ["rehost", "replatform", "refactor", "rearchitect", "rebuild", "retire", "retain"]
+        },
+        "rationale": { "type": "string", "minLength": 10 },
+        "decision_path": { "type": "array", "items": { "type": "string" } },
+        "alternatives_considered": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "object",
+            "required": ["alternative", "rejected_because"],
+            "properties": {
+              "alternative": { "type": "string" },
+              "rejected_because": { "type": "string" }
+            }
+          }
+        },
+        "target_azure_candidates": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["service", "fit"],
+            "properties": {
+              "service": { "type": "string" },
+              "fit": { "enum": ["high", "medium", "low"] },
+              "fit_notes": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+
+    "required_specialists": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+
+    "unresolved_questions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "question", "impact", "recommended_probe"],
+        "properties": {
+          "id": { "type": "string" },
+          "question": { "type": "string" },
+          "impact": { "type": "string" },
+          "recommended_probe": { "type": "string" }
+        }
+      }
+    },
+
+    "assumptions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["assumption", "impact_if_wrong"],
+        "properties": {
+          "assumption": { "type": "string" },
+          "impact_if_wrong": { "type": "string" }
+        }
+      }
+    },
+
+    "handoff": {
+      "type": "object",
+      "properties": {
+        "next_command": { "type": "string" },
+        "next_lead": { "type": "string" },
+        "notes": { "type": "string" }
+      }
+    }
+  }
+}

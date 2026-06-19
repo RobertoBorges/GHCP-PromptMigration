@@ -1,0 +1,15 @@
+{
+  "syncedAt": "2026-06-19T16:00:22.909Z",
+  "totalFiles": 176,
+  "sources": [
+    ".github/chatmodes",
+    ".github/prompts",
+    ".github/skills",
+    ".github/hooks",
+    ".github/copilot-instructions.md",
+    ".squad/agents",
+    ".squad/team.md",
+    ".squad/routing.md",
+    "AGENTS.md"
+  ]
+}

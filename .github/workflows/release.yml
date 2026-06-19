@@ -1,0 +1,117 @@
+name: Release azure-migration-squad
+
+# ╔═════════════════════════════════════════════════════════════════════════╗
+# ║  SOURCE-OF-TRUTH RULE                                                    ║
+# ║                                                                          ║
+# ║  This workflow publishes packages/azure-migration-squad/ to npm.        ║
+# ║  Its templates/ subfolder is auto-generated from:                       ║
+# ║    .github/{prompts,skills,chatmodes,hooks}/ + .squad/ + AGENTS.md      ║
+# ║                                                                          ║
+# ║  Edit ONLY the canonical files at the monorepo root.                   ║
+# ║  Never edit packages/azure-migration-squad/templates/ directly.         ║
+# ║                                                                          ║
+# ║  See: docs/contributing-adapters.md                                     ║
+# ║       packages/azure-migration-squad/templates/README.md                ║
+# ║                                                                          ║
+# ║  Release flow uses Changesets — add `npx changeset` to your PR.         ║
+# ║  See docs/release-automation.md for the full publish runbook.           ║
+# ║                                                                          ║
+# ║  AUTH: This workflow uses npm Trusted Publisher (OIDC).                ║
+# ║  No NPM_TOKEN secret is required. The trust relationship must be       ║
+# ║  configured ONCE in the npm UI:                                         ║
+# ║    https://www.npmjs.com/package/@robertoborges/azure-migration-squad/access
+# ║  → Trusted Publisher → GitHub Actions → repo=RobertoBorges/GHCP-PromptMigration
+# ║  → workflow=release.yml                                                  ║
+# ╚═════════════════════════════════════════════════════════════════════════╝
+
+on:
+  push:
+    branches:
+      - main
+
+concurrency: release-${{ github.ref }}
+
+permissions:
+  contents: write
+  pull-requests: write
+  id-token: write           # REQUIRED for npm Trusted Publisher OIDC
+
+jobs:
+  release:
+    name: Create release PR or publish to npm
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js 24+ (required for OIDC support in npm CLI)
+        uses: actions/setup-node@v4
+        with:
+          # npm CLI 11.5.1+ (bundled with Node 24+) auto-detects OIDC env
+          # via ACTIONS_ID_TOKEN_REQUEST_URL + _TOKEN. Older Node ships
+          # older npm without OIDC support.
+          node-version: '24'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        run: npm install --workspaces=false && npm install --workspaces
+
+      - name: Validate descriptions (≤1024 chars)
+        run: npm run validate:descriptions
+
+      - name: Rebuild plugin manifest from disk
+        run: npm run build:plugin-manifest
+
+      - name: Validate plugin manifest
+        run: npm run validate:plugin-manifest
+
+      # ────────────────────────────────────────────────────────────────────
+      # SOURCE-OF-TRUTH GUARD
+      # Fails the release if templates/ was edited directly.
+      # ────────────────────────────────────────────────────────────────────
+      - name: Check templates/ was not edited by hand
+        run: node scripts/check-templates-not-edited.mjs
+
+      - name: Sync templates
+        working-directory: packages/azure-migration-squad
+        run: npm run sync
+
+      - name: Run package tests
+        working-directory: packages/azure-migration-squad
+        env:
+          AZURE_MIGRATION_SQUAD_TELEMETRY: '0'
+          CI: 'true'
+        run: npm test
+
+      # Changesets workflow:
+      #   - If there are pending changesets and no open release PR → opens/updates a "Version Packages" PR
+      #   - If the release PR was merged (changesets consumed, versions bumped) → publishes to npm
+      #
+      # Authentication: Trusted Publisher (OIDC). The npm CLI 11.5.1+ auto-detects
+      # ACTIONS_ID_TOKEN_REQUEST_URL/_TOKEN and exchanges them for a short-lived
+      # publish token at publish time. No NPM_TOKEN secret needed.
+      #
+      # Provenance: automatically attached when publishing via Trusted Publisher
+      # (no need for the --provenance flag).
+      - name: Create release PR or publish
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          publish: npm run changeset:publish
+          version: npm run changeset:version
+          commit: 'chore(release): version packages'
+          title: 'chore(release): version packages'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # No NPM_TOKEN — npm CLI uses OIDC via ACTIONS_ID_TOKEN_REQUEST_* env vars
+          # which actions/checkout + permissions.id-token:write provide automatically.
+
+      - name: Print published result
+        if: steps.changesets.outputs.published == 'true'
+        run: |
+          echo "Published packages:"
+          echo '${{ steps.changesets.outputs.publishedPackages }}'

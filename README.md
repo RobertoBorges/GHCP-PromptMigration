@@ -1,203 +1,298 @@
-# GitHub Copilot Migration & Modernization for Azure
+# GHCP-PromptMigration — Docs Hub for Azure Migration Squad
 
-This repository showcases how GitHub Copilot using custom prompts and chat mode can be leveraged to migrate solutions from various languages and frameworks to Azure. The current focus is on .NET and Java applications, demonstrating end-to-end migration journeys. The project now includes enhanced modernization tracking, status reporting, and a more structured approach to the migration process.
+> **Universal Azure migration agents for GitHub Copilot + Squad.** Any source. Any stack. One command.
 
-## Overview
+[![npm](https://img.shields.io/npm/v/@robertoborges/azure-migration-squad?label=npm&color=blue)](https://www.npmjs.com/package/@robertoborges/azure-migration-squad)
+[![Squad](https://img.shields.io/badge/squad--cli-compatible-blueviolet?logo=githubcopilot)](https://github.com/bradygaster/squad)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-The GitHub Copilot Migration & Modernization for Azure project provides a structured approach to:
+This is the **canonical docs hub** for the Azure Migration Squad. The squad migrates **any application** — regardless of where it runs today or what it's built in — to Azure. Discovery-first, evidence-bound, squad-orchestrated.
 
-1. Plan and assess legacy applications for cloud readiness
-2. Migrate code to modern frameworks
-3. Generate Azure infrastructure as code
-4. Deploy applications to Azure
-5. Set up CI/CD pipelines for automated deployment
+The squad ships as:
+- An **npm package**: [`@robertoborges/azure-migration-squad`](https://www.npmjs.com/package/@robertoborges/azure-migration-squad) — primary install path
+- A **Squad plugin marketplace** entry — for Squad-discovery-first users (see `plugin.manifest.json`)
+- A **GitHub template** (coming in Wave D) — for new engagements that want sample code included
+- This **monorepo** — the canonical source of truth; the npm package is built from this repo's `.github/` + `.squad/` content
 
-Through a guided, AI-assisted workflow, developers can efficiently transform legacy applications into modern, cloud-native solutions running on Azure.
+---
 
->
-> Note: If your workload have many repositories, consider using the Phase0-Multi-repo-assessment.prompt.md to assess multiple repositories in a single workflow.
-> Start by creating a file named `codebase-repos.md` in the root folder, listing all the repositories to assess.
-> Then, use the command `/phase0-multirepoassessment` to start the multi-repo assessment process.
->
+## Three ways to install
 
-## Requirements
+### 🥇 Option 1 — npm (primary, recommended)
 
-- GitHub Copilot License
-- Model Claude Sonnet 4.5+ (Included in GitHub Copilot)
-- Azure MCP Server Extension
-- GitHub Copilot for Azure Extension
-- GitHub Copilot Extension 1.35+
-- GitHub Copilot Chat Extension 0.30+
-- Visual Studio code 1.101+
-- AZD CLI
-- AZ CLI
-- Development tools that fit to your application
+```bash
+# 1. Set up Squad (one-time)
+npm install -g @bradygaster/squad-cli
+squad init
 
-## Avoiding Hallucinations
+# 2. Add the Azure Migration Squad — pick either:
+npx @robertoborges/azure-migration-squad@latest init     # one-shot, no install
+# OR
+npm install -g @robertoborges/azure-migration-squad@latest
+ams init                                                  # short alias for the rest of this session
 
-To reduce hallucinations during the migration, the guided prompts use two files in the repository's `reports/` folder:
+# 3a. If using VS Code with GitHub Copilot Chat:
+#     Slash commands work directly:
+#       /assess-any-application
+#
+# 3b. If using GitHub Copilot CLI (the `copilot` terminal command):
+#     Slash commands like /assess-any-application are NOT auto-registered.
+#     Just describe what you want in plain English:
+#       "Assess this application for Azure migration"
+#       "Discover this app"
+#       "Phase 2 — migrate the code"
+#     The Squad agent reads the natural-language→action table in
+#     .github/copilot-instructions.md and dispatches the right specialist.
+```
 
-- `reports/Report-Status.md` — overall migration status dashboard
-- `reports/Application-Assessment-Report.md` — application assessment summary
+> 💡 **`ams` is the short alias** for `azure-migration-squad` — both work for all commands. Use whichever you prefer. After `npm install -g`, both binaries are on your `PATH`.
 
-You can update these files at any phase to fit your requirements.
+### 🥈 Option 2 — Squad plugin marketplace
 
-During each phase, read the summary carefully to understand what will be delivered by the model and what inputs are needed.
+```bash
+# 1. Register this repo as a marketplace
+squad plugin marketplace add RobertoBorges/GHCP-PromptMigration
 
-Pro tip: for the rewrite migration process, some unnecessary files may be created (Class1.cs); clean them up before your final check-in.
-Pro tip2: use the @terminal command to ask the agent to solve issues during your tests.
-Pro tip3: Don't assume anything, always verify with the documentation.
+# 2. Install the plugin (curated subset: agents + universal skills + routing as Squad knowledge)
+squad plugin install azure-migration-squad
 
-## Repository Structure
+# 3. For full Copilot integration (chatmodes + prompts + .github/skills), follow Option 1
+```
 
-- **`.github/`**: Contains custom prompts and chat modes that enable GitHub Copilot to assist with migration
-  - **`chatmodes/`**: Defines specialized chat experiences for migration scenarios
-  - **`prompts/`**: Structured prompts for each phase of the migration process
+**Trade-off:** Squad plugin install lands files under `.squad/` per Squad's plugin contract. For full Copilot Chat integration (chatmodes, slash commands), you still want the npm package.
 
-- **`Use-cases/`**: Example applications representing different migration scenarios
-  - **`01-ASPClassicApp/`**: Classic ASP application with e-commerce functionality
-  - **`02-NetFramework30-ASPNET-WEB/`**: .NET Framework 3.0 ASP.NET Web Application
-  - **`03-WCFNet35/`**: WCF services using .NET Framework 3.5
-  - **`04-ContosoUniversityDiPS/`**: Sample university application with multiple components
-  - **`05-BookShop/`**: Bookshop ASP.Net 3.5 Web Forms application for migration demonstration
-  - **`06-Java-API-BusReservation/`**: Java 8 API for bus reservation system
+### 🥉 Option 3 — GitHub template (coming soon — Wave D)
 
+A starter repo with the squad pre-installed plus one sample use-case for instant exploration. Content lives in [`template-repo-starter/`](./template-repo-starter/) — push to a separate GitHub repo + toggle "Template repository" in Settings to make it one-click installable.
 
-## Migration & Modernization Process
+> **Translations:** [Español 🇪🇸](./docs/translations/README.es-ES.md) · [Português 🇧🇷](./docs/translations/README.pt-BR.md)
 
-The repository implements a structured 5-phase approach to application migration:
+---
 
-### Phase 1: Planning & Assessment
+## What the squad does
 
-Plan your migration by gathering requirements (hosting platform, IaC preferences, database needs) and generate a comprehensive assessment report analyzing the current application structure, dependencies, architecture, risk analysis, and effort estimation.
+```
+USER ──► /assess-any-application
+            │
+            ▼
+   ┌──────────────────────────────┐
+   │  Discovery Engineer          │  ← intake + classification + evidence
+   │  (Saul Bloom Jr.)            │
+   │                              │
+   │  Outputs:                    │
+   │   • Discovery Dossier        │  reports/Discovery-Dossier.md
+   │   • Capability Matrix        │  reports/Capability-Matrix.yaml
+   │   • Strategy recommendation  │
+   └────────────┬─────────────────┘
+                │
+                ▼
+   ┌──────────────────────────────┐
+   │  Architect (Danny Ocean)     │  ← approves/refines strategy
+   │  /build-migration-plan       │     finalizes target Azure architecture
+   └────────────┬─────────────────┘     produces reports/Migration-Plan.md
+                │
+                ▼
+   Phase 1 → Phase 2 → Phase 3 → Phase 4 → Phase 5 → Phase 6
+```
 
-### Phase 2: Code Migration
+Covers source environments: **on-premise, AWS, GCP, Oracle, VMware, Kubernetes, container registries, GitHub repos, ZIPs, mainframes**
 
-Upgrade application code to the latest framework versions compatible with Azure, with automated transformations and incremental validation.
+Covers stacks: **.NET, Java, Python, Node.js, PHP, Ruby, Go, Perl, Rust, COBOL, Oracle Forms, PowerBuilder, Delphi/VB6, Scala/Kotlin, C++ Windows**
 
-### Phase 3: Infrastructure Generation
+Picks migration strategy via a **12-branch decision tree** (Rehost/Replatform/Refactor/Rearchitect/Rebuild/Retire/Retain — 6Rs is one output field, not the whole engine).
 
-Create infrastructure as code (IaC) files (Bicep or Terraform) for deploying to Azure, incorporating best practices and security configurations.
+---
 
-### Phase 4: Deployment to Azure
+## 🚨 Source-of-truth rule — READ THIS BEFORE EDITING
 
-Deploy the validated application to Azure services with comprehensive deployment monitoring and validation.
+This is a **monorepo** where the npm package is built from canonical content at the repo root. There are TWO locations that look similar — one is the source of truth, the other is a build artifact.
 
-### Phase 5: CI/CD Pipeline Setup
+### Where to edit what
 
-Configure automated deployment pipelines for continuous integration and delivery, with environment-specific configurations and security gates.
+| If you want to change... | ✅ Edit here (source of truth) | ❌ NEVER edit here (auto-generated) |
+|--------------------------|--------------------------------|--------------------------------------|
+| Prompts (Phase 1–6, Assess-Any-Application, etc.) | `.github/prompts/` | `packages/azure-migration-squad/templates/github/prompts/` |
+| Skills (source/stack/workload adapters, decision tree, etc.) | `.github/skills/` | `packages/azure-migration-squad/templates/github/skills/` |
+| Chatmodes (Discovery-Intake, Migration-Orchestrator, …) | `.github/chatmodes/` | `packages/azure-migration-squad/templates/github/chatmodes/` |
+| Hooks (agent-dispatch, phase-gates, etc.) | `.github/hooks/` | `packages/azure-migration-squad/templates/github/hooks/` |
+| Agent charters (15 specialists) | `.squad/agents/<name>/charter.md` | `packages/azure-migration-squad/templates/squad/agents/` |
+| Squad team + routing | `.squad/team.md`, `.squad/routing.md` | `packages/azure-migration-squad/templates/squad/` |
+| Top-level operating docs | `AGENTS.md`, `.github/copilot-instructions.md` | `packages/azure-migration-squad/templates/AGENTS.md`, `templates/github/copilot-instructions.md` |
 
-## Key Features
+### Why this layout exists
 
-- **Comprehensive Assessment**: Analyze existing .NET Framework or Java applications for cloud readiness
-- **Automated Code Migration**: Transform legacy code to modern versions compatible with Azure
-- **Infrastructure as Code**: Generate Bicep or Terraform files for Azure resources
-- **Multi-Platform Support**: Target different Azure hosting options (App Service, AKS, Container Apps)
-- **Authentication Modernization**: Convert on-premises authentication to Azure Entra ID
-- **Service Migration**: Transform WCF services to modern REST APIs and SOAP services to RESTful endpoints
-- **Configuration Transformation**: Convert legacy configuration files to modern formats
-- **CI/CD Integration**: Set up GitHub Actions or Azure DevOps pipelines for automated deployment
-- **Validation & Best Practices**: Ensure migrated applications follow Azure best practices
-- **Status Tracking**: Comprehensive modernization status reporting with progress tracking and quality metrics
-- **Structured Migration Planning**: Guided approach to planning migration with targeted questions and requirements gathering
-- **Risk Assessment & Mitigation**: Identification and mitigation strategies for potential migration issues
-- **Deployment Monitoring**: Real-time validation and monitoring during application deployment
-- **Incremental Validation**: Step-by-step validation throughout the migration process
+- `.github/` and `.squad/` are also **actively used by Copilot/Squad when you're working in this repo itself** — that's how we dogfood the squad on its own codebase.
+- `packages/azure-migration-squad/templates/` is what ships to npm — it must match the canonical content exactly. A sync script regenerates it before every publish.
 
-## Migration Status Tracking
+### The sync flow
 
-The project now includes comprehensive migration status tracking through the `/getstatus` command:
+```
+.github/   .squad/   AGENTS.md       ← ✏️  edit these
+       │       │         │
+       └───────┴─────────┘
+                 │
+                 ▼
+       npm run sync          ← copy + flatten into templates/
+                 │
+                 ▼
+   templates/   (build artifact — DO NOT EDIT BY HAND)
+                 │
+                 ▼
+            npm publish     ← consumed by end users
+```
 
-- **Progress Monitoring**: Track overall migration progress with completion percentages and phase status
-- **Quality Metrics**: View quality scores for each completed phase
-- **Timeline Tracking**: Timestamps for completed phases to monitor project timeline
-- **Risk Management**: Identification and tracking of potential issues with severity levels
-- **Next Steps Guidance**: Clear recommendations for the next steps in the migration process
-- **Resource Links**: Quick access to relevant documentation and resources
-- **Executive Summary**: At-a-glance view of key migration metrics and status
+The sync runs:
+- **Automatically** before every `npm pack` / `npm publish` (via the `prepack` → `prebuild` → `presync` → `sync` script chain)
+- **In CI** on every PR (see `.github/workflows/azure-migration-squad-ci.yml`)
+- **On demand** anytime: `cd packages/azure-migration-squad && npm run sync`
 
-Status reports are stored in the `reports/Report-Status.md` file, providing a central location for tracking migration progress across all phases.
+### Safety nets we ship
 
-## Getting Started
+1. **Every file under `templates/` has a top-of-file warning** noting it's auto-generated.
+2. **`packages/azure-migration-squad/templates/README.md`** is a big "DO NOT EDIT" sign for anyone opening the folder.
+3. **CI guard** (`scripts/check-templates-not-edited.mjs`) — fails the build if PR commits touch `templates/` without a matching source-of-truth change.
+4. **Sync script is idempotent** — running it always wipes-then-rebuilds `templates/`, so manual edits there are silently lost. Better to fail loudly than silently.
 
-1. Clone this repository
-2. Install [GitHub Copilot](https://copilot.github.com/) in your Visual Studio Code
-3. Open one of the use case projects in VS Code
-4. Start a chat with GitHub Copilot using the prompt:  "`/phase1-planandassess` under the folder #file:02-NetFramework30-ASPNET-WEB" to begin the migration planning and assessment
-5. Use `/getstatus` at any time to check the current migration status
-6. Follow the guided prompts to complete each phase of the migration process
+**TL;DR:** edit at the root (`.github/`, `.squad/`, `AGENTS.md`). Never touch `packages/azure-migration-squad/templates/`.
 
-## Target Azure Hosting Platforms
+---
 
-The migration process supports multiple Azure hosting options:
+## Repository structure
 
-- **Azure App Service**: For web applications and APIs
-- **Azure Kubernetes Service (AKS)**: For containerized applications
-- **Azure Container Apps**: For microservices and containerized applications
+```
+GHCP-PromptMigration/                            ← this monorepo
+├── README.md                                    ← docs hub (you are here)
+├── plugin.manifest.json                         ← Squad plugin marketplace metadata (auto-generated)
+├── package.json                                 ← npm workspaces root
+│
+├── packages/
+│   └── azure-migration-squad/                   ← published npm package
+│       ├── package.json                         (@robertoborges/azure-migration-squad)
+│       ├── bin/cli.js                           ← ✏️ EDIT (CLI source)
+│       ├── lib/                                 ← ✏️ EDIT (telemetry + opt-out consent)
+│       ├── schemas/                             ← ✏️ EDIT (JSON Schemas)
+│       ├── scripts/                             ← ✏️ EDIT (sync, validate, lint)
+│       ├── templates/                           ← ❌ DO NOT EDIT (auto-generated from root .github/ + .squad/)
+│       └── WAVE-A-HANDOFF.md                    (publish runbook)
+│
+├── .github/                                     ← ✏️ SOURCE OF TRUTH (canonical content)
+│   ├── chatmodes/                               (9 Copilot chatmodes)
+│   ├── prompts/                                 (26 prompts: Assess-Any-Application, Phase 0-6, ...)
+│   ├── skills/                                  (60+ source/stack/workload + universal skills)
+│   ├── hooks/                                   (4 orchestration hooks)
+│   ├── copilot-instructions.md
+│   └── workflows/                               (CI: azure-migration-squad-ci.yml + others)
+│
+├── .squad/                                      ← ✏️ SOURCE OF TRUTH (Squad orchestration layer)
+│   ├── agents/                                  (15 specialist charters)
+│   ├── team.md                                  (roster)
+│   ├── routing.md                               (capability-based routing)
+│   └── decisions.md                             (durable decision log)
+│
+├── docs/                                        ← ✏️ EDIT (extended documentation)
+│   ├── telemetry.md                             (data we collect + opt-out matrix)
+│   ├── privacy-policy.md                        (privacy stance)
+│   ├── release-automation.md                    (how releases ship via Changesets + GitHub Actions)
+│   ├── contributing-adapters.md                 (how to add a new adapter)
+│   ├── architecture/                            (system architecture)
+│   ├── guides/                                  (onboarding + skills map)
+│   ├── walkthroughs/                            (7 reference walkthroughs)
+│   └── use-case-cheatsheets/                    (7 quick-reference cards)
+│
+├── Use-cases/                                   ← ✏️ EDIT (7 reference applications, samples)
+│   ├── 01-ASPClassicApp/                        (Classic ASP)
+│   ├── 02-NetFramework30-ASPNET-WEB/            (.NET Framework 3.0)
+│   ├── 03-WCFNet35/                             (WCF .NET 3.5)
+│   ├── 04-ContosoUniversityDiPS/                (ASP.NET MVC)
+│   ├── 05-BookShop/                             (.NET 3.5 WebForms)
+│   ├── 06-Java-API-BusReservation/              (Java 8 + Spring)
+│   └── 07-PartsUnlimited-aspnet45/              (ASP.NET 4.5)
+│
+└── AGENTS.md, CLAUDE.md, JOURNAL.md, PORTFOLIO.md   ← ✏️ EDIT (squad operating docs)
+```
 
-## Authentication & Authorization
+---
 
-The repository includes support for migrating from various authentication systems to Azure Entra ID, ensuring secure access to modernized applications.
+## The squad (15 specialists)
 
-## Use Cases
+| # | Agent | Alias | Best for |
+|---|-------|-------|----------|
+| 1 | **Discovery Engineer** | Saul Bloom Jr. | Intake, classification, 6Rs recommendation, Capability Matrix |
+| 2 | Architect | Danny Ocean | Migration strategy approval, target architecture, sequencing |
+| 3 | Coder | Rusty Ryan | Code modernization, framework upgrades, refactoring |
+| 4 | Tester | Linus Caldwell | Validation, smoke testing, prompt QA |
+| 5 | Azure Specialist | Basher Tarr | Azure hosting, identity, landing zones |
+| 6 | DevOps Engineer | Turk Malloy | CI/CD, deployment automation |
+| 7 | Observability Engineer | Livingston Dell | Monitoring, App Insights, alerts |
+| 8 | Database Specialist | The Amazing Yen | Schema migration, cutover, data validation |
+| 9 | Performance Engineer | Virgil Malloy | Load, baselines, scaling |
+| 10 | Security Auditor | Frank Catton | Auth, secrets, RBAC, compliance |
+| 11 | Evaluator | Saul Bloom | Prompt quality, regression review |
+| 12 | Cutover Commander | Reuben Tishkoff | Rollout, rollback, go-live |
+| 13 | Scribe | Roman Nagel | Journal, decision log |
+| 14 | Presentation Specialist | Tess Ocean | Status decks, executive summaries |
+| 15 | Cost Engineer | The Accountant | Cost models, right-sizing, FinOps |
 
-This repository contains example applications that can be used to test prompts and understand how GitHub Copilot works in the context of migration and modernization:
+Charters: [`.squad/agents/<name>/charter.md`](./.squad/agents/). Routing: [`.squad/routing.md`](./.squad/routing.md).
 
-- **ASP Classic Apps**: Migration path for legacy ASP applications
-- **.NET Framework Web Apps**: Upgrading to modern .NET versions
-- **WCF Services**: Converting to RESTful APIs
-- **Java Applications**: Modernizing for Azure compatibility
+---
 
-## Improved Prompt Structure
+## Quality + telemetry
 
-The custom prompts have been significantly enhanced with:
+### Telemetry — opt-out by default
+The npm CLI collects anonymous usage data (package version, command name, OS/Node, Squad-detected, error class). **Never** file paths, project content, prompts, customer data, IPs, or emails.
 
-### Enhanced Structured Workflow
+Opt out at any time:
+```bash
+azure-migration-squad telemetry off
+# or
+export AZURE_MIGRATION_SQUAD_TELEMETRY=0
+# or industry-standard:
+export DO_NOT_TRACK=1
+```
 
-- **Planning Phase**: Added a dedicated planning phase to gather requirements before starting the assessment
-- **Status Command**: New `/getstatus` command to check migration progress at any time
-- **Report Generation**: Automatic creation of assessment, validation, and status reports
-- **Incremental Validation**: Step-by-step validation checks throughout the migration process
-- **Context Preservation**: Better context retention between phases of the migration
+Full policy: [docs/telemetry.md](./docs/telemetry.md) · Privacy: [docs/privacy-policy.md](./docs/privacy-policy.md)
 
-### Technical Improvements
+### Quality gates
+Every PR runs in CI (Ubuntu × Node 20):
+- ✅ JSON Schema validation for the Capability Matrix
+- ✅ Build validation (key files synced, all cross-references resolve)
+- ✅ PII-leak lint (telemetry calls cannot leak file paths)
+- ✅ Plugin manifest validation
+- ✅ Install smoke test
+- ✅ Squad governance evaluator + prompt linter
+- ✅ Source-of-truth guard (templates/ not edited by hand)
 
-- GitHub Copilot Migration \& Modernization for Azure
-  - Overview
-  - Requirements
-  - Avoiding Hallucinations
-  - Repository Structure
-  - Migration \& Modernization Process
-    - Phase 1: Planning \& Assessment
-    - Phase 2: Code Migration
-    - Phase 3: Infrastructure Generation
-    - Phase 4: Deployment to Azure
-    - Phase 5: CI/CD Pipeline Setup
-  - Key Features
-  - Migration Status Tracking
-  - Getting Started
-  - Target Azure Hosting Platforms
-  - Authentication \& Authorization
-  - Use Cases
-  - Improved Prompt Structure
-    - Enhanced Structured Workflow
-    - Technical Improvements
-    - Documentation and Reporting
-  - Contributing
-  - License
+> CI runs Linux-only because the package is pure Node.js with no native deps. macOS and Windows are spot-checked manually before each release.
 
-### Documentation and Reporting
-
-- **Detailed Reports**: More comprehensive reports with actionable recommendations
-- **Visual Progress**: Visual progress tracking with completion percentages
-- **Risk Management**: Enhanced risk identification and mitigation guidance
-- **Architecture Diagrams**: Support for generating before/after architecture diagrams
-- **Performance Metrics**: Added performance baseline recommendations and validation
+---
 
 ## Contributing
 
-Contributions to improve the prompts, chat modes, or add new use cases are welcome. Please feel free to submit pull requests or open issues to discuss potential improvements.
+We welcome contributions:
+
+- 🆕 **New source adapter** (e.g. `source-azure-devops`, `source-bitbucket-cloud`) — see [docs/contributing-adapters.md](./docs/contributing-adapters.md)
+- 🆕 **New stack adapter** (e.g. `stack-elixir`, `stack-haskell`)
+- 🆕 **New workload pattern** (e.g. `workload-realtime-streaming`)
+- 🌳 **New branches in `migration-strategy-decision-tree.md`**
+- 📚 **Use-case walkthroughs** in `docs/walkthroughs/`
+- 🌍 **Translations** — README is currently EN; pt-BR + es-ES drafts in `docs/translations/`
+
+Open a PR. The **Evaluator** agent reviews prompt/skill changes for consistency. Releases use [Changesets](https://github.com/changesets/changesets).
+
+---
+
+## Roadmap
+
+- ✅ **Wave A** — npm package published (`@robertoborges/azure-migration-squad@0.1.0-insider.1` on `insider` channel)
+- ✅ **Wave B** — Squad plugin marketplace manifest (`plugin.manifest.json`) + validator
+- ✅ **Wave C** — Docs hub repositioning (you're looking at it) + telemetry + privacy + contributing-adapters
+- ✅ **Wave D** — Starter template content at [`template-repo-starter/`](./template-repo-starter/) (push to a separate GitHub repo when ready)
+- ✅ **Wave E** — Evaluator-driven eval suite + Changesets config + Capability Matrix schema validation in `doctor`
+- 🔄 **Wave F** — Multi-language docs ([🇪🇸](./docs/translations/README.es-ES.md) / [🇧🇷](./docs/translations/README.pt-BR.md) drafts shipped); Cloud Accelerate Factory pilot + conference talks pending. See [docs/launch-announcement.md](./docs/launch-announcement.md) for ready-to-post drafts.
+
+---
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+MIT © Roberto Borges

@@ -56,14 +56,3 @@ userName=user2
 
 return the Invoice details and also updates the Bus avaiable and booked seats.
 Invoice will have busName,operator,departureDate,sourceCity,destinationCity,duration,price,userName,email
-
-
-
-Vist for more info: [leo.ka](https://leoka1993.wixsite.com/leoka)
-
-#### Social Media Links
-- Mail: leo.ka1993@gmail.com
-- Linkden : [Leo KA](http://linkedin.com/in/leoka037)
-- Instagram : [Leo__037](https://instagram.com/leo____037)
-- Facebook : [Leo KA](http://www.facebook.com/LEO.K.A.037)
-- Pinterest : [Leo KA](www.in.pinterest.com/leoka1993/)
