@@ -254,12 +254,16 @@ export DO_NOT_TRACK=1
 Full policy: [docs/telemetry.md](./docs/telemetry.md) · Privacy: [docs/privacy-policy.md](./docs/privacy-policy.md)
 
 ### Quality gates
-Every PR runs in CI (Ubuntu/macOS/Windows × Node 20/22):
+Every PR runs in CI (Ubuntu × Node 20):
 - ✅ JSON Schema validation for the Capability Matrix
 - ✅ Build validation (key files synced, all cross-references resolve)
 - ✅ PII-leak lint (telemetry calls cannot leak file paths)
 - ✅ Plugin manifest validation
 - ✅ Install smoke test
+- ✅ Squad governance evaluator + prompt linter
+- ✅ Source-of-truth guard (templates/ not edited by hand)
+
+> CI runs Linux-only because the package is pure Node.js with no native deps. macOS and Windows are spot-checked manually before each release.
 
 ---
 

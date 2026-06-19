@@ -56,7 +56,12 @@ const guidedPrompts = [
 const supportPrompts = [
   'InteractiveMigrationInterview',
   'QuickTriage',
-  'TeamSkillAssessment',
+  'TeamSkillAssessment'
+];
+
+// Legacy Assess-* prompts moved to .github/prompts/legacy/ during the Universal Mode redesign.
+// Discovery is now driven by Assess-Any-Application.prompt.md + the Capability Matrix.
+const legacyPrompts = [
   'Assess-ClassicASP-Migration',
   'Assess-DotNet-Upgrade',
   'Assess-WebForms-Migration',
@@ -141,7 +146,6 @@ for (const filePath of [
   ['CLAUDE.md'],
   ['JOURNAL.md'],
   ['PORTFOLIO.md'],
-  ['Use-cases', 'README.md'],
   ['.github', 'copilot-instructions.md'],
   ['.squad', 'team.md'],
   ['.squad', 'routing.md'],
@@ -204,6 +208,9 @@ for (const prompt of guidedPrompts) {
 for (const prompt of supportPrompts) {
   fileCheck(['.github', 'prompts', `${prompt}.prompt.md`], `support prompt exists: ${prompt}`);
 }
+for (const prompt of legacyPrompts) {
+  fileCheck(['.github', 'prompts', 'legacy', `${prompt}.prompt.md`], `legacy prompt archived: ${prompt}`);
+}
 for (const chatmode of chatmodes) {
   fileCheck(['.github', 'chatmodes', `${chatmode}.chatmode.md`], `chatmode exists: ${chatmode}`);
 }
@@ -213,8 +220,11 @@ contentCheck(['.squad', 'SCORECARD.md'], /Agent Coverage per Use-Case/i, 'SCOREC
 contentCheck(['.squad', 'SCORECARD.md'], /Prompt Quality Metrics/i, 'SCORECARD includes prompt metrics section');
 contentCheck(['.squad', 'SCORECARD.md'], /Skill Coverage/i, 'SCORECARD includes skill coverage section');
 contentCheck(['PORTFOLIO.md'], /Current portfolio status/i, 'PORTFOLIO includes status snapshot');
-contentCheck(['Use-cases', 'README.md'], /docs\\walkthroughs/i, 'Use-cases README points to walkthroughs');
-contentCheck(['Use-cases', 'README.md'], /docs\\use-case-cheatsheets/i, 'Use-cases README points to cheatsheets');
+// Use-cases/ is a folder of reference-only sample apps. The walkthrough docs live under
+// docs/walkthroughs and docs/use-case-cheatsheets and are surfaced from the root README,
+// not from a separate Use-cases/README.md (which would be redundant).
+fileCheck(['docs', 'walkthroughs'], 'walkthroughs directory exists');
+fileCheck(['docs', 'use-case-cheatsheets'], 'use-case cheatsheets directory exists');
 
 console.log(d('\n  Charter Quality'));
 for (const agent of agents) {

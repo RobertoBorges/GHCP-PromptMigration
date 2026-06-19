@@ -1,0 +1,47 @@
+# Force LF line endings for text files we ship to npm.
+# This avoids the CI guard tripping on CRLF↔LF differences when contributors
+# work on different OSes (Windows uses CRLF by default; Linux/macOS use LF).
+#
+# Reference: https://docs.github.com/en/get-started/getting-started-with-git/configuring-git-to-handle-line-endings
+
+# Default: detect text vs binary, normalize text to LF in the repo.
+* text=auto eol=lf
+
+# Explicit text files for the migration squad content.
+*.md       text eol=lf
+*.yaml     text eol=lf
+*.yml      text eol=lf
+*.json     text eol=lf
+*.js       text eol=lf
+*.mjs      text eol=lf
+*.cjs      text eol=lf
+*.ts       text eol=lf
+*.tsx      text eol=lf
+*.txt      text eol=lf
+*.sh       text eol=lf
+*.bicep    text eol=lf
+*.tf       text eol=lf
+
+# PowerShell scripts MUST stay CRLF (Windows convention)
+*.ps1      text eol=crlf
+*.bat      text eol=crlf
+*.cmd      text eol=crlf
+
+# Binary files — never normalize
+*.png      binary
+*.jpg      binary
+*.jpeg     binary
+*.gif      binary
+*.ico      binary
+*.pdf      binary
+*.pptx     binary
+*.docx     binary
+*.xlsx     binary
+*.zip      binary
+*.tar.gz   binary
+*.tgz      binary
+*.mdb      binary
+*.mdf      binary
+*.bak      binary
+*.dll      binary
+*.exe      binary

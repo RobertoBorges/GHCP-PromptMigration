@@ -32,7 +32,21 @@ const PRESERVED_FILES = new Set(['.gitkeep', 'README.md', '.npmignore']);
 
 function sha256(filePath) {
   const buf = readFileSync(filePath);
-  return crypto.createHash('sha256').update(buf).digest('hex');
+  // Normalize line endings to LF so CRLF↔LF differences (Windows ↔ Linux ↔ Git autocrlf)
+  // do not produce false positives when the actual content is identical.
+  // Read as UTF-8 only when the file looks textual (md/yaml/json/txt/asp/cs/etc.);
+  // binary files are hashed raw.
+  const ext = filePath.toLowerCase();
+  const isText = /\.(md|yaml|yml|json|txt|asp|asa|cs|java|py|rb|js|mjs|cjs|ts|tsx|sh|ps1|bicep|tf|properties|config|xml|html|css|sql|cshtml|razor|jsp|html?|csproj|sln)$/.test(ext)
+    || filePath.endsWith('AGENTS.md')
+    || filePath.endsWith('SYNC-MANIFEST.json')
+    || filePath.endsWith('charter.md');
+  let normalized = buf;
+  if (isText) {
+    const text = buf.toString('utf-8').replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+    normalized = Buffer.from(text, 'utf-8');
+  }
+  return crypto.createHash('sha256').update(normalized).digest('hex');
 }
 
 async function snapshot(dir) {

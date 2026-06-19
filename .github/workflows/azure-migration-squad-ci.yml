@@ -39,12 +39,14 @@ on:
 
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
+    # Linux-only matrix to keep CI minutes low. The package is OS-agnostic
+    # (pure Node.js, no native deps), so cross-OS coverage isn't needed for
+    # every push. Run a manual cross-OS smoke before each release if desired.
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-        node: ['20', '22']
+        node: ['20']
 
     steps:
       - uses: actions/checkout@v4

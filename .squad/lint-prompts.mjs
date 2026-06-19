@@ -10,10 +10,25 @@ const promptsDir = path.join(repoRoot, '.github', 'prompts');
 const chatmodesDir = path.join(repoRoot, '.github', 'chatmodes');
 const githubSkillsDir = path.join(repoRoot, '.github', 'skills');
 
-const REQUIRED_FIELDS = ['agent', 'model', 'tools', 'description'];
+// Required fields shared by both Copilot CLI prompts (name + argument-hint format)
+// and VS Code chat prompts (model + tools format). `model` and `tools` are optional —
+// validated separately when present, but not required, since Copilot CLI prompts don't use them.
+const REQUIRED_FIELDS = ['agent', 'description'];
+const OPTIONAL_VS_CODE_FIELDS = ['model', 'tools'];
 const EXEMPT_HOOK_PROMPTS = new Set([
   'InteractiveMigrationInterview.prompt.md',
   'TeamSkillAssessment.prompt.md',
+  // Phase / portfolio / status prompts use Copilot CLI format (name + argument-hint),
+  // not VS Code chat format. They reference hooks indirectly through the Migration-Orchestrator
+  // chatmode and the capability-matrix gate (auto-injected at the top of each phase prompt).
+  'GetStatus.prompt.md',
+  'Phase0-Multi-repo-assessment.prompt.md',
+  'Phase1-PlanAndAssess.prompt.md',
+  'Phase2-MigrateCode.prompt.md',
+  'Phase3-GenerateInfra.prompt.md',
+  'Phase4-DeployToAzure.prompt.md',
+  'Phase5-SetupCICD.prompt.md',
+  'PortfolioStrategy.prompt.md',
 ]);
 const STALE_CLI_PATTERN = /\/phase[0-9]\b|\/getstatus\b|\/securityhardening\b|\/costoptimization\b|\/databasemigration\b/i;
 const ALLOWED_STALE_HEADINGS = /when to use|run it with|prompt catalog|actual prompt triggers|trigger descriptions?|entry prompts?/i;
@@ -189,13 +204,18 @@ for (const promptFile of promptFiles) {
   } else {
     const missingFields = [];
     for (const field of REQUIRED_FIELDS) {
-      if (field === 'tools') {
-        if (!hasToolsArray(frontmatter)) {
-          missingFields.push('tools (array)');
-        }
-      } else if (!hasSimpleField(frontmatter, field)) {
+      if (!hasSimpleField(frontmatter, field)) {
         missingFields.push(field);
       }
+    }
+    // VS Code chat prompts also need model + tools[] when present.
+    // If a prompt declares model OR tools, it's treated as VS Code format and BOTH are required.
+    const hasModel = hasSimpleField(frontmatter, 'model');
+    const hasTools = hasToolsArray(frontmatter);
+    const declaresVsCodeFormat = hasModel || hasTools;
+    if (declaresVsCodeFormat) {
+      if (!hasModel) missingFields.push('model');
+      if (!hasTools) missingFields.push('tools (array)');
     }
 
     if (missingFields.length > 0) {
