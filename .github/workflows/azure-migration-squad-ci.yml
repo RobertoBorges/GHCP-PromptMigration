@@ -20,20 +20,26 @@ on:
     branches: [main]
     paths:
       - 'packages/azure-migration-squad/**'
+      - 'packages/azure-migration-squad-vscode/**'
       - '.github/**'
       - '.squad/**'
       - 'AGENTS.md'
+      - 'MIGRATION-START-HERE.md'
       - 'package.json'
+      - 'package-lock.json'
       - 'plugin.manifest.json'
       - 'scripts/**'
       - '.github/workflows/azure-migration-squad-ci.yml'
   pull_request:
     paths:
       - 'packages/azure-migration-squad/**'
+      - 'packages/azure-migration-squad-vscode/**'
       - '.github/**'
       - '.squad/**'
       - 'AGENTS.md'
+      - 'MIGRATION-START-HERE.md'
       - 'package.json'
+      - 'package-lock.json'
       - 'plugin.manifest.json'
       - 'scripts/**'
 
