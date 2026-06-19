@@ -1,0 +1,196 @@
+# =============================================================================
+# Spring Boot Application Configuration Template
+# =============================================================================
+# Use this template when migrating legacy Java XML/properties configuration
+# to modern Spring Boot YAML format.
+# Replaces: applicationContext.xml, persistence.xml, database.properties, etc.
+
+spring:
+  application:
+    name: ${APP_NAME:my-application}
+
+  # ===========================================================================
+  # Database Configuration
+  # Replaces: <bean id="dataSource">, database.properties, persistence.xml
+  # ===========================================================================
+  datasource:
+    url: jdbc:sqlserver://${DB_HOST:localhost}:1433;database=${DB_NAME:myapp};encrypt=true;trustServerCertificate=${DB_TRUST_CERT:false}
+    username: ${DB_USER:}
+    password: ${DB_PASSWORD:}
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    hikari:
+      maximum-pool-size: ${DB_POOL_SIZE:10}
+      minimum-idle: 5
+      idle-timeout: 300000
+      connection-timeout: 20000
+
+  # ===========================================================================
+  # JPA / Hibernate Configuration
+  # Replaces: <bean id="sessionFactory">, hibernate.cfg.xml
+  # ===========================================================================
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: ${SHOW_SQL:false}
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.SQLServerDialect
+        format_sql: true
+        jdbc:
+          batch_size: 25
+        order_inserts: true
+        order_updates: true
+
+  # ===========================================================================
+  # Azure Entra ID (Active Directory) Configuration
+  # Replaces: JAAS login modules, custom auth filters
+  # ===========================================================================
+  cloud:
+    azure:
+      active-directory:
+        enabled: ${AZURE_AD_ENABLED:true}
+        credential:
+          client-id: ${AZURE_CLIENT_ID:}
+          client-secret: ${AZURE_CLIENT_SECRET:}
+        profile:
+          tenant-id: ${AZURE_TENANT_ID:}
+
+  # ===========================================================================
+  # Security / OAuth2 Configuration
+  # Replaces: <security:http>, web.xml security-constraint
+  # ===========================================================================
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://login.microsoftonline.com/${AZURE_TENANT_ID}/v2.0
+
+  # ===========================================================================
+  # Cache Configuration
+  # Replaces: ehcache.xml, custom cache beans
+  # ===========================================================================
+  cache:
+    type: ${CACHE_TYPE:redis}
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      ssl:
+        enabled: ${REDIS_SSL:true}
+
+  # ===========================================================================
+  # Email Configuration
+  # Replaces: custom mail session beans, JNDI mail resources
+  # ===========================================================================
+  mail:
+    host: ${MAIL_HOST:smtp.example.com}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USER:}
+    password: ${MAIL_PASSWORD:}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enabled: true
+
+  # ===========================================================================
+  # Profile Activation
+  # ===========================================================================
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+
+# =============================================================================
+# Server Configuration
+# Replaces: server.xml, web.xml <context-param>
+# =============================================================================
+server:
+  port: ${SERVER_PORT:8080}
+  servlet:
+    context-path: /
+  compression:
+    enabled: true
+    mime-types: application/json,application/xml,text/html,text/plain
+
+# =============================================================================
+# Actuator / Health Checks
+# =============================================================================
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: when_authorized
+      probes:
+        enabled: true
+  health:
+    livenessstate:
+      enabled: true
+    readinessstate:
+      enabled: true
+    db:
+      enabled: true
+    redis:
+      enabled: true
+
+# =============================================================================
+# Logging Configuration
+# Replaces: log4j.xml, logback.xml, java.util.logging.properties
+# =============================================================================
+logging:
+  level:
+    root: INFO
+    com.example: ${LOG_LEVEL:INFO}
+    org.springframework.security: WARN
+    org.hibernate.SQL: ${SQL_LOG_LEVEL:WARN}
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
+# =============================================================================
+# Application Insights (Azure Monitor)
+# =============================================================================
+azure:
+  application-insights:
+    connection-string: ${APPLICATIONINSIGHTS_CONNECTION_STRING:}
+    enabled: ${APPINSIGHTS_ENABLED:true}
+
+---
+# =============================================================================
+# Development Profile
+# =============================================================================
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    url: jdbc:sqlserver://localhost:1433;database=myapp_dev;trustServerCertificate=true
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+logging:
+  level:
+    com.example: DEBUG
+    org.hibernate.SQL: DEBUG
+
+---
+# =============================================================================
+# Production Profile
+# =============================================================================
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    # Use Azure SQL with managed identity (no credentials needed)
+    url: jdbc:sqlserver://${DB_HOST}.database.windows.net:1433;database=${DB_NAME};encrypt=true;authentication=ActiveDirectoryDefault
+
+logging:
+  level:
+    root: WARN
+    com.example: INFO

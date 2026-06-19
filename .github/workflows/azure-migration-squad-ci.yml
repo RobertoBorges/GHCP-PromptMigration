@@ -1,0 +1,82 @@
+name: azure-migration-squad CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'packages/azure-migration-squad/**'
+      - '.github/**'
+      - '.squad/**'
+      - 'AGENTS.md'
+      - 'package.json'
+      - 'plugin.manifest.json'
+      - 'scripts/**'
+      - '.github/workflows/azure-migration-squad-ci.yml'
+  pull_request:
+    paths:
+      - 'packages/azure-migration-squad/**'
+      - '.github/**'
+      - '.squad/**'
+      - 'AGENTS.md'
+      - 'package.json'
+      - 'plugin.manifest.json'
+      - 'scripts/**'
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        node: ['20', '22']
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js ${{ matrix.node }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Install workspaces
+        run: npm install --workspaces=false && npm install --workspaces
+
+      - name: Validate descriptions ≤1024 chars (root content)
+        run: npm run validate:descriptions
+
+      - name: Rebuild plugin manifest from disk
+        run: npm run build:plugin-manifest
+
+      - name: Validate plugin manifest
+        run: npm run validate:plugin-manifest
+
+      - name: Sync templates from root
+        working-directory: packages/azure-migration-squad
+        run: npm run sync
+
+      - name: Validate build
+        working-directory: packages/azure-migration-squad
+        run: npm run build
+
+      - name: Lint (PII leak check)
+        working-directory: packages/azure-migration-squad
+        run: npm run lint
+
+      - name: Install smoke tests
+        working-directory: packages/azure-migration-squad
+        env:
+          AZURE_MIGRATION_SQUAD_TELEMETRY: '0'
+          CI: 'true'
+        run: node --test test/install.test.mjs
+
+      - name: Evaluator-driven eval suite
+        working-directory: packages/azure-migration-squad
+        env:
+          AZURE_MIGRATION_SQUAD_TELEMETRY: '0'
+          CI: 'true'
+        run: node --test test/eval-suite.test.mjs
+
+      - name: npm pack smoke test
+        working-directory: packages/azure-migration-squad
+        run: npm pack --dry-run

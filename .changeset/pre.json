@@ -1,0 +1,8 @@
+{
+  "mode": "pre",
+  "tag": "insider",
+  "initialVersions": {
+    "@robertoborges/azure-migration-squad": "0.1.0-insider.3"
+  },
+  "changesets": []
+}

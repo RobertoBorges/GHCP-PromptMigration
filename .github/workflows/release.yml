@@ -1,0 +1,75 @@
+name: Release azure-migration-squad
+
+on:
+  push:
+    branches:
+      - main
+
+concurrency: release-${{ github.ref }}
+
+permissions:
+  contents: write
+  pull-requests: write
+  id-token: write
+
+jobs:
+  release:
+    name: Create release PR or publish to npm
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        run: npm install --workspaces=false && npm install --workspaces
+
+      - name: Validate descriptions (≤1024 chars)
+        run: npm run validate:descriptions
+
+      - name: Rebuild plugin manifest from disk
+        run: npm run build:plugin-manifest
+
+      - name: Validate plugin manifest
+        run: npm run validate:plugin-manifest
+
+      - name: Sync templates
+        working-directory: packages/azure-migration-squad
+        run: npm run sync
+
+      - name: Run package tests
+        working-directory: packages/azure-migration-squad
+        env:
+          AZURE_MIGRATION_SQUAD_TELEMETRY: '0'
+          CI: 'true'
+        run: npm test
+
+      # Changesets workflow:
+      #   - If there are pending changesets and no open release PR → opens/updates a "Version Packages" PR
+      #   - If the release PR was merged (changesets consumed, versions bumped) → publishes to npm
+      - name: Create release PR or publish
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          publish: npm run changeset:publish
+          version: npm run changeset:version
+          commit: 'chore(release): version packages'
+          title: 'chore(release): version packages'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Print published result
+        if: steps.changesets.outputs.published == 'true'
+        run: |
+          echo "Published packages:"
+          echo '${{ steps.changesets.outputs.publishedPackages }}'

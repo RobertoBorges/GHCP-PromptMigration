@@ -1,58 +1,72 @@
-# GitHub Copilot Migration & Modernization for Azure
+# GHCP-PromptMigration — Docs Hub for Azure Migration Squad
 
-> **Universal Mode (v2 — 2026-06-01):** Migrate **any application** to Azure — regardless of where it runs today or what it's built in. Discovery-first, evidence-bound, squad-orchestrated.
+> **Universal Azure migration agents for GitHub Copilot + Squad.** Any source. Any stack. One command.
 
-This repository turns GitHub Copilot into a structured migration system: a Discovery Engineer characterizes any application; an Architect approves the strategy; specialist agents execute Phases 1–6 to land it on Azure. The Universal Discovery flow handles **on-premise, AWS, GCP, Oracle, VMware, Kubernetes, container registries, GitHub repos, ZIPs, and mainframes** across **.NET, Java, Python, Node.js, PHP, Ruby, Go, Perl, Rust, COBOL, Oracle Forms, PowerBuilder, Delphi/VB6, Scala/Kotlin, and C++ Windows** stacks.
+[![npm](https://img.shields.io/npm/v/@robertoborges/azure-migration-squad?label=npm&color=blue)](https://www.npmjs.com/package/@robertoborges/azure-migration-squad)
+[![Squad](https://img.shields.io/badge/squad--cli-compatible-blueviolet?logo=githubcopilot)](https://github.com/bradygaster/squad)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-## Table of Contents
+This is the **canonical docs hub** for the Azure Migration Squad. The squad migrates **any application** — regardless of where it runs today or what it's built in — to Azure. Discovery-first, evidence-bound, squad-orchestrated.
 
-- [Overview](#overview)
-- [Three Ways to Start](#three-ways-to-start)
-- [The Universal Migration Flow](#the-universal-migration-flow)
-- [Requirements](#requirements)
-- [What's in the Repository](#whats-in-the-repository)
-- [Migration Phases](#migration-phases)
-- [The Squad — 15 Specialists](#the-squad--15-specialists)
-- [Source / Stack / Workload Adapters](#source--stack--workload-adapters)
-- [Avoiding Hallucinations](#avoiding-hallucinations)
-- [Status Tracking](#status-tracking)
-- [Use-Case Walkthroughs](#use-case-walkthroughs)
-- [Contributing](#contributing)
-- [License](#license)
+The squad ships as:
+- An **npm package**: [`@robertoborges/azure-migration-squad`](https://www.npmjs.com/package/@robertoborges/azure-migration-squad) — primary install path
+- A **Squad plugin marketplace** entry — for Squad-discovery-first users (see `plugin.manifest.json`)
+- A **GitHub template** (coming in Wave D) — for new engagements that want sample code included
+- This **monorepo** — the canonical source of truth; the npm package is built from this repo's `.github/` + `.squad/` content
 
-## Overview
+---
 
-The project provides a structured, evidence-bound approach to:
+## Three ways to install
 
-0. **Discover** any application — characterize source, stack, workload, data, integrations with confidence labels
-1. **Plan & assess** with a Capability Matrix that every phase consumes
-2. **Migrate code** to modern Azure-compatible runtimes (when modernization is in scope)
-3. **Generate infrastructure as code** (Bicep / Terraform)
-4. **Deploy to Azure** with managed identities, Key Vault, observability baked in
-5. **Set up CI/CD** for automated, repeatable deployments
-6. **Post-migration ops** — dashboards, alerts, runbooks, cost guardrails
+### 🥇 Option 1 — npm (primary, recommended)
 
-Through a guided, AI-assisted workflow, developers and architects transform legacy applications into modern, cloud-native solutions running on Azure.
+```bash
+# 1. Set up Squad (one-time)
+npm install -g @bradygaster/squad-cli
+squad init
 
-## Three Ways to Start
+# 2. Add the Azure Migration Squad
+npx @robertoborges/azure-migration-squad@insider init
 
-```
-Got an unknown app and want the squad to figure it out?
-  → /assess-any-application       (Universal Mode — recommended)
-
-Got a customer portfolio (CMDB / RVTools / DMA / 10+ apps)?
-  → /PortfolioStrategy            (Portfolio Planning flow)
-
-Got multiple repos that form ONE business solution?
-  → /Phase0-Multi-repo-assessment
-
-Know the stack and target — just want execution?
-  → /Phase1-PlanAndAssess         (skip discovery; accept risk in .squad/decisions.md)
+# 3a. If using VS Code with GitHub Copilot Chat:
+#     Slash commands work directly:
+#       /assess-any-application
+#
+# 3b. If using GitHub Copilot CLI (the `copilot` terminal command):
+#     Slash commands like /assess-any-application are NOT auto-registered.
+#     Just describe what you want in plain English:
+#       "Assess this application for Azure migration"
+#       "Discover this app"
+#       "Phase 2 — migrate the code"
+#     The Squad agent reads the natural-language→action table in
+#     .github/copilot-instructions.md and dispatches the right specialist.
 ```
 
-The Universal Mode is the default for any new application. It auto-detects what the app is, where it lives, and recommends a migration strategy (Rehost / Replatform / Refactor / Rearchitect / Rebuild / Retire / Retain) using a 12-branch decision tree — not just a 6Rs label.
+**Why the difference?** VS Code Copilot Chat auto-discovers `.github/prompts/*.prompt.md` as slash commands. GitHub Copilot CLI does not — it loads `AGENTS.md` + `.github/copilot-instructions.md` + `.github/agents/*.agent.md` as instructions only. The squad behaves identically on both surfaces; only the invocation syntax differs.
 
-## The Universal Migration Flow
+### 🥈 Option 2 — Squad plugin marketplace
+
+```bash
+# 1. Register this repo as a marketplace
+squad plugin marketplace add RobertoBorges/GHCP-PromptMigration
+
+# 2. Install the plugin (curated subset: agents + universal skills + routing as Squad knowledge)
+squad plugin install azure-migration-squad
+
+# 3. For full Copilot integration (chatmodes + prompts + .github/skills), follow Option 1
+```
+
+**Trade-off:** Squad plugin install lands files under `.squad/` per Squad's plugin contract. For full Copilot Chat integration (chatmodes, slash commands), you still want the npm package.
+
+### 🥉 Option 3 — GitHub template (coming soon — Wave D)
+
+A starter repo with the squad pre-installed plus one sample use-case for instant exploration. Content lives in [`template-repo-starter/`](./template-repo-starter/) — push to a separate GitHub repo + toggle "Template repository" in Settings to make it one-click installable.
+
+> **Translations:** [Español 🇪🇸](./docs/translations/README.es-ES.md) · [Português 🇧🇷](./docs/translations/README.pt-BR.md)
+
+---
+
+## What the squad does
 
 ```
 USER ──► /assess-any-application
@@ -67,7 +81,7 @@ USER ──► /assess-any-application
    │   • Capability Matrix        │  reports/Capability-Matrix.yaml
    │   • Strategy recommendation  │
    └────────────┬─────────────────┘
-                │ handoff (evidence-bound)
+                │
                 ▼
    ┌──────────────────────────────┐
    │  Architect (Danny Ocean)     │  ← approves/refines strategy
@@ -76,94 +90,72 @@ USER ──► /assess-any-application
                 │
                 ▼
    Phase 1 → Phase 2 → Phase 3 → Phase 4 → Phase 5 → Phase 6
-   (each phase consumes the Capability Matrix and dispatches the right
-    squad specialists per the source/stack/workload axes)
 ```
 
-The **Capability Matrix** is the contract: every Phase 1–6 prompt reads it to know which source adapter, stack adapter, and workload pattern to load — and which specialists to dispatch.
+Covers source environments: **on-premise, AWS, GCP, Oracle, VMware, Kubernetes, container registries, GitHub repos, ZIPs, mainframes**
 
-## Requirements
+Covers stacks: **.NET, Java, Python, Node.js, PHP, Ruby, Go, Perl, Rust, COBOL, Oracle Forms, PowerBuilder, Delphi/VB6, Scala/Kotlin, C++ Windows**
 
-- GitHub Copilot License
-- Model **Claude Sonnet 4.5 or 4.6** (included in GitHub Copilot) — Sonnet 4.6 recommended for Discovery
-- Azure MCP Server Extension
-- GitHub Copilot for Azure Extension
-- GitHub Copilot Extension 1.35+
-- GitHub Copilot Chat Extension 0.30+
-- Visual Studio Code 1.101+
-- AZD CLI
-- AZ CLI
-- Development tools that fit your application's stack
+Picks migration strategy via a **12-branch decision tree** (Rehost/Replatform/Refactor/Rearchitect/Rebuild/Retire/Retain — 6Rs is one output field, not the whole engine).
 
-## What's in the Repository
+---
+
+## Repository structure
 
 ```
-.
-├── .github/
-│   ├── chatmodes/              ← 9 chatmodes (Discovery-Intake, Migration-Orchestrator,
-│   │                              Code-Migration-Modernization, Azure-Infrastructure,
-│   │                              Security-Review, Cost-Optimization, Debug-Migration,
-│   │                              Onboarding, Quick-Assessment)
-│   ├── prompts/                ← Universal + Phase prompts (Phase 0–6, PortfolioStrategy,
-│   │                              Assess-Any-Application, Build-Migration-Plan, …)
-│   │   └── legacy/             ← Deprecated narrow Assess-* prompts (kept for reference)
-│   ├── skills/                 ← 60+ reusable skills
-│   │   ├── stack-detection.md
-│   │   ├── migration-strategy-decision-tree.md
-│   │   ├── capability-matrix.md
-│   │   ├── discovery-dossier-template.md
-│   │   ├── migration-plan-template.md
-│   │   ├── source-*.md         ← 11 source adapters (on-premise, AWS, GCP, K8s, …)
-│   │   ├── stack-*.md          ← 15 stack adapters (.NET, Java, Python, COBOL, …)
-│   │   ├── workload-*.md       ← 9 workload patterns (webapp, api, batch, …)
-│   │   └── (nested skill dirs with SKILL.md + templates)
-│   ├── hooks/                  ← agent-dispatch, phase-gates, quality-checklist, …
-│   ├── workflows/              ← GitHub Actions: pptx-generate, squad-health
-│   └── copilot-instructions.md ← Universal Mode behavioral contract
+GHCP-PromptMigration/                            ← this monorepo
+├── README.md                                    ← docs hub (you are here)
+├── plugin.manifest.json                         ← Squad plugin marketplace metadata
+├── package.json                                 ← npm workspaces root
 │
-├── .squad/                     ← Squad orchestration layer
-│   ├── agents/                 ← 15 agent charters (incl. discovery-engineer)
-│   ├── team.md                 ← Roster + targets
-│   ├── routing.md              ← Capability-based routing rules
-│   ├── decisions.md            ← Durable decision log
-│   └── ...
+├── packages/
+│   └── azure-migration-squad/                   ← published npm package
+│       ├── package.json                         (@robertoborges/azure-migration-squad)
+│       ├── bin/cli.js                           (init, upgrade, doctor, list, telemetry)
+│       ├── lib/                                 (telemetry + opt-out consent)
+│       ├── schemas/                             (Capability Matrix + Discovery Dossier JSON Schemas)
+│       ├── scripts/                             (sync, validate, lint)
+│       ├── templates/                           (synced from root .github/ + .squad/agents/)
+│       └── WAVE-A-HANDOFF.md                    (publish runbook)
 │
-├── docs/                       ← Architecture, guides, onboarding, walkthroughs,
-│                                  PPTX decks, use-case cheatsheets
+├── .github/                                     ← canonical content (source of truth)
+│   ├── chatmodes/                               (9 Copilot chatmodes)
+│   ├── prompts/                                 (26 prompts: Assess-Any-Application, Phase 0-6, ...)
+│   ├── skills/                                  (60+ source/stack/workload + universal skills)
+│   ├── hooks/                                   (4 orchestration hooks)
+│   ├── copilot-instructions.md
+│   └── workflows/                               (CI: azure-migration-squad-ci.yml + others)
 │
-├── skills/                     ← Top-level mirror of flat skill files (for cross-mode access)
+├── .squad/                                      ← Squad orchestration layer
+│   ├── agents/                                  (15 specialist charters)
+│   ├── team.md                                  (roster)
+│   ├── routing.md                               (capability-based routing)
+│   └── decisions.md                             (durable decision log)
 │
-├── Use-cases/                  ← 7 reference applications (see Walkthroughs section)
+├── docs/                                        ← extended documentation
+│   ├── telemetry.md                             (data we collect + opt-out matrix)
+│   ├── privacy-policy.md                        (privacy stance)
+│   ├── contributing-adapters.md                 (how to add a new adapter)
+│   ├── architecture/                            (system architecture)
+│   ├── guides/                                  (onboarding + skills map)
+│   ├── walkthroughs/                            (7 reference walkthroughs)
+│   └── use-case-cheatsheets/                    (7 quick-reference cards)
 │
-├── README.md                   ← You are here
-├── README-Squad.md             ← "Ocean's Fourteen" branded deep-dive on squad orchestration
-├── AGENTS.md, CLAUDE.md,
-│ JOURNAL.md, PORTFOLIO.md      ← Squad operating documents
-└── .env.example
+├── Use-cases/                                   ← 7 reference applications (samples)
+│   ├── 01-ASPClassicApp/                        (Classic ASP)
+│   ├── 02-NetFramework30-ASPNET-WEB/            (.NET Framework 3.0)
+│   ├── 03-WCFNet35/                             (WCF .NET 3.5)
+│   ├── 04-ContosoUniversityDiPS/                (ASP.NET MVC)
+│   ├── 05-BookShop/                             (.NET 3.5 WebForms)
+│   ├── 06-Java-API-BusReservation/              (Java 8 + Spring)
+│   └── 07-PartsUnlimited-aspnet45/              (ASP.NET 4.5)
+│
+└── AGENTS.md, CLAUDE.md, JOURNAL.md, PORTFOLIO.md   ← squad operating docs
 ```
 
-## Migration Phases
+---
 
-| Phase | Prompt | Lead Agent | Produces |
-|-------|--------|-----------|----------|
-| **Discovery** | `/assess-any-application` | Discovery Engineer | Discovery Dossier + Capability Matrix |
-| **Plan** | `/build-migration-plan` | Architect | Migration Plan |
-| **0** | `/Phase0-Multi-repo-assessment` | Discovery Engineer | Repo inventory + sequencing |
-| **1** | `/Phase1-PlanAndAssess` | Architect | Application-Assessment-Report |
-| **2** | `/Phase2-MigrateCode` | Coder | Modernized code + Migration-Change-Log |
-| **DB** | `/DatabaseMigration` | Database Specialist | Database-Migration-Report |
-| **3** | `/Phase3-GenerateInfra` | Azure Specialist | Bicep / Terraform IaC |
-| **Sec** | `/SecurityHardening` | Security Auditor | Security-Review-Report |
-| **4** | `/Phase4-DeployToAzure` | DevOps Engineer | Deployed environment |
-| **5** | `/Phase5-SetupCICD` | DevOps Engineer | CI/CD pipelines |
-| **6** | `/Phase6-PostMigrationOps` | Observability Engineer | Runbooks + dashboards + alerts |
-| **Cost** | `/CostOptimization` | Cost Engineer | Cost-Optimization-Report |
-| **Rollback** | `/Phase-Rollback` | Cutover Commander | Rollback execution |
-| **Status** | `/GetStatus` | Tester | Status snapshot |
-
-Each phase has a **quality gate** defined in `.squad/routing.md`. A phase does not advance until the gate is satisfied.
-
-## The Squad — 15 Specialists
+## The squad (15 specialists)
 
 | # | Agent | Alias | Best for |
 |---|-------|-------|----------|
@@ -183,102 +175,62 @@ Each phase has a **quality gate** defined in `.squad/routing.md`. A phase does n
 | 14 | Presentation Specialist | Tess Ocean | Status decks, executive summaries |
 | 15 | Cost Engineer | The Accountant | Cost models, right-sizing, FinOps |
 
-Full charters: `.squad/agents/<name>/charter.md`. Routing rules: `.squad/routing.md`.
+Charters: [`.squad/agents/<name>/charter.md`](./.squad/agents/). Routing: [`.squad/routing.md`](./.squad/routing.md).
 
-## Source / Stack / Workload Adapters
+---
 
-The system characterizes any application along three orthogonal axes — every skill is a small, focused markdown file the Discovery Engineer loads dynamically based on what it detects.
+## Quality + telemetry
 
-**Source adapters (11)** — where the application lives today:
+### Telemetry — opt-out by default
+The npm CLI collects anonymous usage data (package version, command name, OS/Node, Squad-detected, error class). **Never** file paths, project content, prompts, customer data, IPs, or emails.
 
-`source-github-repo`, `source-on-premise`, `source-aws`, `source-gcp`, `source-oracle-db`, `source-vmware-rvtools`, `source-mainframe`, `source-kubernetes-cluster`, `source-container-registry`, `source-zip-filesystem`, `source-unsupported-escalation` (Salesforce / SAP / Lotus Notes catch-all)
+Opt out at any time:
+```bash
+azure-migration-squad telemetry off
+# or
+export AZURE_MIGRATION_SQUAD_TELEMETRY=0
+# or industry-standard:
+export DO_NOT_TRACK=1
+```
 
-**Stack adapters (15)** — what the application is built in:
+Full policy: [docs/telemetry.md](./docs/telemetry.md) · Privacy: [docs/privacy-policy.md](./docs/privacy-policy.md)
 
-`stack-dotnet`, `stack-java`, `stack-python`, `stack-nodejs`, `stack-php`, `stack-ruby`, `stack-go`, `stack-perl`, `stack-rust`, `stack-cobol-mainframe`, `stack-oracle-forms`, `stack-powerbuilder`, `stack-delphi-vb6`, `stack-scala-kotlin`, `stack-cpp-windows`
+### Quality gates
+Every PR runs in CI (Ubuntu/macOS/Windows × Node 20/22):
+- ✅ JSON Schema validation for the Capability Matrix
+- ✅ Build validation (key files synced, all cross-references resolve)
+- ✅ PII-leak lint (telemetry calls cannot leak file paths)
+- ✅ Plugin manifest validation
+- ✅ Install smoke test
 
-**Workload patterns (9)** — runtime / architectural shape:
-
-`workload-webapp`, `workload-api-service`, `workload-batch-job`, `workload-event-driven`, `workload-serverless`, `workload-data-pipeline`, `workload-desktop-client-server`, `workload-packaged-app`, `workload-mainframe-transactional`
-
-Strategy is decided by the `migration-strategy-decision-tree` skill — a 12-branch decision engine that weighs business priority, source constraints, code mutability, data gravity, integration complexity, target Azure options, cutover constraints, and team readiness. The 6Rs label is **one output field**, not the whole engine.
-
-## Avoiding Hallucinations
-
-To keep migration grounded, the squad relies on **evidence-bound artifacts** in `reports/`:
-
-| Artifact | Purpose |
-|----------|---------|
-| `reports/Discovery-Dossier.md` | Narrative discovery output with evidence + confidence labels |
-| `reports/Capability-Matrix.yaml` | Machine-readable contract consumed by every Phase prompt |
-| `reports/Migration-Plan.md` | Architect-approved execution plan |
-| `reports/Application-Assessment-Report.md` | Phase 1 detailed assessment |
-| `reports/Report-Status.md` | Overall status dashboard |
-
-Every classification carries an `evidence_confidence: high | medium | low` label tied to a file path, command output, or quoted user statement. Low-confidence axes must list `unresolved_questions` with a recommended next probe. A Phase prompt that can't find a Capability Matrix refuses to proceed and routes back to Discovery.
-
-**Pro tips:**
-
-- For rewrite migrations, scaffolded files (`Class1.cs`, default templates) may be created. Clean them up before final check-in.
-- Use the `@terminal` command to ask the agent to diagnose issues during tests.
-- Don't assume — verify with documentation. Every Discovery Engineer recommendation lists alternatives considered.
-
-## Status Tracking
-
-Check progress at any time with:
-
-- `/GetStatus` — current status snapshot
-- `@squad show migration status` — squad-mode equivalent
-- `reports/Report-Status.md` — durable status dashboard
-
-The status report includes:
-
-- Overall completion percentage and per-phase status
-- Quality scores for each completed phase
-- Timestamps for phase transitions
-- Identified risks with severity
-- Recommended next steps
-- Resource links (architecture diagrams, IaC, runbooks)
-
-## Use-Case Walkthroughs
-
-The `Use-cases/` folder contains **seven reference applications** that demonstrate the universal flow against well-understood inputs. They are not a fixed catalog — the squad migrates anything — but they're the easiest way to see the system end-to-end.
-
-| # | Use-Case | Source | Demonstrates |
-|---|----------|--------|--------------|
-| 1 | `01-ASPClassicApp` | Classic ASP | Strangler rewrite to ASP.NET Core |
-| 2 | `02-NetFramework30-ASPNET-WEB` | .NET Framework 3.0 | Full-stack modernization to .NET 10 |
-| 3 | `03-WCFNet35` | WCF .NET 3.5 | SOAP-to-REST API conversion |
-| 4 | `04-ContosoUniversityDiPS` | ASP.NET MVC + multiple components | Multi-component App Service migration |
-| 5 | `05-BookShop` | .NET 3.5 WebForms | Razor Pages + Container Apps + Bicep |
-| 6 | `06-Java-API-BusReservation` | Java 8 + Spring | Spring Boot 3.x + PostgreSQL |
-| 7 | `07-PartsUnlimited-aspnet45` | ASP.NET 4.5 | Mature .NET modernization + observability |
-
-Step-by-step walkthroughs and cheatsheets live in `docs/walkthroughs/` and `docs/use-case-cheatsheets/`.
-
-## See Also
-
-- **`README-Squad.md`** — "Ocean's Fourteen" deep-dive on squad orchestration (the why behind multi-agent over single-prompt)
-- **`.squad/team.md`** — full squad roster
-- **`.squad/routing.md`** — capability-based routing rules
-- **`.github/copilot-instructions.md`** — universal behavioral contract for GitHub Copilot
-- **`AGENTS.md`** — universal squad instructions
-- **`docs/onboarding/`** — onboarding guides and training exercises
-- **`docs/architecture/`** — system architecture and prompt catalog
-- **`.github/prompts/legacy/README.md`** — mapping from deprecated `Assess-*` prompts to current adapters
+---
 
 ## Contributing
 
-Contributions are welcome:
+We welcome contributions:
 
-- Add a new source adapter, stack adapter, or workload pattern under `.github/skills/`
-- Improve the `migration-strategy-decision-tree` with new branches
-- Add use-case walkthroughs under `docs/walkthroughs/`
-- Sharpen agent charters in `.squad/agents/`
-- Add example `Capability-Matrix.yaml` fixtures for testing
+- 🆕 **New source adapter** (e.g. `source-azure-devops`, `source-bitbucket-cloud`) — see [docs/contributing-adapters.md](./docs/contributing-adapters.md)
+- 🆕 **New stack adapter** (e.g. `stack-elixir`, `stack-haskell`)
+- 🆕 **New workload pattern** (e.g. `workload-realtime-streaming`)
+- 🌳 **New branches in `migration-strategy-decision-tree.md`**
+- 📚 **Use-case walkthroughs** in `docs/walkthroughs/`
+- 🌍 **Translations** — README is currently EN; pt-BR + es-ES drafts in `docs/translations/`
 
-Please open an issue or PR. The `Evaluator` agent reviews prompt/skill changes for consistency.
+Open a PR. The **Evaluator** agent reviews prompt/skill changes for consistency. Releases use [Changesets](https://github.com/changesets/changesets).
+
+---
+
+## Roadmap
+
+- ✅ **Wave A** — npm package published (`@robertoborges/azure-migration-squad@0.1.0-insider.1` on `insider` channel)
+- ✅ **Wave B** — Squad plugin marketplace manifest (`plugin.manifest.json`) + validator
+- ✅ **Wave C** — Docs hub repositioning (you're looking at it) + telemetry + privacy + contributing-adapters
+- ✅ **Wave D** — Starter template content at [`template-repo-starter/`](./template-repo-starter/) (push to a separate GitHub repo when ready)
+- ✅ **Wave E** — Evaluator-driven eval suite + Changesets config + Capability Matrix schema validation in `doctor`
+- 🔄 **Wave F** — Multi-language docs ([🇪🇸](./docs/translations/README.es-ES.md) / [🇧🇷](./docs/translations/README.pt-BR.md) drafts shipped); Cloud Accelerate Factory pilot + conference talks pending. See [docs/launch-announcement.md](./docs/launch-announcement.md) for ready-to-post drafts.
+
+---
 
 ## License
 
-This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
+MIT © Roberto Borges

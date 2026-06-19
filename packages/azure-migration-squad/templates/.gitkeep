@@ -1,0 +1,2 @@
+# This file ensures templates/ is created in fresh clones.
+# Real content is produced by `npm run sync` from the monorepo root.

@@ -1,0 +1,98 @@
+# =============================================================================
+# Azure Developer CLI Configuration
+# =============================================================================
+# Defines the application structure for azd commands (up, provision, deploy)
+# =============================================================================
+
+name: my-application
+metadata:
+  template: azd-modernization
+
+# =============================================================================
+# Azure Resources Configuration
+# =============================================================================
+azure:
+  location: ${AZURE_LOCATION=eastus2}
+
+# =============================================================================
+# Infrastructure Configuration
+# =============================================================================
+infra:
+  provider: bicep
+  path: ./infra
+  module: main
+
+# =============================================================================
+# Services Configuration
+# =============================================================================
+services:
+  # Web Application
+  web:
+    project: ./src/Web
+    language: dotnet
+    host: containerapp
+    docker:
+      path: ./src/Web/Dockerfile
+    hooks:
+      prepackage:
+        shell: pwsh
+        run: dotnet publish -c Release
+      postdeploy:
+        shell: pwsh
+        run: echo "Web app deployed successfully"
+
+  # API Application
+  api:
+    project: ./src/Api
+    language: dotnet
+    host: containerapp
+    docker:
+      path: ./src/Api/Dockerfile
+
+  # Java Service (if applicable)
+  # java-service:
+  #   project: ./src/JavaService
+  #   language: java
+  #   host: containerapp
+  #   docker:
+  #     path: ./src/JavaService/Dockerfile
+
+# =============================================================================
+# Hooks - Pre and Post Deployment Actions
+# =============================================================================
+hooks:
+  preprovision:
+    shell: pwsh
+    run: |
+      Write-Host "Preparing Azure environment..."
+      az account show
+  
+  postprovision:
+    shell: pwsh
+    run: |
+      Write-Host "Post-provisioning tasks..."
+      # Configure any post-deployment resources
+
+  predeploy:
+    shell: pwsh
+    run: |
+      Write-Host "Pre-deployment validation..."
+      dotnet build --configuration Release
+
+  postdeploy:
+    shell: pwsh
+    run: |
+      Write-Host "Deployment complete!"
+      # Run health checks or smoke tests
+
+# =============================================================================
+# Pipeline Configuration (for CI/CD)
+# =============================================================================
+pipeline:
+  provider: github
+  variables:
+    - AZURE_ENV_NAME
+    - AZURE_LOCATION
+    - AZURE_SUBSCRIPTION_ID
+  secrets:
+    - AZURE_CREDENTIALS

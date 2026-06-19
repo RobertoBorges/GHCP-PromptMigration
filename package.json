@@ -1,0 +1,44 @@
+{
+  "name": "ghcp-prompt-migration-monorepo",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Monorepo root for GHCP-PromptMigration — Azure migration agents for GitHub Copilot + Squad. Published packages live under packages/.",
+  "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present",
+    "sync": "npm run sync --workspaces --if-present",
+    "build:plugin-manifest": "node scripts/build-plugin-manifest.mjs",
+    "validate:plugin-manifest": "node scripts/validate-plugin-manifest.mjs",
+    "validate:descriptions": "node scripts/validate-description-lengths.mjs",
+    "validate:all": "npm run validate:descriptions && npm run validate:plugin-manifest",
+    "pack:smoke": "npm pack --workspace=@robertoborges/azure-migration-squad",
+    "changeset": "changeset",
+    "changeset:version": "changeset version && npm install --package-lock-only",
+    "changeset:publish": "npm run build && changeset publish"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RobertoBorges/GHCP-PromptMigration.git"
+  },
+  "author": "Roberto Borges",
+  "keywords": [
+    "azure",
+    "migration",
+    "copilot",
+    "squad",
+    "multi-agent",
+    "monorepo"
+  ],
+  "devDependencies": {
+    "@changesets/cli": "^2.27.7"
+  }
+}

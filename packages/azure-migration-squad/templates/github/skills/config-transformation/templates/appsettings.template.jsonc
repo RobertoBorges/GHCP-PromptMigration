@@ -1,0 +1,159 @@
+{
+  "$schema": "https://json.schemastore.org/appsettings.json",
+  
+  // ========================================
+  // Application Settings
+  // ========================================
+  "Application": {
+    "Name": "MyApplication",
+    "Version": "1.0.0",
+    "Environment": "Development"
+  },
+
+  // ========================================
+  // Connection Strings
+  // Migrated from web.config <connectionStrings>
+  // ========================================
+  "ConnectionStrings": {
+    // Production: Use Azure Key Vault reference
+    // "@Microsoft.KeyVault(SecretUri=https://myvault.vault.azure.net/secrets/DbConnection)"
+    "DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=MyApp;Trusted_Connection=True;MultipleActiveResultSets=true",
+    "RedisCache": "localhost:6379,abortConnect=false"
+  },
+
+  // ========================================
+  // Logging Configuration
+  // Replaces <system.diagnostics> and custom logging config
+  // ========================================
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft": "Warning",
+      "Microsoft.Hosting.Lifetime": "Information",
+      "Microsoft.EntityFrameworkCore.Database.Command": "Warning"
+    },
+    "Console": {
+      "FormatterName": "json",
+      "FormatterOptions": {
+        "SingleLine": true,
+        "IncludeScopes": true,
+        "TimestampFormat": "yyyy-MM-dd HH:mm:ss "
+      }
+    }
+  },
+
+  // ========================================
+  // Azure Services Configuration
+  // ========================================
+  "Azure": {
+    "KeyVault": {
+      "VaultUri": "https://myapp-kv.vault.azure.net/"
+    },
+    "AppConfiguration": {
+      "Endpoint": "https://myapp-config.azconfig.io"
+    },
+    "ApplicationInsights": {
+      "ConnectionString": ""
+    }
+  },
+
+  // ========================================
+  // Authentication Settings
+  // Replaces <system.web><authentication>
+  // ========================================
+  "Authentication": {
+    "Schemes": {
+      "Bearer": {
+        "ValidAudiences": [ "api://myapp" ],
+        "ValidIssuer": "https://login.microsoftonline.com/{tenant-id}/v2.0"
+      }
+    },
+    "AzureAd": {
+      "Instance": "https://login.microsoftonline.com/",
+      "TenantId": "",
+      "ClientId": "",
+      "CallbackPath": "/signin-oidc"
+    }
+  },
+
+  // ========================================
+  // API Configuration
+  // ========================================
+  "Api": {
+    "Title": "My Application API",
+    "Version": "v1",
+    "EnableSwagger": true,
+    "RateLimiting": {
+      "PermitLimit": 100,
+      "Window": "00:01:00",
+      "QueueLimit": 10
+    }
+  },
+
+  // ========================================
+  // CORS Settings
+  // ========================================
+  "Cors": {
+    "AllowedOrigins": [
+      "https://localhost:3000",
+      "https://myapp.azurewebsites.net"
+    ],
+    "AllowedMethods": [ "GET", "POST", "PUT", "DELETE", "PATCH" ],
+    "AllowedHeaders": [ "Content-Type", "Authorization" ]
+  },
+
+  // ========================================
+  // Cache Settings
+  // Replaces custom caching config sections
+  // ========================================
+  "Cache": {
+    "DefaultExpirationMinutes": 30,
+    "SlidingExpiration": true,
+    "Redis": {
+      "Enabled": false,
+      "InstanceName": "MyApp_"
+    }
+  },
+
+  // ========================================
+  // Email Settings
+  // Replaces custom <emailSettings> section
+  // ========================================
+  "Email": {
+    "SmtpServer": "smtp.example.com",
+    "SmtpPort": 587,
+    "EnableSsl": true,
+    "FromAddress": "noreply@example.com",
+    "FromName": "My Application"
+  },
+
+  // ========================================
+  // Feature Flags
+  // ========================================
+  "FeatureManagement": {
+    "UseNewDashboard": false,
+    "EnableBetaFeatures": false,
+    "MaintenanceMode": false
+  },
+
+  // ========================================
+  // Health Check Settings
+  // ========================================
+  "HealthChecks": {
+    "Enabled": true,
+    "Path": "/health",
+    "DetailedPath": "/health/detailed"
+  },
+
+  // ========================================
+  // Kestrel Server Settings
+  // Replaces <system.web><httpRuntime>
+  // ========================================
+  "Kestrel": {
+    "Limits": {
+      "MaxRequestBodySize": 52428800,
+      "KeepAliveTimeout": "00:02:00",
+      "RequestHeadersTimeout": "00:00:30"
+    }
+  }
+}
