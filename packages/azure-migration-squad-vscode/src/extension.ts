@@ -14,6 +14,8 @@ import { AgentsProvider } from './treeProviders/agentsProvider';
 import { PromptsProvider } from './treeProviders/promptsProvider';
 import { SkillsProvider } from './treeProviders/skillsProvider';
 import { registerCommands } from './commands';
+import { AmsStatusBar } from './statusBar';
+import { maybeShowWelcome, showWelcomePanel, ensureCopilotChat } from './welcome';
 
 export function activate(context: vscode.ExtensionContext): void {
   console.log('[azure-migration-squad] extension activated');
@@ -38,11 +40,35 @@ export function activate(context: vscode.ExtensionContext): void {
     })
   );
 
+  // Status bar widget showing current migration phase. Honors the
+  // azureMigrationSquad.statusBar.enabled setting.
+  const statusBar = new AmsStatusBar(context);
+  const updateStatusBarVisibility = () => {
+    const enabled = vscode.workspace
+      .getConfiguration('azureMigrationSquad')
+      .get<boolean>('statusBar.enabled', true);
+    if (enabled) {
+      statusBar.start();
+    } else {
+      statusBar.dispose();
+    }
+  };
+  updateStatusBarVisibility();
+
+  context.subscriptions.push(
+    vscode.workspace.onDidChangeConfiguration((e) => {
+      if (e.affectsConfiguration('azureMigrationSquad.statusBar.enabled')) {
+        updateStatusBarVisibility();
+      }
+    })
+  );
+
   // Refresh all trees when the workspace's AMS state may have changed.
   const refreshAll = () => {
     agentsProvider.refresh();
     promptsProvider.refresh();
     skillsProvider.refresh();
+    statusBar.refresh();
   };
 
   // Auto-refresh when files in .squad/ or .github/ change.
@@ -64,6 +90,16 @@ export function activate(context: vscode.ExtensionContext): void {
   // Register all commands (Initialize, Upgrade, Doctor, Open Discovery, etc.)
   registerCommands(context, refreshAll);
 
+  // Phase 5 commands: welcome page + Copilot install
+  context.subscriptions.push(
+    vscode.commands.registerCommand('azureMigrationSquad.showWelcome', () =>
+      showWelcomePanel(context)
+    ),
+    vscode.commands.registerCommand('azureMigrationSquad.installCopilotChat', () =>
+      ensureCopilotChat(context, /* userInitiated */ true)
+    )
+  );
+
   // Smoke test command kept from Phase 2 for backward compat / debugging.
   context.subscriptions.push(
     vscode.commands.registerCommand('azureMigrationSquad.hello', () => {
@@ -72,6 +108,11 @@ export function activate(context: vscode.ExtensionContext): void {
       );
     })
   );
+
+  // First-run welcome: shown only if AMS isn't installed and user hasn't
+  // already dismissed it for this workspace. Runs after activation completes
+  // (don't block the activation path).
+  setTimeout(() => maybeShowWelcome(context).catch(() => undefined), 1500);
 }
 
 export function deactivate(): void {

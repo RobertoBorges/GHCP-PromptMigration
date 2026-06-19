@@ -18,6 +18,8 @@ const EXPECTED_COMMANDS = [
   'azureMigrationSquad.openSettings',
   'azureMigrationSquad.refreshTree',
   'azureMigrationSquad.openFile',
+  'azureMigrationSquad.showWelcome',
+  'azureMigrationSquad.installCopilotChat',
   'azureMigrationSquad.hello',
 ];
 

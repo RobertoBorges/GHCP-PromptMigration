@@ -81,6 +81,112 @@
         }
       ]
     },
+    "walkthroughs": [
+      {
+        "id": "azureMigrationSquadGettingStarted",
+        "title": "Migrate to Azure with Azure Migration Squad",
+        "description": "Set up the squad, run Discovery, generate a migration plan, and execute Phases 1-6.",
+        "steps": [
+          {
+            "id": "install",
+            "title": "Initialize the migration squad in your workspace",
+            "description": "Drops the agent charters, prompts, skills, and a 60-second quickstart into your project.\n[Initialize now](command:azureMigrationSquad.initialize)",
+            "media": {
+              "image": "media/walkthroughs/step-1-init.png",
+              "altText": "Initialize Azure Migration Squad screenshot"
+            },
+            "completionEvents": [
+              "onCommand:azureMigrationSquad.initialize"
+            ]
+          },
+          {
+            "id": "installCopilot",
+            "title": "Install GitHub Copilot Chat",
+            "description": "The migration squad uses slash commands inside Copilot Chat (e.g. `/assess-any-application`). If you already have Copilot Chat installed, this step auto-completes.\n[Install Copilot Chat](command:azureMigrationSquad.installCopilotChat)",
+            "media": {
+              "image": "media/walkthroughs/step-2-copilot.png",
+              "altText": "Install GitHub Copilot Chat extension"
+            },
+            "completionEvents": [
+              "extensionInstalled:GitHub.copilot-chat"
+            ]
+          },
+          {
+            "id": "discovery",
+            "title": "Run Discovery — characterize your application",
+            "description": "The Discovery Engineer (Saul Bloom Jr.) interviews you about source, stack, workload, data, and integrations, then produces a Capability Matrix the rest of the squad consumes.\n[Open Discovery](command:azureMigrationSquad.openDiscovery)",
+            "media": {
+              "image": "media/walkthroughs/step-3-discovery.png",
+              "altText": "Run /assess-any-application in Copilot Chat"
+            },
+            "completionEvents": [
+              "onCommand:azureMigrationSquad.openDiscovery"
+            ]
+          },
+          {
+            "id": "explore",
+            "title": "Explore the sidebar — agents, prompts, skills",
+            "description": "Look for the rocket icon 🚀 in the Activity Bar. Browse all 15 agents, 26 prompts, and 60+ skills. Click any item to open its source file.",
+            "media": {
+              "image": "media/walkthroughs/step-4-sidebar.png",
+              "altText": "Azure Migration Squad sidebar showing agents/prompts/skills"
+            }
+          }
+        ]
+      }
+    ],
+    "configuration": {
+      "title": "Azure Migration Squad",
+      "properties": {
+        "azureMigrationSquad.channel": {
+          "type": "string",
+          "default": "latest",
+          "enum": ["latest", "insider"],
+          "enumDescriptions": [
+            "Stable releases — recommended for most users.",
+            "Preview builds with the newest features and fixes."
+          ],
+          "description": "Which npm dist-tag to use when running ams init / upgrade. Insider may include unfinished features.",
+          "scope": "window"
+        },
+        "azureMigrationSquad.telemetry.enabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Send anonymous usage data (command invocation counts, install/upgrade events). Off by default. Never sends file paths, code, or personal data. See: https://github.com/RobertoBorges/GHCP-PromptMigration/blob/main/docs/telemetry.md",
+          "scope": "application"
+        },
+        "azureMigrationSquad.language": {
+          "type": "string",
+          "default": "en",
+          "enum": ["en", "pt-BR", "es-ES"],
+          "enumDescriptions": [
+            "English",
+            "Portuguese (Brazil)",
+            "Spanish"
+          ],
+          "description": "Preferred language for migration content and prompts. Defaults to English. Other translations may be incomplete.",
+          "scope": "window"
+        },
+        "azureMigrationSquad.autoInstallCopilot": {
+          "type": "string",
+          "default": "prompt",
+          "enum": ["prompt", "auto", "never"],
+          "enumDescriptions": [
+            "Ask once per workspace before installing missing Copilot extensions.",
+            "Install GitHub Copilot Chat automatically without asking.",
+            "Never offer to install Copilot extensions."
+          ],
+          "description": "Behavior when GitHub Copilot Chat is not installed. The Migration Squad requires it for slash-command UX.",
+          "scope": "application"
+        },
+        "azureMigrationSquad.statusBar.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show the current migration phase in the status bar.",
+          "scope": "window"
+        }
+      }
+    },
     "commands": [
       {
         "command": "azureMigrationSquad.initialize",
@@ -129,6 +235,18 @@
         "title": "Open file (internal)",
         "category": "Azure Migration",
         "enablement": "false"
+      },
+      {
+        "command": "azureMigrationSquad.showWelcome",
+        "title": "Show welcome page",
+        "category": "Azure Migration",
+        "icon": "$(home)"
+      },
+      {
+        "command": "azureMigrationSquad.installCopilotChat",
+        "title": "Install GitHub Copilot Chat",
+        "category": "Azure Migration",
+        "icon": "$(extensions)"
       },
       {
         "command": "azureMigrationSquad.hello",
