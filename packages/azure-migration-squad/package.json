@@ -1,6 +1,6 @@
 {
   "name": "@robertoborges/azure-migration-squad",
-  "version": "0.1.0-insider.6",
+  "version": "0.1.0-insider.7",
   "description": "Azure migration agents for GitHub Copilot + Squad. Any source. Any stack. One command.",
   "type": "module",
   "bin": {
