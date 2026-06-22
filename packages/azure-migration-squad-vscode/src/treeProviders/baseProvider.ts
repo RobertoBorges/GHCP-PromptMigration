@@ -29,11 +29,14 @@ export class AmsTreeItem extends vscode.TreeItem {
 export class NotInstalledItem extends vscode.TreeItem {
   constructor() {
     super(
-      'Azure Migration Squad not installed in this workspace',
+      'Click to install Azure Migration Squad here',
       vscode.TreeItemCollapsibleState.None
     );
-    this.iconPath = new vscode.ThemeIcon('warning');
-    this.tooltip = 'Click to initialize the migration squad in this workspace.';
+    this.iconPath = new vscode.ThemeIcon('rocket');
+    this.tooltip =
+      'Run "Azure Migration: Initialize" to scaffold prompts, skills, ' +
+      'and 15 specialist agents into this workspace. Squad CLI is NOT ' +
+      'required — the extension bundles everything needed for Copilot Chat.';
     this.command = {
       command: 'azureMigrationSquad.initialize',
       title: 'Initialize',

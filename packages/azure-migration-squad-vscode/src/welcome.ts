@@ -280,7 +280,7 @@ function renderWelcomeHtml(): string {
 
   <h2>Your first migration in 3 steps</h2>
   <ol>
-    <li><strong>Click "Initialize in this workspace"</strong> above — drops <code>.github/prompts/</code>, <code>.squad/agents/</code>, and a welcome guide into your project.</li>
+    <li><strong>Click "Initialize in this workspace"</strong> above — drops <code>.github/prompts/</code>, <code>.squad/agents/</code>, and a welcome guide into your project. <em>No separate Squad CLI install required.</em></li>
     <li><strong>Open GitHub Copilot Chat</strong> (<kbd>Ctrl+Alt+I</kbd>). If you don't have it, click "Install GitHub Copilot Chat" above.</li>
     <li><strong>Type</strong> <code>/assess-any-application</code> — the Discovery Engineer (Saul Bloom Jr.) will walk you through intake.</li>
   </ol>
@@ -292,6 +292,9 @@ function renderWelcomeHtml(): string {
     <li>Open <code>MIGRATION-START-HERE.md</code> in your project root for the full quickstart.</li>
     <li>Use the <strong>Command Palette</strong> (<kbd>Ctrl+Shift+P</kbd>) → type "Azure Migration:" to see all commands.</li>
   </ul>
+
+  <h2>Power-user tip — Squad CLI is optional</h2>
+  <p>This extension bundles every piece of <code>.squad/</code> content needed for Copilot Chat. If you ALSO want the standalone <code>squad</code> binary (for <code>squad init</code>, <code>squad agent add</code>, etc.), the Command Palette has <strong>"Azure Migration: Install Squad CLI globally (optional)"</strong> which opens a terminal with the install command ready. Skip it unless you specifically want the standalone tool.</p>
 
   <script>
     const vscode = acquireVsCodeApi();

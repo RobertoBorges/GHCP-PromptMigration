@@ -50,6 +50,8 @@ Full walkthrough: [docs/vscode-quickstart.md](https://github.com/RobertoBorges/G
 - **Node.js** ≥ 20 (the extension shells out to `npx` for content sync)
 - **GitHub Copilot Chat** extension — the extension can install it for you on first use
 
+> 💡 **Squad CLI is NOT required.** This extension bundles every `.squad/` file Copilot Chat needs. If you also want the standalone `squad` binary for `squad init` / `squad agent add` etc., the Command Palette has **"Azure Migration: Install Squad CLI globally (optional)"** — but skip it unless you specifically want the standalone tool.
+
 ## Settings
 
 Open **VS Code Settings** → search **"Azure Migration Squad"**:

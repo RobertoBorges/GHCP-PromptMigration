@@ -10,6 +10,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { findAmsWorkspace } from '../util/workspace';
 import { runAmsCli, getOutputChannel } from '../util/runNpx';
+import { detectSquadState, argsForAmsInit } from '../util/squadDetection';
 
 export function registerCommands(
   context: vscode.ExtensionContext,
@@ -44,6 +45,10 @@ export function registerCommands(
     ),
 
     vscode.commands.registerCommand('azureMigrationSquad.refreshTree', () => onRefresh()),
+
+    vscode.commands.registerCommand('azureMigrationSquad.installSquadCli', () =>
+      cmdInstallSquadCli()
+    ),
   );
 }
 
@@ -70,12 +75,41 @@ async function cmdInitialize(onRefresh: () => void): Promise<void> {
     }
   }
 
-  await runAmsCli({
+  // Detect Squad state and pick the right ams init flags. The extension does
+  // NOT require the user to install Squad CLI separately — AMS bundles all
+  // the .squad/agents/ content it needs. When .squad/ is missing we pass
+  // --force so ams init skips its "Squad runtime not detected" guard.
+  const detection = detectSquadState(ws.root);
+  const initArgs = argsForAmsInit(detection.state);
+
+  const out = getOutputChannel();
+  if (detection.state === 'no-squad') {
+    out.appendLine('');
+    out.appendLine('ℹ Squad CLI not detected on PATH — that\'s OK!');
+    out.appendLine('  Azure Migration Squad ships all the .squad/ content it needs.');
+    out.appendLine('  Running ams init with --force to skip the Squad runtime check.');
+    out.appendLine('  (If you want the squad CLI for advanced commands, run:');
+    out.appendLine('     npm install -g @bradygaster/squad-cli');
+    out.appendLine('   — but it is optional for Copilot Chat usage.)');
+  } else if (detection.state === 'cli-available') {
+    out.appendLine('');
+    out.appendLine('ℹ Squad CLI is installed globally, but .squad/ is not in this workspace.');
+    out.appendLine('  Installing AMS content directly (it includes the .squad/ scaffolding).');
+    out.appendLine('  After init, you can also run `squad init` for richer Squad metadata.');
+  }
+
+  const exitCode = await runAmsCli({
     subcommand: 'init',
+    args: initArgs,
     cwd: ws.root,
     progressTitle: 'Initializing Azure Migration Squad...',
   });
   onRefresh();
+
+  if (exitCode !== 0) {
+    // Error already shown by runAmsCli; nothing more to do.
+    return;
+  }
 
   // Offer to open the welcome doc if it was just created.
   const welcomePath = path.join(ws.root, 'MIGRATION-START-HERE.md');
@@ -91,6 +125,23 @@ async function cmdInitialize(onRefresh: () => void): Promise<void> {
       await vscode.commands.executeCommand('markdown.showPreview', vscode.Uri.file(welcomePath));
     }
   }
+}
+
+async function cmdInstallSquadCli(): Promise<void> {
+  // Squad CLI is OPTIONAL for AMS users. This command exists for power users
+  // who want it. We open a VS Code terminal with the install command pre-typed
+  // because `npm install -g` may require elevated permissions on some systems
+  // and we want the user to review what's about to run.
+  const terminal = vscode.window.createTerminal({
+    name: 'Install Squad CLI',
+    cwd: vscode.workspace.workspaceFolders?.[0]?.uri.fsPath,
+  });
+  terminal.show();
+  terminal.sendText('npm install -g @bradygaster/squad-cli');
+  vscode.window.showInformationMessage(
+    'A terminal opened with the install command. Press Enter to run it. ' +
+      'On macOS/Linux you may need to prefix with sudo.'
+  );
 }
 
 async function cmdUpgrade(onRefresh: () => void): Promise<void> {
@@ -182,3 +233,4 @@ async function cmdShowCatalog(): Promise<void> {
 
 // Export for tests
 export { getOutputChannel };
+

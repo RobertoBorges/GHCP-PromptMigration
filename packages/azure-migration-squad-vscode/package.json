@@ -2,7 +2,7 @@
   "name": "azure-migration-squad-vscode",
   "displayName": "Azure Migration Squad",
   "description": "Migrate any application to Azure — 15 specialist agents, 60+ skills, and a Discovery-first workflow that handles any source, any stack, any workload. Powered by GitHub Copilot + Squad.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "publisher": "robertoborges",
   "private": false,
   "license": "MIT",
@@ -247,6 +247,12 @@
         "title": "Install GitHub Copilot Chat",
         "category": "Azure Migration",
         "icon": "$(extensions)"
+      },
+      {
+        "command": "azureMigrationSquad.installSquadCli",
+        "title": "Install Squad CLI globally (optional)",
+        "category": "Azure Migration",
+        "icon": "$(terminal)"
       },
       {
         "command": "azureMigrationSquad.hello",
