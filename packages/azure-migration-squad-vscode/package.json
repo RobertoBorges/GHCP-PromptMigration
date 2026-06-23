@@ -2,7 +2,7 @@
   "name": "azure-migration-squad-vscode",
   "displayName": "Azure Migration Squad",
   "description": "Migrate any application to Azure — 15 specialist agents, 60+ skills, and a Discovery-first workflow that handles any source, any stack, any workload. Powered by GitHub Copilot + Squad.",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "publisher": "robertoborges",
   "private": false,
   "license": "MIT",
@@ -184,6 +184,12 @@
           "default": true,
           "description": "Show the current migration phase in the status bar.",
           "scope": "window"
+        },
+        "azureMigrationSquad.promptSquadInit": {
+          "type": "boolean",
+          "default": true,
+          "description": "After running ams init, prompt to register the agents with Squad CLI (squad init). Disable to skip the prompt permanently.",
+          "scope": "application"
         }
       }
     },
@@ -253,6 +259,12 @@
         "title": "Install Squad CLI globally (optional)",
         "category": "Azure Migration",
         "icon": "$(terminal)"
+      },
+      {
+        "command": "azureMigrationSquad.registerAgents",
+        "title": "Register agents with Squad CLI (squad init)",
+        "category": "Azure Migration",
+        "icon": "$(plug)"
       },
       {
         "command": "azureMigrationSquad.hello",

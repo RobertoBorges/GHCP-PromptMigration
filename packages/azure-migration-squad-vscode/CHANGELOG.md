@@ -4,6 +4,25 @@ All notable changes to the Azure Migration Squad VS Code extension are documente
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.2] — Squad CLI integration follow-up
+
+### Fixed
+
+- **AMS agents weren't appearing in Copilot Chat's `@` dropdown** after `ams init`. Root cause: passing `--force` bypassed `squad init`, which is what registers agents with the Squad CLI's chat-participant registry. The agents existed on disk but Copilot Chat didn't know about them.
+
+### Added
+
+- **After-init follow-up flow.** When `ams init` succeeds, the extension now offers two more steps:
+  1. **"Register agents with Squad CLI?"** — if `squad` is on PATH, opens a terminal with `squad init` pre-typed (not auto-executed; user reviews and presses Enter).
+  2. **"Reload window?"** — VS Code only registers `.github/chatmodes/*` on workspace load, so the user needs to reload for new chatmodes to appear in Copilot Chat.
+- If Squad CLI is **not** installed, the prompt becomes: "Install Squad CLI globally for @-agent dispatch?" — opens a terminal with `npm install -g @bradygaster/squad-cli` ready.
+- New Command Palette entry **"Azure Migration: Register agents with Squad CLI (squad init)"** for users who skipped the prompt or want to re-register after adding custom agents.
+- New setting `azureMigrationSquad.promptSquadInit` (default `true`). Disable to permanently silence the post-init Squad registration prompt — the Command Palette command remains available.
+
+### Why this matters
+
+The Squad CLI's @-agent integration with Copilot Chat is **not** triggered by file presence in `.squad/agents/`. It's triggered by `squad init` (or `squad agent add`). This release closes that loop without forcing every AMS user to install Squad CLI — slash-command users (`/assess-any-application` etc.) still get a full migration workflow without it.
+
 ## [0.1.1] — UX fix: no more "Squad runtime not detected" dead-end
 
 ### Fixed

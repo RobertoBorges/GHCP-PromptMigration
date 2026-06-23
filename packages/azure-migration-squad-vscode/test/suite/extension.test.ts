@@ -21,6 +21,7 @@ const EXPECTED_COMMANDS = [
   'azureMigrationSquad.showWelcome',
   'azureMigrationSquad.installCopilotChat',
   'azureMigrationSquad.installSquadCli',
+  'azureMigrationSquad.registerAgents',
   'azureMigrationSquad.hello',
 ];
 
