@@ -104,54 +104,77 @@ Before proceeding with any analysis, gather the following information from the u
    >
    > **Use this configuration as-is, or override any field?**
 
-3. If user confirms: SKIP sections 1.1-1.4 and proceed to Step 2 (Validate Requirements)
-4. If user wants to override specific fields: ask only about those, keep the rest from the handoff
-5. If user wants to start fresh: fall through to sections 1.1-1.4 normally
+3. If user confirms: SKIP section 1.1 (still generate `reports/Decisions-Required.md` with the handoff values pre-filled as `✅ DECIDED`) and proceed to Step B
+4. If user wants to override specific fields: ask only about those, keep the rest from the handoff, then write `Decisions-Required.md` accordingly
+5. If user wants to start fresh: fall through to section 1.1 normally
 
-**If `reports/portfolio-handoff.json` does NOT exist:** proceed directly to sections 1.1-1.4 below.
+**If `reports/portfolio-handoff.json` does NOT exist:** proceed directly to section 1.1 below.
 
 If a Migration Strategy Report HTML deck (`*_Migration_Strategy_Report.html`) exists but no handoff JSON exists yet, the user may not have completed the app-selection step. Offer to run `/PortfolioStrategy` to generate the handoff file, OR proceed with manual setup.
 
-#### 1.1 Modernization Scope
-Ask: **"Which modernization path(s) do you want to follow?"** (Select all that apply)
-- [ ] Version upgrade only (e.g., .NET Framework → .NET 10, Java 8 → Java 21)
-- [ ] Code remediation for cloud readiness (minimal changes for Azure compatibility)
-- [ ] Full code migration/modernization (refactoring, architectural improvements)
+#### 1.1 Generate the Decisions-Required artifact (REPLACES old ad-hoc questions)
 
-#### 1.2 Azure Hosting Platform
-Ask: **"Which Azure hosting platform do you want to target?"**
-| Platform | Best For |
-|----------|----------|
-| **Azure App Service** | Web apps, APIs, quick deployment, PaaS simplicity |
-| **Azure Container Apps** | Microservices, event-driven apps, serverless containers |
-| **Azure Kubernetes Service (AKS)** | Complex orchestration, multi-container workloads, full Kubernetes control |
+> **Wave H change:** Phase 1 no longer asks individual scope questions inline. Instead, it produces the canonical `reports/Decisions-Required.md` file from the catalog, then later phases hard-stop on each PENDING decision.
+>
+> See: [`.github/skills/decision-hardstop.md`](../skills/decision-hardstop.md), [`.github/skills/decision-catalog.md`](../skills/decision-catalog.md), [`.github/skills/decisions-required-template.md`](../skills/decisions-required-template.md)
 
-#### 1.3 Infrastructure as Code
-Ask: **"Which Infrastructure as Code (IaC) tool do you prefer?"**
-- **Bicep** - Azure-native, simpler syntax, first-class Azure support
-- **Terraform** - Multi-cloud, larger ecosystem, HCL syntax
+**Action: Generate `reports/Decisions-Required.md`**
 
-#### 1.4 Database Requirements
-Ask: **"What database does your application currently use, and what Azure database service do you prefer?"**
+1. Read `.github/skills/decision-catalog.md` — the canonical list of 18 major decisions:
+   - D-01 Target framework / runtime version
+   - D-02 UI architecture
+   - D-03 Backend / API style
+   - D-04 Database engine
+   - D-05 Database migration tool
+   - D-06 Hosting platform
+   - D-07 IaC tool
+   - D-08 Region & data residency
+   - D-09 Authentication
+   - D-10 Multi-tenancy approach
+   - D-11 Compliance scope
+   - D-12 Cost ceiling
+   - D-13 DR — RPO/RTO targets
+   - D-14 Cutover strategy
+   - D-15 Acceptable downtime
+   - D-16 CI/CD platform
+   - D-17 Observability stack
+   - D-18 Container registry
+2. Read `.github/skills/decisions-required-template.md` — the file structure.
+3. For each catalog entry:
+   - Copy the section into `reports/Decisions-Required.md` with **Status: ⏸ PENDING**.
+   - Use the catalog's recommendation logic to pre-fill the "Default guess" subsection, citing only visible evidence from the Capability Matrix.
+   - Always label the guess as a guess (`⚠ Default guess`) — never as "recommended" or "best choice."
+   - **Stay-as-is must be option 1** in every options table.
+4. Write the file with a status summary table at the top (one row per decision).
+5. Apply the catalog's `condition` field — if a decision is genuinely N/A for this app (e.g., no UI for a batch-only workload), mark it `🚫 N/A — <reason>` instead of leaving PENDING.
 
-If the user doesn't specify, recommend based on workload analysis:
-| Current Database Type | Recommended Azure Service |
-|----------------------|---------------------------|
-| SQL Server, MySQL, PostgreSQL | **Azure SQL Database** - Managed relational, high compatibility |
-| MongoDB, Cassandra, document stores | **Azure Cosmos DB** - Global distribution, multi-model NoSQL |
-| Redis, in-memory caches | **Azure Cache for Redis** - Managed caching layer |
-| File-based/embedded databases | **Azure SQL Database** or **Cosmos DB** with migration guidance |
+**Action: Tell the user what's next**
 
-### Step 2: Validate Requirements
-**⚠️ DO NOT PROCEED UNTIL THE USER CONFIRMS:**
-1. ✅ Modernization scope selected
-2. ✅ Hosting platform confirmed
-3. ✅ IaC preference confirmed
-4. ✅ Database strategy confirmed
+After writing the file, post this message:
 
-Once confirmed, create the reports folder and initialize status tracking:
-- Create `reports/Report-Status.md` with planning phase details
-- Create `reports/Application-Assessment-Report.md` placeholder
+```
+✅ I've generated reports/Decisions-Required.md with <N> major decisions
+   needing your input.
+
+   These decisions are NOT optional — Phases 2-4 will not run until each
+   is marked ✅ DECIDED (or 🚫 N/A) in that file.
+
+   Two ways to answer them:
+
+   1. Reply to me one at a time in chat, OR
+   2. Open reports/Decisions-Required.md, tick the option box and fill
+      in your rationale for each section, then say "I've answered the
+      decisions" and I'll re-read.
+
+   Want to start with #1? Tell me which decision to start with, or say
+   "go in order" and I'll walk you through them.
+```
+
+**Then wait.** Do not proceed past this step until the user has either:
+- Answered all decisions (or marked N/A), confirmed by re-reading the file, OR
+- Explicitly chose to defer some decisions ("I'll fill in the file later"). In that case, Phase 1 finishes assessment but warns: "Phases 2-4 will hard-stop on PENDING decisions until you fill them in."
+
+**Do NOT silently default any decision.** Even when a "Default guess" is shown, it stays PENDING until the user actively confirms it.
 
 ## Step B: Analyze Application
 

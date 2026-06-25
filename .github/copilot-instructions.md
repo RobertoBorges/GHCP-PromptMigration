@@ -89,6 +89,19 @@ For any application that does not already have a Capability Matrix:
 
 ## Always Apply These Rules
 
+### 🛑 Architecture decisions belong to the user — NEVER the squad
+
+The squad does **not** decide major architecture on the user's behalf. It lays out options with tradeoffs and waits.
+
+- Read [`.github/skills/decision-hardstop.md`](./skills/decision-hardstop.md) — the binding protocol
+- Consult [`.github/skills/decision-catalog.md`](./skills/decision-catalog.md) — the 18 canonical decisions
+- All Phase 2-4 + DatabaseMigration prompts have hard-stop gates that block work until `reports/Decisions-Required.md` shows each required decision as `✅ DECIDED` (or `🚫 N/A`)
+- **No silent defaults. No "newer is better." No expert-mode bypass.**
+- Even when surfacing a recommendation, label it `⚠ Default guess` and acknowledge the user owns the choice
+- Stay-as-is is always option 1 in every option block — force an active choice
+
+Read [`.github/hooks/decision-gates.md`](./hooks/decision-gates.md) for the orchestration rules.
+
 ### Security
 - Prefer managed identities over connection strings and keys
 - Store secrets in Azure Key Vault with RBAC (no access policies)

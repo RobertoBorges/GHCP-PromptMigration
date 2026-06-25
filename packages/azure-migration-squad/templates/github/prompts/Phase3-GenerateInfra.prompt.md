@@ -58,6 +58,49 @@ with `Waiver-<app>: skip-discovery=<reason>` and re-invoke this prompt with the
 3. Confirm Phase prerequisites are met (see standard gates in `.squad/routing.md`).
 
 <!-- END: capability-matrix-gate -->
+<!-- BEGIN: decision-hardstop-gate (auto-managed by inject-decision-gates.mjs) -->
+
+## 🛑 MANDATORY DECISION GATE — Major decisions required for Phase 3 — Generate Infra
+
+The Azure Migration Squad does **not** decide major architecture on your behalf.
+Before Phase 3 — Generate Infra can do any work, every decision below must be **DECIDED** in
+`reports/Decisions-Required.md` (or marked **🚫 N/A** if genuinely not applicable).
+
+| Catalog ID | Decision | Required status |
+|-----------|----------|-----------------|
+| D-06 | Hosting platform | ✅ DECIDED (or 🚫 N/A) |
+| D-07 | IaC tool | ✅ DECIDED (or 🚫 N/A) |
+| D-08 | Region & data residency | ✅ DECIDED (or 🚫 N/A) |
+| D-10 | Multi-tenancy approach _(only if app is multi-tenant)_ | ✅ DECIDED (or 🚫 N/A) |
+| D-12 | Cost ceiling | ✅ DECIDED (or 🚫 N/A) |
+| D-13 | DR — RPO / RTO targets | ✅ DECIDED (or 🚫 N/A) |
+| D-18 | Container registry _(only if hosting is container-based)_ | ✅ DECIDED (or 🚫 N/A) |
+
+### Check sequence (run this BEFORE anything else in this prompt)
+
+1. Open `reports/Decisions-Required.md`.
+2. For each row in the table above, locate its section and read **Status**.
+3. Any decision still at `⏸ PENDING` → STOP. Do not proceed.
+4. Apply the **Decision Hardstop protocol** from `.github/skills/decision-hardstop.md`:
+   - Post the 🛑 DECISION REQUIRED block in chat with options + tradeoffs from `.github/skills/decision-catalog.md`.
+   - Wait for the user's reply (or for the file to be updated).
+   - Record the answer in `reports/Decision-Log.md`.
+   - Update Status to `✅ DECIDED <ISO date>` in `reports/Decisions-Required.md`.
+   - THEN re-run the check sequence.
+5. If `reports/Decisions-Required.md` is missing → STOP and route the user to `/Phase1-PlanAndAssess`.
+
+### Hard rules
+
+- **Never assume.** Newer is not automatically better. "What most projects use" is not a decision.
+- **Never silently pick.** If a value is missing, ask. Don't infer.
+- **Never accept brief replies.** "Use SQL" is not enough — confirm engine, tier, region.
+- **Never bypass with an expert flag.** This protocol applies on every project.
+
+See [`.github/skills/decision-hardstop.md`](../skills/decision-hardstop.md) for the full protocol
+and [`.github/skills/decision-catalog.md`](../skills/decision-catalog.md) for canonical option matrices.
+
+<!-- END: decision-hardstop-gate -->
+
 Generate Infrastructure as Code Files for Azure Deployment
 
 ## Preconditions

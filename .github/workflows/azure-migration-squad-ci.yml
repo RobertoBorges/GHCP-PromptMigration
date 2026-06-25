@@ -75,6 +75,15 @@ jobs:
         run: npm run validate:plugin-manifest
 
       # ────────────────────────────────────────────────────────────────────
+      # DECISION HARDSTOP COVERAGE
+      # Fails the build if any catalog item in decision-catalog.md is not
+      # referenced by at least one phase prompt. See docs at
+      # .github/skills/decision-hardstop.md.
+      # ────────────────────────────────────────────────────────────────────
+      - name: Validate decision-catalog coverage
+        run: npm run validate:decision-coverage
+
+      # ────────────────────────────────────────────────────────────────────
       # SOURCE-OF-TRUTH GUARD
       # Fails the build if anyone edited templates/ directly instead of the
       # canonical files at the monorepo root. See docs/contributing-adapters.md
