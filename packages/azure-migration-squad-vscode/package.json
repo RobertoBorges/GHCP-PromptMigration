@@ -2,7 +2,7 @@
   "name": "azure-migration-squad-vscode",
   "displayName": "Azure Migration Squad",
   "description": "Migrate any application to Azure — 15 specialist agents, 60+ skills, and a Discovery-first workflow that handles any source, any stack, any workload. Powered by GitHub Copilot + Squad.",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "publisher": "robertoborges",
   "private": false,
   "license": "MIT",
@@ -53,6 +53,12 @@
     "views": {
       "azureMigrationSquad": [
         {
+          "id": "azureMigrationSquadDecisions",
+          "name": "🛑 Decisions Required",
+          "icon": "media/activity-bar-icon.svg",
+          "contextualTitle": "Azure Migration Squad — Decisions Required"
+        },
+        {
           "id": "azureMigrationSquadAgents",
           "name": "Agents",
           "icon": "media/activity-bar-icon.svg",
@@ -76,7 +82,7 @@
       "view/title": [
         {
           "command": "azureMigrationSquad.refreshTree",
-          "when": "view == azureMigrationSquadAgents || view == azureMigrationSquadPrompts || view == azureMigrationSquadSkills",
+          "when": "view == azureMigrationSquadAgents || view == azureMigrationSquadPrompts || view == azureMigrationSquadSkills || view == azureMigrationSquadDecisions",
           "group": "navigation"
         }
       ]
@@ -265,6 +271,18 @@
         "title": "Register agents with Squad CLI (squad init)",
         "category": "Azure Migration",
         "icon": "$(plug)"
+      },
+      {
+        "command": "azureMigrationSquad.showDecisions",
+        "title": "Show decisions required (open file)",
+        "category": "Azure Migration",
+        "icon": "$(checklist)"
+      },
+      {
+        "command": "azureMigrationSquad.openDecisionAtLine",
+        "title": "Open decision at line (internal)",
+        "category": "Azure Migration",
+        "enablement": "false"
       },
       {
         "command": "azureMigrationSquad.hello",

@@ -4,6 +4,44 @@ All notable changes to the Azure Migration Squad VS Code extension are documente
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.3] — Wave H surface: Decisions Required tree view + status bar enhancement
+
+### Added
+
+- **New "🛑 Decisions Required" tree view** in the sidebar (top entry, above Agents/Prompts/Skills). Reads `reports/Decisions-Required.md` and renders each major architecture decision with its current status:
+  - ⏸ PENDING — needs user input (red icon)
+  - ✅ DECIDED — answered (green checkmark)
+  - 🔒 LOCKED — determined by another decision (blue lock)
+  - 🚫 N/A — does not apply (gray slash)
+  - ❓ Unknown — could not parse status (yellow)
+- **Click a decision** → opens `reports/Decisions-Required.md` scrolled to that decision's section.
+- **Auto-refresh on file change** (FileSystemWatcher on `**/reports/Decisions-Required.md`).
+- **Status bar pending-count indicator.** When any decision is `⏸ PENDING`, the status bar widget switches from "AMS: Phase N" to **"🛑 AMS: 3/18 decisions pending"** with a warning-colored background. Click → opens the decisions file. Once all decisions are made, the widget reverts to the normal phase indicator.
+- **New Command Palette commands:**
+  - `Azure Migration: Show decisions required (open file)` — opens `reports/Decisions-Required.md` directly.
+  - `Azure Migration: Open decision at line (internal)` — used by tree-item clicks.
+- **8 new unit tests** for `decisionsParser` covering all status variants, line tracking, catalog-ID headings (`D-NN`), and empty/malformed files.
+- **Placeholder states** for the new tree view:
+  - "Open a folder to see decisions" — when no workspace.
+  - "Click to install Azure Migration Squad here" — when AMS not installed.
+  - "Run Phase 1 to generate decisions" — when AMS installed but no decisions file yet.
+  - "No decisions found — re-run Phase 1?" — when file exists but unparseable.
+
+### Why
+
+Wave H (npm package `0.1.1.0-insider.0`) introduced the Decision Hardstop Protocol: the squad now generates `reports/Decisions-Required.md` with 18 major architecture decisions a user must answer before Phases 2-4 can run. Without surfacing this in the extension UI, users wouldn't see the new file unless they opened the file tree. With v0.1.3, the protocol is **visible at a glance**: open the sidebar, see which decisions are pending; or just look at the status bar.
+
+### Architecture
+
+- `src/util/decisionsParser.ts` — pure-logic markdown parser, exported types for `Decision`, `DecisionStatus`, `DecisionsFileSummary`. Tolerates emoji/no-emoji status text; supports both numeric (`1`) and catalog-ID (`D-04`) headings.
+- `src/treeProviders/decisionsProvider.ts` — `TreeDataProvider` implementation. Uses theme icons + theme colors so it matches user's VS Code color scheme.
+- `src/extension.ts` — registers the new tree view + FileSystemWatcher; wires `showDecisions` and `openDecisionAtLine` commands.
+- `src/statusBar.ts` — pending-count check runs before phase inference; pending takes priority.
+
+### Bundle size
+
+`.vsix` is now 23.46 KB (up from 21 KB). esbuild bundle is 91 KB minified.
+
 ## [0.1.2] — Squad CLI integration follow-up
 
 ### Fixed

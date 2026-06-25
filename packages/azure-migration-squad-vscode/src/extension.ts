@@ -13,6 +13,7 @@ import * as vscode from 'vscode';
 import { AgentsProvider } from './treeProviders/agentsProvider';
 import { PromptsProvider } from './treeProviders/promptsProvider';
 import { SkillsProvider } from './treeProviders/skillsProvider';
+import { DecisionsProvider } from './treeProviders/decisionsProvider';
 import { registerCommands } from './commands';
 import { AmsStatusBar } from './statusBar';
 import { maybeShowWelcome, showWelcomePanel, ensureCopilotChat } from './welcome';
@@ -20,10 +21,11 @@ import { maybeShowWelcome, showWelcomePanel, ensureCopilotChat } from './welcome
 export function activate(context: vscode.ExtensionContext): void {
   console.log('[azure-migration-squad] extension activated');
 
-  // Tree views — one per content type (agents / prompts / skills)
+  // Tree views — one per content type (agents / prompts / skills / decisions).
   const agentsProvider = new AgentsProvider();
   const promptsProvider = new PromptsProvider();
   const skillsProvider = new SkillsProvider();
+  const decisionsProvider = new DecisionsProvider();
 
   context.subscriptions.push(
     vscode.window.createTreeView('azureMigrationSquadAgents', {
@@ -37,6 +39,10 @@ export function activate(context: vscode.ExtensionContext): void {
     vscode.window.createTreeView('azureMigrationSquadSkills', {
       treeDataProvider: skillsProvider,
       showCollapseAll: true,
+    }),
+    vscode.window.createTreeView('azureMigrationSquadDecisions', {
+      treeDataProvider: decisionsProvider,
+      showCollapseAll: false,
     })
   );
 
@@ -68,6 +74,7 @@ export function activate(context: vscode.ExtensionContext): void {
     agentsProvider.refresh();
     promptsProvider.refresh();
     skillsProvider.refresh();
+    decisionsProvider.refresh();
     statusBar.refresh();
   };
 
@@ -80,6 +87,18 @@ export function activate(context: vscode.ExtensionContext): void {
     watcher.onDidCreate(refreshAll),
     watcher.onDidDelete(refreshAll),
     watcher.onDidChange(refreshAll)
+  );
+
+  // Auto-refresh when reports/Decisions-Required.md changes (Wave H artifact).
+  // This drives the Decisions tree view AND the status bar's pending count.
+  const decisionsWatcher = vscode.workspace.createFileSystemWatcher(
+    '**/reports/Decisions-Required.md'
+  );
+  context.subscriptions.push(
+    decisionsWatcher,
+    decisionsWatcher.onDidCreate(refreshAll),
+    decisionsWatcher.onDidDelete(refreshAll),
+    decisionsWatcher.onDidChange(refreshAll)
   );
 
   // Also refresh on workspace folder change (multi-root projects).
@@ -97,6 +116,52 @@ export function activate(context: vscode.ExtensionContext): void {
     ),
     vscode.commands.registerCommand('azureMigrationSquad.installCopilotChat', () =>
       ensureCopilotChat(context, /* userInitiated */ true)
+    )
+  );
+
+  // Wave I (v0.1.3) — Decisions Required protocol commands.
+  // - showDecisions: open the file at the top
+  // - openDecisionAtLine: open the file scrolled to a specific section
+  //   (used by DecisionItem clicks in the tree view)
+  context.subscriptions.push(
+    vscode.commands.registerCommand('azureMigrationSquad.showDecisions', async () => {
+      const folders = vscode.workspace.workspaceFolders;
+      if (!folders || folders.length === 0) {
+        vscode.window.showErrorMessage('Open a folder first.');
+        return;
+      }
+      const root = folders[0].uri.fsPath;
+      const uri = vscode.Uri.joinPath(folders[0].uri, 'reports', 'Decisions-Required.md');
+      try {
+        const doc = await vscode.workspace.openTextDocument(uri);
+        await vscode.window.showTextDocument(doc);
+      } catch {
+        const choice = await vscode.window.showWarningMessage(
+          `reports/Decisions-Required.md doesn't exist yet. Phase 1 generates it.`,
+          'Run Discovery',
+          'Cancel'
+        );
+        if (choice === 'Run Discovery') {
+          vscode.commands.executeCommand('azureMigrationSquad.openDiscovery');
+        }
+        // Silence the unused-variable lint
+        void root;
+      }
+    }),
+    vscode.commands.registerCommand(
+      'azureMigrationSquad.openDecisionAtLine',
+      async (uri: vscode.Uri, line: number) => {
+        try {
+          const doc = await vscode.workspace.openTextDocument(uri);
+          const editor = await vscode.window.showTextDocument(doc);
+          const lineIdx = Math.max(0, (line ?? 1) - 1);
+          const range = new vscode.Range(lineIdx, 0, lineIdx, 0);
+          editor.selection = new vscode.Selection(range.start, range.start);
+          editor.revealRange(range, vscode.TextEditorRevealType.AtTop);
+        } catch (err) {
+          vscode.window.showErrorMessage(`Could not open decision: ${err}`);
+        }
+      }
     )
   );
 

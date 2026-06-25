@@ -12,6 +12,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 import * as vscode from 'vscode';
 import { findAmsWorkspace } from './util/workspace';
+import { parseDecisionsFile } from './util/decisionsParser';
 
 const PHASE_ICON: Record<string, string> = {
   'not-installed': '$(warning)',
@@ -109,6 +110,20 @@ export class AmsStatusBar {
       return;
     }
 
+    // Pending decisions take priority — if Phase 1 produced the file and any
+    // decision is still PENDING, surface that count in the status bar.
+    // Clicking jumps to the Decisions tree view via the showDecisions command.
+    const decisions = parseDecisionsFile(ws.root);
+    if (decisions.exists && decisions.pending > 0) {
+      const total = decisions.decisions.length;
+      this.item.text = `$(circle-large-outline) AMS: ${decisions.pending}/${total} decisions pending`;
+      this.item.tooltip = buildDecisionsTooltip(decisions);
+      this.item.command = 'azureMigrationSquad.showDecisions';
+      this.item.backgroundColor = new vscode.ThemeColor('statusBarItem.warningBackground');
+      this.item.show();
+      return;
+    }
+
     const phase = inferPhase(ws.root, !!ws.hasManifest);
     const icon = PHASE_ICON[phase] || PHASE_ICON.unknown;
     const label = PHASE_LABEL[phase] || PHASE_LABEL.unknown;
@@ -117,6 +132,7 @@ export class AmsStatusBar {
     this.item.text = `${icon} ${label}`;
     this.item.tooltip = buildTooltip(ws.root, phase, ws.manifest?.version);
     this.item.command = cmd;
+    this.item.backgroundColor = undefined;
     this.item.show();
   }
 
@@ -125,6 +141,18 @@ export class AmsStatusBar {
     this.reportsWatcher?.dispose();
     this.item.dispose();
   }
+}
+
+function buildDecisionsTooltip(summary: ReturnType<typeof parseDecisionsFile>): string {
+  const lines = ['Azure Migration Squad — Decisions Required', ''];
+  lines.push(`⏸ PENDING:  ${summary.pending}`);
+  lines.push(`✅ DECIDED:  ${summary.decided}`);
+  if (summary.locked > 0) lines.push(`🔒 LOCKED:   ${summary.locked}`);
+  if (summary.na > 0) lines.push(`🚫 N/A:      ${summary.na}`);
+  lines.push('');
+  lines.push('Click to open reports/Decisions-Required.md.');
+  lines.push('Phases 2-4 + DatabaseMigration will not run until all required decisions are made.');
+  return lines.join('\n');
 }
 
 /**
