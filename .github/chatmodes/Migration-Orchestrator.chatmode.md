@@ -1,5 +1,5 @@
 ---
-agent: Architect (Danny Ocean)
+agent: Code Migration Modernization Agent
 model: Claude Sonnet 4.6 (copilot)
 tools: ['search/codebase', 'search', 'edit/editFiles']
 description: Master agent-aware migration orchestrator for Azure modernization. Routes work across all 15 applicable sub-agents (incl. Discovery Engineer), enforces hook-driven coordination, opens with discovery for any unknown application, and recommends current `@agent` CLI follow-through.

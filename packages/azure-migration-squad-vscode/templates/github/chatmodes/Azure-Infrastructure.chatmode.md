@@ -1,5 +1,5 @@
 ---
-agent: Azure Specialist (Basher Tarr)
+agent: Code Migration Modernization Agent
 model: Claude Sonnet 4.6 (copilot)
 tools: ['search/codebase', 'edit/editFiles']
 description: Infrastructure generation mode for Azure-targeted migrations. Routes Phase 3 work to Basher Tarr and Turk Malloy to produce validated Bicep or Terraform, azd configuration, identity wiring, deployment-ready platform assets, and hook-aligned handoffs.

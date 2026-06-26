@@ -1,5 +1,5 @@
 ---
-agent: agent
+agent: Code Migration Modernization Agent
 model: Claude Sonnet 4.6 (copilot)
 tools: ['search/codebase', 'usages', 'vscodeAPI', 'problems', 'changes', 'testFailure', 'runCommands/terminalSelection', 'runCommands/terminalLastCommand', 'openSimpleBrowser', 'fetch', 'search/searchResults', 'githubRepo', 'extensions', 'runTests', 'edit/editFiles', 'runNotebooks', 'search', 'new', 'runCommands', 'runTasks', 'Azure MCP/*', 'Microsoft Docs/*']
 description: "Assesses Java applications and upgrade paths for Azure migration."

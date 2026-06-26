@@ -1,5 +1,5 @@
 ---
-agent: Coder (Rusty Ryan)
+agent: Code Migration Modernization Agent
 model: Claude Sonnet 4.6 (copilot)
 tools: ['search/codebase', 'search', 'read/problems', 'execute/testFailure', 'vscode/runCommand', 'web/fetch', 'github/*', 'vscode/extensions', 'execute/runTests', 'edit/editFiles']
 description: Migration debugging mode for diagnosing failures during or after Azure migration work. Focuses on root-cause analysis, evidence capture, orchestration-hook compliance, and routed recovery actions.

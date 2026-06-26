@@ -1,5 +1,5 @@
 ---
-agent: agent
+agent: Code Migration Modernization Agent
 model: Claude Sonnet 4.6 (copilot)
 tools: ['search/codebase', 'usages', 'vscodeAPI', 'problems', 'changes', 'runCommands/terminalSelection', 'runCommands/terminalLastCommand', 'openSimpleBrowser', 'fetch', 'search/searchResults', 'githubRepo', 'extensions', 'edit/editFiles', 'search', 'runCommands', 'runTasks', 'Azure MCP/*', 'Microsoft Docs/*']
 description: "Universal application-to-Azure migration intake. Discovers ANY application (any source, any stack, any workload) and produces a Discovery Dossier + Capability Matrix that every downstream Phase prompt consumes."

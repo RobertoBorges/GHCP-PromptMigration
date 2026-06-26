@@ -1,5 +1,5 @@
 ---
-agent: Coder (Rusty Ryan)
+agent: Code Migration Modernization Agent
 model: Claude Sonnet 4.6 (copilot)
 tools: ['search/codebase', 'search/usages', 'vscode/vscodeAPI', 'read/problems', 'execute/testFailure', 'vscode/runCommand', 'web/fetch', 'search/searchResults', 'github/*', 'vscode/extensions', 'execute/runTests', 'edit/editFiles', 'search', 'execute/runTask']
 description: Phase 2 code modernization specialist for Azure migrations. Focuses only on code migration, framework upgrades, configuration externalization, orchestration-hook compliance, and handoff readiness for infrastructure work.

@@ -3,6 +3,7 @@ name: PortfolioStrategy
 description: Generate an executive-ready Migration Strategy Report (HTML deck) for a customer portfolio — invokes the migration-strategy-report skill on the customer folder you specify.
 argument-hint: "Specify the path to the customer folder containing CMDB, RVTools, DMA, or other artifacts (e.g., 'Generate a migration strategy report for Customers/Contoso')"
 agent: Code Migration Modernization Agent
+model: Claude Sonnet 4.6 (copilot)
 ---
 
 # Portfolio Migration Strategy Report

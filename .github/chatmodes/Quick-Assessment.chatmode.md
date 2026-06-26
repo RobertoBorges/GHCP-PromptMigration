@@ -1,5 +1,5 @@
 ---
-agent: Architect (Danny Ocean)
+agent: Code Migration Modernization Agent
 model: Claude Sonnet 4.6 (copilot)
 tools: ['search/codebase', 'github/*', 'web/fetch']
 description: Rapid migration triage mode for legacy .NET and Java applications. Produces a concise Azure migration assessment, routes to the right specialists, and preserves hook-aware handoff guidance.
