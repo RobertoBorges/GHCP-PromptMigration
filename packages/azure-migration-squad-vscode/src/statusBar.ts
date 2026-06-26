@@ -1,11 +1,12 @@
 /**
- * Status bar widget showing the current migration phase.
+ * Status bar widget — shows pending decisions OR current migration phase.
  *
- * Reads `.azure-migration-squad/manifest.json` from the workspace; falls back
- * to "Not installed" if AMS hasn't been initialized.
+ * Priority order:
+ *   1. If reports/Decisions-Required.md has PENDING items → "⏸ AMS: N/M decisions pending"
+ *   2. If reports/ has phase artifacts → infer phase from filesystem
+ *   3. If workspace not initialized → "AMS: not installed"
  *
- * The phase is inferred from manifest.lastPhase if present (set by future
- * CLI hooks), or from the presence of certain reports/ files.
+ * Click → opens the most relevant next action.
  */
 
 import * as path from 'path';
@@ -63,7 +64,7 @@ export class AmsStatusBar {
       vscode.StatusBarAlignment.Left,
       100
     );
-    this.item.name = 'Azure Migration Squad';
+    this.item.name = 'Azure Migration Agent';
     context.subscriptions.push(this.item);
   }
 
@@ -71,7 +72,6 @@ export class AmsStatusBar {
     this.refresh();
     this.setupWatchers();
 
-    // Refresh when workspace folders change (multi-root or open/close).
     this.context.subscriptions.push(
       vscode.workspace.onDidChangeWorkspaceFolders(() => {
         this.setupWatchers();
@@ -84,15 +84,14 @@ export class AmsStatusBar {
     this.watcher?.dispose();
     this.reportsWatcher?.dispose();
 
-    // Watch manifest.json for version changes.
+    // Watch the marker file for install state.
     this.watcher = vscode.workspace.createFileSystemWatcher(
-      '**/.azure-migration-squad/manifest.json'
+      '**/.github/agents/Code-Migration-Modernization.agent.md'
     );
     this.watcher.onDidCreate(() => this.refresh());
-    this.watcher.onDidChange(() => this.refresh());
     this.watcher.onDidDelete(() => this.refresh());
 
-    // Watch reports/ for phase inference signals.
+    // Watch reports/ for phase + decision signals.
     this.reportsWatcher = vscode.workspace.createFileSystemWatcher(
       '**/reports/*.md'
     );
@@ -110,9 +109,7 @@ export class AmsStatusBar {
       return;
     }
 
-    // Pending decisions take priority — if Phase 1 produced the file and any
-    // decision is still PENDING, surface that count in the status bar.
-    // Clicking jumps to the Decisions tree view via the showDecisions command.
+    // Pending decisions take priority — block work indicator.
     const decisions = parseDecisionsFile(ws.root);
     if (decisions.exists && decisions.pending > 0) {
       const total = decisions.decisions.length;
@@ -124,13 +121,13 @@ export class AmsStatusBar {
       return;
     }
 
-    const phase = inferPhase(ws.root, !!ws.hasManifest);
+    const phase = inferPhase(ws.root, ws.isInstalled);
     const icon = PHASE_ICON[phase] || PHASE_ICON.unknown;
     const label = PHASE_LABEL[phase] || PHASE_LABEL.unknown;
     const cmd = PHASE_PROMPT[phase] || PHASE_PROMPT.unknown;
 
     this.item.text = `${icon} ${label}`;
-    this.item.tooltip = buildTooltip(ws.root, phase, ws.manifest?.version);
+    this.item.tooltip = buildTooltip(ws.root, phase);
     this.item.command = cmd;
     this.item.backgroundColor = undefined;
     this.item.show();
@@ -144,7 +141,7 @@ export class AmsStatusBar {
 }
 
 function buildDecisionsTooltip(summary: ReturnType<typeof parseDecisionsFile>): string {
-  const lines = ['Azure Migration Squad — Decisions Required', ''];
+  const lines = ['Azure Migration Agent — Decisions Required', ''];
   lines.push(`⏸ PENDING:  ${summary.pending}`);
   lines.push(`✅ DECIDED:  ${summary.decided}`);
   if (summary.locked > 0) lines.push(`🔒 LOCKED:   ${summary.locked}`);
@@ -155,54 +152,29 @@ function buildDecisionsTooltip(summary: ReturnType<typeof parseDecisionsFile>): 
   return lines.join('\n');
 }
 
-/**
- * Heuristic: infer the current migration phase from filesystem state.
- *
- * Order matters — most-advanced phase wins.
- */
-function inferPhase(root: string, hasManifest: boolean): string {
-  if (!hasManifest) {
-    return 'not-installed';
-  }
+function inferPhase(root: string, isInstalled: boolean): string {
+  if (!isInstalled) return 'not-installed';
   const reports = path.join(root, 'reports');
   const exists = (rel: string) => fs.existsSync(path.join(reports, rel));
 
-  if (exists('Phase-6-PostMigrationOps.md') || exists('Cutover-Complete.md')) {
-    return 'complete';
-  }
-  if (exists('Phase-6-PostMigrationOps-Plan.md') || exists('Operations-Runbook.md')) {
-    return 'phase-6';
-  }
-  if (exists('Phase-5-CICD.md') || exists('CICD-Setup.md')) {
-    return 'phase-5';
-  }
-  if (exists('Phase-4-Deployment.md') || exists('Deployment-Report.md')) {
-    return 'phase-4';
-  }
-  if (exists('Phase-3-Infrastructure.md') || exists('Infrastructure-Plan.md')) {
-    return 'phase-3';
-  }
-  if (exists('Phase-2-CodeMigration.md') || exists('Code-Migration-Plan.md')) {
-    return 'phase-2';
-  }
-  if (exists('Migration-Plan.md')) {
-    return 'phase-1';
-  }
-  if (exists('Capability-Matrix.yaml') || exists('Discovery-Dossier.md')) {
-    return 'discovery';
-  }
+  if (exists('Phase-6-PostMigrationOps.md') || exists('Cutover-Complete.md')) return 'complete';
+  if (exists('Phase-6-PostMigrationOps-Plan.md') || exists('Operations-Runbook.md')) return 'phase-6';
+  if (exists('Phase-5-CICD.md') || exists('CICD-Setup.md')) return 'phase-5';
+  if (exists('Phase-4-Deployment.md') || exists('Deployment-Report.md')) return 'phase-4';
+  if (exists('Phase-3-Infrastructure.md') || exists('Infrastructure-Plan.md')) return 'phase-3';
+  if (exists('Phase-2-CodeMigration.md') || exists('Code-Migration-Plan.md')) return 'phase-2';
+  if (exists('Migration-Plan.md')) return 'phase-1';
+  if (exists('Capability-Matrix.yaml') || exists('Discovery-Dossier.md')) return 'discovery';
   return 'unknown';
 }
 
-function buildTooltip(root: string, phase: string, version?: string): string {
-  const lines = [
-    `Azure Migration Squad`,
+function buildTooltip(root: string, phase: string): string {
+  return [
+    `Azure Migration Agent`,
     ``,
     `Phase: ${PHASE_LABEL[phase] || phase}`,
-  ];
-  if (version) lines.push(`Version: ${version}`);
-  lines.push(`Workspace: ${root}`);
-  lines.push(``);
-  lines.push(`Click to open the next recommended action.`);
-  return lines.join('\n');
+    `Workspace: ${root}`,
+    ``,
+    `Click to open the next recommended action.`,
+  ].join('\n');
 }

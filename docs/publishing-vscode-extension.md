@@ -104,7 +104,7 @@ After publishing:
 3. **Install fresh in VS Code:**
 
    ```
-   Ctrl+Shift+X → search "Azure Migration Squad" → Install
+   Ctrl+Shift+X → search "Azure Migration Agent" → Install
    ```
 
 4. **Check the version matches** in the Extensions sidebar.

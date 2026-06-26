@@ -1,80 +1,82 @@
-# Azure Migration Squad — VS Code Extension
+# Azure Migration Agent — VS Code extension
 
 > **Migrate any application to Azure** — directly from your editor.
-> 15 specialist agents, 60+ skills, Discovery-first workflow. Powered by GitHub Copilot.
+> One agent definition, 19 prompts, 113 skills. Stack-agnostic. Discovery-first. Hard-stop user-decision gates.
 
-[![npm](https://img.shields.io/npm/v/@robertoborges/azure-migration-squad?label=cli&color=blue)](https://www.npmjs.com/package/@robertoborges/azure-migration-squad)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 ---
 
-## What you get
+## What it does
 
-- **Sidebar tree view** of all 15 specialist agents, 26 prompts, and 60+ skills — click any item to open its source file
-- **Status bar widget** showing your current migration phase (Discovery → Phase 1 → … → Complete) — click to jump to the next recommended action
-- **11 Command Palette commands** — Initialize, Upgrade, Doctor, Open Discovery, Show prompt catalog, settings, and more
-- **First-run welcome panel** with one-click setup
-- **VS Code Walkthrough** that guides you through your first migration in 4 steps
-- **Settings UI** for telemetry, channel selection, language, and Copilot install behavior
-- **Auto-prompt** to install GitHub Copilot Chat (with consent)
+Drops a `.github/agents/Code-Migration-Modernization.agent.md` and the full prompt+skill+chatmode catalog into any VS Code workspace. The agent walks you through:
+
+1. **Discovery** — what is this app? (source, stack, workload, data, integrations)
+2. **Plan** — a migration plan + 18 major decisions you need to answer
+3. **Execute** — Phases 2-6: migrate code, generate infra, deploy, set up CI/CD, run ops
+
+The agent **never picks framework / database / hosting / IaC tool on your behalf**. It surfaces options + tradeoffs and waits.
 
 ## Quick install
 
-1. **`Ctrl+Shift+X`** in VS Code → search **"Azure Migration Squad"** → **Install**
+1. `Ctrl+Shift+X` in VS Code → search **"Azure Migration Agent"** → Install
 2. Open the folder you want to migrate
-3. Accept the welcome notification → click **"Get started"**
-4. The extension drops the migration squad into your project (~30 seconds)
-5. Open Copilot Chat (**`Ctrl+Alt+I`**) → type **`/assess-any-application`**
-
-The **Discovery Engineer (Saul Bloom Jr.)** takes it from there.
+3. Accept the welcome notification → click **Get started**
+4. The extension copies content into `.github/` and `MIGRATION-START-HERE.md`
+5. In Copilot Chat (`Ctrl+Alt+I`), type `/assess-any-application`
 
 Full walkthrough: [docs/vscode-quickstart.md](https://github.com/RobertoBorges/GHCP-PromptMigration/blob/main/docs/vscode-quickstart.md)
 
-## What gets installed in your project
+## What you'll see in your sidebar
 
-- `.github/prompts/` — 26 slash commands (try `/assess-any-application`)
-- `.github/chatmodes/` — 9 specialized chat modes
-- `.github/skills/` — 60+ migration skills (stack + source + workload adapters)
-- `.squad/agents/` — 15 specialist charter files (Ocean's Twelve theme)
-- `MIGRATION-START-HERE.md` — your 60-second quickstart at the project root
+Open the **rocket icon 🚀** in the Activity Bar:
+
+```
+🛑 DECISIONS REQUIRED        ← Wave H artifact — pending architecture decisions
+AGENT                         ← The Code Migration Modernization Agent
+PROMPTS                       ← 19 slash commands
+SKILLS                        ← 113 adapters & patterns
+```
+
+The **status bar** (bottom-left) shows your current migration phase, or **"⚠ AMS: N/M decisions pending"** with a warning background when you have unanswered architecture decisions.
 
 ## Supported tech
 
 | Sources | Stacks | Workloads |
 |---------|--------|-----------|
-| On-premise, AWS, GCP, Oracle, VMware, Kubernetes, container registries, GitHub repos, ZIPs, mainframes | .NET, Java, Python, Node.js, PHP, Ruby, Go, Perl, Rust, COBOL, Oracle Forms, PowerBuilder, Delphi/VB6, Scala/Kotlin, C++ Windows | Web app, API service, batch job, event-driven, serverless, data pipeline, desktop, packaged, mainframe transactional |
+| On-premise, AWS, GCP, Oracle, VMware, Kubernetes, container registries, GitHub repos, ZIPs, mainframes | .NET, Java, Python, Node.js, PHP, Ruby, Go, Perl, Rust, COBOL, Oracle Forms, PowerBuilder, Delphi/VB6, Scala/Kotlin, C++ Windows | Web app, API, batch, event-driven, serverless, data pipeline, desktop, packaged, mainframe transactional |
 
 ## Requirements
 
 - **VS Code** ≥ 1.85
-- **Node.js** ≥ 20 (the extension shells out to `npx` for content sync)
-- **GitHub Copilot Chat** extension — the extension can install it for you on first use
-
-> 💡 **Squad CLI is NOT required.** This extension bundles every `.squad/` file Copilot Chat needs. If you also want the standalone `squad` binary for `squad init` / `squad agent add` etc., the Command Palette has **"Azure Migration: Install Squad CLI globally (optional)"** — but skip it unless you specifically want the standalone tool.
+- **GitHub Copilot Chat** extension — the extension offers to install it for you on first use
+- **Node.js** is NOT required to run the extension (it bundles all content)
 
 ## Settings
 
-Open **VS Code Settings** → search **"Azure Migration Squad"**:
+`Ctrl+,` → search **"Azure Migration"**:
 
 | Setting | Default | Description |
 |---------|---------|-------------|
-| `azureMigrationSquad.channel` | `latest` | npm dist-tag (`latest` or `insider`) used by Initialize/Upgrade |
-| `azureMigrationSquad.telemetry.enabled` | `false` | Opt-in anonymous usage data — **off by default** |
-| `azureMigrationSquad.language` | `en` | Migration content language (`en`, `pt-BR`, `es-ES`) |
-| `azureMigrationSquad.autoInstallCopilot` | `prompt` | Behavior when Copilot Chat is missing (`prompt`/`auto`/`never`) |
-| `azureMigrationSquad.statusBar.enabled` | `true` | Toggle the migration phase widget |
+| `azureMigrationSquad.autoInstallCopilot` | `prompt` | `prompt` / `auto` / `never` — Copilot Chat install behavior |
+| `azureMigrationSquad.statusBar.enabled` | `true` | Show migration phase + pending decisions in the status bar |
 
 ## How it works
 
-This extension is a **GUI wrapper** around the [`@robertoborges/azure-migration-squad`](https://www.npmjs.com/package/@robertoborges/azure-migration-squad) npm CLI. All AMS-modifying commands (Initialize, Upgrade, Doctor) shell out to `npx` so the extension and the CLI share a **single source of truth**. When the npm package gets a new agent or skill, the extension picks it up automatically on next Initialize/Upgrade.
+The extension is **self-contained**:
+
+- Bundles all migration content under `templates/` (built from the canonical `.github/*` at the repo root via `scripts/sync-templates.mjs`)
+- On Initialize, copies `templates/` into the user's workspace under `.github/`
+- All Copilot Chat slash commands work via the bundled `.github/prompts/*.prompt.md` files
+- The agent definition at `.github/agents/Code-Migration-Modernization.agent.md` orchestrates everything
+
+No npm CLI. No external Squad framework. Just the extension and Copilot Chat.
 
 ## Links
 
-- 🏠 **Project home:** https://github.com/RobertoBorges/GHCP-PromptMigration
-- 📦 **CLI on npm:** https://www.npmjs.com/package/@robertoborges/azure-migration-squad
+- 🏠 **Repo:** https://github.com/RobertoBorges/GHCP-PromptMigration
 - 📚 **Quickstart:** [docs/vscode-quickstart.md](https://github.com/RobertoBorges/GHCP-PromptMigration/blob/main/docs/vscode-quickstart.md)
 - 🛠️ **Issues:** https://github.com/RobertoBorges/GHCP-PromptMigration/issues
-- 📊 **Telemetry policy:** [docs/telemetry.md](https://github.com/RobertoBorges/GHCP-PromptMigration/blob/main/docs/telemetry.md)
 
 ## License
 

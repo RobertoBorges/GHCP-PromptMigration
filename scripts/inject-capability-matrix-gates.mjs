@@ -41,9 +41,9 @@ function buildGate(phase) {
     '',
     '| Required artifact | Location | If missing |',
     '|-------------------|----------|------------|',
-    '| Discovery Dossier | `reports/Discovery-Dossier.md` | **STOP** — route to Discovery Engineer |',
-    '| Capability Matrix | `reports/Capability-Matrix.yaml` | **STOP** — route to Discovery Engineer |',
-    '| Approved Migration Plan | `reports/Migration-Plan.md` | **STOP** — route to Architect (run `/build-migration-plan`) |',
+    '| Discovery Dossier | `reports/Discovery-Dossier.md` | **STOP** — run `/assess-any-application` first |',
+    '| Capability Matrix | `reports/Capability-Matrix.yaml` | **STOP** — run `/assess-any-application` first |',
+    '| Approved Migration Plan | `reports/Migration-Plan.md` | **STOP** — run `/build-migration-plan` |',
     '',
     '### If ANY of those three artifacts is missing',
     '',
@@ -62,14 +62,14 @@ function buildGate(phase) {
     '  2. Then: /build-migration-plan                  (or in CLI: "build the migration plan")',
     '  3. Then: /' + phase.split(' ')[0].toLowerCase() + '...',
     '',
-    'To override (skip Discovery and accept risk), log a waiver in .squad/decisions.md',
-    'with `Waiver-<app>: skip-discovery=<reason>` and re-invoke this prompt with the',
-    '`--accept-risk` natural-language flag in your request.',
+    'To override (skip Discovery and accept risk), log a waiver entry in',
+    'reports/Decision-Log.md with `Waiver: skip-discovery=<reason>` and re-invoke',
+    'this prompt with the `--accept-risk` natural-language flag in your request.',
     '```',
     '',
     '**Do NOT proceed past this gate unless:**',
     '- All three artifacts exist, OR',
-    '- A waiver entry exists in `.squad/decisions.md` AND the user explicitly said "skip discovery" or similar',
+    '- A waiver entry exists in `reports/Decision-Log.md` AND the user explicitly said "skip discovery" or similar',
     '',
     '### When the gate passes',
     '',
@@ -77,20 +77,23 @@ function buildGate(phase) {
     '   - `source.primary_adapter` → load the matching `source-*` skill',
     '   - `stack.primary_stack` + `stack.secondary_stacks` → load matching `stack-*` skills',
     '   - `workload.primary_pattern` → load matching `workload-*` skill',
-    '   - `migration_strategy.recommendation` → adjust phase emphasis per the strategy table in `.squad/routing.md`',
-    '   - `risk_flags` → auto-dispatch the specialists listed in `.squad/routing.md`',
-    '   - `required_specialists` → ensure all are in the room',
+    '   - `migration_strategy.recommendation` → adjust phase emphasis based on the recommended strategy',
+    '   - `risk_flags` → load the matching risk skills (e.g., `risk-cross-region-data.md`)',
     '   - `unresolved_questions` → if any remain unanswered, surface them BEFORE starting work',
-    '2. Read `reports/Migration-Plan.md` for the Architect\'s approved sequencing and any app-specific extra gates.',
-    '3. Confirm Phase prerequisites are met (see standard gates in `.squad/routing.md`).',
+    '2. Read `reports/Migration-Plan.md` for approved sequencing and any app-specific extra gates.',
+    '3. Confirm Phase prerequisites are met.',
     '',
     SENTINEL_END,
     '',
   ].join('\n');
 }
 
+function escapeRegex(s) {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 const GATE_RE = new RegExp(
-  `${SENTINEL_START.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\$&')}[\\s\\S]*?${SENTINEL_END.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\$&')}\\s*`,
+  `${escapeRegex(SENTINEL_START)}[\\s\\S]*?${escapeRegex(SENTINEL_END)}\\s*`,
   'g'
 );
 

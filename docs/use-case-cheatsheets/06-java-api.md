@@ -44,18 +44,18 @@ A Java 8 Spring Boot API for bus reservation workflows, backed by Spring Web, Sp
 
 ## Prompt sequence
 
-1. `@squad run quick assessment`
+1. `/run quick assessment`
 2. `Assess #file:Use-cases/06-Java-API-BusReservation for Java 8 + Spring Boot 2.3 modernization to Java 21 + Spring Boot 3 on Azure Container Apps with PostgreSQL. Highlight H2, javax->jakarta, Docker, and Maven risks.`
-3. `@squad run Phase 1 plan and assess`
+3. `/run Phase 1 plan and assess`
 4. `Review pom.xml, application.properties, and RestApi.java. Produce an endpoint inventory, dependency upgrade plan, and target architecture using Container Apps and PostgreSQL.`
-5. `@squad run database migration review`
-6. `@squad run Phase 2 code migration`
-7. `@squad run security hardening review`
-8. `@squad run Phase 3 infrastructure generation`
-9. `@squad run Phase 4 deploy to Azure`
-10. `@squad run Phase 5 CI/CD setup`
-11. `@squad run Phase 6 post-migration ops`
-12. `@squad show migration status`
+5. `/run database migration review`
+6. `/run Phase 2 code migration`
+7. `/run security hardening review`
+8. `/run Phase 3 infrastructure generation`
+9. `/run Phase 4 deploy to Azure`
+10. `/run Phase 5 CI/CD setup`
+11. `/run Phase 6 post-migration ops`
+12. `@agent show migration status`
 
 ## Agent dispatch order
 

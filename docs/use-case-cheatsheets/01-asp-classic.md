@@ -43,18 +43,18 @@ A small Classic ASP storefront used as the repo's pure legacy baseline. It mixes
 
 ## Prompt sequence
 
-1. `@squad run quick assessment`
+1. `/run quick assessment`
 2. `Assess #file:Use-cases/01-ASPClassicApp as a Classic ASP + VBScript + ADODB application. Target .NET 8 on Azure App Service with Azure SQL, Bicep, and GitHub Actions. Call out session state, include files, COM/ADODB dependencies, and global.asa risks.`
-3. `@squad run Phase 1 plan and assess`
+3. `/run Phase 1 plan and assess`
 4. `Create a page-by-page migration map for default.asp, products.asp, product-detail.asp, cart.asp, about.asp, and contact.asp. Show how includes, Session variables, and global.asa events map to ASP.NET Core.`
-5. `@squad run database migration review`
-6. `@squad run Phase 2 code migration`
-7. `@squad run Phase 3 infrastructure generation`
-8. `@squad run security hardening review`
-9. `@squad run Phase 4 deploy to Azure`
-10. `@squad run Phase 5 CI/CD setup`
-11. `@squad run Phase 6 post-migration ops`
-12. `@squad show migration status`
+5. `/run database migration review`
+6. `/run Phase 2 code migration`
+7. `/run Phase 3 infrastructure generation`
+8. `/run security hardening review`
+9. `/run Phase 4 deploy to Azure`
+10. `/run Phase 5 CI/CD setup`
+11. `/run Phase 6 post-migration ops`
+12. `@agent show migration status`
 
 ## Agent dispatch order
 

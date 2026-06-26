@@ -1,8 +1,8 @@
 {
   "name": "azure-migration-squad-vscode",
-  "displayName": "Azure Migration Squad",
-  "description": "Migrate any application to Azure — 15 specialist agents, 60+ skills, and a Discovery-first workflow that handles any source, any stack, any workload. Powered by GitHub Copilot + Squad.",
-  "version": "0.1.3",
+  "displayName": "Azure Migration Agent",
+  "description": "Migrate any application to Azure with GitHub Copilot. Universal source/stack/workload coverage (15 source adapters, 15 stack adapters, 9 workload patterns). Discovery-first workflow. Hard-stop user-decision gates so the agent never picks framework/database/hosting on your behalf.",
+  "version": "0.2.0",
   "publisher": "robertoborges",
   "private": false,
   "license": "MIT",
@@ -25,7 +25,6 @@
     "azure",
     "migration",
     "copilot",
-    "squad",
     "ai",
     "modernization",
     "dotnet",
@@ -45,7 +44,7 @@
       "activitybar": [
         {
           "id": "azureMigrationSquad",
-          "title": "Azure Migration Squad",
+          "title": "Azure Migration Agent",
           "icon": "media/activity-bar-icon.svg"
         }
       ]
@@ -56,25 +55,25 @@
           "id": "azureMigrationSquadDecisions",
           "name": "🛑 Decisions Required",
           "icon": "media/activity-bar-icon.svg",
-          "contextualTitle": "Azure Migration Squad — Decisions Required"
+          "contextualTitle": "Azure Migration Agent — Decisions Required"
         },
         {
           "id": "azureMigrationSquadAgents",
-          "name": "Agents",
+          "name": "Agent",
           "icon": "media/activity-bar-icon.svg",
-          "contextualTitle": "Azure Migration Squad — Agents"
+          "contextualTitle": "Azure Migration Agent — Definition"
         },
         {
           "id": "azureMigrationSquadPrompts",
           "name": "Prompts",
           "icon": "media/activity-bar-icon.svg",
-          "contextualTitle": "Azure Migration Squad — Prompts"
+          "contextualTitle": "Azure Migration Agent — Prompts"
         },
         {
           "id": "azureMigrationSquadSkills",
           "name": "Skills",
           "icon": "media/activity-bar-icon.svg",
-          "contextualTitle": "Azure Migration Squad — Skills"
+          "contextualTitle": "Azure Migration Agent — Skills"
         }
       ]
     },
@@ -90,13 +89,13 @@
     "walkthroughs": [
       {
         "id": "azureMigrationSquadGettingStarted",
-        "title": "Migrate to Azure with Azure Migration Squad",
-        "description": "Set up the squad, run Discovery, generate a migration plan, and execute Phases 1-6.",
+        "title": "Migrate to Azure with the Azure Migration Agent",
+        "description": "Set up the agent, run Discovery, generate a migration plan, and execute Phases 1-6.",
         "steps": [
           {
             "id": "install",
-            "title": "Initialize the migration squad in your workspace",
-            "description": "Drops the agent charters, prompts, skills, and a 60-second quickstart into your project.\n[Initialize now](command:azureMigrationSquad.initialize)",
+            "title": "Initialize the migration agent in your workspace",
+            "description": "Drops the agent definition, prompts, skills, and a 60-second quickstart into your project.\n[Initialize now](command:azureMigrationSquad.initialize)",
             "media": {
               "image": "media/walkthroughs/step-1-init.png",
               "altText": "Initialize Azure Migration Squad screenshot"
@@ -131,71 +130,36 @@
           },
           {
             "id": "explore",
-            "title": "Explore the sidebar — agents, prompts, skills",
-            "description": "Look for the rocket icon 🚀 in the Activity Bar. Browse all 15 agents, 26 prompts, and 60+ skills. Click any item to open its source file.",
+            "title": "Explore the sidebar — agent, prompts, skills, decisions",
+            "description": "Look for the rocket icon 🚀 in the Activity Bar. Browse the agent definition, 26 prompts, 60+ skills, and pending architecture decisions. Click any item to open its source file.",
             "media": {
               "image": "media/walkthroughs/step-4-sidebar.png",
-              "altText": "Azure Migration Squad sidebar showing agents/prompts/skills"
+              "altText": "Azure Migration Agent sidebar"
             }
           }
         ]
       }
     ],
     "configuration": {
-      "title": "Azure Migration Squad",
+      "title": "Azure Migration Agent",
       "properties": {
-        "azureMigrationSquad.channel": {
-          "type": "string",
-          "default": "latest",
-          "enum": ["latest", "insider"],
-          "enumDescriptions": [
-            "Stable releases — recommended for most users.",
-            "Preview builds with the newest features and fixes."
-          ],
-          "description": "Which npm dist-tag to use when running ams init / upgrade. Insider may include unfinished features.",
-          "scope": "window"
-        },
-        "azureMigrationSquad.telemetry.enabled": {
-          "type": "boolean",
-          "default": false,
-          "description": "Send anonymous usage data (command invocation counts, install/upgrade events). Off by default. Never sends file paths, code, or personal data. See: https://github.com/RobertoBorges/GHCP-PromptMigration/blob/main/docs/telemetry.md",
-          "scope": "application"
-        },
-        "azureMigrationSquad.language": {
-          "type": "string",
-          "default": "en",
-          "enum": ["en", "pt-BR", "es-ES"],
-          "enumDescriptions": [
-            "English",
-            "Portuguese (Brazil)",
-            "Spanish"
-          ],
-          "description": "Preferred language for migration content and prompts. Defaults to English. Other translations may be incomplete.",
-          "scope": "window"
-        },
         "azureMigrationSquad.autoInstallCopilot": {
           "type": "string",
           "default": "prompt",
           "enum": ["prompt", "auto", "never"],
           "enumDescriptions": [
-            "Ask once per workspace before installing missing Copilot extensions.",
+            "Ask once per workspace before installing the GitHub Copilot Chat extension.",
             "Install GitHub Copilot Chat automatically without asking.",
-            "Never offer to install Copilot extensions."
+            "Never offer to install GitHub Copilot Chat."
           ],
-          "description": "Behavior when GitHub Copilot Chat is not installed. The Migration Squad requires it for slash-command UX.",
+          "description": "Behavior when GitHub Copilot Chat is not installed. The Azure Migration Agent uses Copilot Chat slash commands.",
           "scope": "application"
         },
         "azureMigrationSquad.statusBar.enabled": {
           "type": "boolean",
           "default": true,
-          "description": "Show the current migration phase in the status bar.",
+          "description": "Show the current migration phase and pending decisions in the status bar.",
           "scope": "window"
-        },
-        "azureMigrationSquad.promptSquadInit": {
-          "type": "boolean",
-          "default": true,
-          "description": "After running ams init, prompt to register the agents with Squad CLI (squad init). Disable to skip the prompt permanently.",
-          "scope": "application"
         }
       }
     },
@@ -261,18 +225,6 @@
         "icon": "$(extensions)"
       },
       {
-        "command": "azureMigrationSquad.installSquadCli",
-        "title": "Install Squad CLI globally (optional)",
-        "category": "Azure Migration",
-        "icon": "$(terminal)"
-      },
-      {
-        "command": "azureMigrationSquad.registerAgents",
-        "title": "Register agents with Squad CLI (squad init)",
-        "category": "Azure Migration",
-        "icon": "$(plug)"
-      },
-      {
         "command": "azureMigrationSquad.showDecisions",
         "title": "Show decisions required (open file)",
         "category": "Azure Migration",
@@ -292,13 +244,15 @@
     ]
   },
   "scripts": {
-    "vscode:prepublish": "npm run build",
+    "vscode:prepublish": "npm run sync && npm run build",
+    "sync": "node scripts/sync-templates.mjs",
     "build": "node esbuild.config.mjs",
     "watch": "node esbuild.config.mjs --watch",
     "lint": "echo 'lint deferred to follow-up'",
-    "pretest": "npm run build && npm run build:tests",
+    "pretest": "npm run sync && npm run build && npm run build:tests",
     "build:tests": "tsc -p tsconfig.test.json",
     "test": "node ./out/test/runTest.js",
+    "prepackage": "npm run sync",
     "package": "vsce package --no-dependencies",
     "publish": "vsce publish --no-dependencies"
   },

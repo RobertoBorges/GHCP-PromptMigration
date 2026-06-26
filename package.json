@@ -2,28 +2,20 @@
   "name": "ghcp-prompt-migration-monorepo",
   "version": "0.0.0",
   "private": true,
-  "description": "Monorepo root for GHCP-PromptMigration — Azure migration agents for GitHub Copilot + Squad. Published packages live under packages/.",
+  "description": "Monorepo root for the Azure Migration Agent VS Code extension. The canonical .github/{agents,prompts,skills,chatmodes,hooks} content is shipped to users through the VS Code extension at packages/azure-migration-squad-vscode/.",
   "type": "module",
   "workspaces": [
-    "packages/*"
+    "packages/azure-migration-squad-vscode"
   ],
   "scripts": {
     "build": "npm run build --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
-    "lint": "npm run lint --workspaces --if-present",
     "sync": "npm run sync --workspaces --if-present",
-    "build:plugin-manifest": "node scripts/build-plugin-manifest.mjs",
-    "validate:plugin-manifest": "node scripts/validate-plugin-manifest.mjs",
     "validate:descriptions": "node scripts/validate-description-lengths.mjs",
-    "validate:templates-not-edited": "node scripts/check-templates-not-edited.mjs",
     "validate:decision-coverage": "node scripts/validate-decision-coverage.mjs",
     "inject:decision-gates": "node scripts/inject-decision-gates.mjs",
     "inject:capability-gates": "node scripts/inject-capability-matrix-gates.mjs",
-    "validate:all": "npm run validate:descriptions && npm run validate:plugin-manifest && npm run validate:decision-coverage && npm run validate:templates-not-edited",
-    "pack:smoke": "npm pack --workspace=@robertoborges/azure-migration-squad",
-    "changeset": "changeset",
-    "changeset:version": "changeset version && npm install --package-lock-only",
-    "changeset:publish": "npm run build && changeset publish"
+    "validate:all": "npm run validate:descriptions && npm run validate:decision-coverage"
   },
   "engines": {
     "node": ">=20.0.0"
@@ -38,11 +30,6 @@
     "azure",
     "migration",
     "copilot",
-    "squad",
-    "multi-agent",
-    "monorepo"
-  ],
-  "devDependencies": {
-    "@changesets/cli": "^2.27.7"
-  }
+    "modernization"
+  ]
 }

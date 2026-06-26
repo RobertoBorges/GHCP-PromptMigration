@@ -85,7 +85,7 @@ function buildGate(phase, decisions) {
     '',
     `## 🛑 MANDATORY DECISION GATE — Major decisions required for ${phase}`,
     '',
-    'The Azure Migration Squad does **not** decide major architecture on your behalf.',
+    'The Code Migration Modernization Agent does **not** decide major architecture on your behalf.',
     `Before ${phase} can do any work, every decision below must be **DECIDED** in`,
     '`reports/Decisions-Required.md` (or marked **🚫 N/A** if genuinely not applicable).',
     '',
@@ -121,8 +121,12 @@ function buildGate(phase, decisions) {
   ].join('\n');
 }
 
+function escapeRegex(s) {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 const GATE_RE = new RegExp(
-  `${SENTINEL_START.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\$&')}[\\s\\S]*?${SENTINEL_END.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\$&')}\\s*`,
+  `${escapeRegex(SENTINEL_START)}[\\s\\S]*?${escapeRegex(SENTINEL_END)}\\s*`,
   'g'
 );
 

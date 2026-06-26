@@ -99,10 +99,10 @@ export class DecisionsProvider implements vscode.TreeDataProvider<vscode.TreeIte
       ];
     }
 
-    if (!ws.hasManifest && !ws.hasSquad && !ws.hasPrompts) {
+    if (!ws.isInstalled) {
       return [
         new PlaceholderItem(
-          'Click to install Azure Migration Squad here',
+          'Click to install the Azure Migration Agent here',
           'rocket',
           'Run "Azure Migration: Initialize" first. The decisions file is produced by Phase 1.',
           'azureMigrationSquad.initialize'

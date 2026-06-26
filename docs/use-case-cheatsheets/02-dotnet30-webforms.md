@@ -43,17 +43,17 @@ A compact ASP.NET WebForms sample on .NET Framework 3.0 with `Default.aspx`, `Ab
 
 ## Prompt sequence
 
-1. `@squad run quick assessment`
+1. `/run quick assessment`
 2. `Assess #file:Use-cases/02-NetFramework30-ASPNET-WEB as a .NET Framework 3.0 WebForms app targeting .NET 8 on Azure App Service with Azure SQL and Bicep. Call out WebForms, Secure.aspx, Web.config, and Windows Authentication risks.`
-3. `@squad run Phase 1 plan and assess`
+3. `/run Phase 1 plan and assess`
 4. `Inventory Default.aspx, About.aspx, Secure.aspx, and Web.config. Map each page, server-side event, and auth rule to Razor Pages or MVC endpoints while preserving Secure.aspx behavior.`
-5. `@squad run Phase 2 code migration`
-6. `@squad run security hardening review`
-7. `@squad run Phase 3 infrastructure generation`
-8. `@squad run Phase 4 deploy to Azure`
-9. `@squad run Phase 5 CI/CD setup`
-10. `@squad run Phase 6 post-migration ops`
-11. `@squad show migration status`
+5. `/run Phase 2 code migration`
+6. `/run security hardening review`
+7. `/run Phase 3 infrastructure generation`
+8. `/run Phase 4 deploy to Azure`
+9. `/run Phase 5 CI/CD setup`
+10. `/run Phase 6 post-migration ops`
+11. `@agent show migration status`
 
 ## Agent dispatch order
 

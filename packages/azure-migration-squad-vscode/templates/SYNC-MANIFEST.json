@@ -1,0 +1,13 @@
+{
+  "syncedAt": "2026-06-26T14:04:21.583Z",
+  "totalFiles": 154,
+  "sources": [
+    ".github/agents",
+    ".github/prompts",
+    ".github/skills",
+    ".github/chatmodes",
+    ".github/hooks",
+    ".github/copilot-instructions.md",
+    "MIGRATION-START-HERE.md"
+  ]
+}

@@ -1,6 +1,6 @@
 # Ocean's Twelve Skills Map
 
-Production-ready mapping for Roberto Borges' migration crew: which skills, prompts, and squad agents to use for each target in this repo.
+Production-ready mapping for Roberto Borges' migration crew: which skills, prompts, and sub-agents to use for each target in this repo.
 
 > **Rule of thumb:** use the built-in slash commands for phase control, then use the exact natural-language prompts in this document to steer each use-case. This repo does **not** currently include use-case-specific slash commands like `/assess-wcf-migration`.
 

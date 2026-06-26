@@ -1,12 +1,8 @@
 /**
- * Azure Migration Squad — VS Code extension.
+ * Azure Migration Agent — VS Code extension.
  *
- * This extension turns any VS Code workspace into a launchpad for migrating
- * applications to Azure using the @robertoborges/azure-migration-squad npm
- * package as the source of truth for prompts, skills, and agents.
- *
- * Phase 2: bootstrap activate/deactivate + smoke test command
- * Phase 3 (this file): tree view + commands + first useful UX
+ * Self-contained: bundles all migration content under `templates/` and
+ * copies it into the user's workspace on Initialize.
  */
 
 import * as vscode from 'vscode';
@@ -19,9 +15,8 @@ import { AmsStatusBar } from './statusBar';
 import { maybeShowWelcome, showWelcomePanel, ensureCopilotChat } from './welcome';
 
 export function activate(context: vscode.ExtensionContext): void {
-  console.log('[azure-migration-squad] extension activated');
+  console.log('[azure-migration-agent] extension activated');
 
-  // Tree views — one per content type (agents / prompts / skills / decisions).
   const agentsProvider = new AgentsProvider();
   const promptsProvider = new PromptsProvider();
   const skillsProvider = new SkillsProvider();
@@ -46,8 +41,6 @@ export function activate(context: vscode.ExtensionContext): void {
     })
   );
 
-  // Status bar widget showing current migration phase. Honors the
-  // azureMigrationSquad.statusBar.enabled setting.
   const statusBar = new AmsStatusBar(context);
   const updateStatusBarVisibility = () => {
     const enabled = vscode.workspace
@@ -69,7 +62,6 @@ export function activate(context: vscode.ExtensionContext): void {
     })
   );
 
-  // Refresh all trees when the workspace's AMS state may have changed.
   const refreshAll = () => {
     agentsProvider.refresh();
     promptsProvider.refresh();
@@ -78,9 +70,9 @@ export function activate(context: vscode.ExtensionContext): void {
     statusBar.refresh();
   };
 
-  // Auto-refresh when files in .squad/ or .github/ change.
+  // Watch the workspace's .github/* for changes.
   const watcher = vscode.workspace.createFileSystemWatcher(
-    '**/{.squad,.github}/**/*.md'
+    '**/.github/**/*.md'
   );
   context.subscriptions.push(
     watcher,
@@ -89,8 +81,7 @@ export function activate(context: vscode.ExtensionContext): void {
     watcher.onDidChange(refreshAll)
   );
 
-  // Auto-refresh when reports/Decisions-Required.md changes (Wave H artifact).
-  // This drives the Decisions tree view AND the status bar's pending count.
+  // Watch reports/Decisions-Required.md for the Decisions tree + status bar.
   const decisionsWatcher = vscode.workspace.createFileSystemWatcher(
     '**/reports/Decisions-Required.md'
   );
@@ -101,15 +92,13 @@ export function activate(context: vscode.ExtensionContext): void {
     decisionsWatcher.onDidChange(refreshAll)
   );
 
-  // Also refresh on workspace folder change (multi-root projects).
   context.subscriptions.push(
     vscode.workspace.onDidChangeWorkspaceFolders(refreshAll)
   );
 
-  // Register all commands (Initialize, Upgrade, Doctor, Open Discovery, etc.)
   registerCommands(context, refreshAll);
 
-  // Phase 5 commands: welcome page + Copilot install
+  // Welcome + Copilot install commands
   context.subscriptions.push(
     vscode.commands.registerCommand('azureMigrationSquad.showWelcome', () =>
       showWelcomePanel(context)
@@ -119,10 +108,7 @@ export function activate(context: vscode.ExtensionContext): void {
     )
   );
 
-  // Wave I (v0.1.3) — Decisions Required protocol commands.
-  // - showDecisions: open the file at the top
-  // - openDecisionAtLine: open the file scrolled to a specific section
-  //   (used by DecisionItem clicks in the tree view)
+  // Wave I commands — Decisions Required.
   context.subscriptions.push(
     vscode.commands.registerCommand('azureMigrationSquad.showDecisions', async () => {
       const folders = vscode.workspace.workspaceFolders;
@@ -130,7 +116,6 @@ export function activate(context: vscode.ExtensionContext): void {
         vscode.window.showErrorMessage('Open a folder first.');
         return;
       }
-      const root = folders[0].uri.fsPath;
       const uri = vscode.Uri.joinPath(folders[0].uri, 'reports', 'Decisions-Required.md');
       try {
         const doc = await vscode.workspace.openTextDocument(uri);
@@ -144,8 +129,6 @@ export function activate(context: vscode.ExtensionContext): void {
         if (choice === 'Run Discovery') {
           vscode.commands.executeCommand('azureMigrationSquad.openDiscovery');
         }
-        // Silence the unused-variable lint
-        void root;
       }
     }),
     vscode.commands.registerCommand(
@@ -165,22 +148,19 @@ export function activate(context: vscode.ExtensionContext): void {
     )
   );
 
-  // Smoke test command kept from Phase 2 for backward compat / debugging.
+  // Smoke test command kept for backward compat / debugging.
   context.subscriptions.push(
     vscode.commands.registerCommand('azureMigrationSquad.hello', () => {
       vscode.window.showInformationMessage(
-        'Azure Migration Squad extension is active — open the sidebar to browse agents, prompts, and skills.'
+        'Azure Migration Agent extension is active — open the sidebar to browse the agent, prompts, skills, and decisions.'
       );
     })
   );
 
-  // First-run welcome: shown only if AMS isn't installed and user hasn't
-  // already dismissed it for this workspace. Runs after activation completes
-  // (don't block the activation path).
+  // First-run welcome (non-blocking).
   setTimeout(() => maybeShowWelcome(context).catch(() => undefined), 1500);
 }
 
 export function deactivate(): void {
   // Subscriptions handle their own disposal.
 }
-

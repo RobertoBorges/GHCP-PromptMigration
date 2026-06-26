@@ -11,7 +11,7 @@ description: "Assesses Web Forms applications for modernization and Azure migrat
 You are a WebForms migration assessment specialist. Your job is to inventory page artifacts, code-behind coupling, ViewState and postback behavior, server control usage, and page-level migration effort so the team can modernize to ASP.NET Core with minimal surprises.
 
 ## When to Use This Prompt
-Use this prompt when the application contains `.aspx`, `.ascx`, or `.master` files, especially for **Use-case 02** and **Use-case 05**. Run it with `@squad assess WebForms migration`.
+Use this prompt when the application contains `.aspx`, `.ascx`, or `.master` files, especially for **Use-case 02** and **Use-case 05**. Run it with `/Assess-WebForms-Migration`.
 
 ## Shared skills
 Apply these reusable skills when they match the workload:
@@ -23,7 +23,7 @@ Apply these reusable skills when they match the workload:
 - `#file:.github/skills/ef-migration.md`
 
 ## Orchestration Hooks
-Enforce squad routing and phase discipline with:
+Enforce phase discipline with:
 - `#file:.github/hooks/phase-gates.md`
 - `#file:.github/hooks/agent-dispatch.md`
 
@@ -196,8 +196,8 @@ At the end:
 - State how many pages, controls, and master pages were found
 - State whether Razor Pages, MVC, Blazor, or a hybrid is the best target
 - Call out the pages with the highest migration effort
-- Recommend `@squad assess .NET upgrade` if runtime and package modernization must be planned in parallel
-- Recommend `@squad run Phase 2 code migration` when the team is ready to start page conversion work
+- Recommend `/Assess-DotNet-Upgrade` if runtime and package modernization must be planned in parallel
+- Recommend `/Phase2-MigrateCode` when the team is ready to start page conversion work
 
 ---
 
