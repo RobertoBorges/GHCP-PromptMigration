@@ -44,13 +44,13 @@ BookShop is the repo's completed modernization reference: a formerly legacy web 
 
 ## Prompt sequence
 
-1. `@squad show migration status`
+1. `@agent show migration status`
 2. `Use #file:Use-cases/05-BookShop as the reference implementation for .NET 8, ASP.NET Core, Azure App Service, Azure SQL, Bicep, GitHub Actions, Key Vault, and Application Insights. Extract reusable patterns for use-cases 01, 02, and 07.`
-3. `@squad run Phase 6 post-migration ops`
-4. `@squad run security hardening review`
-5. `@squad run cost optimization review`
-6. `@squad evaluate rollback options`
-7. `@squad show migration status`
+3. `/run Phase 6 post-migration ops`
+4. `/run security hardening review`
+5. `/run cost optimization review`
+6. `@agent evaluate rollback options`
+7. `@agent show migration status`
 
 ## Agent dispatch order
 

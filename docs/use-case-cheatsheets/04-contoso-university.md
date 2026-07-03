@@ -45,18 +45,18 @@ A multi-project university solution already on ASP.NET Core 2.1, spanning a trad
 
 ## Prompt sequence
 
-1. `@squad run quick assessment`
+1. `/run quick assessment`
 2. `Assess #file:Use-cases/04-ContosoUniversityDiPS as one multi-project solution with API, Web, React SPA, Data, Common, and Tests. Target .NET 8 on Azure App Service with Azure SQL. Do not treat this as a multi-repo assessment.`
-3. `@squad run Phase 1 plan and assess`
+3. `/run Phase 1 plan and assess`
 4. `Produce a dependency map across the projects. Highlight JWT, Identity, SendGrid, Twilio, EF Core provider choices, SPA build pipeline, and test-suite impact.`
-5. `@squad run database migration review`
-6. `@squad run Phase 2 code migration`
-7. `@squad run security hardening review`
-8. `@squad run Phase 3 infrastructure generation`
-9. `@squad run Phase 4 deploy to Azure`
-10. `@squad run Phase 5 CI/CD setup`
-11. `@squad run Phase 6 post-migration ops`
-12. `@squad show migration status`
+5. `/run database migration review`
+6. `/run Phase 2 code migration`
+7. `/run security hardening review`
+8. `/run Phase 3 infrastructure generation`
+9. `/run Phase 4 deploy to Azure`
+10. `/run Phase 5 CI/CD setup`
+11. `/run Phase 6 post-migration ops`
+12. `@agent show migration status`
 
 ## Agent dispatch order
 

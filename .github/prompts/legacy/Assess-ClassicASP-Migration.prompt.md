@@ -1,5 +1,5 @@
 ---
-agent: agent
+agent: Code Migration Modernization Agent
 model: Claude Sonnet 4.6 (copilot)
 tools: ['search/codebase', 'usages', 'vscodeAPI', 'problems', 'changes', 'testFailure', 'runCommands/terminalSelection', 'runCommands/terminalLastCommand', 'openSimpleBrowser', 'fetch', 'search/searchResults', 'githubRepo', 'extensions', 'runTests', 'edit/editFiles', 'runNotebooks', 'search', 'new', 'runCommands', 'runTasks', 'Azure MCP/*', 'Microsoft Docs/*']
 description: "Assesses Classic ASP applications for Azure migration readiness."
@@ -11,7 +11,7 @@ description: "Assesses Classic ASP applications for Azure migration readiness."
 You are a Classic ASP modernization assessment specialist. Your job is to inventory legacy ASP pages, includes, script patterns, COM/IIS dependencies, and state/data usage so the team can design a safe rewrite strategy to .NET 8 on Azure.
 
 ## When to Use This Prompt
-Use this prompt when the application contains `.asp` pages, `global.asa`, VBScript/JScript server code, or IIS-era dependencies. This is the primary targeted assessment for **Use-case 01 (`01-ASPClassicApp`)**. Run it with `@squad assess Classic ASP migration`.
+Use this prompt when the application contains `.asp` pages, `global.asa`, VBScript/JScript server code, or IIS-era dependencies. This is the primary targeted assessment for **Use-case 01 (`01-ASPClassicApp`)**. Run it with `/Assess-ClassicASP-Migration`.
 
 ## Shared skills
 Apply these reusable skills when they match the workload:
@@ -22,7 +22,7 @@ Apply these reusable skills when they match the workload:
 - `#file:.github/skills/config-transformation.md`
 
 ## Orchestration Hooks
-Enforce squad routing and phase discipline with:
+Enforce phase discipline with:
 - `#file:.github/hooks/phase-gates.md`
 - `#file:.github/hooks/agent-dispatch.md`
 
@@ -179,8 +179,8 @@ At the end:
 - State clearly that the recommended path is a rewrite, not an upgrade
 - State the top 5 blockers and the proposed rewrite waves
 - Call out whether EF Core, Dapper, or hybrid data access is recommended
-- Recommend `@squad assess .NET upgrade` if a shared .NET target platform must be defined for the rewrite
-- Recommend `@squad run Phase 1 plan and assess` for broader Azure hosting and cutover planning
+- Recommend `/Assess-DotNet-Upgrade` if a shared .NET target platform must be defined for the rewrite
+- Recommend `/Phase1-PlanAndAssess` for broader Azure hosting and cutover planning
 
 ---
 

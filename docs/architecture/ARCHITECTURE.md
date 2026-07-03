@@ -2,13 +2,13 @@
 
 ## Goal
 
-Replace the flat prompt library with a modular, squad-aware system that keeps slash-command compatibility, supports reusable skills, and allows per-use-case overrides without duplicating 40KB+ prompt references.
+Replace the flat prompt library with a modular, Agent-aware system that keeps slash-command compatibility, supports reusable skills, and allows per-use-case overrides without duplicating 40KB+ prompt references.
 
 ## Design Principles
 
 1. **Thin entrypoints, rich modules** — keep `.github/prompts/` as user-facing slash-command entrypoints, move reusable knowledge into modular libraries.
 2. **Compose by role + phase + tech + skill** — every phase prompt is assembled from a predictable set of fragments.
-3. **Squad-aware by default** — prompts declare a lead role, assisting roles, required artifacts, and handoff targets.
+3. **Agent-aware by default** — prompts declare a lead role, assisting roles, required artifacts, and handoff targets.
 4. **Use-case overrides beat global defaults** — BookShop and future scenarios can replace only the files they need.
 5. **Human docs stay small** — replace giant reference docs with indexed skill sheets and generated summaries.
 
@@ -370,7 +370,7 @@ The monolith is replaced by a **master orchestrator** plus narrow specialist cha
 
 ```yaml
 ---
-description: Master squad-aware migration coordinator for multi-phase and multi-app Azure modernization.
+description: Master Agent-aware migration coordinator for multi-phase and multi-app Azure modernization.
 tools: ['search/codebase', 'usages', 'runCommands', 'runTests', 'edit/editFiles', 'new', 'Azure MCP/*', 'Microsoft Docs/*']
 model: Claude Sonnet 4.6 (copilot)
 leadRole: Architect

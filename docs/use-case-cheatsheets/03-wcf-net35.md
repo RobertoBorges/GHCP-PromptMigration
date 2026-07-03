@@ -2,7 +2,7 @@
 
 ## What is this app?
 
-A WCF demonstration solution centered on service contracts, data contracts, SOAP-style bindings, and a client/host split. It is the cleanest lab for teaching the squad how to move from `.NET 3.5 + WCF + app.config` to ASP.NET Core REST APIs deployed on Azure Container Apps.
+A WCF demonstration solution centered on service contracts, data contracts, SOAP-style bindings, and a client/host split. It is the cleanest lab for teaching the agent how to move from `.NET 3.5 + WCF + app.config` to ASP.NET Core REST APIs deployed on Azure Container Apps.
 
 ## Source stack
 
@@ -43,17 +43,17 @@ A WCF demonstration solution centered on service contracts, data contracts, SOAP
 
 ## Prompt sequence
 
-1. `@squad run quick assessment`
+1. `/run quick assessment`
 2. `Assess #file:Use-cases/03-WCFNet35 for WCF .NET 3.5 to ASP.NET Core REST migration on Azure Container Apps. Focus on ServiceContract, OperationContract, basicHttpBinding, app.config, and client compatibility.`
-3. `@squad run Phase 1 plan and assess`
+3. `/run Phase 1 plan and assess`
 4. `Map each operation in WCFDemo.Service to REST endpoints, request/response DTOs, status codes, and breaking changes. Recommend API versioning and authentication approach.`
-5. `@squad run Phase 2 code migration`
-6. `@squad run security hardening review`
-7. `@squad run Phase 3 infrastructure generation`
-8. `@squad run Phase 4 deploy to Azure`
-9. `@squad run Phase 5 CI/CD setup`
-10. `@squad run Phase 6 post-migration ops`
-11. `@squad show migration status`
+5. `/run Phase 2 code migration`
+6. `/run security hardening review`
+7. `/run Phase 3 infrastructure generation`
+8. `/run Phase 4 deploy to Azure`
+9. `/run Phase 5 CI/CD setup`
+10. `/run Phase 6 post-migration ops`
+11. `@agent show migration status`
 
 ## Agent dispatch order
 

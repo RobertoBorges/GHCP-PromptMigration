@@ -1,0 +1,269 @@
+{
+  "name": "azure-migration-squad-vscode",
+  "displayName": "Azure Migration Agent",
+  "description": "Migrate any application to Azure with GitHub Copilot. Universal source/stack/workload coverage (15 source adapters, 15 stack adapters, 9 workload patterns). Discovery-first workflow. Hard-stop user-decision gates so the agent never picks framework/database/hosting on your behalf.",
+  "version": "0.2.0",
+  "publisher": "robertoborges",
+  "private": false,
+  "license": "MIT",
+  "icon": "media/icon.png",
+  "homepage": "https://github.com/RobertoBorges/GHCP-PromptMigration",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RobertoBorges/GHCP-PromptMigration.git",
+    "directory": "packages/azure-migration-squad-vscode"
+  },
+  "bugs": {
+    "url": "https://github.com/RobertoBorges/GHCP-PromptMigration/issues"
+  },
+  "categories": [
+    "Other",
+    "Azure",
+    "AI"
+  ],
+  "keywords": [
+    "azure",
+    "migration",
+    "copilot",
+    "ai",
+    "modernization",
+    "dotnet",
+    "java",
+    "python",
+    "nodejs"
+  ],
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "main": "./dist/extension.js",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "azureMigrationSquad",
+          "title": "Azure Migration Agent",
+          "icon": "media/activity-bar-icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "azureMigrationSquad": [
+        {
+          "id": "azureMigrationSquadDecisions",
+          "name": "🛑 Decisions Required",
+          "icon": "media/activity-bar-icon.svg",
+          "contextualTitle": "Azure Migration Agent — Decisions Required"
+        },
+        {
+          "id": "azureMigrationSquadAgents",
+          "name": "Agent",
+          "icon": "media/activity-bar-icon.svg",
+          "contextualTitle": "Azure Migration Agent — Definition"
+        },
+        {
+          "id": "azureMigrationSquadPrompts",
+          "name": "Prompts",
+          "icon": "media/activity-bar-icon.svg",
+          "contextualTitle": "Azure Migration Agent — Prompts"
+        },
+        {
+          "id": "azureMigrationSquadSkills",
+          "name": "Skills",
+          "icon": "media/activity-bar-icon.svg",
+          "contextualTitle": "Azure Migration Agent — Skills"
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "azureMigrationSquad.refreshTree",
+          "when": "view == azureMigrationSquadAgents || view == azureMigrationSquadPrompts || view == azureMigrationSquadSkills || view == azureMigrationSquadDecisions",
+          "group": "navigation"
+        }
+      ]
+    },
+    "walkthroughs": [
+      {
+        "id": "azureMigrationSquadGettingStarted",
+        "title": "Migrate to Azure with the Azure Migration Agent",
+        "description": "Set up the agent, run Discovery, generate a migration plan, and execute Phases 1-6.",
+        "steps": [
+          {
+            "id": "install",
+            "title": "Initialize the migration agent in your workspace",
+            "description": "Drops the agent definition, prompts, skills, and a 60-second quickstart into your project.\n[Initialize now](command:azureMigrationSquad.initialize)",
+            "media": {
+              "image": "media/walkthroughs/step-1-init.png",
+              "altText": "Initialize Azure Migration Squad screenshot"
+            },
+            "completionEvents": [
+              "onCommand:azureMigrationSquad.initialize"
+            ]
+          },
+          {
+            "id": "installCopilot",
+            "title": "Install GitHub Copilot Chat",
+            "description": "The migration squad uses slash commands inside Copilot Chat (e.g. `/assess-any-application`). If you already have Copilot Chat installed, this step auto-completes.\n[Install Copilot Chat](command:azureMigrationSquad.installCopilotChat)",
+            "media": {
+              "image": "media/walkthroughs/step-2-copilot.png",
+              "altText": "Install GitHub Copilot Chat extension"
+            },
+            "completionEvents": [
+              "extensionInstalled:GitHub.copilot-chat"
+            ]
+          },
+          {
+            "id": "discovery",
+            "title": "Run Discovery — characterize your application",
+            "description": "The Discovery Engineer (Saul Bloom Jr.) interviews you about source, stack, workload, data, and integrations, then produces a Capability Matrix the rest of the squad consumes.\n[Open Discovery](command:azureMigrationSquad.openDiscovery)",
+            "media": {
+              "image": "media/walkthroughs/step-3-discovery.png",
+              "altText": "Run /assess-any-application in Copilot Chat"
+            },
+            "completionEvents": [
+              "onCommand:azureMigrationSquad.openDiscovery"
+            ]
+          },
+          {
+            "id": "explore",
+            "title": "Explore the sidebar — agent, prompts, skills, decisions",
+            "description": "Look for the rocket icon 🚀 in the Activity Bar. Browse the agent definition, 26 prompts, 60+ skills, and pending architecture decisions. Click any item to open its source file.",
+            "media": {
+              "image": "media/walkthroughs/step-4-sidebar.png",
+              "altText": "Azure Migration Agent sidebar"
+            }
+          }
+        ]
+      }
+    ],
+    "configuration": {
+      "title": "Azure Migration Agent",
+      "properties": {
+        "azureMigrationSquad.autoInstallCopilot": {
+          "type": "string",
+          "default": "prompt",
+          "enum": ["prompt", "auto", "never"],
+          "enumDescriptions": [
+            "Ask once per workspace before installing the GitHub Copilot Chat extension.",
+            "Install GitHub Copilot Chat automatically without asking.",
+            "Never offer to install GitHub Copilot Chat."
+          ],
+          "description": "Behavior when GitHub Copilot Chat is not installed. The Azure Migration Agent uses Copilot Chat slash commands.",
+          "scope": "application"
+        },
+        "azureMigrationSquad.statusBar.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show the current migration phase and pending decisions in the status bar.",
+          "scope": "window"
+        }
+      }
+    },
+    "commands": [
+      {
+        "command": "azureMigrationSquad.initialize",
+        "title": "Initialize in this workspace",
+        "category": "Azure Migration",
+        "icon": "$(rocket)"
+      },
+      {
+        "command": "azureMigrationSquad.upgrade",
+        "title": "Upgrade to latest version",
+        "category": "Azure Migration",
+        "icon": "$(cloud-download)"
+      },
+      {
+        "command": "azureMigrationSquad.doctor",
+        "title": "Run health check (doctor)",
+        "category": "Azure Migration",
+        "icon": "$(pulse)"
+      },
+      {
+        "command": "azureMigrationSquad.openDiscovery",
+        "title": "Open Discovery (/assess-any-application)",
+        "category": "Azure Migration",
+        "icon": "$(search)"
+      },
+      {
+        "command": "azureMigrationSquad.showCatalog",
+        "title": "Show prompt catalog (MIGRATION-START-HERE.md)",
+        "category": "Azure Migration",
+        "icon": "$(book)"
+      },
+      {
+        "command": "azureMigrationSquad.openSettings",
+        "title": "Open settings",
+        "category": "Azure Migration",
+        "icon": "$(settings-gear)"
+      },
+      {
+        "command": "azureMigrationSquad.refreshTree",
+        "title": "Refresh",
+        "category": "Azure Migration",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "azureMigrationSquad.openFile",
+        "title": "Open file (internal)",
+        "category": "Azure Migration",
+        "enablement": "false"
+      },
+      {
+        "command": "azureMigrationSquad.showWelcome",
+        "title": "Show welcome page",
+        "category": "Azure Migration",
+        "icon": "$(home)"
+      },
+      {
+        "command": "azureMigrationSquad.installCopilotChat",
+        "title": "Install GitHub Copilot Chat",
+        "category": "Azure Migration",
+        "icon": "$(extensions)"
+      },
+      {
+        "command": "azureMigrationSquad.showDecisions",
+        "title": "Show decisions required (open file)",
+        "category": "Azure Migration",
+        "icon": "$(checklist)"
+      },
+      {
+        "command": "azureMigrationSquad.openDecisionAtLine",
+        "title": "Open decision at line (internal)",
+        "category": "Azure Migration",
+        "enablement": "false"
+      },
+      {
+        "command": "azureMigrationSquad.hello",
+        "title": "Hello (smoke test)",
+        "category": "Azure Migration"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run sync && npm run build",
+    "sync": "node scripts/sync-templates.mjs",
+    "build": "node esbuild.config.mjs",
+    "watch": "node esbuild.config.mjs --watch",
+    "lint": "echo 'lint deferred to follow-up'",
+    "pretest": "npm run sync && npm run build && npm run build:tests",
+    "build:tests": "tsc -p tsconfig.test.json",
+    "test": "node ./out/test/runTest.js",
+    "prepackage": "npm run sync",
+    "package": "vsce package --no-dependencies",
+    "publish": "vsce publish --no-dependencies"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.6",
+    "@types/node": "^20.10.0",
+    "@types/vscode": "^1.85.0",
+    "@vscode/test-electron": "^2.3.9",
+    "@vscode/vsce": "^2.24.0",
+    "esbuild": "^0.20.2",
+    "mocha": "^10.3.0",
+    "typescript": "^5.3.3"
+  }
+}

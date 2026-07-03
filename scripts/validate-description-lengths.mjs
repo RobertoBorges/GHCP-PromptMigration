@@ -1,10 +1,10 @@
 /**
  * Validate YAML frontmatter description fields on all skill/chatmode/prompt
  * markdown files don't exceed the 1024-character limit enforced by
- * GitHub Copilot / Squad when loading them.
+ * GitHub Copilot when loading them.
  *
  * A real bug in v0.1.0-insider.0: migration-strategy-report/SKILL.md had a
- * 1273-char description and crashed the squad loader. This check fails the
+ * 1273-char description and crashed the Copilot extension loader. This check fails the
  * build before publish so it never ships again.
  */
 
@@ -98,7 +98,7 @@ if (problems > 0) {
   }
   console.error('');
   console.error('Fix: shorten each "description:" YAML frontmatter field to ≤1024 chars.');
-  console.error('GitHub Copilot / Squad refuses to load skills with longer descriptions.');
+  console.error('GitHub Copilot refuses to load skills with longer descriptions.');
   process.exit(1);
 }
 

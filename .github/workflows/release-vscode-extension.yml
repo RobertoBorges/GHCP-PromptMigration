@@ -1,0 +1,95 @@
+name: Release VS Code extension
+
+# ╔═════════════════════════════════════════════════════════════════════════╗
+# ║  PUBLISHES azure-migration-squad-vscode to the VS Code Marketplace     ║
+# ║  AND the Open VSX Registry (for VS Codium etc).                         ║
+# ║                                                                          ║
+# ║  Triggered by:                                                           ║
+# ║    1. Push of a tag matching `vscode-vX.Y.Z` (manual release)          ║
+# ║    2. Manual workflow_dispatch (for testing)                             ║
+# ║                                                                          ║
+# ║  Required secrets:                                                       ║
+# ║    VSCE_PAT       — Personal Access Token for Visual Studio Marketplace ║
+# ║                     (Azure DevOps PAT with Marketplace > Publish scope) ║
+# ║    OVSX_PAT       — (optional) Open VSX Registry token                  ║
+# ║                                                                          ║
+# ║  See: docs/publishing-vscode-extension.md for setup steps.              ║
+# ╚═════════════════════════════════════════════════════════════════════════╝
+
+on:
+  push:
+    tags:
+      - 'vscode-v*'
+  workflow_dispatch:
+    inputs:
+      dryRun:
+        description: 'Dry-run only (build .vsix, no publish)'
+        required: false
+        default: 'true'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
+
+permissions:
+  contents: read
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install workspaces
+        run: npm install --workspaces=false && npm install --workspaces
+
+      - name: Build VS Code extension
+        working-directory: packages/azure-migration-squad-vscode
+        run: npm run build
+
+      - name: Package .vsix
+        working-directory: packages/azure-migration-squad-vscode
+        run: npm run package
+
+      - name: Show package contents
+        working-directory: packages/azure-migration-squad-vscode
+        run: |
+          echo "Built .vsix files:"
+          ls -la *.vsix
+          echo ""
+          echo "Manifest preview:"
+          cat package.json | head -50
+
+      - name: Upload .vsix artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: vscode-extension-${{ github.run_number }}
+          path: packages/azure-migration-squad-vscode/*.vsix
+          retention-days: 90
+
+      - name: Publish to VS Code Marketplace (vsce)
+        if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.dryRun == 'false')
+        working-directory: packages/azure-migration-squad-vscode
+        env:
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}
+        run: |
+          if [ -z "$VSCE_PAT" ]; then
+            echo "::error::VSCE_PAT secret is not set. Configure it in repo settings → Secrets and variables → Actions. See docs/publishing-vscode-extension.md."
+            exit 1
+          fi
+          npm run publish
+
+      - name: Publish to Open VSX Registry
+        if: (github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.dryRun == 'false')) && env.OVSX_PAT != ''
+        working-directory: packages/azure-migration-squad-vscode
+        env:
+          OVSX_PAT: ${{ secrets.OVSX_PAT }}
+        run: |
+          npx -y ovsx publish *.vsix -p "$OVSX_PAT"

@@ -1,0 +1,26 @@
+# Source files that don't ship in the .vsix
+src/**
+test/**
+out/**
+node_modules/**
+.vscode/**
+.vscode-test/**
+**/*.ts
+**/*.map
+**/tsconfig*.json
+**/esbuild.config.mjs
+**/.eslintrc*
+**/.prettierrc*
+**/.editorconfig
+**/.github/**
+**/.gitignore
+**/.gitattributes
+**/*.log
+
+# Keep only what users see:
+# - dist/extension.js    (bundled extension)
+# - package.json         (manifest)
+# - README.md            (marketplace listing)
+# - CHANGELOG.md         (release notes)
+# - LICENSE
+# - media/               (icon + screenshots)

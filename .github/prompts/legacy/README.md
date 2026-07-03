@@ -43,13 +43,13 @@ If you were using `Assess-XYZ-Migration` in a script, chatmode, or external work
 
 ## Can I still run the old prompts?
 
-The files are kept here so you can read them and copy useful narrative if you need it. But the squad routing (in `.squad/routing.md`) no longer references them. Running them directly will:
+The files are kept here so you can read them and copy useful narrative if you need it. But the agent routing (in `.github/copilot-instructions.md`) no longer references them. Running them directly will:
 
 - Skip the Discovery Engineer (so no Capability Matrix is produced)
 - Not be auto-routed by the Migration-Orchestrator
 - Need manual handoff to the Architect
 
-If you absolutely need the old behavior for a one-off engagement, document the reason in `.squad/decisions.md` so the Evaluator knows it was a conscious choice.
+If you absolutely need the old behavior for a one-off engagement, document the reason in `reports/Decision-Log.md` so the Evaluator knows it was a conscious choice.
 
 ## See also
 
@@ -57,5 +57,5 @@ If you absolutely need the old behavior for a one-off engagement, document the r
 - Architect handoff: `.github/prompts/Build-Migration-Plan.prompt.md`
 - Discovery chatmode: `.github/chatmodes/Discovery-Intake.chatmode.md`
 - Migration orchestration: `.github/chatmodes/Migration-Orchestrator.chatmode.md`
-- Routing rules: `.squad/routing.md`
-- Discovery Engineer charter: `.squad/agents/discovery-engineer/charter.md`
+- Routing rules: `.github/copilot-instructions.md`
+- Discovery Engineer charter: `.github/prompts/Assess-Any-Application.prompt.md`

@@ -7,7 +7,7 @@ Use this protocol whenever a migration moves from one phase owner to the next. T
 2. **`reports/Report-Status.md` is the handoff document.** Every phase updates it before asking the next role to start.
 3. **Block early.** If a quality gate fails, stop and record the blocker in the status report.
 4. **Hand off facts, not assumptions.** Identify what was verified, what is inferred, and what is still unknown.
-5. **Name the next owner.** Every handoff must assign a human owner and expected squad agent.
+5. **Name the next owner.** Every handoff must assign a human owner and expected agent.
 
 ## Required Artifacts by Phase Transition
 
@@ -46,7 +46,7 @@ Every update to `reports/Report-Status.md` should include these sections:
 **Current Phase:** <Phase name>
 **Status:** <Not started | In progress | Blocked | Complete>
 **Owner:** <Human role>
-**Squad Agent:** <Architect | Coder | Tester | Azure Specialist | Security Auditor>
+**Agent:** <Architect | Coder | Tester | Azure Specialist | Security Auditor>
 **Updated:** <YYYY-MM-DD HH:MM>
 
 ## Summary
@@ -72,7 +72,7 @@ Every update to `reports/Report-Status.md` should include these sections:
 
 ## Next Step
 - **Next owner:** <role>
-- **Next squad agent:** <agent>
+- **Next Agent:** <agent>
 - **Recommended prompt/command:** `<exact prompt or slash command>`
 ```
 
