@@ -210,7 +210,7 @@ function renderWelcomeHtml(): string {
   <div class="feature-grid">
     <div class="feature-card">
       <strong>One migration agent</strong>
-      The Code Migration Modernization Agent reads .github/agents/Code-Migration-Modernization.agent.md and orchestrates Phase 0-6 plus utility prompts.
+      The Code Migration Modernization Agent reads .github/agents/Code-Migration-Modernization.agent.md and orchestrates the main path (Phase 1 → Phase 6) plus optional add-ons.
     </div>
     <div class="feature-card">
       <strong>Universal source adapters</strong>
@@ -226,16 +226,32 @@ function renderWelcomeHtml(): string {
     </div>
   </div>
 
-  <h2>Your first migration in 3 steps</h2>
+  <h2>Your first migration in 6 phases</h2>
+  <p style="opacity: 0.85; margin-top: -6px;">The main path. Run these in order in Copilot Chat.</p>
   <ol>
     <li><strong>Click "Initialize in this workspace"</strong> above — drops <code>.github/agents/</code>, <code>.github/prompts/</code>, <code>.github/skills/</code>, etc. into your project.</li>
     <li><strong>Open GitHub Copilot Chat</strong> (<kbd>Ctrl+Alt+I</kbd>). If you don't have it, click "Install GitHub Copilot Chat" above.</li>
-    <li><strong>Type</strong> <code>/assess-any-application</code> — the agent will interview you about source, stack, workload, then produce a Capability Matrix.</li>
+    <li><strong><code>/Phase1-PlanAndAssess</code></strong> — interview + assessment report + <code>Decisions-Required.md</code></li>
+    <li><strong><code>/Phase2-MigrateCode</code></strong> — modernize the code to your chosen target</li>
+    <li><strong><code>/Phase3-GenerateInfra</code></strong> — Bicep or Terraform for Azure</li>
+    <li><strong><code>/Phase4-DeployToAzure</code></strong> — deploy via Azure Developer CLI (azd)</li>
+    <li><strong><code>/Phase5-SetupCICD</code></strong> — GitHub Actions or Azure DevOps</li>
+    <li><strong><code>/Phase6-PostMigrationOps</code></strong> — App Insights, alerts, runbooks</li>
   </ol>
+  <p style="opacity: 0.75; font-size: 0.9em;">Phases 2-6 hard-stop until each pending decision in <code>reports/Decisions-Required.md</code> is answered. The status bar shows a count.</p>
+
+  <h2>Optional add-ons</h2>
+  <p style="opacity: 0.85; margin-top: -6px;">Not part of the default flow — surface only when you need one.</p>
+  <ul>
+    <li><strong>Alternative intakes:</strong> <code>/assess-any-application</code>, <code>/build-migration-plan</code>, <code>/QuickAssessment</code>, <code>/QuickTriage</code>, <code>/InteractiveMigrationInterview</code>, <code>/TeamSkillAssessment</code></li>
+    <li><strong>Portfolio / multi-app:</strong> <code>/PortfolioStrategy</code>, <code>/Phase0-Multi-repo-assessment</code></li>
+    <li><strong>Specialized deep-dives:</strong> <code>/DatabaseMigration</code>, <code>/SecurityHardening</code>, <code>/CostOptimization</code></li>
+    <li><strong>Utility / recovery:</strong> <code>/Phase-Rollback</code>, <code>/GetStatus</code></li>
+  </ul>
 
   <h2>Next steps after init</h2>
   <ul>
-    <li>Browse the <strong>agent definition, prompts, skills, and decisions</strong> in the sidebar (look for the rocket icon 🚀 in the Activity Bar).</li>
+    <li>Browse the <strong>Agent, Main path, Optional add-ons, and Decisions</strong> in the sidebar (look for the rocket icon 🚀 in the Activity Bar).</li>
     <li>Check the <strong>status bar</strong> for your current migration phase and pending decisions (bottom-left).</li>
     <li>Open <code>MIGRATION-START-HERE.md</code> in your project root for the full quickstart.</li>
     <li>Use the <strong>Command Palette</strong> (<kbd>Ctrl+Shift+P</kbd>) → type "Azure Migration:" to see all commands.</li>

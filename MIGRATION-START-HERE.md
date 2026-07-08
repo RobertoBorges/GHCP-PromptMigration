@@ -14,66 +14,75 @@
 └── copilot-instructions.md                           ← Top-level rules
 ```
 
-## Your first migration in 3 steps
+---
 
-### 1. Open GitHub Copilot Chat
-`Ctrl+Alt+I` (or `gh copilot suggest` in terminal)
+## 🟢 The main path — 6 phases
 
-### 2. Run Discovery
-```
-/assess-any-application
-```
-The agent interviews you about source/stack/workload/data/integrations and produces `reports/Discovery-Dossier.md` + `reports/Capability-Matrix.yaml`.
+**This is the migration flow.** Everything else (Discovery previews, portfolio planning, database-specific work, cost tuning, etc.) is optional and listed under **Optional add-ons** below.
 
-### 3. Build the plan + answer the decisions
-```
-/build-migration-plan
-```
-Produces `reports/Migration-Plan.md` and **`reports/Decisions-Required.md`** — a list of major architecture decisions YOU need to answer before Phases 2-6 can run:
+Open GitHub Copilot Chat (`Ctrl+Alt+I`) and run the phases in order:
 
-- Target framework version
-- UI architecture
-- Database engine
-- Hosting platform
-- IaC tool
-- ...and 13 more
+| # | Phase | Prompt | What it does |
+|---|-------|--------|--------------|
+| **1** | 🚀 Plan & Assess | `/Phase1-PlanAndAssess` | Interviews you about source/stack/workload, produces `reports/Application-Assessment-Report.md` + `reports/Decisions-Required.md` |
+| **2** | ⚙️ Migrate Code | `/Phase2-MigrateCode` | Modernizes application code to your chosen target framework |
+| **3** | 🏗️ Generate Infra | `/Phase3-GenerateInfra` | Generates Bicep or Terraform for Azure |
+| **4** | ☁️ Deploy | `/Phase4-DeployToAzure` | Deploys via Azure Developer CLI (azd) |
+| **5** | 🔄 Setup CI/CD | `/Phase5-SetupCICD` | Configures GitHub Actions (or Azure DevOps) |
+| **6** | 📈 Post-Migration Ops | `/Phase6-PostMigrationOps` | App Insights, alerts, runbooks |
 
-The agent **shows options + tradeoffs** for each one and waits for your pick. No silent defaults.
+**How the phases coordinate:**
 
-Then run Phase 2 onward:
-```
-/Phase2-MigrateCode
-/Phase3-GenerateInfra
-/Phase4-DeployToAzure
-/Phase5-SetupCICD
-/Phase6-PostMigrationOps
-```
+- After Phase 1, open `reports/Decisions-Required.md` — the agent listed the **major architecture decisions you must make** (target framework, database engine, hosting platform, IaC tool, etc.). Each one shows options with tradeoffs and **waits for your pick**. No silent defaults.
+- Phases 2-6 **hard-stop** until each required decision is `✅ DECIDED`. The status bar (bottom-left) shows how many are still pending.
+- If Phase 1 doesn't find a Discovery Dossier + Capability Matrix, it'll route you through `/assess-any-application` and `/build-migration-plan` automatically. You can also run those two separately from the add-ons list if you prefer to preview.
 
-## Full prompt catalog
+**That's the whole main flow.** Six commands, in order, one per phase.
 
-| Prompt | What it does |
-|--------|-------------|
-| `/assess-any-application` ⭐ | Universal intake — characterize any app |
-| `/build-migration-plan` | Build the migration plan + Decisions-Required from Capability Matrix |
-| `/QuickAssessment` | Fast triage when you already know the basics |
-| `/QuickTriage` | Suggest the next migration step in <5 minutes |
-| `/InteractiveMigrationInterview` | Guided Q&A intake |
-| `/TeamSkillAssessment` | Audit your team's readiness |
-| `/PortfolioStrategy` | Executive CIO deck for 10+ apps |
-| `/Phase0-Multi-repo-assessment` | Map multi-repo business solutions |
-| `/Phase1-PlanAndAssess` | Plan + per-app assessment |
-| `/Phase2-MigrateCode` | Modernize code to target framework |
-| `/Phase3-GenerateInfra` | Generate Bicep / Terraform |
-| `/Phase4-DeployToAzure` | Deploy to Azure (azd) |
-| `/Phase5-SetupCICD` | GitHub Actions for the migrated app |
-| `/Phase6-PostMigrationOps` | App Insights, alerts, runbooks |
-| `/Phase-Rollback` | Rollback an in-flight migration |
-| `/DatabaseMigration` | Schema + data move (DMS / DMA) |
-| `/SecurityHardening` | Entra ID, Key Vault, managed identity |
-| `/CostOptimization` | Right-sizing, savings plans, budgets |
-| `/GetStatus` | Show current migration progress |
+---
 
-Each prompt lives at `.github/prompts/<Name>.prompt.md`.
+## 🔵 Optional add-ons
+
+These are **not part of the default flow**. Use them when you need a specific specialized task, a lightweight alternative entry point, or a utility.
+
+### Alternative intakes
+
+Use these instead of (or before) Phase 1 if you have a specific need:
+
+| Prompt | Use when |
+|--------|----------|
+| `/assess-any-application` | You want a **standalone discovery** — produces the Capability Matrix + Discovery Dossier without committing to Phase 1's full assessment. Useful for previewing before deciding. |
+| `/build-migration-plan` | You already ran `/assess-any-application` and want the migration plan + `Decisions-Required.md` split into its own step. |
+| `/QuickAssessment` | You already know the basics — fast triage without the full interview. |
+| `/QuickTriage` | You want the agent to suggest the next migration step in **under 5 minutes**. |
+| `/InteractiveMigrationInterview` | You'd like a **guided Q&A** rather than free-form intake. |
+| `/TeamSkillAssessment` | You want to audit your team's readiness for the migration (skills gap analysis). |
+
+### Portfolio / multi-app
+
+| Prompt | Use when |
+|--------|----------|
+| `/PortfolioStrategy` | You have **10+ apps** (from CMDB / RVTools / DMA) and need an executive CIO deck classifying each app. Runs before per-app work. |
+| `/Phase0-Multi-repo-assessment` | You have **multiple repos that form ONE business solution** and need cross-repo dependency + sequencing analysis before Phase 1. |
+
+### Specialized deep-dives
+
+Use during or between phases when a specific concern needs focused work:
+
+| Prompt | Use when |
+|--------|----------|
+| `/DatabaseMigration` | You need a focused **schema + data move** plan using Azure DMS / DMA. |
+| `/SecurityHardening` | You want a dedicated pass on **Entra ID, Key Vault, managed identity, and network security**. |
+| `/CostOptimization` | You want **right-sizing, savings plans, and budget setup** for the migrated workload. |
+
+### Utility / recovery
+
+| Prompt | Use when |
+|--------|----------|
+| `/Phase-Rollback` | You need to **rollback an in-flight migration** to a safe state. |
+| `/GetStatus` | You want to see the **current migration progress** at a glance. |
+
+---
 
 ## Useful extension commands
 
@@ -86,7 +95,7 @@ Each prompt lives at `.github/prompts/<Name>.prompt.md`.
 - Show prompt catalog (this file)
 - Show decisions required
 
-Or use the sidebar: rocket icon 🚀 in the Activity Bar shows Agent, Prompts, Skills, Decisions.
+Or use the sidebar: rocket icon 🚀 in the Activity Bar shows Agent, Main path, Add-ons, and Decisions.
 
 ## Troubleshooting
 
@@ -94,7 +103,8 @@ Or use the sidebar: rocket icon 🚀 in the Activity Bar shows Agent, Prompts, S
 |---------|-----|
 | Slash commands don't show in Copilot Chat | **Reload VS Code window** (`Ctrl+Shift+P` → "Developer: Reload Window") |
 | Status bar shows "AMS: N/M decisions pending" | Open `reports/Decisions-Required.md` and answer each PENDING decision |
-| "Unknown command" in Copilot CLI | Copilot CLI doesn't auto-register slash commands. Type the request in natural language: *"assess this application"* |
+| Phase 1 tells me it can't find a Discovery Dossier | Either let Phase 1 run Discovery inline, OR run `/assess-any-application` first (add-on), then re-run Phase 1 |
+| "Unknown command" in Copilot CLI | Copilot CLI doesn't auto-register slash commands. Type the request in natural language: *"plan and assess this application"* |
 | Want to start over | Delete `.github/agents/`, `.github/prompts/`, `.github/skills/`, `.github/chatmodes/`, `.github/hooks/`, `.github/copilot-instructions.md`, `MIGRATION-START-HERE.md` and re-run Initialize |
 
 ## Learn more

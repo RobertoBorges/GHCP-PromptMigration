@@ -8,13 +8,42 @@ This repository is a **universal application-to-Azure migration system**. It can
 
 The system supports **three complementary flows**:
 
-1. **Universal Application Migration Flow (default)** — Starts with `/assess-any-application`. The agent characterizes the application's source, stack, workload pattern, data, and integrations; produces a **Discovery Dossier** and a **Capability Matrix**; recommends a migration strategy (Rehost/Replatform/Refactor/Rearchitect/Rebuild/Retire/Retain) using the `migration-strategy-decision-tree` skill; and proceeds to execution via Phases 1–6.
+1. **Per-Application Modernization Flow (default, main path)** — Guided execution of ONE application at a time via **`/Phase1-PlanAndAssess` → `/Phase2-MigrateCode` → `/Phase3-GenerateInfra` → `/Phase4-DeployToAzure` → `/Phase5-SetupCICD` → `/Phase6-PostMigrationOps`**. Stack-agnostic: Phase prompts consume the Capability Matrix produced by Discovery and apply the right stack/source/workload-specific guidance via skills. Phase 1 will route to `/assess-any-application` and `/build-migration-plan` automatically if their artifacts are missing.
 
-2. **Portfolio Planning Flow (pre-engagement)** — Generates executive-ready Migration Strategy Reports from CMDB / RVTools / DMA / mixed customer artifacts. Produces a CIO-level HTML deck with CAF-aligned 6 Rs classification and Factory / ISD-Partner / Unknown execution ownership. Invoke with `/PortfolioStrategy` or use the `migration-strategy-report` skill.
+2. **Portfolio Planning Flow (pre-engagement, optional add-on)** — Generates executive-ready Migration Strategy Reports from CMDB / RVTools / DMA / mixed customer artifacts. Produces a CIO-level HTML deck with CAF-aligned 6 Rs classification and Factory / ISD-Partner / Unknown execution ownership. Invoke with `/PortfolioStrategy` or use the `migration-strategy-report` skill.
 
-3. **Per-Application Modernization Flow (Phases 1–5, optionally Phase 0)** — Guided execution of ONE application at a time. Stack-agnostic: Phase prompts consume the Capability Matrix produced by Discovery and apply the right stack/source/workload-specific guidance via skills.
+3. **Universal Discovery Preview (optional add-on)** — `/assess-any-application` runs standalone Discovery producing `reports/Discovery-Dossier.md` + `reports/Capability-Matrix.yaml` without committing to Phase 1's full assessment. Useful for a preview before the main path.
 
 The seven legacy use-cases (`01-ASPClassicApp` … `07-PartsUnlimited`) remain in the repository as **reference walkthroughs**, not as a fixed catalog.
+
+## Main path vs optional add-ons
+
+The default migration flow is **6 phases** run in order. Everything else is an **optional add-on** offered when the user has a specific specialized need.
+
+### 🟢 Main path (default — 6 phases)
+
+Present these first. Run in order.
+
+| # | Phase | Command |
+|---|-------|---------|
+| 1 | Plan & Assess | `/Phase1-PlanAndAssess` |
+| 2 | Migrate Code | `/Phase2-MigrateCode` |
+| 3 | Generate Infra | `/Phase3-GenerateInfra` |
+| 4 | Deploy | `/Phase4-DeployToAzure` |
+| 5 | Setup CI/CD | `/Phase5-SetupCICD` |
+| 6 | Post-Migration Ops | `/Phase6-PostMigrationOps` |
+
+### 🔵 Optional add-ons (offer only when relevant)
+
+**Alternative intakes** — `/assess-any-application`, `/build-migration-plan`, `/QuickAssessment`, `/QuickTriage`, `/InteractiveMigrationInterview`, `/TeamSkillAssessment`
+**Portfolio / multi-app** — `/PortfolioStrategy`, `/Phase0-Multi-repo-assessment`
+**Specialized deep-dives** — `/DatabaseMigration`, `/SecurityHardening`, `/CostOptimization`
+**Utility / recovery** — `/Phase-Rollback`, `/GetStatus`
+
+**Agent behavior:**
+- When a user starts a new migration, recommend the **main path** (Phase 1 first). Do NOT lead with `/assess-any-application` unless the user explicitly asks for a Discovery preview.
+- Only surface add-ons when the user's question maps to one (e.g., "how do I move the DB?" → suggest `/DatabaseMigration`).
+- The natural-language mapping table below still maps ALL commands so users can type any of them — but presentation should always foreground the main path.
 
 ## How to Invoke the Agent (CLI vs Chat)
 
@@ -27,28 +56,33 @@ The seven legacy use-cases (`01-ASPClassicApp` … `07-PartsUnlimited`) remain i
 
 ### Natural-language → action mapping (for CLI users)
 
-When the user says any of the phrases below, take the matching action:
+When the user says any of the phrases below, take the matching action. **Rows are ordered main-path first, then add-ons.**
 
 | User says (any of) | Action |
 |---|---|
-| "assess this application", "assess any application", "discover this app", "discover this application", "what is this app", "characterize this application", "scan this repo", "/assess-any-application", "azure migration of this app" | Read `.github/prompts/Assess-Any-Application.prompt.md` and follow it. Produce `reports/Discovery-Dossier.md` + `reports/Capability-Matrix.yaml`. |
-| "build migration plan", "approve discovery", "build the plan", "make the migration plan", "/build-migration-plan" | Read `.github/prompts/Build-Migration-Plan.prompt.md`. Produce `reports/Migration-Plan.md`. Requires Discovery Dossier + Capability Matrix to already exist. |
-| "phase 1", "plan and assess", "/phase1-planandassess" | Read `.github/prompts/Phase1-PlanAndAssess.prompt.md` |
+| **🟢 Main path (Phase 1-6)** | |
+| "phase 1", "plan and assess", "start migration", "assess this app", "/phase1-planandassess" | Read `.github/prompts/Phase1-PlanAndAssess.prompt.md`. Phase 1 will route to `/assess-any-application` + `/build-migration-plan` first if their artifacts are missing. |
 | "phase 2", "migrate code", "/phase2-migratecode" | Read `.github/prompts/Phase2-MigrateCode.prompt.md` |
 | "phase 3", "generate infra", "/phase3-generateinfra" | Read `.github/prompts/Phase3-GenerateInfra.prompt.md` |
 | "phase 4", "deploy to azure", "/phase4-deploytoazure" | Read `.github/prompts/Phase4-DeployToAzure.prompt.md` |
 | "phase 5", "setup cicd", "/phase5-setupcicd" | Read `.github/prompts/Phase5-SetupCICD.prompt.md` |
 | "phase 6", "post-migration ops", "/phase6-postmigrationops" | Read `.github/prompts/Phase6-PostMigrationOps.prompt.md` |
+| **🔵 Alternative intakes (add-ons)** | |
+| "assess any application", "discover this app", "characterize this application", "scan this repo", "/assess-any-application", "run discovery" | Read `.github/prompts/Assess-Any-Application.prompt.md` and follow it. Produce `reports/Discovery-Dossier.md` + `reports/Capability-Matrix.yaml`. |
+| "build migration plan", "approve discovery", "build the plan", "make the migration plan", "/build-migration-plan" | Read `.github/prompts/Build-Migration-Plan.prompt.md`. Produce `reports/Migration-Plan.md`. Requires Discovery Dossier + Capability Matrix to already exist. |
+| "quick assessment", "/quickassessment", "quick triage", "/quicktriage" | Read the matching prompt |
+| "interview me", "/InteractiveMigrationInterview" | Read `.github/prompts/InteractiveMigrationInterview.prompt.md` |
+| "team skill assessment", "/TeamSkillAssessment" | Read `.github/prompts/TeamSkillAssessment.prompt.md` |
+| **🔵 Portfolio / multi-app (add-ons)** | |
 | "portfolio strategy", "/PortfolioStrategy", "analyze portfolio", "CMDB analysis", "RVTools analysis", "migration strategy report" | Read `.github/prompts/PortfolioStrategy.prompt.md` and the `migration-strategy-report` skill |
 | "phase 0", "multi-repo assessment", "/phase0-multi-repo-assessment" | Read `.github/prompts/Phase0-Multi-repo-assessment.prompt.md` |
+| **🔵 Specialized deep-dives (add-ons)** | |
 | "database migration", "/databasemigration", "migrate the database" | Read `.github/prompts/DatabaseMigration.prompt.md` |
 | "security hardening", "/securityhardening", "harden security" | Read `.github/prompts/SecurityHardening.prompt.md` |
 | "cost optimization", "/costoptimization", "optimize cost" | Read `.github/prompts/CostOptimization.prompt.md` |
-| "quick assessment", "/quickassessment", "quick triage", "/quicktriage" | Read the matching prompt |
+| **🔵 Utility / recovery (add-ons)** | |
 | "rollback", "phase rollback", "/phase-rollback" | Read `.github/prompts/Phase-Rollback.prompt.md` |
 | "status", "/getstatus", "show migration status" | Read `.github/prompts/GetStatus.prompt.md` and consult `reports/Report-Status.md` |
-| "interview me", "/InteractiveMigrationInterview" | Read `.github/prompts/InteractiveMigrationInterview.prompt.md` |
-| "team skill assessment", "/TeamSkillAssessment" | Read `.github/prompts/TeamSkillAssessment.prompt.md` |
 
 **If the user types a slash command that isn't in the table above, look for a matching file at `.github/prompts/<command-no-slash>.prompt.md` (case-insensitive) and read it.**
 

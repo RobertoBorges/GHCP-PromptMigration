@@ -50,29 +50,23 @@ A notification offers to open the welcome doc — click **Open**.
 
 A second notification offers to **reload the VS Code window** so Copilot Chat picks up the new prompts and chatmodes. Click **Reload**.
 
-## Step 4 — Run Discovery
+## Step 4 — Run the main path (Phase 1)
 
 In **Copilot Chat** (open with `Ctrl+Alt+I`):
 
 ```
-/assess-any-application
+/Phase1-PlanAndAssess
 ```
 
-The agent interviews you about source, stack, workload, data, and integrations. It produces:
+Phase 1 interviews you about source, stack, workload, data, and integrations. It produces:
 
-- `reports/Discovery-Dossier.md` — narrative + evidence
-- `reports/Capability-Matrix.yaml` — structured classification
+- `reports/Application-Assessment-Report.md` — the per-app assessment
+- `reports/Decisions-Required.md` — **major architecture decisions you need to answer** before later phases can run
+- `reports/Discovery-Dossier.md` + `reports/Capability-Matrix.yaml` (via inline discovery routing)
 
-## Step 5 — Build the migration plan + answer decisions
+> **Prefer a Discovery-only preview?** Run `/assess-any-application` first — it's an optional add-on that produces the Discovery Dossier + Capability Matrix without committing to Phase 1's full assessment. Phase 1 will pick them up on the next run.
 
-```
-/build-migration-plan
-```
-
-The agent produces:
-
-- `reports/Migration-Plan.md` — the migration plan
-- `reports/Decisions-Required.md` — **18 major architecture decisions you need to answer** before later phases can run
+## Step 5 — Answer the decisions
 
 Open `reports/Decisions-Required.md`. For each decision (Target framework, Database engine, Hosting platform, IaC tool, etc.), the agent shows options + tradeoffs. Pick one and fill in your rationale.
 
@@ -80,7 +74,7 @@ The **status bar** (bottom-left) shows **"⚠ AMS: N/M decisions pending"** with
 
 The **🛑 Decisions Required tree view** in the sidebar (rocket icon 🚀 in the Activity Bar) shows each decision's status. Click any entry to jump to that section of the file.
 
-## Step 6 — Run the phases
+## Step 6 — Run Phase 2 through Phase 6
 
 Once all required decisions are `✅ DECIDED`:
 
@@ -93,6 +87,15 @@ Once all required decisions are `✅ DECIDED`:
 ```
 
 Each phase **hard-stops** if any decision it depends on is still `⏸ PENDING`. The agent will tell you which decisions block its work.
+
+## Optional add-ons
+
+These are **not part of the default flow**. Use them when you need a specific specialized task:
+
+- **Alternative intakes:** `/assess-any-application`, `/build-migration-plan`, `/QuickAssessment`, `/QuickTriage`, `/InteractiveMigrationInterview`, `/TeamSkillAssessment`
+- **Portfolio / multi-app:** `/PortfolioStrategy`, `/Phase0-Multi-repo-assessment`
+- **Specialized deep-dives:** `/DatabaseMigration`, `/SecurityHardening`, `/CostOptimization`
+- **Utility / recovery:** `/Phase-Rollback`, `/GetStatus`
 
 ## Useful Command Palette commands
 

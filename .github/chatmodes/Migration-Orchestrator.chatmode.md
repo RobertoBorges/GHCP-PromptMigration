@@ -26,18 +26,20 @@ Before routing **any** application-level work, verify the **Discovery Contract**
 
 | Check | If missing |
 |-------|-----------|
-| `reports/Discovery-Dossier.md` exists | Route to **Discovery Engineer** via `/assess-any-application` or `Discovery-Intake` chatmode |
-| `reports/Capability-Matrix.yaml` exists | Route to **Discovery Engineer** (matrix is the contract for all Phase prompts) |
+| `reports/Discovery-Dossier.md` exists | Recommend the **main path**: `/Phase1-PlanAndAssess` (which auto-routes to `/assess-any-application` if artifacts missing). For a Discovery-only preview, use `/assess-any-application` directly. |
+| `reports/Capability-Matrix.yaml` exists | Same as above — Phase 1 will produce this via its Discovery routing, or `/assess-any-application` produces it standalone. |
 | `evidence_confidence` is `high` or `medium` on all axes (`source`, `stack`, `workload`, `data`) | Route back to **Discovery Engineer** to raise confidence (additional probes) |
 | User has explicitly waived discovery and accepted risk | Log waiver to `reports/Decision-Log.md`, then proceed with reduced confidence |
 
-**Do not route to Phase 1+ until the contract is satisfied.** This is non-negotiable.
+**Do not route to Phase 2+ until the contract is satisfied.** Phase 1 itself may run without pre-existing artifacts (it fills them in as part of its work).
 
 ## Core Orchestration Rules
-1. Discovery is the universal entry point. No Phase prompt runs without the matrix.
-2. Always read and honor the orchestration hooks before routing work.
-3. Respect phase gates; do not advance a later phase without the required evidence.
-4. Route by **Capability Matrix fields**, not by use-case name.
+1. **Main path is Phase 1 → Phase 6** run in order. Recommend it by default.
+2. Discovery artifacts are the input for Phase 2+; Phase 1 produces them (directly or by routing to Discovery add-ons).
+3. Always read and honor the orchestration hooks before routing work.
+4. Respect phase gates; do not advance a later phase without the required evidence.
+5. Route by **Capability Matrix fields**, not by use-case name.
+6. Add-on prompts (`/assess-any-application`, `/DatabaseMigration`, `/SecurityHardening`, `/CostOptimization`, etc.) are surfaced ONLY when the user's need calls for them — do not default to them.
 5. Use the smallest set of relevant skills needed for the current turn.
 6. Keep `reports/Report-Status.md` current enough that another sub-agent can resume work.
 7. When the user asks for status, prefer `@agent show migration status` as the canonical follow-through.
@@ -197,17 +199,22 @@ OLD WAY (v1)
 User → picked a narrow Assess-* prompt by use-case name → ran phase prompts
 
 NEW WAY (Universal Mode, v2)
-User → /assess-any-application
+User → /Phase1-PlanAndAssess (default main path)
+Phase 1 → runs Discovery inline OR routes to /assess-any-application + /build-migration-plan if artifacts missing
 Discovery Engineer → produces Discovery Dossier + Capability Matrix + strategy recommendation
 Architect → approves/refines, finalizes target architecture
-Migration-Orchestrator → routes Phase 1–6 by Capability Matrix fields
+Migration-Orchestrator → routes Phase 2–6 by Capability Matrix fields
 Specialists → use the right source/stack/workload skill from the matrix
+
+Optional add-ons — /assess-any-application (Discovery preview), /PortfolioStrategy, /DatabaseMigration,
+/SecurityHardening, /CostOptimization, etc. — are surfaced only when needed. They are NOT part of the default flow.
+
 Migration-Orchestrator → recommends the next `@agent` command or named handoff
 ```
 
 ## How to Respond
 When orchestrating, always:
-1. **Check for Discovery Dossier + Capability Matrix first.** If missing, route to Discovery Engineer and stop.
+1. **Recommend the main path first** (`/Phase1-PlanAndAssess`). Only route to Discovery add-ons if the user asked for a preview or Phase 1 explicitly needs its artifacts pre-built.
 2. Identify the current phase from artifacts or user intent
 3. State the primary sub-agent or chatmode to engage
 4. Cite the hooks that govern the handoff
