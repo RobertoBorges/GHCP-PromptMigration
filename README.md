@@ -115,7 +115,16 @@ npm test                 # 13 headless tests
 
 ## Publishing the extension
 
-See [`docs/publishing-vscode-extension.md`](./docs/publishing-vscode-extension.md). One-time marketplace setup, then tag `vscode-vX.Y.Z` to release.
+Versioning + changelog are automated via [release-please](https://github.com/googleapis/release-please). Use [Conventional Commits](./docs/conventional-commits.md) (`feat:` / `fix:` / `feat!:`) and merge to `main` — a Release PR opens automatically. Merge it and the marketplace publish workflow fires.
+
+To preview a release locally (or ship an emergency hotfix):
+
+```powershell
+cd packages/azure-migration-squad-vscode
+npm run release:local -- --dry-run
+```
+
+Full walkthrough: [`docs/publishing-vscode-extension.md`](./docs/publishing-vscode-extension.md).
 
 ## License
 

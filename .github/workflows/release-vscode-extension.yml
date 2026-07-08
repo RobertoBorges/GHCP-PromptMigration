@@ -50,6 +50,32 @@ jobs:
       - name: Install workspaces
         run: npm install --workspaces=false && npm install --workspaces
 
+      # ────────────────────────────────────────────────────────────────────
+      # TAG vs PACKAGE.JSON version guard
+      #
+      # The tag that fired this workflow (e.g., vscode-v0.2.1) MUST match
+      # the version in packages/azure-migration-squad-vscode/package.json.
+      # A mismatch means:
+      #   - Someone manually tagged without bumping package.json, OR
+      #   - Someone bumped package.json without pushing the matching tag
+      # Either way, we do NOT want to publish — fail fast and loud.
+      #
+      # This step is skipped for workflow_dispatch (manual runs) because
+      # those don't have a tag to compare against.
+      # ────────────────────────────────────────────────────────────────────
+      - name: Verify tag matches package.json version
+        if: github.event_name == 'push'
+        run: |
+          TAG_VER="${GITHUB_REF_NAME#vscode-v}"
+          PKG_VER=$(node -p "require('./packages/azure-migration-squad-vscode/package.json').version")
+          echo "Tag version:         $TAG_VER"
+          echo "package.json version: $PKG_VER"
+          if [ "$TAG_VER" != "$PKG_VER" ]; then
+            echo "::error::Tag $GITHUB_REF_NAME (${TAG_VER}) does not match package.json version ${PKG_VER}. Bump the version + retag, or use release-please to keep them in sync."
+            exit 1
+          fi
+          echo "✓ Tag matches package.json version"
+
       - name: Build VS Code extension
         working-directory: packages/azure-migration-squad-vscode
         run: npm run build

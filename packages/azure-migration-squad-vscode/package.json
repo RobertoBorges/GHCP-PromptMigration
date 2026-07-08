@@ -254,7 +254,12 @@
     "test": "node ./out/test/runTest.js",
     "prepackage": "npm run sync",
     "package": "vsce package --no-dependencies",
-    "publish": "vsce publish --no-dependencies"
+    "publish": "vsce publish --no-dependencies",
+    "release:local": "node scripts/local-release.mjs",
+    "release:local:patch": "node scripts/local-release.mjs --patch",
+    "release:local:minor": "node scripts/local-release.mjs --minor",
+    "release:local:major": "node scripts/local-release.mjs --major",
+    "release:local:dry-run": "node scripts/local-release.mjs --dry-run"
   },
   "devDependencies": {
     "@types/mocha": "^10.0.6",

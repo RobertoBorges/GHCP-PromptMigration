@@ -1,0 +1,44 @@
+name: Release Please
+
+# ╔═════════════════════════════════════════════════════════════════════════╗
+# ║  release-please: on every push to main, this workflow parses commits    ║
+# ║  since the last release tag, detects the correct semver bump, and       ║
+# ║  opens (or updates) a "chore(main): release vscode-v0.2.1" PR.          ║
+# ║                                                                          ║
+# ║  When you MERGE the Release PR, release-please auto-creates a git tag   ║
+# ║  `vscode-v0.2.1`. That tag triggers `release-vscode-extension.yml`,     ║
+# ║  which publishes the .vsix.                                             ║
+# ║                                                                          ║
+# ║  See docs/publishing-vscode-extension.md and docs/conventional-commits  ║
+# ║  for the full flow.                                                      ║
+# ╚═════════════════════════════════════════════════════════════════════════╝
+
+on:
+  push:
+    branches: [main]
+  # Manual trigger for the rare case where you need to force a re-run
+  # (e.g., after fixing a config mistake).
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run release-please
+        id: release
+        uses: googleapis/release-please-action@v4
+        with:
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+          # GITHUB_TOKEN with contents:write + pull-requests:write is
+          # sufficient. For cross-workflow tag triggering to work well,
+          # a Personal Access Token or GitHub App token is recommended
+          # (see release-please docs). GITHUB_TOKEN works for the basic
+          # flow but may not trigger tag-based downstream workflows.
+          # Set RELEASE_PLEASE_TOKEN as a repo secret to unlock cross-
+          # workflow triggering; falls back to GITHUB_TOKEN otherwise.
+          token: ${{ secrets.RELEASE_PLEASE_TOKEN || secrets.GITHUB_TOKEN }}
