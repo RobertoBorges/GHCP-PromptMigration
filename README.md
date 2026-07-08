@@ -18,13 +18,13 @@ The extension bundles a copy of the canonical content from this repo and drops i
 1. Install the extension: open VS Code, `Ctrl+Shift+X`, search **"Azure Migration Agent"**, click Install.
 2. Open the folder you want to migrate.
 3. Accept the welcome notification → click **Get started** (or run "Azure Migration: Initialize in this workspace" from the Command Palette).
-4. Open GitHub Copilot Chat (`Ctrl+Alt+I`) → type `/Phase1-PlanAndAssess`.
-5. Phase 1 interviews you about source, stack, workload, then produces `reports/Application-Assessment-Report.md` + `reports/Decisions-Required.md`.
+4. Open GitHub Copilot Chat (`Ctrl+Alt+I`) → type `/assess-any-application`. This is step 1 of the main path — discovery.
+5. Then `/Phase1-Plan` — produces `reports/Application-Assessment-Report.md`, `reports/Migration-Plan.md`, and `reports/Decisions-Required.md`.
 6. Answer each decision in `reports/Decisions-Required.md`, then run Phase 2 → Phase 3 → Phase 4 → Phase 5 → Phase 6 in order.
 
 Phases 2-6 **hard-stop** until each required decision in `reports/Decisions-Required.md` is answered. See [`.github/skills/decision-hardstop.md`](./.github/skills/decision-hardstop.md) for the protocol.
 
-> **Optional add-ons** — `/assess-any-application`, `/Build-Migration-Plan`, `/PortfolioStrategy`, `/DatabaseMigration`, `/SecurityHardening`, `/CostOptimization`, and more are available for specialized needs. They are **not part of the default flow**. See [`MIGRATION-START-HERE.md`](./MIGRATION-START-HERE.md) for the full add-ons catalog.
+> **Optional add-ons** — `/Build-Migration-Plan`, `/PortfolioStrategy`, `/DatabaseMigration`, `/SecurityHardening`, `/CostOptimization`, and more are available for specialized needs. They are **not part of the default flow**. See [`MIGRATION-START-HERE.md`](./MIGRATION-START-HERE.md) for the full add-ons catalog.
 
 Full walkthrough: [docs/vscode-quickstart.md](./docs/vscode-quickstart.md).
 

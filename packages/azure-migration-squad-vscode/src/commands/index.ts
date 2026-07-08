@@ -176,7 +176,7 @@ async function cmdDoctor(context: vscode.ExtensionContext): Promise<void> {
   out.appendLine(`  GitHub Copilot Chat ext:   ${copilotChat ? '✓ installed' : '✗ NOT installed'}`);
 
   const decisionsExists = fs.existsSync(path.join(ws.root, 'reports', 'Decisions-Required.md'));
-  out.appendLine(`  reports/Decisions-Req...:  ${decisionsExists ? '✓ generated' : '⏸ not yet (run /Phase1-PlanAndAssess)'}`);
+  out.appendLine(`  reports/Decisions-Req...:  ${decisionsExists ? '✓ generated' : '⏸ not yet (run /Phase1-Plan)'}`);
 
   const extensionVersion = (() => {
     try {
@@ -204,7 +204,7 @@ async function cmdOpenDiscovery(): Promise<void> {
 }
 
 async function cmdOpenMainPath(): Promise<void> {
-  return sendChatQuery('/Phase1-PlanAndAssess', 'main-path');
+  return sendChatQuery('/assess-any-application', 'main-path');
 }
 
 async function sendChatQuery(query: string, kind: string): Promise<void> {

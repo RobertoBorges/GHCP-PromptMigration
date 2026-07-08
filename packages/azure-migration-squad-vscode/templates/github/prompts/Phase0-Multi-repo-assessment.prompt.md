@@ -702,7 +702,7 @@ After multi-repo assessment is complete:
 1. ✅ Update `reports/Report-Status.md` to mark **Phase 0: Multi-Repo Assessment** as complete.
 2. ▶️ Modernize each application individually using the per-app flow:
 
-   > Run **`/Phase1-PlanAndAssess`** on each repository's code folder.
+   > Run **`/Phase1-Plan`** on each repository's code folder.
    >
    > Or click **🚀 Modernize a single application** if the handoff button is visible in your UI.
 

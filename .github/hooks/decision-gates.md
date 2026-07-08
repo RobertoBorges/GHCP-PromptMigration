@@ -66,7 +66,7 @@ If `reports/Decisions-Required.md` doesn't exist, the agent must NOT proceed and
 This file is produced by Phase 1 — Plan & Assess, which enumerates every
 major architecture decision needed for your migration.
 
-Please run:  /Phase1-PlanAndAssess
+Please run:  /Phase1-Plan
 (or in CLI: "build the migration plan")
 
 Once Phase 1 completes, I can resume work — but only against the decisions

@@ -253,7 +253,7 @@ At the end:
 - State the detected starting runtime and the recommended target runtime plainly
 - State whether the recommended path is incremental, hybrid, big-bang, or strangler
 - Call out the top 5 blockers for the chosen version jump
-- Recommend `/Phase1-PlanAndAssess` if broader Azure platform planning is still needed
+- Recommend `/Phase1-Plan` if broader Azure platform planning is still needed
 - Recommend `/Assess-WebForms-Migration`, `/Assess-WCF-Migration`, or `/Assess-ClassicASP-Migration` when those technologies dominate the risk
 
 ---

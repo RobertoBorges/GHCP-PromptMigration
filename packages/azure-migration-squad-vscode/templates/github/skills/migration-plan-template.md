@@ -134,7 +134,7 @@ See `.github/skills/rollback-strategy.md` + per-phase rollback notes:
 
 > 3–5 lines telling the Migration-Orchestrator chatmode (Architect-led) what to dispatch first.
 
-**Next command:** `/phase1-planandassess`
+**Next command:** `/phase1-plan`
 **Lead:** Architect
 **First dispatch:** Azure Specialist (target compute validation), Database Specialist (data path validation)
 **Watch list:** <top 1–2 risks the orchestrator should keep eyes on through all phases>

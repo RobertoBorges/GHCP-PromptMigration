@@ -8,6 +8,7 @@ description: "Applies security hardening guidance for Azure migration targets."
 
 
 
+
 <!-- BEGIN: capability-matrix-gate (auto-managed by inject-capability-matrix-gates.mjs) -->
 
 ## 🚦 MANDATORY OPENING CHECK — Capability Matrix Required
@@ -18,7 +19,7 @@ description: "Applies security hardening guidance for Azure migration targets."
 |-------------------|----------|------------|
 | Discovery Dossier | `reports/Discovery-Dossier.md` | **STOP** — run `/assess-any-application` first |
 | Capability Matrix | `reports/Capability-Matrix.yaml` | **STOP** — run `/assess-any-application` first |
-| Approved Migration Plan | `reports/Migration-Plan.md` | **STOP** — run `/build-migration-plan` |
+| Approved Migration Plan | `reports/Migration-Plan.md` | **STOP** — run `/Phase1-Plan` (or the `/build-migration-plan` add-on) |
 
 ### If ANY of those three artifacts is missing
 
@@ -34,7 +35,7 @@ Missing artifacts:
 
 Required steps before re-running this phase:
   1. Open Copilot Chat → /assess-any-application  (or in CLI: "assess this application")
-  2. Then: /build-migration-plan                  (or in CLI: "build the migration plan")
+  2. Then: /Phase1-Plan                            (produces the Migration Plan, or use /build-migration-plan add-on)
   3. Then: /security...
 
 To override (skip Discovery and accept risk), log a waiver entry in

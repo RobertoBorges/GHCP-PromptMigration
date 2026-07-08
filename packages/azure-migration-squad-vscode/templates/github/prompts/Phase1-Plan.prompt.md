@@ -1,10 +1,11 @@
 ---
-name: Phase1-PlanAndAssess
-description: Start planning and generate an assessment report for your application
-argument-hint: "Specify the folder path to your legacy application, e.g., 'Assess the app in Use-cases/02-NetFramework30-ASPNET-WEB'"
+name: Phase1-Plan
+description: Generate the migration plan, Application-Assessment-Report, and Decisions-Required file for one application
+argument-hint: "Specify the folder path to your legacy application, e.g., 'Plan the app in Use-cases/02-NetFramework30-ASPNET-WEB'"
 agent: Code Migration Modernization Agent
 model: Claude Sonnet 4.6 (copilot)
 ---
+
 
 
 
@@ -14,30 +15,29 @@ model: Claude Sonnet 4.6 (copilot)
 
 ## 🚦 MANDATORY OPENING CHECK — Capability Matrix Required
 
-**Before doing ANY work for Phase 1 — Plan & Assess, verify the Discovery contract:**
+**Before doing ANY work for Phase 1 — Plan, verify the Discovery contract:**
 
 | Required artifact | Location | If missing |
 |-------------------|----------|------------|
 | Discovery Dossier | `reports/Discovery-Dossier.md` | **STOP** — run `/assess-any-application` first |
 | Capability Matrix | `reports/Capability-Matrix.yaml` | **STOP** — run `/assess-any-application` first |
-| Approved Migration Plan | `reports/Migration-Plan.md` | **STOP** — run `/build-migration-plan` |
 
-### If ANY of those three artifacts is missing
+> **Note:** `reports/Migration-Plan.md` is **produced by Phase 1**. If it doesn't exist yet, Phase 1 will generate it. If you'd like to produce it separately first, use the `/build-migration-plan` add-on.
+
+### If EITHER of those two artifacts is missing
 
 Reply with exactly:
 
 ```
-🚨 Phase 1 — Plan & Assess cannot proceed without the Discovery contract.
+🚨 Phase 1 — Plan cannot proceed without the Discovery contract.
 
 Missing artifacts:
   - reports/Discovery-Dossier.md          [missing/present]
   - reports/Capability-Matrix.yaml         [missing/present]
-  - reports/Migration-Plan.md              [missing/present]
 
 Required steps before re-running this phase:
   1. Open Copilot Chat → /assess-any-application  (or in CLI: "assess this application")
-  2. Then: /build-migration-plan                  (or in CLI: "build the migration plan")
-  3. Then: /phase...
+  2. Then re-run: /Phase1-Plan
 
 To override (skip Discovery and accept risk), log a waiver entry in
 reports/Decision-Log.md with `Waiver: skip-discovery=<reason>` and re-invoke
@@ -45,7 +45,7 @@ this prompt with the `--accept-risk` natural-language flag in your request.
 ```
 
 **Do NOT proceed past this gate unless:**
-- All three artifacts exist, OR
+- Both artifacts exist, OR
 - A waiver entry exists in `reports/Decision-Log.md` AND the user explicitly said "skip discovery" or similar
 
 ### When the gate passes
@@ -57,7 +57,7 @@ this prompt with the `--accept-risk` natural-language flag in your request.
    - `migration_strategy.recommendation` → adjust phase emphasis based on the recommended strategy
    - `risk_flags` → load the matching risk skills (e.g., `risk-cross-region-data.md`)
    - `unresolved_questions` → if any remain unanswered, surface them BEFORE starting work
-2. Read `reports/Migration-Plan.md` for approved sequencing and any app-specific extra gates.
+2. If `reports/Migration-Plan.md` exists, read it for approved sequencing. Otherwise Phase 1 will produce it as part of its work.
 3. Confirm Phase prerequisites are met.
 
 <!-- END: capability-matrix-gate -->

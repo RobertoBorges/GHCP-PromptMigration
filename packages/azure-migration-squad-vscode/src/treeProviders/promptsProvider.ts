@@ -1,9 +1,19 @@
 import * as path from 'path';
 import { AmsTreeProviderBase } from './baseProvider';
 
-/** Filenames that make up the main-path (Phase 1 → Phase 6). */
+/**
+ * Main-path files, in canonical order:
+ *   1. Assess (Discovery)
+ *   2. Plan (Phase 1)
+ *   3. Migrate Code (Phase 2)
+ *   4. Generate Infra (Phase 3)
+ *   5. Deploy (Phase 4)
+ *   6. Setup CI/CD (Phase 5)
+ *   7. Post-Migration Ops (Phase 6)
+ */
 const MAIN_PATH_FILES = new Set([
-  'Phase1-PlanAndAssess.prompt.md',
+  'Assess-Any-Application.prompt.md',
+  'Phase1-Plan.prompt.md',
   'Phase2-MigrateCode.prompt.md',
   'Phase3-GenerateInfra.prompt.md',
   'Phase4-DeployToAzure.prompt.md',
@@ -12,7 +22,7 @@ const MAIN_PATH_FILES = new Set([
 ]);
 
 /**
- * Prompts tree view — main path only (Phase 1 → Phase 6).
+ * Prompts tree view — main path only (Assess + Phase 1 → Phase 6).
  * Optional add-ons live in the sibling AddonsProvider.
  */
 export class PromptsProvider extends AmsTreeProviderBase {

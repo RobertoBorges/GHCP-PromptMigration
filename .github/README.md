@@ -10,7 +10,7 @@ This folder contains VS Code GitHub Copilot customization files for the **Code M
 │   └── Code-Migration-Modernization.agent.md
 ├── prompts/                             # Phase-specific prompts
 │   ├── Phase0-Multi-repo-assessment.prompt.md
-│   ├── Phase1-PlanAndAssess.prompt.md
+│   ├── Phase1-Plan.prompt.md
 │   ├── Phase2-MigrateCode.prompt.md
 │   ├── Phase3-GenerateInfra.prompt.md
 │   ├── Phase4-DeployToAzure.prompt.md
@@ -56,7 +56,7 @@ This folder contains VS Code GitHub Copilot customization files for the **Code M
 Type `/` in Copilot Chat followed by the prompt name:
 - `/PortfolioStrategy` — Portfolio Planning flow entry point — generates executive Migration Strategy Report from customer portfolio artifacts and writes handoff file for per-app execution
 - `/Phase0-Multi-repo-assessment`
-- `/Phase1-PlanAndAssess`
+- `/Phase1-Plan`
 - `/Phase2-MigrateCode`
 - `/Phase3-GenerateInfra`
 - `/Phase4-DeployToAzure`

@@ -10,7 +10,7 @@ model: Claude Sonnet 4.6 (copilot)
 
 ## What This Prompt Does
 
-Invokes the `migration-strategy-report` skill to analyze a customer portfolio and produce a CIO-ready HTML migration deck. This is the **Portfolio Planning flow** — produces an executive plan that informs which apps to modernize via the per-app flow (`/Phase1-PlanAndAssess`).
+Invokes the `migration-strategy-report` skill to analyze a customer portfolio and produce a CIO-ready HTML migration deck. This is the **Portfolio Planning flow** — produces an executive plan that informs which apps to modernize via the per-app flow (`/Phase1-Plan`).
 
 ## When to Use
 
@@ -19,7 +19,7 @@ Invokes the `migration-strategy-report` skill to analyze a customer portfolio an
 - An RVTools, Azure Migrate, or DMA export needs to become a leadership-ready story
 - Mixed artifacts (data + meeting notes + vendor proposals) need synthesis into one coherent deck
 
-If you only need to modernize one application's code, use `/Phase0-Multi-repo-assessment` or `/Phase1-PlanAndAssess` instead.
+If you only need to modernize one application's code, use `/Phase0-Multi-repo-assessment` or `/Phase1-Plan` instead.
 
 ## Required Input
 
@@ -91,7 +91,7 @@ Also offer:
 
 ## Handoff File: portfolio-handoff.json
 
-When the user picks an application to start modernizing (Step 4), this skill writes a structured handoff file to `reports/portfolio-handoff.json` that the per-app modernization flow (`/Phase1-PlanAndAssess`) reads automatically to pre-populate setup questions.
+When the user picks an application to start modernizing (Step 4), this skill writes a structured handoff file to `reports/portfolio-handoff.json` that the per-app modernization flow (`/Phase1-Plan`) reads automatically to pre-populate setup questions.
 
 ### Schema
 
@@ -160,6 +160,6 @@ When the Portfolio Strategy Report is complete:
    >
    > For a **multi-repo deep assessment** of the portfolio, run **`/Phase0-Multi-repo-assessment`**.
    >
-   > For a **single-app modernization** starting with the pilot, run **`/Phase1-PlanAndAssess`** — it automatically reads `portfolio-handoff.json` to pre-fill setup choices.
+   > For a **single-app modernization** starting with the pilot, run **`/Phase1-Plan`** — it automatically reads `portfolio-handoff.json` to pre-fill setup choices.
    >
    > Or click **🚀 Modernize a single application** / **🗂️ Run multi-repo assessment** if the handoff buttons are visible in your UI.

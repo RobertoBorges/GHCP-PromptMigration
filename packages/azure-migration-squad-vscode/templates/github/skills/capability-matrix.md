@@ -172,7 +172,7 @@ Use only the canonical values (in `.github/copilot-instructions.md`). Each flag 
 
 ## Consumer Contract
 
-Every Phase prompt (`/phase1-planandassess` through `/phase6-postmigrationops`) reads this matrix at startup. If the matrix is missing or `schema_version` doesn't match, the Phase prompt **must**:
+Every Phase prompt (`/phase1-plan` through `/phase6-postmigrationops`) reads this matrix at startup. If the matrix is missing or `schema_version` doesn't match, the Phase prompt **must**:
 
 1. Refuse to proceed
 2. Print a clear error pointing to `/assess-any-application`

@@ -65,7 +65,7 @@
         },
         {
           "id": "azureMigrationSquadPrompts",
-          "name": "🟢 Main path (Phase 1-6)",
+          "name": "🟢 Main path (Assess + Phase 1-6)",
           "icon": "media/activity-bar-icon.svg",
           "contextualTitle": "Azure Migration Agent — Main path"
         },
@@ -107,7 +107,7 @@
           {
             "id": "installCopilot",
             "title": "Install GitHub Copilot Chat",
-            "description": "The agent uses slash commands inside Copilot Chat (e.g. `/Phase1-PlanAndAssess`). If you already have Copilot Chat installed, this step auto-completes.\n[Install Copilot Chat](command:azureMigrationSquad.installCopilotChat)",
+            "description": "The agent uses slash commands inside Copilot Chat (e.g. `/assess-any-application`). If you already have Copilot Chat installed, this step auto-completes.\n[Install Copilot Chat](command:azureMigrationSquad.installCopilotChat)",
             "media": {
               "image": "media/walkthroughs/step-2-copilot.png",
               "altText": "Install GitHub Copilot Chat extension"
@@ -118,11 +118,11 @@
           },
           {
             "id": "discovery",
-            "title": "Start the main path — /Phase1-PlanAndAssess",
-            "description": "Phase 1 interviews you about source, stack, workload, data, and integrations, produces the assessment report + Decisions-Required, and lets you run Phases 2-6 next.\n[Start main path](command:azureMigrationSquad.openMainPath)",
+            "title": "Start the main path — /assess-any-application",
+            "description": "Step 1 of the main path is Discovery. Interviews you about source, stack, workload, data, and integrations; produces the Capability Matrix that /Phase1-Plan and every subsequent phase consumes.\n[Start main path](command:azureMigrationSquad.openMainPath)",
             "media": {
               "image": "media/walkthroughs/step-3-discovery.png",
-              "altText": "Run /Phase1-PlanAndAssess in Copilot Chat"
+              "altText": "Run /assess-any-application in Copilot Chat"
             },
             "completionEvents": [
               "onCommand:azureMigrationSquad.openMainPath"
@@ -184,13 +184,13 @@
       },
       {
         "command": "azureMigrationSquad.openMainPath",
-        "title": "Start main path (/Phase1-PlanAndAssess)",
+        "title": "Start main path (/assess-any-application)",
         "category": "Azure Migration",
         "icon": "$(play)"
       },
       {
         "command": "azureMigrationSquad.openDiscovery",
-        "title": "Open Discovery add-on (/assess-any-application)",
+        "title": "Open Discovery (/assess-any-application)",
         "category": "Azure Migration",
         "icon": "$(search)"
       },

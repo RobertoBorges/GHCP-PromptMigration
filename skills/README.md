@@ -46,18 +46,18 @@ This `skills/` folder is the **REFERENCE catalog** for broader knowledge, traini
 
 | Skill | Description | Typical migration phases if promoted to `.github/skills/` |
 |---|---|---|
-| **★** `skills/dotnet-framework-to-dotnet8.md` | .NET Framework to .NET 8 migration patterns | `QuickAssessment`, `Phase1-PlanAndAssess`, `Phase2-MigrateCode` |
-| **★** `skills/wcf-to-rest-api.md` | WCF contracts and hosting mapped to ASP.NET Core REST APIs | `QuickAssessment`, `Phase1-PlanAndAssess`, `Phase2-MigrateCode` |
-| `skills/webforms-to-razor.md` | Web Forms and ASPX modernization guidance | `QuickAssessment`, `Phase1-PlanAndAssess`, `Phase2-MigrateCode` |
-| **★** `skills/java8-to-java21.md` | Java 8 to Java 21 and Spring Boot 3 modernization | `QuickAssessment`, `Phase1-PlanAndAssess`, `Phase2-MigrateCode` |
-| `skills/asp-classic-to-dotnet.md` | Classic ASP to .NET 8 modernization strategy | `QuickAssessment`, `Phase1-PlanAndAssess`, `Phase2-MigrateCode` |
-| **★** `skills/config-transformation.md` | `web.config` / `app.config` to `appsettings.json` patterns | `Phase1-PlanAndAssess`, `Phase2-MigrateCode`, `Phase4-DeployToAzure` |
-| `skills/ef-migration.md` | ADO.NET or EF6 to EF Core migration patterns | `Phase1-PlanAndAssess`, `Phase2-MigrateCode`, `DatabaseMigration` |
-| **★** `skills/azure-app-service.md` | App Service hosting and deployment patterns | `Phase1-PlanAndAssess`, `Phase3-GenerateInfra`, `Phase4-DeployToAzure` |
-| `skills/azure-container-apps.md` | Container Apps patterns for APIs and background workloads | `Phase1-PlanAndAssess`, `Phase3-GenerateInfra`, `Phase4-DeployToAzure` |
-| `skills/azure-aks.md` | AKS deployment and Helm chart guidance | `Phase1-PlanAndAssess`, `Phase3-GenerateInfra`, `Phase4-DeployToAzure` |
-| `skills/azure-sql-migration.md` | SQL Server to Azure SQL Database migration guidance | `Phase1-PlanAndAssess`, `Phase3-GenerateInfra`, `DatabaseMigration` |
-| **★** `skills/azure-entra-id.md` | Entra ID authentication and authorization setup | `Phase1-PlanAndAssess`, `Phase2-MigrateCode`, `Phase3-GenerateInfra`, `SecurityHardening` |
+| **★** `skills/dotnet-framework-to-dotnet8.md` | .NET Framework to .NET 8 migration patterns | `QuickAssessment`, `Phase1-Plan`, `Phase2-MigrateCode` |
+| **★** `skills/wcf-to-rest-api.md` | WCF contracts and hosting mapped to ASP.NET Core REST APIs | `QuickAssessment`, `Phase1-Plan`, `Phase2-MigrateCode` |
+| `skills/webforms-to-razor.md` | Web Forms and ASPX modernization guidance | `QuickAssessment`, `Phase1-Plan`, `Phase2-MigrateCode` |
+| **★** `skills/java8-to-java21.md` | Java 8 to Java 21 and Spring Boot 3 modernization | `QuickAssessment`, `Phase1-Plan`, `Phase2-MigrateCode` |
+| `skills/asp-classic-to-dotnet.md` | Classic ASP to .NET 8 modernization strategy | `QuickAssessment`, `Phase1-Plan`, `Phase2-MigrateCode` |
+| **★** `skills/config-transformation.md` | `web.config` / `app.config` to `appsettings.json` patterns | `Phase1-Plan`, `Phase2-MigrateCode`, `Phase4-DeployToAzure` |
+| `skills/ef-migration.md` | ADO.NET or EF6 to EF Core migration patterns | `Phase1-Plan`, `Phase2-MigrateCode`, `DatabaseMigration` |
+| **★** `skills/azure-app-service.md` | App Service hosting and deployment patterns | `Phase1-Plan`, `Phase3-GenerateInfra`, `Phase4-DeployToAzure` |
+| `skills/azure-container-apps.md` | Container Apps patterns for APIs and background workloads | `Phase1-Plan`, `Phase3-GenerateInfra`, `Phase4-DeployToAzure` |
+| `skills/azure-aks.md` | AKS deployment and Helm chart guidance | `Phase1-Plan`, `Phase3-GenerateInfra`, `Phase4-DeployToAzure` |
+| `skills/azure-sql-migration.md` | SQL Server to Azure SQL Database migration guidance | `Phase1-Plan`, `Phase3-GenerateInfra`, `DatabaseMigration` |
+| **★** `skills/azure-entra-id.md` | Entra ID authentication and authorization setup | `Phase1-Plan`, `Phase2-MigrateCode`, `Phase3-GenerateInfra`, `SecurityHardening` |
 | `skills/azure-key-vault.md` | Key Vault integration patterns | `Phase3-GenerateInfra`, `Phase4-DeployToAzure`, `Phase5-SetupCICD`, `SecurityHardening` |
 | `skills/azure-monitor-appinsights.md` | Azure Monitor and Application Insights observability | `Phase3-GenerateInfra`, `Phase4-DeployToAzure`, `Phase6-PostMigrationOps` |
 | **★** `skills/bicep-modules.md` | Bicep module structure and Azure Verified Modules usage | `Phase3-GenerateInfra`, `Phase4-DeployToAzure` |
@@ -69,7 +69,7 @@ This `skills/` folder is the **REFERENCE catalog** for broader knowledge, traini
 | `skills/managed-identity.md` | Managed identity usage patterns | `Phase3-GenerateInfra`, `Phase4-DeployToAzure`, `SecurityHardening` |
 | `skills/rbac-least-privilege.md` | Least-privilege RBAC assignments | `Phase3-GenerateInfra`, `Phase4-DeployToAzure`, `SecurityHardening` |
 | `skills/secret-management.md` | Secret handling, Key Vault, and pipeline secret guidance | `Phase2-MigrateCode`, `Phase3-GenerateInfra`, `Phase5-SetupCICD`, `SecurityHardening` |
-| **★** `skills/migration-report-template.md` | Standard report format for assessment and migration phases | `Phase0-Multi-repo-assessment`, `Phase1-PlanAndAssess`, `GetStatus`, `Phase6-PostMigrationOps` |
+| **★** `skills/migration-report-template.md` | Standard report format for assessment and migration phases | `Phase0-Multi-repo-assessment`, `Phase1-Plan`, `GetStatus`, `Phase6-PostMigrationOps` |
 | `skills/rollback-strategy.md` | Rollback, cutover, and recovery planning patterns | `Phase4-DeployToAzure`, `Phase5-SetupCICD`, `Phase-Rollback` |
 | `skills/cost-optimization.md` | Azure cost optimization patterns for target architecture | `CostOptimization`, `Phase3-GenerateInfra`, `Phase4-DeployToAzure`, `Phase6-PostMigrationOps` |
 

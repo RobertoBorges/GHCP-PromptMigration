@@ -24,7 +24,6 @@ const ADDON_GROUPS: AddonGroup[] = [
     description: 'Alternative entry points',
     iconId: 'search',
     files: [
-      'Assess-Any-Application.prompt.md',
       'Build-Migration-Plan.prompt.md',
       'QuickAssessment.prompt.md',
       'QuickTriage.prompt.md',

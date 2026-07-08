@@ -180,7 +180,7 @@ At the end:
 - State the top 5 blockers and the proposed rewrite waves
 - Call out whether EF Core, Dapper, or hybrid data access is recommended
 - Recommend `/Assess-DotNet-Upgrade` if a shared .NET target platform must be defined for the rewrite
-- Recommend `/Phase1-PlanAndAssess` for broader Azure hosting and cutover planning
+- Recommend `/Phase1-Plan` for broader Azure hosting and cutover planning
 
 ---
 

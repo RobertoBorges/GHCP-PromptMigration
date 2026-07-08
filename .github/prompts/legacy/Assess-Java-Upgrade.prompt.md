@@ -221,7 +221,7 @@ At the end:
 - State the detected Java version and framework plainly
 - State whether Spring Boot 3 + Java 21 is recommended, conditional, or blocked
 - Call out the top 5 blockers for the upgrade
-- Recommend `/Phase1-PlanAndAssess` if broader Azure architecture planning is still needed
+- Recommend `/Phase1-Plan` if broader Azure architecture planning is still needed
 - Recommend `/QuickTriage` if the user wants a fast estate-wide screen before deeper work
 
 ---

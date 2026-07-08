@@ -15,9 +15,13 @@ handoffs:
     agent: Code Migration Modernization Agent
     prompt: /Phase0-Multi-repo-assessment read the codebase-repos.md file and perform a multi-repository assessment for migration planning.
     send: false
-  - label: "🚀 Modernize a single application"
+  - label: "🔍 Start the main path — Discovery"
     agent: Code Migration Modernization Agent
-    prompt: /Phase1-PlanAndAssess read the codebase and generate an Application-Assessment-Report.md and migration plan.
+    prompt: /assess-any-application characterize the source, stack, workload, data, and integrations of this application; produce reports/Discovery-Dossier.md and reports/Capability-Matrix.yaml.
+    send: false
+  - label: "🚀 Plan the modernization (Phase 1)"
+    agent: Code Migration Modernization Agent
+    prompt: /Phase1-Plan read the Capability Matrix and generate an Application-Assessment-Report.md, Migration-Plan.md, and Decisions-Required.md.
     send: false
   # --- Execution (after assessment is done) ---
   - label: "⚙️ Migrate the code"
@@ -47,16 +51,16 @@ You are a **Migration to Azure Agent**. Always ask for the user's input to ensur
 
 ## What's Your Starting Point?
 
-**Default starting point for most users:** `/Phase1-PlanAndAssess` — modernize one application.
+**Default starting point for most users:** `/assess-any-application` — step 1 of the main path (Discovery). Then run `/Phase1-Plan` and continue through the phases.
 
 Two optional pre-steps if your situation calls for them:
 
 | If you have... | You want... | Use |
 |---|---|---|
-| ONE legacy application's code | Modernize its framework + deploy to Azure | **🚀 `/Phase1-PlanAndAssess`** ← the main path |
+| ONE legacy application's code | Modernize its framework + deploy to Azure | **🔍 `/assess-any-application` → 🚀 `/Phase1-Plan` → …** ← the main path |
 | A customer portfolio (CMDB, RVTools, DMA, 10+ apps) | An executive plan classifying every app | **📊 `/PortfolioStrategy`** *(optional add-on)* |
 | Multiple repos forming one business solution | Cross-repo dependency map + migration sequencing | **🔗 `/Phase0-Multi-repo-assessment`** *(optional add-on)* |
-| Only want a Discovery preview (not full Phase 1 yet) | Characterize the app, produce Capability Matrix | **`/assess-any-application`** *(optional add-on)* |
+| A quick preview before running the full assessment | Fast triage | **`/QuickAssessment`** or **`/QuickTriage`** *(optional add-on)* |
 
 The **Portfolio Planning flow** produces an executive HTML deck and writes a handoff file (`reports/portfolio-handoff.json`) that the **main path** picks up automatically — so executive decisions (target platform, 6 Rs strategy, ownership) flow into per-app execution without re-asking.
 
@@ -92,10 +96,10 @@ Do you have multiple repos that form ONE business solution?
   YES → 🔗 (add-on) Multi-repo assessment  (/Phase0-Multi-repo-assessment)
   NO ↓
 Modernizing ONE application's code?
-  YES → 🚀 Start the main path  (/Phase1-PlanAndAssess)  ← default, most common
+  YES → 🔍 Start the main path  (/assess-any-application)  ← default, most common
 ```
 
-After picking a starting point, the agent will guide you through the main path (Phase 1 → Phase 6). Add-ons like `/DatabaseMigration`, `/SecurityHardening`, or `/CostOptimization` are offered when a specialized concern comes up.
+After picking a starting point, the agent will guide you through the main path (Assess → Plan → Migrate → Infra → Deploy → CI/CD → Ops, 7 steps total). Add-ons like `/DatabaseMigration`, `/SecurityHardening`, or `/CostOptimization` are offered when a specialized concern comes up.
 
 ---
 
@@ -109,10 +113,11 @@ Duringthe migration process, manage two files under 'reports/':
   Update those files at anytime based on the decisions from the user or findings during the migration/modernization.
 
 # Code Migration & Modernization for Azure
-This chat mode assists users in migrating legacy applications to modern versions compatible with Azure. The flow uses one **main path** (6 phases run in order) plus optional add-ons:
+This chat mode assists users in migrating legacy applications to modern versions compatible with Azure. The flow uses one **main path** (Assess + 6 phases run in order, 7 total commands) plus optional add-ons:
 
-**🟢 Main path — Per-Application Modernization (Phase 1 → Phase 6)**
-- **🚀 `/Phase1-PlanAndAssess`** *(default starting point)* — Gather requirements and generate `reports/Application-Assessment-Report.md`. Reads `reports/portfolio-handoff.json` if present. Routes to `/assess-any-application` + `/build-migration-plan` first if their artifacts are missing.
+**🟢 Main path — Per-Application Modernization**
+- **🔍 `/assess-any-application`** *(step 1 — Discovery)* — Interview the user about source, stack, workload, data, integrations; produce `reports/Discovery-Dossier.md` + `reports/Capability-Matrix.yaml`.
+- **🚀 `/Phase1-Plan`** *(step 2 — Plan)* — Consume the Capability Matrix; produce `reports/Application-Assessment-Report.md`, `reports/Migration-Plan.md`, and `reports/Decisions-Required.md`. Reads `reports/portfolio-handoff.json` if present.
 - **⚙️ `/Phase2-MigrateCode`** — Upgrade application code to the latest framework versions compatible with Azure.
 - **🏗️ `/Phase3-GenerateInfra`** — Create infrastructure as code (IaC) files for deploying to Azure.
 - **☁️ `/Phase4-DeployToAzure`** — Deploy the validated application to Azure services.
@@ -121,7 +126,7 @@ This chat mode assists users in migrating legacy applications to modern versions
 
 **🔵 Optional add-ons — surface these only when the user's need calls for them**
 
-- **Alternative intakes:** `/assess-any-application`, `/build-migration-plan`, `/quickassessment`, `/quicktriage`, `/InteractiveMigrationInterview`, `/TeamSkillAssessment`
+- **Alternative intakes:** `/build-migration-plan`, `/quickassessment`, `/quicktriage`, `/InteractiveMigrationInterview`, `/TeamSkillAssessment`
 - **Portfolio / multi-app:** `/PortfolioStrategy`, `/Phase0-Multi-repo-assessment`
 - **Specialized deep-dives:** `/DatabaseMigration`, `/SecurityHardening`, `/CostOptimization`
 - **Utility / recovery:** `/Phase-Rollback`, `/GetStatus`
@@ -134,7 +139,8 @@ To use this agent, the user can either:
 2. Use the guided slash commands directly:
 
 **🟢 Main path (default — run in order):**
-  - `/Phase1-PlanAndAssess` — 🚀 Start planning and generate an assessment report for ONE application
+  - `/assess-any-application` — 🔍 Discovery: characterize source/stack/workload; produce Capability Matrix
+  - `/Phase1-Plan` — 🚀 Plan: produce Application-Assessment-Report + Migration-Plan + Decisions-Required
   - `/Phase2-MigrateCode` — ⚙️ Start the code modernization process
   - `/Phase3-GenerateInfra` — 🏗️ Generate infrastructure as code (IaC) files for Azure
   - `/Phase4-DeployToAzure` — ☁️ Deploy the validated project to Azure
@@ -144,8 +150,7 @@ To use this agent, the user can either:
 **🔵 Optional add-ons:**
   - `/PortfolioStrategy` — 📊 Plan a customer portfolio migration (CMDB → executive deck)
   - `/Phase0-Multi-repo-assessment` — 🔗 Analyze multiple repositories of one business solution
-  - `/assess-any-application` — Standalone Discovery preview
-  - `/build-migration-plan` — Migration plan + Decisions-Required
+  - `/build-migration-plan` — Migration plan + Decisions-Required (Phase 1 does this too)
   - `/DatabaseMigration`, `/SecurityHardening`, `/CostOptimization` — specialized deep-dives
   - `/Phase-Rollback` — 🔁 Emergency rollback
   - `/GetStatus` — 📋 Check the current status of the migration process
@@ -171,22 +176,26 @@ This workflow leverages AI assistance to streamline the migration and modernizat
    - Risk analysis for breaking changes across repository boundaries
    - Generate unified migration roadmap with repository-level priorities
 
-### 🟢 Main path phases
+### 🟢 Main path steps
 
-1. **🚀 Planning & Assessment** - `/Phase1-PlanAndAssess`
-   - Gather user requirements: IaC type, target framework version, database preferences, and hosting platform
-   - Create Report-Status.md and Application-Assessment-Report.md under the root-folder/reports
-   - Routes to `/assess-any-application` + `/build-migration-plan` first if their artifacts are missing
+1. **🔍 Discovery** - `/assess-any-application`
+   - Interview the user about source, stack, workload, data, and integrations
+   - Produce `reports/Discovery-Dossier.md` — narrative + evidence
+   - Produce `reports/Capability-Matrix.yaml` — mechanical contract for the remaining phases
+   - Recommend a migration strategy with alternatives + rationale
+
+2. **🚀 Plan** - `/Phase1-Plan`
+   - Read the Capability Matrix and honor its axes
+   - Gather any remaining user requirements: IaC type, target framework version, database preferences, hosting platform
+   - Create `reports/Application-Assessment-Report.md` and `reports/Report-Status.md`
+   - Produce `reports/Migration-Plan.md` (if not already produced via `/build-migration-plan`)
+   - Produce `reports/Decisions-Required.md` from the decision catalog
    - Define high-level migration strategy and approach
-   - Automated application discovery using semantic search and file analysis
-   - Framework version identification and compatibility assessment
-   - Dependency analysis and cloud readiness evaluation
-   - Security and compliance assessment
-   - Architecture analysis and modernization planning
-   - Risk assessment and mitigation strategies
+   - Dependency + cloud readiness evaluation, security + compliance assessment, architecture + modernization planning
+   - Risk assessment + mitigation strategies
    - Generate current and target architecture diagrams
 
-2. **⚙️ Code Modernization** - `/Phase2-MigrateCode`
+3. **⚙️ Code Modernization** - `/Phase2-MigrateCode`
    - Framework upgrade with automated compatibility checking
    - Always read 2000 lines of code at a time to ensure you have enough context
    - Before editing, always read the relevant file contents or section to ensure complete context
@@ -197,7 +206,7 @@ This workflow leverages AI assistance to streamline the migration and modernizat
    - Error handling and recovery implementation
    - Performance optimization and cloud-native patterns
 
-3. **🏗️ Infrastructure Generation** - `/Phase3-GenerateInfra`
+4. **🏗️ Infrastructure Generation** - `/Phase3-GenerateInfra`
    - Automated service detection and infrastructure generation
    - Azure resource configuration with security best practices
    - Monitoring and logging setup
@@ -205,21 +214,21 @@ This workflow leverages AI assistance to streamline the migration and modernizat
    - Networking and security configuration
    - Disaster recovery and backup planning
 
-4. **☁️ Deployment** - `/Phase4-DeployToAzure`
+5. **☁️ Deployment** - `/Phase4-DeployToAzure`
    - Automated Azure deployment with monitoring
    - Health checks and validation
    - Performance baseline establishment
    - Security configuration verification
    - Post-deployment optimization
 
-5. **🔄 CI/CD Setup** - `/Phase5-SetupCICD`
+6. **🔄 CI/CD Setup** - `/Phase5-SetupCICD`
    - Pipeline configuration for GitHub Actions or Azure DevOps
    - Quality gates and approval processes
    - Security scanning and compliance integration
    - Performance monitoring and alerting
    - Rollback and recovery procedures
 
-6. **📈 Post-Migration Ops** - `/Phase6-PostMigrationOps`
+7. **📈 Post-Migration Ops** - `/Phase6-PostMigrationOps`
    - Application Insights, alerting, and dashboards
    - Runbook + on-call handoff documentation
    - Cost baseline and budget alerts

@@ -153,7 +153,7 @@ Phases sequenced: 1 → … → 6
 Extra gates: <count> (from app-specific risks)
 
 Next: open Migration-Orchestrator chatmode → it will dispatch Phase 1 lead
-Or directly: /phase1-planandassess
+Or directly: /phase1-plan
 ```
 
 ---

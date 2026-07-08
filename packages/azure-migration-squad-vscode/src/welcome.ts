@@ -226,12 +226,13 @@ function renderWelcomeHtml(): string {
     </div>
   </div>
 
-  <h2>Your first migration in 6 phases</h2>
+  <h2>Your first migration in 7 steps</h2>
   <p style="opacity: 0.85; margin-top: -6px;">The main path. Run these in order in Copilot Chat.</p>
   <ol>
     <li><strong>Click "Initialize in this workspace"</strong> above — drops <code>.github/agents/</code>, <code>.github/prompts/</code>, <code>.github/skills/</code>, etc. into your project.</li>
     <li><strong>Open GitHub Copilot Chat</strong> (<kbd>Ctrl+Alt+I</kbd>). If you don't have it, click "Install GitHub Copilot Chat" above.</li>
-    <li><strong><code>/Phase1-PlanAndAssess</code></strong> — interview + assessment report + <code>Decisions-Required.md</code></li>
+    <li><strong><code>/assess-any-application</code></strong> — 🔍 Discovery: characterize source/stack/workload; produce Capability Matrix</li>
+    <li><strong><code>/Phase1-Plan</code></strong> — 🚀 Plan: produce Application-Assessment-Report + Migration-Plan + Decisions-Required</li>
     <li><strong><code>/Phase2-MigrateCode</code></strong> — modernize the code to your chosen target</li>
     <li><strong><code>/Phase3-GenerateInfra</code></strong> — Bicep or Terraform for Azure</li>
     <li><strong><code>/Phase4-DeployToAzure</code></strong> — deploy via Azure Developer CLI (azd)</li>
@@ -243,7 +244,7 @@ function renderWelcomeHtml(): string {
   <h2>Optional add-ons</h2>
   <p style="opacity: 0.85; margin-top: -6px;">Not part of the default flow — surface only when you need one.</p>
   <ul>
-    <li><strong>Alternative intakes:</strong> <code>/assess-any-application</code>, <code>/build-migration-plan</code>, <code>/QuickAssessment</code>, <code>/QuickTriage</code>, <code>/InteractiveMigrationInterview</code>, <code>/TeamSkillAssessment</code></li>
+    <li><strong>Alternative intakes:</strong> <code>/build-migration-plan</code>, <code>/QuickAssessment</code>, <code>/QuickTriage</code>, <code>/InteractiveMigrationInterview</code>, <code>/TeamSkillAssessment</code></li>
     <li><strong>Portfolio / multi-app:</strong> <code>/PortfolioStrategy</code>, <code>/Phase0-Multi-repo-assessment</code></li>
     <li><strong>Specialized deep-dives:</strong> <code>/DatabaseMigration</code>, <code>/SecurityHardening</code>, <code>/CostOptimization</code></li>
     <li><strong>Utility / recovery:</strong> <code>/Phase-Rollback</code>, <code>/GetStatus</code></li>

@@ -105,4 +105,4 @@ This keeps the active context window lean even though the full skill has substan
 - Slash command → [.github/prompts/PortfolioStrategy.prompt.md](../../prompts/PortfolioStrategy.prompt.md)
 - Enforcement hook → [.github/hooks/customer-data-isolation.json](../../hooks/customer-data-isolation.json)
 - Context injection hook → [.github/hooks/scripts/load-migration-state.ps1](../../hooks/scripts/load-migration-state.ps1)
-- Per-app modernization → [.github/prompts/Phase1-PlanAndAssess.prompt.md](../../prompts/Phase1-PlanAndAssess.prompt.md)
+- Per-app modernization → [.github/prompts/Phase1-Plan.prompt.md](../../prompts/Phase1-Plan.prompt.md)
