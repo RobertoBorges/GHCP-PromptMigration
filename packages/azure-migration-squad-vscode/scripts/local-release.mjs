@@ -109,7 +109,10 @@ ${BLUE}docs/publishing-vscode-extension.md${RESET}.
 }
 
 function run(cmd, opts = {}) {
-  return execSync(cmd, { encoding: 'utf-8', cwd: monorepoRoot, ...opts }).trim();
+  const result = execSync(cmd, { encoding: 'utf-8', cwd: monorepoRoot, ...opts });
+  // When stdio is 'inherit', execSync returns null (output goes straight to
+  // the terminal, nothing is captured). Only .trim() the string case.
+  return typeof result === 'string' ? result.trim() : '';
 }
 
 function safeRun(cmd) {
