@@ -147,6 +147,7 @@ Read [`.github/hooks/decision-gates.md`](./hooks/decision-gates.md) for the orch
 
 ### Documentation
 - Track migration progress in `reports/Report-Status.md`
+- **Append an Action Log entry** to `reports/Report-Status.md` after every meaningful action (phase transition, artifact production, decision, gate event, user input, rollback). Format spec: [`.github/skills/action-log-format.md`](./skills/action-log-format.md). The Action Log is the migration's **trace memory** — it's what allows a new session to recover if the previous session was lost.
 - Generate assessment artifacts in `reports/Discovery-Dossier.md` + `reports/Capability-Matrix.yaml`
 - Generate per-application reports in `reports/Application-Assessment-Report.md`
 - Use Mermaid diagrams for architecture visualization

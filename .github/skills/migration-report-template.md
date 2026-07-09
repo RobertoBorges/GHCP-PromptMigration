@@ -110,8 +110,8 @@ graph TD
 
 | Phase | Status | Notes |
 |---|---|---|
-| Phase 0 - Multi-repo assessment | Not started | |
-| Phase 1 - Planning & assessment | In progress | |
+| Assess (Discovery) | Not started | |
+| Phase 1 - Plan | Not started | |
 | Phase 2 - Code migration | Not started | |
 | Phase 3 - Infrastructure generation | Not started | |
 | Phase 4 - Deployment | Not started | |
@@ -128,7 +128,17 @@ graph TD
 -
 
 ## Recommended next command
-- `/phase2-migratecode`
+- `/assess-any-application`
+
+## 📜 Action Log
+
+<!--
+Every prompt, hook, and agent appends one line per meaningful action.
+Format: - <ISO-8601-UTC> | actor=<name> | action=<verb-phrase> | files=<+~-> | tokens=~<bucket> | turn=<n> | notes="<free text>"
+See .github/skills/action-log-format.md for the full spec.
+-->
+
+- 2026-05-28T14:30Z | actor=hook | action=session-started | tokens=~0 | turn=0 | notes="new session"
 ```
 
 ## Report writing checklist
@@ -147,3 +157,4 @@ Every generated report should answer these questions:
 - Preserve prior useful sections when updating existing reports.
 - Prefer additive updates over rewriting history unless the report is explicitly being regenerated.
 - Reference the next phase command by name.
+- **Append an Action Log entry** to `reports/Report-Status.md` for every meaningful action — see [`action-log-format.md`](./action-log-format.md).
