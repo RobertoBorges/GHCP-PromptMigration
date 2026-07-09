@@ -101,7 +101,7 @@ Or use the sidebar: rocket icon 🚀 in the Activity Bar shows Agent, Main path,
 | Problem | Fix |
 |---------|-----|
 | Slash commands don't show in Copilot Chat | **Reload VS Code window** (`Ctrl+Shift+P` → "Developer: Reload Window") |
-| Status bar shows "AMS: N/M decisions pending" | Open `reports/Decisions-Required.md` and answer each PENDING decision |
+| Status bar shows "AMA: N/M decisions pending" | Open `reports/Decisions-Required.md` and answer each PENDING decision |
 | `/Phase1-Plan` tells me it can't find a Discovery Dossier | Run `/assess-any-application` first (that's step 1 of the main path) |
 | "Unknown command" in Copilot CLI | Copilot CLI doesn't auto-register slash commands. Type the request in natural language: *"assess this application"* / *"plan this migration"* |
 | Want to start over | Delete `.github/agents/`, `.github/prompts/`, `.github/skills/`, `.github/chatmodes/`, `.github/hooks/`, `.github/copilot-instructions.md`, `MIGRATION-START-HERE.md` and re-run Initialize |

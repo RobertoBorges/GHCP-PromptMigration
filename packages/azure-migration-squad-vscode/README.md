@@ -38,7 +38,7 @@ PROMPTS                       ← 19 slash commands
 SKILLS                        ← 113 adapters & patterns
 ```
 
-The **status bar** (bottom-left) shows your current migration phase, or **"⚠ AMS: N/M decisions pending"** with a warning background when you have unanswered architecture decisions.
+The **status bar** (bottom-left) shows your current migration phase, or **"⚠ AMA: N/M decisions pending"** with a warning background when you have unanswered architecture decisions.
 
 ## Supported tech
 

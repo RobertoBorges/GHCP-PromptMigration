@@ -79,7 +79,7 @@ Phase 1 reads the Capability Matrix and produces:
 
 Open `reports/Decisions-Required.md`. For each decision (Target framework, Database engine, Hosting platform, IaC tool, etc.), the agent shows options + tradeoffs. Pick one and fill in your rationale.
 
-The **status bar** (bottom-left) shows **"⚠ AMS: N/M decisions pending"** with a warning background until all are answered.
+The **status bar** (bottom-left) shows **"⚠ AMA: N/M decisions pending"** with a warning background until all are answered.
 
 The **🛑 Decisions Required tree view** in the sidebar (rocket icon 🚀 in the Activity Bar) shows each decision's status. Click any entry to jump to that section of the file.
 
@@ -128,7 +128,7 @@ These are **not part of the default flow**. Use them when you need a specific sp
 |---------|-----|
 | Slash commands don't show in Copilot Chat | **Reload VS Code window** (`Ctrl+Shift+P` → "Developer: Reload Window") |
 | Welcome notification keeps showing every time | Click **"Don't show again"** — it persists per workspace |
-| Status bar shows "AMS: N/M decisions pending" | Open `reports/Decisions-Required.md` and answer each PENDING decision |
+| Status bar shows "AMA: N/M decisions pending" | Open `reports/Decisions-Required.md` and answer each PENDING decision |
 | Sidebar shows "Click to install Azure Migration Agent here" | Click the entry — it runs Initialize |
 | Tree views are empty after init | Reload VS Code window OR click the refresh button on each tree title |
 

@@ -1,5 +1,5 @@
 /**
- * Base class for the AMS tree providers (Agents, Prompts, Skills).
+ * Base class for the AMA tree providers (Agents, Prompts, Add-ons).
  * Each subclass declares where its content lives and produces TreeItems.
  */
 
