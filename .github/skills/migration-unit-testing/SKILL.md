@@ -14,7 +14,7 @@ Use this skill when creating unit tests to validate migrated applications work c
 ## When to Use This Skill
 
 - Creating tests to validate migration correctness
-- Building test suites for migrated .NET or Java applications
+- Building test suites for migrated applications of any stack (`.NET`, `Java`, `Python`, `Node.js`, `PHP`, `Ruby`, `Go`, etc.). This skill ships worked examples for .NET and Java; adapt the same patterns to other stacks using their idiomatic test frameworks (pytest for Python, jest/vitest for Node, phpunit for PHP, rspec for Ruby, testing package for Go, etc.).
 - Implementing equivalence testing (old vs new behavior)
 - Setting up mocking for external dependencies
 - Creating regression tests for business logic

@@ -52,7 +52,7 @@ The agent **does not decide major architecture on your behalf**. It surfaces opt
 
 | When | What the agent does |
 |------|---------------------|
-| Target framework version unclear | Posts options (.NET 8 vs 10, Java 17 vs 21, etc.) with tradeoffs, waits for your pick |
+| Target framework version unclear | Posts options (.NET 8 vs 10, Java 17 vs 21, Python 3.11 vs 3.12, Node 20 vs 22 LTS, PHP 8.2 vs 8.3, etc.) with tradeoffs, waits for your pick |
 | Database engine unclear | Posts options (Azure SQL, PostgreSQL, Cosmos, etc.), waits |
 | Hosting platform unclear | Posts options (App Service, Container Apps, AKS, Functions), waits |
 | IaC tool unclear | Posts options (Bicep, Terraform, ARM, Pulumi), waits |

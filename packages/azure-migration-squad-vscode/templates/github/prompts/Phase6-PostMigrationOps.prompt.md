@@ -86,7 +86,7 @@ Use this prompt after the application has been deployed to Azure and basic deplo
 ## Preconditions
 Before starting, confirm or infer the following from the repository and `reports/` folder:
 - Target Azure hosting platform (App Service, Azure Container Apps, or AKS)
-- Application type and runtime (.NET, Java, Node.js, or mixed)
+- Application stack and runtime (from `Capability-Matrix.stack.primary_stack` — e.g., dotnet, java, python, nodejs, php, ruby, go, etc.)
 - Deployment outputs, endpoints, and environment names
 - Monitoring resources already provisioned (Application Insights, Log Analytics, Azure Monitor)
 - Security controls already configured (managed identities, Key Vault, network controls)
@@ -116,9 +116,24 @@ If this information is incomplete, ask targeted follow-up questions before makin
 - Check for noisy telemetry and sampling gaps.
 
 ### 2.2 Instrumentation Expectations
-- For .NET, verify `ILogger`, OpenTelemetry, and Application Insights SDK configuration.
-- For Java, verify SLF4J/OpenTelemetry/Application Insights integration.
-- For containerized workloads, confirm stdout/stderr logs and platform diagnostics are connected to Azure Monitor or Log Analytics.
+
+For each stack in `Capability-Matrix.stack.primary_stack` (and `.stack.secondary_stacks`), verify observability wiring is in place. Only load the rows that apply — don't ask about instrumentation for stacks not in the matrix.
+
+| Stack | What to verify |
+|-------|----------------|
+| `dotnet` | `ILogger`, OpenTelemetry .NET SDK, `Microsoft.ApplicationInsights.AspNetCore` (or the OTLP exporter to Application Insights) |
+| `java` | SLF4J + Logback / Log4j2, OpenTelemetry Java agent auto-instrumentation OR `applicationinsights-agent-*.jar` attached to JVM |
+| `python` | `logging` module configured to stdout/stderr, `opentelemetry-instrumentation-*` packages, `azure-monitor-opentelemetry` (or OTLP exporter to Application Insights) |
+| `nodejs` | `winston` / `pino` writing JSON to stdout, `@azure/monitor-opentelemetry` (or `applicationinsights` SDK) |
+| `php` | `Monolog` writing to stdout, PHP OpenTelemetry SDK (or per-request Application Insights REST push) |
+| `ruby` | `Rails.logger` / `Lograge` for JSON logs, OpenTelemetry Ruby SDK OR `applicationinsights` gem |
+| `go` | `slog` / `zap` / `logrus` JSON logs, `go.opentelemetry.io/otel` with OTLP exporter |
+| `perl` | `Log::Log4perl` writing structured logs to stdout; Application Insights via REST push if available |
+| `rust` | `tracing` + `tracing-opentelemetry` with OTLP exporter |
+| `cobol-mainframe` | Vendor-emitted job/step logs shipped to Log Analytics via Diagnostic Settings on the AKS/App Service layer |
+| Other / unknown | Confirm the app writes to stdout/stderr (containerized) OR to files that Diagnostic Settings can ship to Log Analytics |
+
+For **containerized workloads** of any stack, confirm stdout/stderr logs and platform diagnostics are connected to Azure Monitor / Log Analytics via the Container Apps / AKS / App Service diagnostic settings.
 
 ### 2.3 Dashboard and Workbook Creation
 Define a production-ready dashboard or workbook that includes:

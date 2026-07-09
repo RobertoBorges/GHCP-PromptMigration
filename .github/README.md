@@ -1,6 +1,6 @@
 # GitHub Copilot Customization for Azure Migration
 
-This folder contains VS Code GitHub Copilot customization files for the **Code Migration Modernization Agent** - a guided workflow for migrating legacy .NET and Java applications to Azure.
+This folder contains VS Code GitHub Copilot customization files for the **Code Migration Modernization Agent** — a guided workflow for migrating any legacy application (any language, any source environment) to Azure.
 
 ## 📁 Folder Structure
 

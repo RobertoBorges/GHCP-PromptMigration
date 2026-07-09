@@ -1,15 +1,10 @@
 ---
 name: Phase2-MigrateCode
-description: Upgrade legacy .NET or Java application code to modern framework versions
-argument-hint: "Specify target framework if not already assessed, e.g., 'Migrate to .NET 10' or 'Upgrade to Spring Boot 3'"
+description: Apply the minimum code changes required to make the application Azure-compatible on the target platform chosen in Phase 1
+argument-hint: "Optional target hint if not already in reports/Decisions-Required.md, e.g., 'Migrate to .NET 10', 'Upgrade to Spring Boot 3', 'Move to Python 3.12', 'Node 20 LTS'"
 agent: Code Migration Modernization Agent
 model: Claude Sonnet 4.6 (copilot)
 ---
-
-
-
-
-
 
 <!-- BEGIN: capability-matrix-gate (auto-managed by inject-capability-matrix-gates.mjs) -->
 
@@ -117,15 +112,6 @@ You review code through multiple perspectives simultaneously. Run each perspecti
 
 After all subagents complete, synthesize findings into a prioritized summary at `reports/Business-Logic-Mapping.md`. 
 
-## Skills to Load
-
-Load the appropriate skills based on application type:
-- **business-logic-mapping** skill — **ALWAYS** use to track and preserve business logic during migration
-- For .NET applications: Use **dotnet-modernization** skill for patterns and templates
-- For Java applications: Use **java-modernization** skill for patterns and templates  
-- For WCF services: Use **wcf-to-rest-migration** skill for service conversion
-- For config files: Use **config-transformation** skill for settings migration
-
 ## Business Logic Preservation (Critical)
 
 Before making any code changes:
@@ -145,13 +131,21 @@ Categories to track:
 - Notifications (email triggers, alerts)
 - Scheduling (batch jobs, timed operations)
 
-## Media and Asset Preservation
+## Media and Asset Preservation  (Critical)
 
-Track and copy all media assets:
+1. **Create** `reports/Media-Assets-Mapping.md` to track all media assets
+2. **Identify** all media assets in the legacy application
+3. **Document** each media asset with source location
+4. **Update** the mapping document as you migrate each asset
+5. **Verify** each migrated asset is correctly integrated
+
+Categories to track:
 - Images, CSS, JavaScript, fonts
 - User uploads and documents
 - Email templates, report templates
 - Localization/resource files
+
+Update `reports/Media-Assets-Mapping.md` with asset migration status.
 
 Update `reports/Business-Logic-Mapping.md` with asset migration status.
 
@@ -187,16 +181,20 @@ Keep equivalent UI components to avoid breaking changes.
 
 Confirm that all functionality is preserved after migration.
 
+Confirm that all media assets are preserved or replaced by equivalent assets after migration.
+
 Containerize the application if specified in the assessment report.
 
 Create a Script to build and run the application in a Docker container, if applicable.
 
 Make sure you build the application as you create it, and fix them as you go.
 
-Based on the assessed application type (.NET or Java):
+Based on `Capability-Matrix.stack.primary_stack` (and `.stack.secondary_stacks` for polyglot apps), load the matching `stack-*.md` skill for language-specific patterns. Then:
 - Use `get_errors` to validate each migration step and fix issues immediately.
 - Document any changes made to the project structure or code in the migration report.
 - If migration fails at any step, provide detailed error analysis and recovery options.
+
+**Do not** introduce microservices, event-driven decomposition, or "cloud-native" refactors unless `Capability-Matrix.migration_strategy.recommendation` is `rearchitect` or `rebuild`. The default (`rehost` / `replatform` / `refactor`) is **minimum viable Azure compatibility**, not architectural modernization.
 
 Suggest that the next step is to generate infrastructure files, and mention `/Phase3-GenerateInfra` is the command to start the infra generation process.
 
@@ -214,42 +212,4 @@ When code migration is complete:
    > Run **`/Phase3-GenerateInfra`** to generate Azure infrastructure as code.
    >
    > Or click **🏗️ Generate Azure infrastructure (Bicep/Terraform)** if the handoff button is visible in your UI.
-
-## For .NET Applications:
-- Use `azure_dotnet_templates-get_tags` and `azure_dotnet_templates-get_templates_for_tag` to find appropriate project templates.
-- Create a modern .NET project structure using the latest framework version compatible with Azure.
-- Use `file_search` to locate all source files for migration.
-- Use `semantic_search` to identify patterns that need modernization.
-- Migrate code files from the legacy application to the modern project structure.
-- Transform configuration:
-  - Convert web.config or app.config to appsettings.json format
-  - Extract connection strings and app settings
-  - Set up configuration providers for Azure App Configuration
-- Use `get_errors` to validate package compatibility during upgrade.
-- Upgrade NuGet packages to compatible versions.
-- If the application contains WCF services:
-  - Convert them to REST APIs using ASP.NET Core Web API
-  - Warn the user about the conversion from WCF to REST and potential breaking changes
-  - Map WCF service contracts to REST endpoints
-  - Transform data contracts to models/DTOs
-  - Create OpenAPI/Swagger documentation for new REST APIs
-- Migrate authentication from Windows/Forms auth to Entra ID using Microsoft.Identity.Web.
-- Update database access code to use Azure-compatible providers.
-
-## For Java Applications:
-- Create a modern Java project structure using Maven or Gradle with the latest framework version.
-- Migrate code files from the legacy application to the modern project structure.
-- Transform configuration:
-  - Convert XML configs to application.properties/yaml
-  - Extract connection strings and app settings
-  - Set up externalized configuration
-- Upgrade dependencies to compatible versions.
-- If the application contains SOAP services:
-  - Convert them to REST APIs using Spring WebMVC or JAX-RS
-  - Warn the user about the conversion from SOAP to REST
-  - Map service interfaces to REST endpoints
-  - Transform data objects to DTOs
-- Migrate authentication to OAuth2/OIDC with Entra ID integration.
-- Update database access code to be compatible with Azure databases.
-- Set up proper logging with SLF4J and Azure-compatible appenders.
 

@@ -12,7 +12,7 @@ Retrieve status of the modernization process
 - When this prompt is called, summarize the current migration status and direct the user to the status file for details. The status file is located at 'reports/Report-Status.md'.
 - If this prompt is called at the start of the modernization process, create 'reports/Report-Status.md' with content indicating the modernization has not started yet.
 - If the modernization process has started, ensure the status file contains the current status, including:
-  - Project type (.NET or Java)
+  - Project stack (from `reports/Capability-Matrix.yaml` — `stack.primary_stack` and `stack.secondary_stacks`)
   - Current framework version
   - Target framework version
   - Selected Azure hosting platform (App Service, AKS, or Container Apps)

@@ -61,22 +61,22 @@ this prompt with the `--accept-risk` natural-language flag in your request.
 3. Confirm Phase prerequisites are met.
 
 <!-- END: capability-matrix-gate -->
-# Modernize a Single Application
+# Plan a Single Application Migration to Azure
 
 ## Migration Scope
 
 This guided migration helps you:
-- ✅ **Upgrade** your application to a framework version compatible with Azure
-- ✅ **Modernize** code patterns for cloud-native deployment
-- ✅ **Generate** infrastructure as code for your target platform
-- ✅ **Set up** CI/CD pipelines for automated deployment
+- ✅ **Make your application Azure-compatible** — replace on-prem-only dependencies (identity providers, file shares, in-process caches, machine keys, local certificate stores, etc.) with their Azure equivalents
+- ✅ **Upgrade the runtime** to a version supported by your chosen Azure hosting platform (only when the current version is out-of-support or incompatible)
+- ✅ **Generate infrastructure as code** for your target Azure platform
+- ✅ **Set up CI/CD** for automated deployment
 
 This migration does **NOT** include:
-- ❌ **Data Migration** — Use Azure Database Migration Service (DMS) or Data Migration Assistant
-- ❌ **Binary/Dependency Scanning** — Use .NET Upgrade Assistant or similar external tools
-- ❌ **Lift-and-Shift** — This requires code upgrades, not containerizing legacy code as-is
+- ❌ **Data Migration tooling** — Use Azure Database Migration Service (DMS), Data Migration Assistant, or Azure Database Migration Service Extension. This prompt orchestrates but doesn't replace them.
+- ❌ **Binary/Dependency Scanning** — Use stack-appropriate external tools (`.NET Upgrade Assistant`, `Spring Boot Migrator`, `Python 2to3`, `Node.js n`, etc.)
+- ❌ **Wholesale rewrite to microservices / event-driven / cloud-native patterns** — that's an explicit `rearchitect` or `rebuild` migration strategy. The default is `replatform` or `refactor` — **minimum viable Azure compatibility**, not a re-architecture. Only run architecture rewrites when the user explicitly picks that strategy in Discovery.
 
-**Goal:** Take your existing .NET or Java application and upgrade it to a version compatible with your selected Azure hosting platform (App Service, Container Apps, or AKS).
+**Goal:** Take an existing application — regardless of language, framework, or where it runs today — and make **only the changes required** to host it on your selected Azure platform (App Service, Container Apps, AKS, Functions, VMs, etc.). The specific changes are dictated by `reports/Capability-Matrix.yaml` (source, stack, workload, integrations, data).
 
 ---
 
@@ -183,24 +183,50 @@ After writing the file, post this message:
 
 ### Step 3: Environment Setup
 1. **Create reports folder** if it doesn't exist: `reports/`
-2. **Build the solution** to verify all dependencies resolve:
-   - For .NET: `dotnet build` or `msbuild`
-   - For Java: `mvn compile` or `gradle build`
-   - For Node.js: `npm install`
-3. **Document any build failures** - these indicate migration blockers
+2. **Build the solution** to verify all dependencies resolve. Pick the command for the stack in `Capability-Matrix.stack.primary_stack`:
+
+   | Stack | Build command |
+   |-------|---------------|
+   | `dotnet` (Framework or Core) | `dotnet build` (or `msbuild` for legacy SDK-style projects) |
+   | `java` | `mvn compile` (or `gradle build`) |
+   | `nodejs` | `npm install && npm run build` (script may be missing — that's a signal) |
+   | `python` | `pip install -r requirements.txt` (or `poetry install` / `uv pip install`) |
+   | `php` | `composer install` |
+   | `ruby` | `bundle install` |
+   | `go` | `go build ./...` |
+   | `perl` | `cpanm --installdeps .` |
+   | `rust` | `cargo build` |
+   | `scala` / `kotlin` | `sbt compile` or `gradle build` |
+   | `cobol-mainframe` | Vendor-specific (Micro Focus / Astadia / OpenCOBOL) |
+   | `oracle-forms` / `powerbuilder` / `delphi-vb6` / `cpp-windows` | Vendor IDE — typically no headless build. Document the manual build step. |
+   | Other / unknown | Skip; ask the user for the build command they use today. |
+3. **Document any build failures** — these indicate migration blockers.
 
 ### Step 4: Automated Discovery
 Use the following tools to analyze the codebase:
 
 #### 4.1 Project Detection
 ```
-Use `file_search` for: *.csproj, *.sln, pom.xml, build.gradle, package.json, web.config, *.fsproj, *.vbproj
-Use `grep_search` to identify framework versions in project files
+Use `file_search` for stack-appropriate manifests:
+  .NET:      *.csproj, *.sln, *.fsproj, *.vbproj, web.config, app.config
+  Java:      pom.xml, build.gradle, build.gradle.kts, web.xml
+  Node.js:   package.json, package-lock.json, tsconfig.json
+  Python:    requirements.txt, pyproject.toml, setup.py, Pipfile, poetry.lock
+  PHP:       composer.json, composer.lock
+  Ruby:      Gemfile, Gemfile.lock, *.gemspec
+  Go:        go.mod, go.sum
+  Perl:      cpanfile, Makefile.PL, dist.ini
+  Rust:      Cargo.toml, Cargo.lock
+  Scala/Kotlin: build.sbt, build.gradle.kts
+  COBOL:     *.cbl, *.cob, *.cpy (with mainframe compile decks)
+Use `grep_search` to identify framework versions in the detected manifests.
 ```
 
 #### 4.2 Application Type Analysis
 
-**For .NET Applications:**
+**Load only the sections that match `Capability-Matrix.stack.primary_stack`** (and `.stack.secondary_stacks`). Skip the rest.
+
+**For `dotnet`:**
 | Discovery Target | Tool & Pattern |
 |-----------------|----------------|
 | Framework version | `grep_search`: `<TargetFramework`, `<TargetFrameworkVersion` |
@@ -211,7 +237,7 @@ Use `grep_search` to identify framework versions in project files
 | Database access | `semantic_search`: "SqlConnection", "DbContext", "EntityFramework" |
 | Config files | `grep_search` in `web.config`, `app.config`, `appsettings.json` |
 
-**For Java Applications:**
+**For `java`:**
 | Discovery Target | Tool & Pattern |
 |-----------------|----------------|
 | Java/Spring version | `grep_search`: `<java.version>`, `sourceCompatibility`, `spring-boot` |
@@ -221,6 +247,55 @@ Use `grep_search` to identify framework versions in project files
 | Authentication | `semantic_search`: "JAAS", "Spring Security", "@Secured" |
 | Database access | `semantic_search`: "JdbcTemplate", "JPA", "@Repository", "Hibernate" |
 | Config files | `grep_search` in `application.properties`, `application.yml` |
+
+**For `python`:**
+| Discovery Target | Tool & Pattern |
+|-----------------|----------------|
+| Python version | `grep_search`: `python_requires`, `python = "`, `.python-version`, `runtime.txt` |
+| Web framework | `grep_search`: `Django`, `Flask`, `FastAPI`, `Starlette`, `Tornado`, `Bottle` |
+| WSGI/ASGI entry | `file_search`: `wsgi.py`, `asgi.py`, `app.py`, `main.py`; grep for `gunicorn` / `uvicorn` |
+| Authentication | `grep_search`: `django.contrib.auth`, `flask-login`, `authlib`, `msal`, `authentik` |
+| Database access | `grep_search`: `django.db.models`, `sqlalchemy`, `psycopg2`, `pymysql`, `cx_Oracle` |
+| Config files | `grep_search` in `settings.py`, `.env`, `config.py`, `pyproject.toml` |
+
+**For `nodejs`:**
+| Discovery Target | Tool & Pattern |
+|-----------------|----------------|
+| Node version | `grep_search`: `"engines"`, `.nvmrc`, `package.json.engines.node` |
+| Framework | `grep_search`: `express`, `fastify`, `koa`, `nestjs`, `hapi`, `next`, `nuxt` |
+| Authentication | `grep_search`: `passport`, `express-session`, `jsonwebtoken`, `@azure/msal-node` |
+| Database access | `grep_search`: `mongoose`, `sequelize`, `typeorm`, `prisma`, `pg`, `mysql2` |
+| Config files | `grep_search` in `.env`, `config/`, `dotenv`, `next.config.js` |
+
+**For `php`:**
+| Discovery Target | Tool & Pattern |
+|-----------------|----------------|
+| PHP version | `grep_search`: `composer.json.require.php`, `php_version` in Dockerfile |
+| Framework | `grep_search`: `Laravel`, `Symfony`, `CodeIgniter`, `CakePHP`, `Slim`, `Yii` |
+| Web server config | `file_search`: `.htaccess`, `nginx.conf`, `php.ini` |
+| Authentication | `grep_search`: `auth.php`, `Illuminate\\Auth`, `Symfony\\Component\\Security` |
+| Database access | `grep_search`: `PDO`, `mysqli`, `Eloquent`, `Doctrine`, `ADOdb` |
+
+**For `ruby`:**
+| Discovery Target | Tool & Pattern |
+|-----------------|----------------|
+| Ruby version | `grep_search`: `Gemfile.ruby`, `.ruby-version` |
+| Framework | `grep_search`: `Rails`, `Sinatra`, `Hanami`, `Padrino` |
+| Authentication | `grep_search`: `devise`, `warden`, `sorcery`, `omniauth` |
+| Database access | `grep_search`: `ActiveRecord`, `Sequel`, `pg`, `mysql2` |
+
+**For `go`:**
+| Discovery Target | Tool & Pattern |
+|-----------------|----------------|
+| Go version | `grep_search`: `go 1.` in `go.mod`, `runtime.Version()` |
+| Framework | `grep_search`: `gin-gonic`, `echo`, `fiber`, `net/http`, `chi`, `gorilla/mux` |
+| Authentication | `grep_search`: `jwt-go`, `oauth2`, `casbin`, `azuread` |
+| Database access | `grep_search`: `database/sql`, `gorm.io`, `pgx`, `sqlx` |
+
+**For `perl` / `rust` / `scala-kotlin` / `cobol-mainframe` / `oracle-forms` / `powerbuilder` / `delphi-vb6` / `cpp-windows`:**
+Load the matching `stack-*.md` skill for its detection patterns and Azure compatibility guidance.
+
+**Mixed-stack applications** (`.stack.secondary_stacks` is non-empty): run the discovery for each stack in scope, then reconcile findings in the assessment report.
 
 #### 4.3 Dependency Analysis
 - Extract all third-party dependencies from project files

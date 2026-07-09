@@ -116,7 +116,7 @@ For any application that does not already have a Capability Matrix:
 
 ### What This Project Does NOT Do ❌
 - **Data Migration tooling** itself — recommends and orchestrates Azure DMS / DMA but does not replace them
-- **Binary/dependency scanning of compiled artifacts** — recommends .NET Upgrade Assistant or equivalent external tools for that
+- **Binary/dependency scanning of compiled artifacts** — recommends stack-appropriate external tools (`.NET Upgrade Assistant`, `Spring Boot Migrator`, `Python 2to3`, `Node.js n`, etc.) for that
 - **Wholesale replacement of SaaS-embedded code** — escalates to specialist (not a Copilot-only task)
 
 ## Always Apply These Rules
