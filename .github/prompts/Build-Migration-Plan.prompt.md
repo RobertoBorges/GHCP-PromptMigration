@@ -1,7 +1,7 @@
 ---
 agent: Code Migration Modernization Agent
-model: Claude Sonnet 4.6 (copilot)
-tools: ['search/codebase', 'usages', 'vscodeAPI', 'problems', 'changes', 'runCommands/terminalSelection', 'runCommands/terminalLastCommand', 'openSimpleBrowser', 'fetch', 'search/searchResults', 'githubRepo', 'extensions', 'edit/editFiles', 'search', 'runCommands', 'runTasks', 'Azure MCP/*', 'Microsoft Docs/*']
+model: Claude Sonnet 4.7 (copilot)
+tools: ['search/codebase', 'search/usages', 'vscode/vscodeAPI', 'read/problems', 'search/changes', 'vscode/runCommand', 'read/terminalLastCommand', 'openSimpleBrowser', 'web/fetch', 'search/searchResults', 'web/githubRepo', 'vscode/extensions', 'edit/editFiles', 'search', 'execute/runTask', 'Azure MCP/*', 'Microsoft Docs/*']
 description: "Consumes the Discovery Dossier + Capability Matrix and produces a finalized, evidence-backed migration plan with phase sequencing, phase assignments, target Azure architecture, and quality gates."
 ---
 

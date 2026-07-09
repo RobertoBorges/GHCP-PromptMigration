@@ -1,7 +1,6 @@
 ---
 agent: Code Migration Modernization Agent
-model: Claude Sonnet 4.6 (copilot)
-tools: ['search/codebase', 'usages', 'vscodeAPI', 'problems', 'changes', 'testFailure', 'runCommands/terminalSelection', 'runCommands/terminalLastCommand', 'openSimpleBrowser', 'fetch', 'search/searchResults', 'githubRepo', 'extensions', 'runTests', 'edit/editFiles', 'runNotebooks', 'search', 'new', 'runCommands', 'runTasks', 'Azure MCP/*', 'Microsoft Docs/*']
+model: Claude Sonnet 4.7 (copilot)
 description: "Rapid intake triage for a legacy application migration — stack-agnostic. Returns a Go/No-Go signal in ~5 minutes with the dominant stack, top blockers, complexity, and the next command to run."
 ---
 

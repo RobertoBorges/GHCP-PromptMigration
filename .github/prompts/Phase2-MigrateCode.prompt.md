@@ -3,7 +3,7 @@ name: Phase2-MigrateCode
 description: Apply the minimum code changes required to make the application Azure-compatible on the target platform chosen in Phase 1
 argument-hint: "Optional target hint if not already in reports/Decisions-Required.md, e.g., 'Migrate to .NET 10', 'Upgrade to Spring Boot 3', 'Move to Python 3.12', 'Node 20 LTS'"
 agent: Code Migration Modernization Agent
-model: Claude Sonnet 4.6 (copilot)
+model: Claude Sonnet 4.7 (copilot)
 ---
 
 <!-- BEGIN: capability-matrix-gate (auto-managed by inject-capability-matrix-gates.mjs) -->

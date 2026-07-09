@@ -3,13 +3,8 @@ name: Phase1-Plan
 description: Generate the migration plan, Application-Assessment-Report, and Decisions-Required file for one application
 argument-hint: "Specify the folder path to your legacy application, e.g., 'Plan the app in Use-cases/02-NetFramework30-ASPNET-WEB'"
 agent: Code Migration Modernization Agent
-model: Claude Sonnet 4.6 (copilot)
+model: Claude Sonnet 4.7 (copilot)
 ---
-
-
-
-
-
 
 <!-- BEGIN: capability-matrix-gate (auto-managed by inject-capability-matrix-gates.mjs) -->
 

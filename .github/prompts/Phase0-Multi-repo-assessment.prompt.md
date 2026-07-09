@@ -3,7 +3,7 @@ name: Phase0-Multi-repo-assessment
 description: Analyze multiple repositories of a business solution for migration planning
 argument-hint: "Ensure codebase-repos.md exists with repository URLs, then run this command"
 agent: Code Migration Modernization Agent
-model: Claude Sonnet 4.6 (copilot)
+model: Claude Sonnet 4.7 (copilot)
 ---
 
 # Code Base Analysis - Multi-Repository

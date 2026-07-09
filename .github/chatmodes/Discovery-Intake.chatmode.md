@@ -1,6 +1,6 @@
 ---
 agent: Code Migration Modernization Agent
-model: Claude Sonnet 4.6 (copilot)
+model: Claude Sonnet 4.7 (copilot)
 tools: ['search/codebase', 'usages', 'vscodeAPI', 'changes', 'runCommands/terminalLastCommand', 'openSimpleBrowser', 'fetch', 'search/searchResults', 'githubRepo', 'extensions', 'edit/editFiles', 'search', 'runCommands', 'Azure MCP/*', 'Microsoft Docs/*']
 description: Interactive discovery & intake conversation for any application. Walks the user through six fast triage questions, runs adaptive follow-ups based on detected risk, probes source/stack/workload, and produces the Discovery Dossier + Capability Matrix.
 leadRole: Discovery Engineer

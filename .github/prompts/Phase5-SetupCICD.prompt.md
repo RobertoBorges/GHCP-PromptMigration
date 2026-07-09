@@ -3,13 +3,8 @@ name: Phase5-SetupCICD
 description: Configure GitHub Actions or Azure DevOps pipelines for automated deployment
 argument-hint: "Specify CI/CD platform, e.g., 'Setup GitHub Actions' or 'Configure Azure DevOps pipelines'"
 agent: Code Migration Modernization Agent
-model: Claude Sonnet 4.6 (copilot)
+model: Claude Sonnet 4.7 (copilot)
 ---
-
-
-
-
-
 
 <!-- BEGIN: capability-matrix-gate (auto-managed by inject-capability-matrix-gates.mjs) -->
 
