@@ -109,10 +109,11 @@ function buildGate(phase, requiresPlan) {
     '   - `migration_strategy.recommendation` → adjust phase emphasis based on the recommended strategy',
     '   - `risk_flags` → load the matching risk skills (e.g., `risk-cross-region-data.md`)',
     '   - `unresolved_questions` → if any remain unanswered, surface them BEFORE starting work',
+    '2. **Skill Gap Check (belt + suspenders)** — for each value above, verify a matching `<family>-<value>.md` exists in `.github/skills/`. If any is missing, invoke `.github/skills/skill-creator.md` to author it on the fly. Ask a single Y/n/N-for-session confirmation; default is Y.',
     requiresPlan
-      ? '2. Read `reports/Migration-Plan.md` for approved sequencing and any app-specific extra gates.'
-      : '2. If `reports/Migration-Plan.md` exists, read it for approved sequencing. Otherwise Phase 1 will produce it as part of its work.',
-    '3. Confirm Phase prerequisites are met.',
+      ? '3. Read `reports/Migration-Plan.md` for approved sequencing and any app-specific extra gates.'
+      : '3. If `reports/Migration-Plan.md` exists, read it for approved sequencing. Otherwise Phase 1 will produce it as part of its work.',
+    '4. Confirm Phase prerequisites are met.',
     '',
     SENTINEL_END,
     '',

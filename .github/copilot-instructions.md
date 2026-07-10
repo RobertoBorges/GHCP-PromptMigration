@@ -84,6 +84,8 @@ When the user says any of the phrases below, take the matching action. **Rows ar
 | **🔵 Utility / recovery (add-ons)** | |
 | "rollback", "phase rollback", "/phase-rollback" | Read `.github/prompts/Phase-Rollback.prompt.md` |
 | "status", "/getstatus", "show migration status" | Read `.github/prompts/GetStatus.prompt.md` and consult `reports/Report-Status.md` |
+| **🧠 Skill creation (auto-invoked + user-invokable)** | |
+| "create a skill for X", "add a skill for X", "we need a skill for X", "research this and create a skill", "/skill-creator" | Read `.github/skills/skill-creator.md` and follow its 7-step flow (Detect Gap → Confirm → Research → Draft → Smoke-test → Log → Continue). Also invoked **automatically** by `/assess-any-application` (Step 8.5) and `/Phase1-Plan` (in the capability-matrix-gate) when the Capability Matrix contains a stack/source/workload/integration value with no matching `.github/skills/<family>-<value>.md` file. |
 
 **If the user types a slash command that isn't in the table above, look for a matching file at `.github/prompts/<command-no-slash>.prompt.md` (case-insensitive) and read it.**
 

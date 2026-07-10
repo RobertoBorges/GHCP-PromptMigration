@@ -223,6 +223,42 @@ Apply the `migration-strategy-decision-tree` skill. The output is **not** just a
 
 Apply confidence labels. If any axis is `low` confidence, the recommendation must include a "blocking probe" — a specific next step that would raise confidence.
 
+## Step 8.5 — Skill Gap Check (BEFORE writing Capability Matrix)
+
+Before emitting the Capability Matrix in Step 9, verify that every classification value you're about to record has a matching skill file in `.github/skills/`. Without a matching skill, downstream Phase prompts won't have stack-/source-/workload-specific guidance for this app.
+
+For each of the following axes, do a `file_search` for the matching filename pattern:
+
+| Classification axis | Expected filename pattern | Example |
+|--------------------|---------------------------|---------|
+| `stack.primary_stack` | `stack-<value>.md` | `stack-elixir.md` |
+| `stack.secondary_stacks[*]` | `stack-<value>.md` | `stack-clojure.md` |
+| `source.primary_adapter` | `source-<value>.md` | `source-as400.md` |
+| `workload.primary_pattern` | `workload-<value>.md` | `workload-iot-edge.md` |
+| each entry in `integrations` (if it looks like a well-known system) | `integration-<value>.md` | `integration-ibm-mq.md` |
+
+For **each miss** (file not found):
+
+1. **Announce the gap plainly:**
+   > *"I've classified this app's `<axis>` as **<value>**, but I don't yet have a `<family>-<value>.md` skill. Without it, downstream phases will have generic guidance instead of `<value>`-specific patterns."*
+
+2. **Ask a single confirmation** (default Y):
+   > **I can create a `<family>-<value>.md` skill on the fly — I'll research authoritative docs (~2-5 min) and write it so this migration and future migrations benefit. Should I proceed? [Y / n / N-for-this-session-only]**
+
+3. **On Y (or empty response)** → invoke `.github/skills/skill-creator.md` following its full flow (Detect Gap → Confirm → Research → Draft → Smoke-test → Log → Continue). The new skill goes into `.github/skills/<family>-<value>.md`.
+
+4. **On n** → skip THIS gap. Continue Discovery with reduced guidance. Log the skip:
+   ```
+   - <UTC> | actor=Assess-Any-Application | action=gap-skipped | tokens=~0 | turn=<n> | notes="user declined to create <family>-<value>.md"
+   ```
+
+5. **On N-for-this-session-only** → skip THIS and all subsequent gap prompts for the rest of the session. Log:
+   ```
+   - <UTC> | actor=Assess-Any-Application | action=gap-skipped-session-wide | tokens=~0 | turn=<n> | notes="user declined skill-creator for the session"
+   ```
+
+After processing all gaps (or if there are none), proceed to Step 9.
+
 ## Step 9 — Capability Matrix
 
 Emit `reports/Capability-Matrix.yaml` using the schema in `.github/skills/capability-matrix.md`.

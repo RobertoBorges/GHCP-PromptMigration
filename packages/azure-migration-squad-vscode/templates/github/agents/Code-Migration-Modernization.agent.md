@@ -304,6 +304,13 @@ Use the following guidelines based on what type of migration the user is doing
 
 @agent rule: If `reports/Report-Status.md` doesn't exist, create it from `.github/skills/migration-report-template.md` before your first action — the template already includes the `## 📜 Action Log` section.
 
+### Skill Gap Detection Rules (top-priority)
+@agent rule: ALWAYS check for skill gaps before writing the Capability Matrix. For each classification axis (`stack.primary_stack`, `source.primary_adapter`, `workload.primary_pattern`, each entry in `integrations`), do a `file_search` in `.github/skills/` for the matching `<family>-<value>.md` file. If missing, invoke `.github/skills/skill-creator.md` to author the skill on the fly.
+
+@agent rule: When invoking skill-creator, ask the user a single Y/n/N-for-this-session confirmation. Default is Y (create). Do not silently create files; do not require the user to initiate the request.
+
+@agent rule: Once a new skill is created, load it in the same session and continue the migration as if it had existed all along. Log both the creation (`action=created-skill`) and first use (`action=loaded-skill`) to the Action Log.
+
 ### Assessment & Planning Rules
 @agent rule: ALWAYS perform a comprehensive assessment before starting any migration using semantic search and file analysis
 

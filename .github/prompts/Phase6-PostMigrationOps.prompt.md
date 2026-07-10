@@ -4,6 +4,7 @@ model: Claude Sonnet 4.7 (copilot)
 description: "Establishes post-migration monitoring, performance, and operational readiness."
 ---
 
+
 <!-- BEGIN: capability-matrix-gate (auto-managed by inject-capability-matrix-gates.mjs) -->
 
 ## 🚦 MANDATORY OPENING CHECK — Capability Matrix Required
@@ -51,11 +52,11 @@ this prompt with the `--accept-risk` natural-language flag in your request.
    - `migration_strategy.recommendation` → adjust phase emphasis based on the recommended strategy
    - `risk_flags` → load the matching risk skills (e.g., `risk-cross-region-data.md`)
    - `unresolved_questions` → if any remain unanswered, surface them BEFORE starting work
-2. Read `reports/Migration-Plan.md` for approved sequencing and any app-specific extra gates.
-3. Confirm Phase prerequisites are met.
+2. **Skill Gap Check (belt + suspenders)** — for each value above, verify a matching `<family>-<value>.md` exists in `.github/skills/`. If any is missing, invoke `.github/skills/skill-creator.md` to author it on the fly. Ask a single Y/n/N-for-session confirmation; default is Y.
+3. Read `reports/Migration-Plan.md` for approved sequencing and any app-specific extra gates.
+4. Confirm Phase prerequisites are met.
 
 <!-- END: capability-matrix-gate -->
-
 <!-- BEGIN: action-log-contract (auto-managed by inject-action-log-contract.mjs) -->
 
 ## 📜 Action Log Contract
