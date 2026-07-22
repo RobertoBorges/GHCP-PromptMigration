@@ -214,11 +214,11 @@ function renderWelcomeHtml(): string {
     </div>
     <div class="feature-card">
       <strong>Universal source adapters</strong>
-      On-premise, AWS, GCP, Oracle, VMware, Kubernetes, container registries, GitHub repos, ZIPs, mainframes.
+      On-premise, AWS, GCP, Oracle, VMware, Kubernetes, container registries, GitHub repos, ZIPs.
     </div>
     <div class="feature-card">
       <strong>Stack adapters</strong>
-      .NET, Java, Python, Node.js, PHP, Ruby, Go, Perl, Rust, COBOL, Oracle Forms, PowerBuilder, Delphi/VB6, Scala/Kotlin, C++ Windows.
+      .NET, Java, Python, Node.js, PHP, Ruby, Go, Perl, Rust, Oracle Forms, PowerBuilder, Delphi/VB6, Scala/Kotlin, C++ Windows.
     </div>
     <div class="feature-card">
       <strong>Decision Hardstop Protocol</strong>

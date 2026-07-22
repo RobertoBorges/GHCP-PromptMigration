@@ -39,8 +39,8 @@ Apply the most relevant reusable skills based on what you detect. Prefer stack-*
 - `#file:.github/skills/stack-detection.md` — how to identify the dominant stack from file evidence
 - `#file:.github/skills/capability-matrix.md` — the target output schema
 - `#file:.github/skills/migration-strategy-decision-tree.md` — 6Rs scoring for the go/no-go
-- One or more `stack-*.md` skills matching what you detect (e.g., `stack-dotnet.md`, `stack-java.md`, `stack-python.md`, `stack-nodejs.md`, `stack-php.md`, `stack-ruby.md`, `stack-go.md`, `stack-cobol-mainframe.md`, `stack-oracle-forms.md`, `stack-delphi-vb6.md`, `stack-powerbuilder.md`, `stack-cpp-windows.md`, etc.)
-- One or more `workload-*.md` skills matching the shape (e.g., `workload-webapp.md`, `workload-api-service.md`, `workload-batch-job.md`, `workload-data-pipeline.md`, `workload-event-driven.md`, `workload-desktop-client-server.md`, `workload-packaged-app.md`, `workload-mainframe-transactional.md`, `workload-serverless.md`)
+- One or more `stack-*.md` skills matching what you detect (e.g., `stack-dotnet.md`, `stack-java.md`, `stack-python.md`, `stack-nodejs.md`, `stack-php.md`, `stack-ruby.md`, `stack-go.md`, `stack-oracle-forms.md`, `stack-delphi-vb6.md`, `stack-powerbuilder.md`, `stack-cpp-windows.md`, etc.)
+- One or more `workload-*.md` skills matching the shape (e.g., `workload-webapp.md`, `workload-api-service.md`, `workload-batch-job.md`, `workload-data-pipeline.md`, `workload-event-driven.md`, `workload-desktop-client-server.md`, `workload-packaged-app.md`, `workload-serverless.md`)
 - `#file:.github/skills/migration-report-template.md`
 
 ## Orchestration Hooks
@@ -59,8 +59,8 @@ Inspect the highest-signal files first:
 Detect and record:
 - **Primary language** and framework family
 - **Runtime version(s)** in use
-- **App shape** — webapp, API service, batch job, event-driven, data pipeline, desktop, packaged app, serverless, mainframe transactional
-- **Hosting assumptions** — where it runs today (on-prem, VM, container, K8s, cloud PaaS, mainframe)
+- **App shape** — webapp, API service, batch job, event-driven, data pipeline, desktop, packaged app, serverless
+- **Hosting assumptions** — where it runs today (on-prem, VM, container, K8s, cloud PaaS — mainframe/midrange should be flagged as `unsupported` and escalated)
 - **Data access + auth patterns** — what identity provider, what datastore(s), what integrations
 
 ## Step 2: Count Files by Type
@@ -80,7 +80,6 @@ Stack-appropriate manifests and entry points to look for:
 | Perl | `cpanfile`, `Makefile.PL`, `.pl`, `.pm` |
 | Rust | `Cargo.toml`, `.rs` |
 | Scala / Kotlin | `build.sbt`, `build.gradle.kts`, `.scala`, `.kt` |
-| COBOL / Mainframe | `.cbl`, `.cob`, `.cpy`, JCL decks |
 | Legacy 4GL / desktop | `.pas` (Delphi), `.frm`/`.vbp` (VB6), `.pbl`/`.pbt` (PowerBuilder), `.fmb`/`.rdf` (Oracle Forms) |
 | C++ Windows | `.vcxproj`, `.sln`, `.cpp`, `.h`, MFC/ATL headers |
 | Containers / IaC / CI | `Dockerfile`, `docker-compose.yml`, `*.bicep`, `*.tf`, `.github/workflows/*.yml`, `azure-pipelines.yml` |
@@ -96,7 +95,7 @@ Rank the top 5 blockers based on evidence. Blockers should focus on **things tha
 - **Legacy Java EE** — `javax.*` before jakarta rename, external Tomcat/WebSphere/WebLogic dependency, EJB entity beans, legacy Spring 2.x/3.x
 - **Machine-local state** — file system paths as durable storage, in-process session/cache, local machine keys, hard-coded certificates in the machine store, local scheduled tasks or cron
 - **Missing containerization or PaaS entry point** — no `main`/`Program.cs`/`app.py`/`server.js` that a container image can launch
-- **Datastore not Azure-compatible** — on-prem-only DB drivers, deprecated auth (SQL Server integrated auth), Oracle-specific PL/SQL, DB2/mainframe VSAM
+- **Datastore not Azure-compatible** — on-prem-only DB drivers, deprecated auth (SQL Server integrated auth), Oracle-specific PL/SQL, DB2 without Azure DMS coverage
 - **Missing tests + missing docs** — makes any change risky
 - **Unsupported source** — SaaS-embedded code (Salesforce Apex, ServiceNow, SharePoint on-prem, Power Platform custom connectors) — escalate via `source-unsupported-escalation.md`
 

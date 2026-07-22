@@ -39,10 +39,10 @@ Use this prompt when a team lead needs to assess team readiness before starting 
 **Before writing any quizzes, load the migration scope.**
 
 If `reports/Capability-Matrix.yaml` exists → read the following fields to scope the assessment:
-- `source.primary_adapter` — the source environment (on-premise, AWS, GCP, Oracle, VMware, K8s, container registry, GitHub, mainframe, etc.)
+- `source.primary_adapter` — the source environment (on-premise, AWS, GCP, Oracle, VMware, K8s, container registry, GitHub, etc. — mainframe/midrange scopes to specialist-partner enablement rather than this quiz)
 - `stack.primary_stack` and `stack.secondary_stacks` — the language/framework families
-- `workload.primary_pattern` — webapp / api-service / batch-job / data-pipeline / event-driven / desktop / packaged-app / serverless / mainframe-transactional
-- `data.primary_datastore` — SQL Server / PostgreSQL / MySQL / Oracle / DB2 / MongoDB / Redis / Cosmos / VSAM / file share / etc.
+- `workload.primary_pattern` — webapp / api-service / batch-job / data-pipeline / event-driven / desktop / packaged-app / serverless
+- `data.primary_datastore` — SQL Server / PostgreSQL / MySQL / Oracle / DB2 / MongoDB / Redis / Cosmos / file share / etc.
 - `integrations` — identity provider, external APIs, queues, schedulers, file shares
 - `hosting.target_platform` — App Service / Container Apps / AKS / Functions / VMs / etc.
 
@@ -73,7 +73,6 @@ Cover only the tracks that match the Capability Matrix. Do not quiz on stacks or
 - `perl` — Perl 5 modernization, packaging with cpanm
 - `rust` — Rust edition upgrades, cargo workspace patterns
 - `scala-kotlin` — Scala 2 → 3, Kotlin runtime upgrades
-- `cobol-mainframe` — Micro Focus / Astadia refactor paths, JCL translation, VSAM data extraction
 - `oracle-forms` — APEX / Spring Boot rewrite paths, Forms → web UI decomposition
 - `delphi-vb6` / `powerbuilder` / `cpp-windows` — rebuild strategies and gradual migration patterns
 
@@ -92,7 +91,7 @@ Cover only the tracks that match the Capability Matrix. Do not quiz on stacks or
 - AWS / GCP / Oracle Cloud → Azure (identity, networking, data egress)
 - VMware / RVTools → AVS or Azure VMs
 - Kubernetes → AKS
-- Mainframe → Azure via Micro Focus / Astadia (specialist track — usually partner-led)
+- (Mainframe / IBM i / midrange → out of scope for this tool; escalate via `source-unsupported-escalation.md` to a specialist partner)
 
 ### 2.2 Quiz design rules
 For each in-scope track, include:
@@ -161,7 +160,6 @@ Include at least one scenario from each relevant category:
 ### 4.2 Example simulation prompts (adapt from actual apps in scope)
 - "This app authenticates against Windows Auth and stores files on a network share. Sequence the changes and pick the Azure targets."
 - "This app is written in Python 2.7 with mod_wsgi under Apache. Sequence the changes: Python upgrade, framework upgrade, hosting move, identity, observability."
-- "This app has an ISAM/VSAM file store on a mainframe with 40 years of business logic. What's your first slice, and what stays on the mainframe for now?"
 - "This app has 800 stored procedures in Oracle PL/SQL. What's the sequence for moving to Azure Database for PostgreSQL or Azure SQL?"
 
 ## Step 5: Score Each Team Member with a Clear Rubric

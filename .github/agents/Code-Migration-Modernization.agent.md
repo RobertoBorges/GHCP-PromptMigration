@@ -66,7 +66,9 @@ The **Portfolio Planning flow** produces an executive HTML deck and writes a han
 
 ## Migration Scope
 
-This agent helps you take **any legacy application** — regardless of language (.NET, Java, Python, Node.js, PHP, Ruby, Go, Perl, Rust, COBOL, Oracle Forms, PowerBuilder, Delphi/VB6, Scala/Kotlin, C++ Windows, etc.), source environment (on-prem, AWS, GCP, Oracle, VMware, Kubernetes, container registry, GitHub, ZIP, mainframe), or workload type (webapp, API, batch, event-driven, data pipeline, desktop, packaged, mainframe transactional) — and make it **run on Azure**. It also helps you plan multi-app migrations at the portfolio level.
+This agent helps you take **any legacy application** — regardless of language (.NET, Java, Python, Node.js, PHP, Ruby, Go, Perl, Rust, Oracle Forms, PowerBuilder, Delphi/VB6, Scala/Kotlin, C++ Windows, etc.), source environment (on-prem, AWS, GCP, Oracle, VMware, Kubernetes, container registry, GitHub, ZIP), or workload type (webapp, API, batch, event-driven, data pipeline, desktop, packaged, serverless) — and make it **run on Azure**. It also helps you plan multi-app migrations at the portfolio level.
+
+> **Not covered as a first-class family:** mainframe / midrange workloads (z/OS, z/VSE, IBM i / AS-400), COBOL / RPG / Natural / PL/I applications, CICS/IMS transactional systems, or VSAM data stores. If your application falls into these categories, Discovery will route you to `source-unsupported-escalation.md`, which lays out a specialist-partner escalation playbook (Micro Focus, Astadia, Kyndryl, LzLabs, TCS, NTT DATA). This tool does not attempt code-level COBOL/RPG/Natural migration.
 
 The specific changes come from the Capability Matrix produced by Discovery. Common examples:
 
@@ -254,13 +256,13 @@ Detailed migration patterns and examples live in the skills folder. Load only th
 - `stack-dotnet.md` / `dotnet-modernization/`, `dotnet-framework-to-dotnet8.md`, `wcf-to-rest-api.md`, `webforms-to-razor.md`, `asp-classic-to-dotnet.md`
 - `stack-java.md` / `java-modernization/`, `java8-to-java21.md`
 - `stack-python.md`, `stack-nodejs.md`, `stack-php.md`, `stack-ruby.md`, `stack-go.md`, `stack-perl.md`, `stack-rust.md`, `stack-scala-kotlin.md`
-- `stack-cobol-mainframe.md`, `stack-oracle-forms.md`, `stack-powerbuilder.md`, `stack-delphi-vb6.md`, `stack-cpp-windows.md`
+- `stack-oracle-forms.md`, `stack-powerbuilder.md`, `stack-delphi-vb6.md`, `stack-cpp-windows.md`
 
 **Source adapter skills** (load per-source):
-- `source-on-premise.md`, `source-aws.md`, `source-gcp.md`, `source-oracle-db.md`, `source-vmware-rvtools.md`, `source-kubernetes-cluster.md`, `source-container-registry.md`, `source-github-repo.md`, `source-zip-filesystem.md`, `source-mainframe.md`, `source-unsupported-escalation.md`
+- `source-on-premise.md`, `source-aws.md`, `source-gcp.md`, `source-oracle-db.md`, `source-vmware-rvtools.md`, `source-kubernetes-cluster.md`, `source-container-registry.md`, `source-github-repo.md`, `source-zip-filesystem.md`, `source-unsupported-escalation.md` (covers mainframe / midrange / SaaS-embedded escalation)
 
 **Workload pattern skills** (load per-workload):
-- `workload-webapp.md`, `workload-api-service.md`, `workload-batch-job.md`, `workload-data-pipeline.md`, `workload-event-driven.md`, `workload-desktop-client-server.md`, `workload-packaged-app.md`, `workload-serverless.md`, `workload-mainframe-transactional.md`
+- `workload-webapp.md`, `workload-api-service.md`, `workload-batch-job.md`, `workload-data-pipeline.md`, `workload-event-driven.md`, `workload-desktop-client-server.md`, `workload-packaged-app.md`, `workload-serverless.md`
 
 **Universal Azure skills** (always relevant):
 - `azure-infrastructure/` — Bicep and Terraform templates using Azure Verified Modules

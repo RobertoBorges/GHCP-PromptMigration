@@ -91,7 +91,7 @@ triggers: <comma-separated values from Capability Matrix that should invoke this
 - Lowercase, hyphen-separated
 - Matches the filename (minus `.md`)
 - For folder-form skills, matches the folder name
-- Examples: `stack-elixir`, `source-as400`, `workload-iot-edge`, `integration-ibm-mq`, `pattern-com-plus-interop`, `risk-data-sovereignty`
+- Examples: `stack-elixir`, `source-nutanix`, `workload-iot-edge`, `integration-tibco-ems`, `pattern-com-plus-interop`, `risk-data-sovereignty`
 
 ### `description`
 
@@ -130,8 +130,9 @@ Comma-separated list of Capability Matrix values or keywords that should cause t
 
 Examples:
 - `elixir, phoenix, mix, ecto` (stack)
-- `as400, iseries, i5os, ibm-i` (source)
+- `nutanix, ahv, prism` (source)
 - `iot-edge, mqtt-broker, edge-compute` (workload)
+- `tibco-ems, jms, amqp` (integration)
 - `ibm-mq, websphere-mq, mq-series` (integration)
 
 ## Body sections per family

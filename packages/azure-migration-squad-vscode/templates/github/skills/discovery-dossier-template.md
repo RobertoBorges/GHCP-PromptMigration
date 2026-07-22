@@ -54,7 +54,7 @@
 
 ## 4. Stack Profile
 
-**Primary stack:** `<dotnet | java | python | nodejs | php | ruby | go | perl | rust | cobol-mainframe | oracle-forms | powerbuilder | delphi-vb6 | scala-kotlin | cpp-windows>`
+**Primary stack:** `<dotnet | java | python | nodejs | php | ruby | go | perl | rust | oracle-forms | powerbuilder | delphi-vb6 | scala-kotlin | cpp-windows>`
 **Primary framework:** `<framework + version>`
 **Build system:** `<msbuild | maven | gradle | npm | pip | composer | cargo | go-modules | ...>`
 **Runtime version detected:** `<e.g., dotnet8.0, java-17, python-3.11>`
@@ -74,7 +74,7 @@
 
 ## 5. Workload Profile
 
-**Primary pattern:** `<webapp | api-service | batch-job | event-driven | serverless | desktop-client-server | packaged-app | data-pipeline | mainframe-transactional>`
+**Primary pattern:** `<webapp | api-service | batch-job | event-driven | serverless | desktop-client-server | packaged-app | data-pipeline>`
 **Secondary patterns:** <list or "none">
 
 ### Entry Points

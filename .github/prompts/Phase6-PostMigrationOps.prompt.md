@@ -150,7 +150,6 @@ For each stack in `Capability-Matrix.stack.primary_stack` (and `.stack.secondary
 | `go` | `slog` / `zap` / `logrus` JSON logs, `go.opentelemetry.io/otel` with OTLP exporter |
 | `perl` | `Log::Log4perl` writing structured logs to stdout; Application Insights via REST push if available |
 | `rust` | `tracing` + `tracing-opentelemetry` with OTLP exporter |
-| `cobol-mainframe` | Vendor-emitted job/step logs shipped to Log Analytics via Diagnostic Settings on the AKS/App Service layer |
 | Other / unknown | Confirm the app writes to stdout/stderr (containerized) OR to files that Diagnostic Settings can ship to Log Analytics |
 
 For **containerized workloads** of any stack, confirm stdout/stderr logs and platform diagnostics are connected to Azure Monitor / Log Analytics via the Container Apps / AKS / App Service diagnostic settings.

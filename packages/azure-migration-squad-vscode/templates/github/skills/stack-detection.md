@@ -57,7 +57,6 @@ Apply in this order to maximize signal:
 | `*.pbproj`, `*.pbl` | PowerBuilder |
 | `*.dpr`, `*.dpk` | Delphi |
 | `*.vbp` | VB6 |
-| `*.cbl`, `*.cob`, `JCL` files | COBOL / mainframe |
 | `*.fmb`, `*.fmx`, `*.mmb` | Oracle Forms |
 
 If a manifest is found and parsed, `primary_confidence: high`.
@@ -78,7 +77,6 @@ If no manifest, or for secondary language detection, count source files by exten
 | `.rs` | Rust |
 | `.pl`, `.pm`, `.t`, `.psgi` | Perl |
 | `.c`, `.h`, `.cpp`, `.hpp`, `.cc`, `.cxx` | C / C++ |
-| `.cbl`, `.cob`, `.cpy` | COBOL |
 | `.fmb`, `.fmx`, `.mmb`, `.olb`, `.pll` | Oracle Forms |
 | `.pbl`, `.pbt`, `.pbw` | PowerBuilder |
 | `.dpr`, `.pas`, `.dpk`, `.dfm` | Delphi |
@@ -151,7 +149,7 @@ Heuristic for primary:
 
 ## Edge Cases
 
-- **Mainframe / IBM i** — file extensions are weak signals. Use presence of JCL, copybooks, CICS maps, RACF files. Default to `low` confidence and recommend specialist probe.
+- **Mainframe / IBM i / midrange** — file extensions like `.cbl`/`.cob`/`.cpy`/JCL, RPG, CICS maps, RACF files are weak signals for our purposes because these workloads are **out of scope** for this tool. Classify the source as `source-unsupported-escalation` and route to a specialist partner (Micro Focus / Astadia / Kyndryl / LzLabs / TCS / NTT DATA). Do NOT attempt to derive a `stack-*` classification for these.
 - **SaaS-embedded** — when the only artifacts are XML metadata (Salesforce Force.com IDE, ServiceNow update sets, SharePoint solution packages), classify as `source-unsupported-escalation`, not as a normal stack.
 - **Vendor binaries only** — no manifests, no source. Detect from EXE/DLL strings, container base image, installation scripts. `primary_confidence: low`, flag as `no-source-code-available`.
 - **Notebooks** — `.ipynb` files imply data-science workload pattern more than a "stack"; capture as primary stack `python` with `workload-data-pipeline`.

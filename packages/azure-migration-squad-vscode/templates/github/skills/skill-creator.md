@@ -33,10 +33,10 @@ The output goes into `.github/skills/` following our existing naming convention.
 
 | Family | Filename pattern | Use when |
 |--------|------------------|----------|
-| **Stack** | `stack-<name>.md` | New language/framework — Elixir, Clojure, Erlang, Haskell, F#, D, Zig, Nim, Crystal, Julia, Racket, Lua, R, MATLAB, ABAP, RPG, etc. |
-| **Source** | `source-<name>.md` | New source environment — IBM AS/400, IBM z/VM, HP-UX, Solaris, OpenVMS, Nutanix, custom on-prem appliance, private cloud not covered |
+| **Stack** | `stack-<name>.md` | New language/framework — Elixir, Clojure, Erlang, Haskell, F#, D, Zig, Nim, Crystal, Julia, Racket, Lua, R, MATLAB, etc. |
+| **Source** | `source-<name>.md` | New source environment — Nutanix, HP-UX, Solaris, OpenVMS, custom on-prem appliance, private cloud not covered (mainframe / IBM i / midrange should NOT be handled here — route to `source-unsupported-escalation.md` instead) |
 | **Workload** | `workload-<name>.md` | Unusual workload pattern — IoT edge device, HPC cluster job, machine-learning training pipeline, real-time trading system, media-encoding farm |
-| **Integration** | `integration-<name>.md` | External system integration — IBM MQ, TIBCO EMS, SAP RFC, MuleSoft, Kerberos-only realm, Novell eDirectory, legacy CICS/IMS gateway |
+| **Integration** | `integration-<name>.md` | External system integration — TIBCO EMS, MuleSoft, SAP RFC, Kerberos-only realm, Novell eDirectory |
 | **Pattern** | `pattern-<name>.md` | Reusable migration pattern — COM+ interop replacement, custom RMI-over-SSL transport, session-state externalization, thick-client to web-client |
 | **Risk** | `risk-<name>.md` | Migration risk — data-sovereignty jurisdiction change, latency-sensitive DR failover, third-party dependency EOL, licensing constraint |
 
@@ -49,7 +49,7 @@ Detection is automatic and happens during Discovery (`/assess-any-application`) 
 1. Reads the `Capability-Matrix.yaml` values (or the in-progress classification if not yet written)
 2. For each axis, does a `file_search` in `.github/skills/` for a matching filename:
    - `stack.primary_stack: elixir` → look for `stack-elixir.md`
-   - `source.primary_adapter: as400` → look for `source-as400.md`
+   - `source.primary_adapter: nutanix` → look for `source-nutanix.md`
    - `workload.primary_pattern: iot-edge` → look for `workload-iot-edge.md`
    - each entry in `integrations[]` → look for `integration-<name>.md`
 3. **Any miss → gap detected. Invoke this skill.**
@@ -237,7 +237,7 @@ For **major refinements**, invoke skill-creator again with the `--refine` mode (
 
 ### Refine mode (`--refine`)
 
-If the user says "the elixir skill is missing X" or "revise the source-as400 skill", enter refine mode:
+If the user says "the elixir skill is missing X" or "revise the source-nutanix skill", enter refine mode:
 
 1. Load the existing skill file
 2. Load the specific gap noted by the user

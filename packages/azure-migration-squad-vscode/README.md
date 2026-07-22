@@ -44,7 +44,7 @@ The **status bar** (bottom-left) shows your current migration phase, or **"⚠ A
 
 | Sources | Stacks | Workloads |
 |---------|--------|-----------|
-| On-premise, AWS, GCP, Oracle, VMware, Kubernetes, container registries, GitHub repos, ZIPs, mainframes | .NET, Java, Python, Node.js, PHP, Ruby, Go, Perl, Rust, COBOL, Oracle Forms, PowerBuilder, Delphi/VB6, Scala/Kotlin, C++ Windows | Web app, API, batch, event-driven, serverless, data pipeline, desktop, packaged, mainframe transactional |
+| On-premise, AWS, GCP, Oracle, VMware, Kubernetes, container registries, GitHub repos, ZIPs | .NET, Java, Python, Node.js, PHP, Ruby, Go, Perl, Rust, Oracle Forms, PowerBuilder, Delphi/VB6, Scala/Kotlin, C++ Windows | Web app, API, batch, event-driven, serverless, data pipeline, desktop, packaged |
 
 ## Requirements
 

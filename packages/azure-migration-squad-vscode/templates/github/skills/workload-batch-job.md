@@ -1,6 +1,6 @@
 # Skill: Workload Pattern — Batch Job
 
-> Workload pattern for scheduled or on-demand batch processing: nightly ETL, report generation, payroll runs, COBOL batch jobs, cron-driven scripts, file-import jobs.
+> Workload pattern for scheduled or on-demand batch processing: nightly ETL, report generation, payroll runs, cron-driven scripts, file-import jobs, Spring Batch jobs, .NET / Java / Python / Node.js batch runners.
 
 ## When to Use
 
@@ -28,7 +28,6 @@
 | **AWS Step Functions** | state-machine state.json | Logic Apps Standard / Durable Functions |
 | **Airflow DAG** | `airflow.models.DAG` import | Data Factory Managed Airflow / AKS |
 | **Spring Batch** | `spring-boot-starter-batch`; `Job`, `Step` beans | Container Apps Jobs (jar) / Spring Apps |
-| **Mainframe JCL** | `*.jcl` files (z/OS) | Container Apps Jobs after refactor / Azure Batch |
 | **SSIS / Data Factory packages** | `*.dtsx` files | Azure Data Factory |
 
 ## Probes

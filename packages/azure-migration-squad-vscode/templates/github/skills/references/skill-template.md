@@ -6,8 +6,8 @@
 
 Anywhere you see `<X>` or `<X.Y>` in the templates below, replace with real content. Never ship a skill with unfilled placeholders.
 
-- `<name>` — short kebab-case name for the skill (`elixir`, `as400`, `iot-edge`)
-- `<Name>` — human-readable title-case (`Elixir`, `IBM AS/400`, `IoT Edge`)
+- `<name>` — short kebab-case name for the skill (`elixir`, `nutanix`, `iot-edge`)
+- `<Name>` — human-readable title-case (`Elixir`, `Nutanix AHV`, `IoT Edge`)
 - `<family>` — one of `stack`, `source`, `workload`, `integration`, `pattern`, `risk`
 - `<triggers>` — comma-separated capability-matrix values or keywords
 - `<citation>` — a real URL from Step 3 research
@@ -140,7 +140,7 @@ triggers: <name>, <alt-name>, <keyword>
 
 How to extract code + config + data from this source:
 
-- **Code extraction**: <method — e.g., "Git-import from VSAM; use IBM Rocket ExitNow if code is on ISPF PDS">
+- **Code extraction**: <method — e.g., "Rehost as VM image via Azure Migrate; use vendor export tooling for filesystem snapshots">
 - **Config extraction**: <method>
 - **Data extraction**: <method — e.g., "IBM DB2 → Azure SQL via Azure DMS with pre-migration schema conversion">
 

@@ -44,7 +44,7 @@ Full walkthrough: [docs/vscode-quickstart.md](./docs/vscode-quickstart.md).
 
 | Sources | Stacks | Workloads |
 |---------|--------|-----------|
-| On-premise, AWS, GCP, Oracle, VMware, Kubernetes, container registries, GitHub repos, ZIPs, mainframes | .NET, Java, Python, Node.js, PHP, Ruby, Go, Perl, Rust, COBOL, Oracle Forms, PowerBuilder, Delphi/VB6, Scala/Kotlin, C++ Windows | Web app, API service, batch job, event-driven, serverless, data pipeline, desktop, packaged, mainframe transactional |
+| On-premise, AWS, GCP, Oracle, VMware, Kubernetes, container registries, GitHub repos, ZIPs | .NET, Java, Python, Node.js, PHP, Ruby, Go, Perl, Rust, Oracle Forms, PowerBuilder, Delphi/VB6, Scala/Kotlin, C++ Windows | Web app, API service, batch job, event-driven, serverless, data pipeline, desktop, packaged |
 
 ## The Decision Hardstop Protocol
 

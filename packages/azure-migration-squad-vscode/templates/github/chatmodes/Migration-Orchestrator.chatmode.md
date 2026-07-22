@@ -68,7 +68,6 @@ Combine only the skills that fit the situation. Start from the Capability Matrix
 - `#file:.github/skills/source-gcp.md`
 - `#file:.github/skills/source-oracle-db.md`
 - `#file:.github/skills/source-vmware-rvtools.md`
-- `#file:.github/skills/source-mainframe.md`
 - `#file:.github/skills/source-kubernetes-cluster.md`
 - `#file:.github/skills/source-container-registry.md`
 - `#file:.github/skills/source-zip-filesystem.md`
@@ -84,7 +83,6 @@ Combine only the skills that fit the situation. Start from the Capability Matrix
 - `#file:.github/skills/stack-go.md`
 - `#file:.github/skills/stack-perl.md`
 - `#file:.github/skills/stack-rust.md`
-- `#file:.github/skills/stack-cobol-mainframe.md`
 - `#file:.github/skills/stack-oracle-forms.md`
 - `#file:.github/skills/stack-powerbuilder.md`
 - `#file:.github/skills/stack-delphi-vb6.md`
@@ -100,7 +98,6 @@ Combine only the skills that fit the situation. Start from the Capability Matrix
 - `#file:.github/skills/workload-desktop-client-server.md`
 - `#file:.github/skills/workload-packaged-app.md`
 - `#file:.github/skills/workload-data-pipeline.md`
-- `#file:.github/skills/workload-mainframe-transactional.md`
 
 **Target/Azure:**
 - `#file:.github/skills/azure-app-service.md`

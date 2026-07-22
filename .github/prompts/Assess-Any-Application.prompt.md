@@ -66,10 +66,10 @@ application:
   name: <string>
   business_priority: <speed | modernize | cost | risk>
 source_hint:
-  type: <on-premise | aws | gcp | azure | oracle | kubernetes | mainframe | github-repo | zip | rvtools>
+  type: <on-premise | aws | gcp | azure | oracle | kubernetes | github-repo | zip | rvtools | unsupported>
   access: <git-url | file-path | aws-profile | rvtools-file | "describe-only">
 stack_hint:
-  primary: <dotnet | java | python | nodejs | php | ruby | go | perl | rust | cobol | oracle-forms | powerbuilder | delphi-vb6 | scala | kotlin | cpp | "unknown">
+  primary: <dotnet | java | python | nodejs | php | ruby | go | perl | rust | oracle-forms | powerbuilder | delphi-vb6 | scala | kotlin | cpp | "unknown">
   framework: <optional>
 data_hint:
   primary_datastore: <optional>
@@ -94,17 +94,17 @@ constraints:
 
 Load **only** the source skill that matches the application's current home:
 
-- `source-github-repo`, `source-zip-filesystem`, `source-on-premise`, `source-aws`, `source-gcp`, `source-oracle-db`, `source-vmware-rvtools`, `source-mainframe`, `source-kubernetes-cluster`, `source-container-registry`, `source-unsupported-escalation`
+- `source-github-repo`, `source-zip-filesystem`, `source-on-premise`, `source-aws`, `source-gcp`, `source-oracle-db`, `source-vmware-rvtools`, `source-kubernetes-cluster`, `source-container-registry`, `source-unsupported-escalation` (covers mainframe / midrange / SaaS-embedded — escalate to specialist)
 
 ## Stack Adapter Skills (pick one or more)
 
 Load the stack skill that matches the primary language/framework. Multiple may apply to a polyglot app.
 
-- `stack-dotnet`, `stack-java`, `stack-python`, `stack-nodejs`, `stack-php`, `stack-ruby`, `stack-go`, `stack-perl`, `stack-rust`, `stack-cobol-mainframe`, `stack-oracle-forms`, `stack-powerbuilder`, `stack-delphi-vb6`, `stack-scala-kotlin`, `stack-cpp-windows`
+- `stack-dotnet`, `stack-java`, `stack-python`, `stack-nodejs`, `stack-php`, `stack-ruby`, `stack-go`, `stack-perl`, `stack-rust`, `stack-oracle-forms`, `stack-powerbuilder`, `stack-delphi-vb6`, `stack-scala-kotlin`, `stack-cpp-windows` (COBOL / RPG / Natural on mainframe / midrange → escalate via `source-unsupported-escalation`)
 
 ## Workload Pattern Skills (pick one or more)
 
-- `workload-webapp`, `workload-api-service`, `workload-batch-job`, `workload-event-driven`, `workload-serverless`, `workload-desktop-client-server`, `workload-packaged-app`, `workload-data-pipeline`, `workload-mainframe-transactional`
+- `workload-webapp`, `workload-api-service`, `workload-batch-job`, `workload-event-driven`, `workload-serverless`, `workload-desktop-client-server`, `workload-packaged-app`, `workload-data-pipeline` (mainframe transactional / CICS / IMS workloads → escalate via `source-unsupported-escalation`)
 
 ## Orchestration Hooks
 
@@ -119,7 +119,7 @@ Load the stack skill that matches the primary language/framework. Multiple may a
 
 Ask the user, one block at a time, accepting brief answers:
 
-1. **Where does the app run today?** (on-prem / AWS / GCP / Azure / Oracle / Kubernetes / mainframe / "I'll share a repo" / "I'll upload a ZIP" / "describe-only")
+1. **Where does the app run today?** (on-prem / AWS / GCP / Azure / Oracle / Kubernetes / "I'll share a repo" / "I'll upload a ZIP" / "describe-only" — for mainframe / IBM i / AS-400 / z/OS answer "describe-only" and Discovery will route to `source-unsupported-escalation`)
 2. **How can we access it?** (git URL / file path / AWS profile / RVTools export / network share / "describe-only")
 3. **What language(s) and framework(s)?** (or "I don't know — probe it")
 4. **What datastore(s)?** (or "unknown")
@@ -179,7 +179,6 @@ Map evidence to workload pattern(s):
 | Desktop UI + backend service | `desktop-client-server` |
 | Vendor binary or installable | `packaged-app` |
 | ETL/ELT, data movement, DataFrame work, scheduled extracts | `data-pipeline` |
-| CICS / IMS / transactional mainframe | `mainframe-transactional` |
 
 Pick one **primary** pattern and any **secondary** patterns. Load matching `workload-*` skill(s).
 
@@ -200,7 +199,6 @@ Trigger **only** the follow-ups that apply:
 | If detected in Steps 3–6 | Follow-up to ask |
 |--------------------------|------------------|
 | Regulated data (PII / PCI / HIPAA / GDPR) | "What residency, audit, and encryption requirements apply?" |
-| Mainframe / RPG / COBOL | "Batch vs online split? Scheduler? RACF or other security?" |
 | Vendor runtime (Oracle, IBM, SAP) | "Licensing and support contract details?" |
 | No test environment | "What RTO/RPO? Allowed cutover window?" |
 | Large or very-large data gravity | "Replication needs? Reporting downstream consumers?" |
@@ -233,9 +231,9 @@ For each of the following axes, do a `file_search` for the matching filename pat
 |--------------------|---------------------------|---------|
 | `stack.primary_stack` | `stack-<value>.md` | `stack-elixir.md` |
 | `stack.secondary_stacks[*]` | `stack-<value>.md` | `stack-clojure.md` |
-| `source.primary_adapter` | `source-<value>.md` | `source-as400.md` |
+| `source.primary_adapter` | `source-<value>.md` | `source-nutanix.md` |
 | `workload.primary_pattern` | `workload-<value>.md` | `workload-iot-edge.md` |
-| each entry in `integrations` (if it looks like a well-known system) | `integration-<value>.md` | `integration-ibm-mq.md` |
+| each entry in `integrations` (if it looks like a well-known system) | `integration-<value>.md` | `integration-tibco-ems.md` |
 
 For **each miss** (file not found):
 

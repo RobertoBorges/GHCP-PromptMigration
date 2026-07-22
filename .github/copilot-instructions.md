@@ -4,7 +4,9 @@ These instructions apply to all GitHub Copilot interactions within this reposito
 
 ## Project Purpose (Universal Mode)
 
-This repository is a **universal application-to-Azure migration system**. It can assess, modernize, and migrate **any application** — regardless of source environment (on-premise, AWS, GCP, Oracle, VMware, Kubernetes, container registry, GitHub repo, ZIP, mainframe) or stack (.NET, Java, Python, Node.js, PHP, Ruby, Go, Perl, Rust, COBOL, Oracle Forms, PowerBuilder, Delphi/VB6, Scala/Kotlin, C++ Windows, and more) — into Azure.
+This repository is a **universal application-to-Azure migration system**. It can assess, modernize, and migrate **any application** — regardless of source environment (on-premise, AWS, GCP, Oracle, VMware, Kubernetes, container registry, GitHub repo, ZIP) or stack (.NET, Java, Python, Node.js, PHP, Ruby, Go, Perl, Rust, Oracle Forms, PowerBuilder, Delphi/VB6, Scala/Kotlin, C++ Windows, and more) — into Azure.
+
+> **Mainframe and midrange workloads** (z/OS, z/VSE, IBM i / AS-400, COBOL / RPG / Natural / PL/I, CICS/IMS, VSAM) are **out of scope** as a first-class family. Discovery redirects these to `source-unsupported-escalation.md`, which provides a specialist-partner escalation playbook (Micro Focus, Astadia, Kyndryl, LzLabs, TCS, NTT DATA). This tool does not attempt code-level COBOL/RPG/Natural migration.
 
 The system supports **three complementary flows**:
 
@@ -192,7 +194,6 @@ Read [`.github/hooks/decision-gates.md`](./hooks/decision-gates.md) for the orch
 | PHP 5.x / 7.x | PHP 8.3+ |
 | Ruby 2.x | Ruby 3.3+ |
 | Go ≤ 1.19 | Go 1.22+ |
-| COBOL / OpenCOBOL on z/OS | Java 21 on AKS via Micro Focus / Astadia, or rebuild |
 | Oracle Forms | APEX / Spring Boot rewrite, or refactor to web UI |
 | Delphi / VB6 / PowerBuilder | Rebuild on .NET 10 or modern web stack |
 

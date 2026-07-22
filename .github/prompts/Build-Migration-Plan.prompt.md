@@ -132,7 +132,7 @@ In addition to the standard phase gates, add app-specific gates from the matrix:
 | `large-data-gravity` | Performance Engineer baseline before Phase 6 |
 | `vendor-licensed-runtime` | Cost Engineer license review before Phase 3 |
 | `tight-cutover-window` | Cutover Commander rehearsal before Phase 4 |
-| `mainframe` or `saas-embedded` | Architect re-review before each phase boundary |
+| `saas-embedded` or `unsupported-source` (mainframe/IBM i/midrange) | Architect re-review before each phase boundary |
 | `production-only-system` | Tester smoke plan before Phase 4 |
 | `high-integration-fanout` | Integration mocks before Phase 4 |
 

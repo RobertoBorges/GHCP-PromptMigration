@@ -130,8 +130,8 @@ When the user picks an application to start modernizing (Step 4), this skill wri
 | `app.target_platform` | string | Azure hosting platform | `App Service` \| `Container Apps` \| `AKS` |
 | `app.iac_preference` | string | Infrastructure-as-Code tool | `Bicep` \| `Terraform` |
 | `app.database_strategy` | string | Target Azure database service | e.g., `Azure SQL Database`, `Cosmos DB`, `Azure Database for PostgreSQL` |
-| `app.current_stack` | string | Current framework/version | e.g., `.NET Framework 4.8`, `Java 8 + Spring 4.x`, `Python 2.7 + Django 1.11`, `Node.js 12 + Express 4`, `PHP 5.6 + Laravel 5`, `Ruby 2.6 + Rails 5`, `COBOL on z/OS`, `Delphi 7`, `Oracle Forms 11g` |
-| `app.target_stack` | string | Target framework/version | e.g., `.NET 10 LTS`, `Spring Boot 3.x + Java 21`, `Python 3.12 + Django 5`, `Node.js 20 LTS + Express 5`, `PHP 8.3 + Laravel 11`, `Ruby 3.3 + Rails 7`, `Java 21 on AKS (COBOL refactor)`, or `unchanged (rehost only)` |
+| `app.current_stack` | string | Current framework/version | e.g., `.NET Framework 4.8`, `Java 8 + Spring 4.x`, `Python 2.7 + Django 1.11`, `Node.js 12 + Express 4`, `PHP 5.6 + Laravel 5`, `Ruby 2.6 + Rails 5`, `Delphi 7`, `Oracle Forms 11g` |
+| `app.target_stack` | string | Target framework/version | e.g., `.NET 10 LTS`, `Spring Boot 3.x + Java 21`, `Python 3.12 + Django 5`, `Node.js 20 LTS + Express 5`, `PHP 8.3 + Laravel 11`, `Ruby 3.3 + Rails 7`, or `unchanged (rehost only)` |
 | `app.criticality` | string | Business criticality from deck | `Low` \| `Medium` \| `High` \| `Critical` |
 | `app.notes` | string | Free-form context to carry forward | optional |
 

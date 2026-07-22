@@ -217,7 +217,6 @@ After writing the file, post this message:
    | `perl` | `cpanm --installdeps .` |
    | `rust` | `cargo build` |
    | `scala` / `kotlin` | `sbt compile` or `gradle build` |
-   | `cobol-mainframe` | Vendor-specific (Micro Focus / Astadia / OpenCOBOL) |
    | `oracle-forms` / `powerbuilder` / `delphi-vb6` / `cpp-windows` | Vendor IDE — typically no headless build. Document the manual build step. |
    | Other / unknown | Skip; ask the user for the build command they use today. |
 3. **Document any build failures** — these indicate migration blockers.
@@ -238,7 +237,6 @@ Use `file_search` for stack-appropriate manifests:
   Perl:      cpanfile, Makefile.PL, dist.ini
   Rust:      Cargo.toml, Cargo.lock
   Scala/Kotlin: build.sbt, build.gradle.kts
-  COBOL:     *.cbl, *.cob, *.cpy (with mainframe compile decks)
 Use `grep_search` to identify framework versions in the detected manifests.
 ```
 
@@ -312,8 +310,10 @@ Use `grep_search` to identify framework versions in the detected manifests.
 | Authentication | `grep_search`: `jwt-go`, `oauth2`, `casbin`, `azuread` |
 | Database access | `grep_search`: `database/sql`, `gorm.io`, `pgx`, `sqlx` |
 
-**For `perl` / `rust` / `scala-kotlin` / `cobol-mainframe` / `oracle-forms` / `powerbuilder` / `delphi-vb6` / `cpp-windows`:**
+**For `perl` / `rust` / `scala-kotlin` / `oracle-forms` / `powerbuilder` / `delphi-vb6` / `cpp-windows`:**
 Load the matching `stack-*.md` skill for its detection patterns and Azure compatibility guidance.
+
+**For mainframe / midrange sources (z/OS, z/VSE, IBM i / AS-400) or COBOL / RPG / Natural / PL/I applications:** these are **out of scope** for this tool. Skip Phase 1 and use `source-unsupported-escalation.md` to route the user to a specialist partner (Micro Focus / Astadia / Kyndryl / LzLabs / TCS / NTT DATA).
 
 **Mixed-stack applications** (`.stack.secondary_stacks` is non-empty): run the discovery for each stack in scope, then reconcile findings in the assessment report.
 

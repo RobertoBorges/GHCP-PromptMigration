@@ -54,7 +54,7 @@ Framework version determines support lifecycle, breaking changes, library compat
 | 2 | **Node 20 LTS** | Stable LTS, broad ecosystem | Mid-lifecycle |
 | 3 | **Node 22 LTS** | Newest LTS, longest runway | Some libs lag a bit |
 
-**Other stacks** (PHP, Ruby, Go, Perl, Rust, COBOL, Oracle Forms, PowerBuilder, Delphi/VB6, Scala/Kotlin, C++ Windows): consult the matching `stack-<name>.md` skill for the recommended target.
+**Other stacks** (PHP, Ruby, Go, Perl, Rust, Oracle Forms, PowerBuilder, Delphi/VB6, Scala/Kotlin, C++ Windows): consult the matching `stack-<name>.md` skill for the recommended target.
 
 ### Recommendation logic
 - If `source.primary_adapter == "on-premise"` AND `stack.framework_eol_within_year == true` → suggest Option 3 (newest LTS).
