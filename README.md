@@ -20,6 +20,50 @@ This repository is the canonical source for the **Azure Migration Agent** (`.git
 
 > **Out of scope as a first-class family:** mainframe / midrange code migration (z/OS, IBM i, COBOL / RPG / Natural / PL/I on CICS / IMS / VSAM). These workloads route to `.github/skills/source-unsupported-escalation.md`, which provides a specialist-partner playbook (Micro Focus / Astadia / Kyndryl / LzLabs / TCS / NTT DATA) instead of pretending we can migrate their code.
 
+## Where this tool fits alongside Microsoft's other migration options
+
+Microsoft ships two first-party migration tools that are excellent when they cover your scenario. This tool complements them — use whatever combination fits your needs:
+
+### 🔷 [GitHub Copilot Upgrade](https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.upgrade-agent) *(`ms-dotnettools.upgrade-agent`)*
+Great for **in-place .NET code upgrades and modernization**:
+- .NET Framework / .NET Core → current .NET (8, 9, 10)
+- .NET Framework 4.8.1 upgrades
+- ASP.NET Web Forms → Blazor Server
+- Azure Functions in-process → isolated worker
+- Aspire integration + version upgrades
+- SDK-style project conversion, VSIX/VSSDK modernization
+- Newtonsoft.Json → System.Text.Json, System.Data.SqlClient → Microsoft.Data.SqlClient
+- Semantic Kernel → Microsoft Agents framework
+
+### 🔷 [Azure Migrate](https://learn.microsoft.com/en-us/azure/migrate/migrate-services-overview)
+Great for **infrastructure discovery + lift-and-shift** of on-prem/other-cloud workloads to Azure IaaS:
+- Server discovery (VMware, Hyper-V, physical, other clouds) → Azure VMs / AVS
+- SQL Server assessment + migration → Azure SQL / Managed Instance / VMs (via **Data Migration Assistant** + **Azure Database Migration Service**)
+- ASP.NET web apps on VMware → App Service (via **App Service Migration Assistant**)
+- Business case analysis, dependency mapping, right-sizing, cost estimation
+- Offline data movement via **Azure Data Box**
+- Includes a preview **Azure Copilot migration agent** for planning inside the Azure portal
+
+### 🟢 What THIS tool does differently
+
+| Capability | This tool | Copilot Upgrade | Azure Migrate |
+|------------|-----------|-----------------|---------------|
+| **Non-.NET stacks** (Java, Python, Node.js, PHP, Ruby, Go, Perl, Rust, Scala/Kotlin, Oracle Forms, PowerBuilder, Delphi/VB6, C++ Windows) | ✅ 15 stack adapters | ❌ .NET only | ⚠ IaaS lift only, no code changes |
+| **Universal source intake** (GitHub repo, ZIP archive, "describe-only" apps, mixed portfolios) | ✅ 10 source adapters + Discovery-first | ⚠ workspace-only | ✅ VMware / Hyper-V / physical / other cloud |
+| **Decision Hardstop Protocol** — 18 major architecture decisions forced before code changes; user picks target framework, DB engine, hosting platform, IaC tool, etc. | ✅ | ❌ | ❌ |
+| **On-the-fly skill authoring** (`skill-creator`) — mid-migration, agent researches + writes a new skill for any stack it hasn't seen (Elixir, F#, Clojure, ABAP, etc.) | ✅ | ❌ | ❌ |
+| **Cross-session trace memory** — canonical Action Log in `Report-Status.md` for recovery + per-action token accounting | ✅ | ❌ | ❌ |
+| **Portfolio 6Rs strategy report** — CIO-ready HTML deck with Factory / ISD-Partner / Unknown ownership across mixed-stack portfolios | ✅ | ❌ | ✅ (business case, different format) |
+| **Cross-stack post-migration observability wiring** — App Insights + OpenTelemetry recipes for 11+ languages | ✅ | ❌ | ❌ |
+| **Universal Discovery Dossier + Capability Matrix** — a mechanical contract every downstream Phase prompt consumes | ✅ | ❌ | ⚠ separate discovery report |
+| **Never picks major architecture for you** — options + tradeoffs, waits for user pick, "stay-as-is" is always option 1 | ✅ | ⚠ some prompts | ❌ |
+
+**How to combine them:**
+- Have a .NET app that needs an in-place code upgrade? Start with **GitHub Copilot Upgrade**.
+- Have on-prem VMs / SQL / web apps to lift into Azure? Start with **Azure Migrate** for discovery + assessment.
+- Have Java / Python / Node.js / PHP / Ruby / Go / other-stack apps to modernize? Use **this tool**.
+- Have a mixed-stack portfolio needing a CIO plan? Use **this tool** for the 6Rs report, then hand off IaaS candidates to Azure Migrate and .NET candidates to GitHub Copilot Upgrade.
+
 ## How it's distributed
 
 **One channel:** the [Azure Migration Agent VS Code extension](https://marketplace.visualstudio.com/items?itemName=robertoborges.azure-migration-squad-vscode). No npm CLI. Just install the extension, open a folder, click **Initialize**.
