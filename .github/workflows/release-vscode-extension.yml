@@ -100,6 +100,52 @@ jobs:
           path: packages/azure-migration-squad-vscode/*.vsix
           retention-days: 90
 
+      # ────────────────────────────────────────────────────────────────────
+      # RAW AGENT CONTENT PACK
+      # Same content the .vsix bundles under templates/github/, packaged
+      # as a plain ZIP for users who want to drop the agent into their
+      # project without installing the VS Code extension.
+      # ────────────────────────────────────────────────────────────────────
+      - name: Stage agent content pack
+        run: |
+          set -euo pipefail
+          STAGE="$RUNNER_TEMP/agent-content-pack"
+          mkdir -p "$STAGE/.github"
+          cp -R .github/agents "$STAGE/.github/"
+          cp -R .github/prompts "$STAGE/.github/"
+          cp -R .github/skills "$STAGE/.github/"
+          cp -R .github/chatmodes "$STAGE/.github/"
+          cp -R .github/hooks "$STAGE/.github/"
+          cp .github/copilot-instructions.md "$STAGE/.github/"
+          cp MIGRATION-START-HERE.md "$STAGE/"
+          cat > "$STAGE/README.md" <<'EOF'
+          # Azure Migration Agent — content pack
+
+          This ZIP contains the canonical agent definition, prompts, skills,
+          chatmodes, hooks, and welcome doc that back the Azure Migration Agent.
+
+          ## Usage (without the VS Code extension)
+
+          1. Extract this ZIP into any repository.
+          2. Files land under `.github/` and at the repo root (`MIGRATION-START-HERE.md`).
+          3. Open the folder in a Copilot-Chat-capable client (VS Code + Copilot Chat, GitHub Copilot CLI, etc.).
+          4. Type `/assess-any-application` in Copilot Chat, or the natural-language equivalent.
+
+          For the guided experience (sidebar, decisions panel, status bar,
+          session-lifecycle hooks), install the VS Code extension instead:
+          https://marketplace.visualstudio.com/items?itemName=robertoborges.azure-migration-squad-vscode
+
+          Source repo: https://github.com/RobertoBorges/GHCP-PromptMigration
+          EOF
+
+      - name: Upload agent content pack artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: agent-content-pack-${{ github.run_number }}
+          path: ${{ runner.temp }}/agent-content-pack/
+          if-no-files-found: error
+          retention-days: 90
+
       - name: Publish to VS Code Marketplace (vsce)
         if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.dryRun == 'false')
         working-directory: packages/azure-migration-squad-vscode

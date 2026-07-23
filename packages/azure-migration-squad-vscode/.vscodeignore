@@ -17,6 +17,16 @@ node_modules/**
 **/.gitattributes
 **/*.log
 
+# Dev-only scripts (not needed at extension runtime — the templates/
+# directory is populated at build time by sync-templates.mjs and shipped
+# as static content. Users never execute these scripts.)
+scripts/**
+
+# Placeholder / build-time notes inside templates/ that shouldn't reach users
+templates/README.md
+templates/.gitkeep
+templates/SYNC-MANIFEST.json
+
 # Keep only what users see:
 # - dist/extension.js    (bundled extension)
 # - package.json         (manifest)
@@ -24,3 +34,5 @@ node_modules/**
 # - CHANGELOG.md         (release notes)
 # - LICENSE
 # - media/               (icon + screenshots)
+# - templates/github/    (the .github/* content the extension copies into user workspace)
+# - templates/MIGRATION-START-HERE.md  (the welcome doc the extension copies too)

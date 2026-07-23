@@ -96,3 +96,57 @@ jobs:
           path: packages/azure-migration-squad-vscode/*.vsix
           if-no-files-found: error
           retention-days: 30
+
+      # ────────────────────────────────────────────────────────────────────
+      # RAW AGENT CONTENT PACK
+      # A separate artifact containing the canonical .github/* content
+      # plus MIGRATION-START-HERE.md. This is what users who prefer NOT
+      # to install the VS Code extension can download and drop into their
+      # own project's .github/ folder directly. Same content the extension
+      # bundles internally under templates/github/.
+      # ────────────────────────────────────────────────────────────────────
+      - name: Stage agent content pack
+        run: |
+          set -euo pipefail
+          STAGE="$RUNNER_TEMP/agent-content-pack"
+          mkdir -p "$STAGE/.github" "$STAGE"
+          # Canonical .github subfolders the extension bundles
+          cp -R .github/agents "$STAGE/.github/"
+          cp -R .github/prompts "$STAGE/.github/"
+          cp -R .github/skills "$STAGE/.github/"
+          cp -R .github/chatmodes "$STAGE/.github/"
+          cp -R .github/hooks "$STAGE/.github/"
+          cp .github/copilot-instructions.md "$STAGE/.github/"
+          # Top-level welcome doc
+          cp MIGRATION-START-HERE.md "$STAGE/"
+          # Small README explaining how to use the pack
+          cat > "$STAGE/README.md" <<'EOF'
+          # Azure Migration Agent — content pack
+
+          This ZIP contains the canonical agent definition, prompts, skills,
+          chatmodes, hooks, and welcome doc that back the Azure Migration Agent.
+
+          ## Usage (without the VS Code extension)
+
+          1. Extract this ZIP into any repository.
+          2. Files land under `.github/` and at the repo root (`MIGRATION-START-HERE.md`).
+          3. Open the folder in a Copilot-Chat-capable client (VS Code + Copilot Chat, GitHub Copilot CLI, etc.).
+          4. Type `/assess-any-application` in Copilot Chat, or the natural-language equivalent.
+
+          For the guided experience (sidebar, decisions panel, status bar,
+          session-lifecycle hooks), install the VS Code extension instead:
+          https://marketplace.visualstudio.com/items?itemName=robertoborges.azure-migration-squad-vscode
+
+          Source repo: https://github.com/RobertoBorges/GHCP-PromptMigration
+          EOF
+          echo "Staged content pack:"
+          find "$STAGE" -type f | wc -l
+          du -sh "$STAGE"
+
+      - name: Upload agent content pack artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: agent-content-pack
+          path: ${{ runner.temp }}/agent-content-pack/
+          if-no-files-found: error
+          retention-days: 30

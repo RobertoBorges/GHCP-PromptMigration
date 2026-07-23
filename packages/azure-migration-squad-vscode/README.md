@@ -1,7 +1,7 @@
 # Azure Migration Agent — VS Code extension
 
 > **Migrate any application to Azure** — directly from your editor.
-> One agent definition, 19 prompts, 113 skills. Stack-agnostic. Discovery-first. Hard-stop user-decision gates.
+> One agent definition, 19 prompts, 85 skills. Stack-agnostic. Discovery-first. Hard-stop user-decision gates.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
@@ -16,6 +16,21 @@ Drops a `.github/agents/Code-Migration-Modernization.agent.md` and the full prom
 3. **Execute** — Phases 2-6: migrate code, generate infra, deploy, set up CI/CD, run ops
 
 The agent **never picks framework / database / hosting / IaC tool on your behalf**. It surfaces options + tradeoffs and waits.
+
+## Supported languages, frameworks, and platforms
+
+**Not just .NET and Java.** The agent handles any application in any of these stacks — with a dedicated skill file per stack that knows the modernization patterns, Azure hosting options, and common blockers:
+
+**15 stack adapters (languages / frameworks):**
+`.NET` (Framework 2.x → 10 LTS) · `Java` (8/11 → 17/21 LTS + Spring Boot 3.x) · `Python` (2.x → 3.12+, Django/Flask/FastAPI) · `Node.js` (12/14/16 → 20/22 LTS, Express/NestJS/Next) · `PHP` (5.x/7.x → 8.3+, Laravel/Symfony) · `Ruby` (2.x → 3.3+, Rails) · `Go` (≤ 1.19 → 1.22+) · `Perl` · `Rust` · `Scala/Kotlin` · `Oracle Forms` (→ APEX / Spring Boot) · `PowerBuilder` · `Delphi/VB6` · `C++ Windows`
+
+**Plus on-the-fly skill authoring:** if you show up with a stack the 15 adapters don't cover (Elixir, F#, Julia, Clojure, ABAP, etc.), the built-in **skill-creator** meta-skill offers to research authoritative docs and author a new skill on the spot (~2-5 minutes).
+
+**10 source adapters (where the app runs today):** On-premise · AWS · GCP · Oracle Cloud · VMware / RVTools · Kubernetes · container registries (ACR / ECR / Docker Hub) · GitHub repo · ZIP archive · escalation path for SaaS-embedded (Salesforce Apex, ServiceNow, SharePoint on-prem, Power Platform, SAP ABAP) and mainframe/midrange workloads
+
+**8 workload patterns:** Web app · API service · Batch job · Event-driven · Serverless (Functions) · Data pipeline · Desktop / client-server · Packaged app
+
+> **Out of scope as a first-class family:** mainframe / midrange code migration (z/OS, IBM i, COBOL / RPG / Natural). These route to a specialist-partner playbook instead of pretending we can migrate their code.
 
 ## Quick install
 
@@ -32,19 +47,20 @@ Full walkthrough: [docs/vscode-quickstart.md](https://github.com/RobertoBorges/G
 Open the **rocket icon 🚀** in the Activity Bar:
 
 ```
-🛑 DECISIONS REQUIRED        ← Wave H artifact — pending architecture decisions
-AGENT                         ← The Code Migration Modernization Agent
-PROMPTS                       ← 19 slash commands
-SKILLS                        ← 113 adapters & patterns
+🛑 DECISIONS REQUIRED           ← pending architecture decisions (from reports/Decisions-Required.md)
+AGENT                            ← The Code Migration Modernization Agent
+🟢 MAIN PATH (Assess + Phase 1-6) ← the 7-step migration flow
+🔵 OPTIONAL ADD-ONS              ← Alternative intakes · Portfolio · Specialized deep-dives · Utility
 ```
 
 The **status bar** (bottom-left) shows your current migration phase, or **"⚠ AMA: N/M decisions pending"** with a warning background when you have unanswered architecture decisions.
 
-## Supported tech
+## Standout features
 
-| Sources | Stacks | Workloads |
-|---------|--------|-----------|
-| On-premise, AWS, GCP, Oracle, VMware, Kubernetes, container registries, GitHub repos, ZIPs | .NET, Java, Python, Node.js, PHP, Ruby, Go, Perl, Rust, Oracle Forms, PowerBuilder, Delphi/VB6, Scala/Kotlin, C++ Windows | Web app, API, batch, event-driven, serverless, data pipeline, desktop, packaged |
+- **🎯 Decision Hardstop Protocol** — Phases 2-6 hard-stop until you answer 18 canonical architecture decisions. No silent defaults, no expert-mode bypass. Stay-as-is is always option 1.
+- **🧠 On-the-fly skill authoring** — `skill-creator` writes new stack/source/workload skills mid-migration when it hits an unknown, inspired by [Anthropic's skill-creator](https://github.com/anthropics/skills/tree/main/skills/skill-creator).
+- **📜 Action Log (trace memory)** — every meaningful action logs one line to `reports/Report-Status.md` in a canonical format. New sessions recover from the last 5 log entries. Includes per-action turn count + best-effort token estimate.
+- **✅ Universal, stack-agnostic wording** — every prompt was swept to remove ".NET or Java only" phrasing. Default goal is minimum viable Azure compatibility, NOT rewriting to microservices.
 
 ## Requirements
 
@@ -69,6 +85,7 @@ The extension is **self-contained**:
 - On Initialize, copies `templates/` into the user's workspace under `.github/`
 - All Copilot Chat slash commands work via the bundled `.github/prompts/*.prompt.md` files
 - The agent definition at `.github/agents/Code-Migration-Modernization.agent.md` orchestrates everything
+- Session-lifecycle hooks read/write `reports/Report-Status.md` so recovery works across sessions
 
 No npm CLI. No external Squad framework. Just the extension and Copilot Chat.
 
