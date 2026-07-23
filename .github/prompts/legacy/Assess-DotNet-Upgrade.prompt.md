@@ -1,6 +1,6 @@
 ---
 agent: Code Migration Modernization Agent
-model: Claude Sonnet 4.6 (copilot)
+model: Claude Sonnet 4.7 (copilot)
 tools: ['search/codebase', 'usages', 'vscodeAPI', 'problems', 'changes', 'testFailure', 'runCommands/terminalSelection', 'runCommands/terminalLastCommand', 'openSimpleBrowser', 'fetch', 'search/searchResults', 'githubRepo', 'extensions', 'runTests', 'edit/editFiles', 'runNotebooks', 'search', 'new', 'runCommands', 'runTasks', 'Azure MCP/*', 'Microsoft Docs/*']
 description: "Assesses .NET applications and upgrade paths for Azure migration."
 ---
@@ -253,7 +253,7 @@ At the end:
 - State the detected starting runtime and the recommended target runtime plainly
 - State whether the recommended path is incremental, hybrid, big-bang, or strangler
 - Call out the top 5 blockers for the chosen version jump
-- Recommend `/Phase1-PlanAndAssess` if broader Azure platform planning is still needed
+- Recommend `/Phase1-Plan` if broader Azure platform planning is still needed
 - Recommend `/Assess-WebForms-Migration`, `/Assess-WCF-Migration`, or `/Assess-ClassicASP-Migration` when those technologies dominate the risk
 
 ---

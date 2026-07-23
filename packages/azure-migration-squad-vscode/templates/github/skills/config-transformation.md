@@ -1,6 +1,6 @@
 # Configuration Transformation
 
-Use this skill when modernizing legacy .NET or Java configuration from XML and flat property files into cloud-friendly configuration providers.
+Use this skill when modernizing legacy application configuration from any format (XML `web.config` / `app.config`, Java properties, `.env`, YAML, INI, Python `settings.py`, PHP `.htaccess` + `php.ini`, Ruby YAML, etc.) into cloud-friendly configuration providers.
 
 ## When to Use
 

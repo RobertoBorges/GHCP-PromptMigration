@@ -1,5 +1,5 @@
 /**
- * Base class for the AMS tree providers (Agents, Prompts, Skills).
+ * Base class for the AMA tree providers (Agents, Prompts, Add-ons).
  * Each subclass declares where its content lives and produces TreeItems.
  */
 
@@ -54,6 +54,10 @@ export abstract class AmsTreeProviderBase implements vscode.TreeDataProvider<vsc
   getFileSuffix(): string {
     return '.md';
   }
+  /** Subclasses can filter files further (e.g., only main-path phases). Default: include all. */
+  filterFile(_absolutePath: string): boolean {
+    return true;
+  }
 
   refresh(): void {
     this._onDidChangeTreeData.fire();
@@ -63,16 +67,21 @@ export abstract class AmsTreeProviderBase implements vscode.TreeDataProvider<vsc
     return element;
   }
 
-  async getChildren(): Promise<vscode.TreeItem[]> {
+  async getChildren(element?: vscode.TreeItem): Promise<vscode.TreeItem[]> {
+    // Flat providers ignore `element` — parent items only exist in grouped providers
+    // (like AddonsProvider) which override this method.
+    if (element) {
+      return [];
+    }
     const ws = findAmsWorkspace();
     if (!ws || !ws.isInstalled) {
       return [new NotInstalledItem()];
     }
 
     const dir = path.join(ws.root, this.getRelativeDir());
-    const files = listMarkdownFiles(dir, this.isRecursive()).filter((f) =>
-      f.endsWith(this.getFileSuffix())
-    );
+    const files = listMarkdownFiles(dir, this.isRecursive())
+      .filter((f) => f.endsWith(this.getFileSuffix()))
+      .filter((f) => this.filterFile(f));
     if (files.length === 0) {
       const empty = new vscode.TreeItem('(none found)');
       empty.iconPath = new vscode.ThemeIcon('info');

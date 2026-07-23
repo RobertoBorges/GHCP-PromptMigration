@@ -9,7 +9,7 @@ description: |
 
 # Azure Containerization Skill
 
-Use this skill when containerizing .NET or Java applications for Azure deployment.
+Use this skill when containerizing applications for Azure deployment. Currently ships worked example Dockerfiles for `.NET` and `Java`; adapt the same multi-stage pattern for other stacks (`python`, `nodejs`, `php`, `ruby`, `go`, `rust`, `perl`, etc.) using their official base images.
 
 ## When to Use This Skill
 

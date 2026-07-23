@@ -1,11 +1,8 @@
 ---
 agent: Code Migration Modernization Agent
-model: Claude Sonnet 4.6 (copilot)
-tools: ['search/codebase', 'usages', 'vscodeAPI', 'problems', 'changes', 'testFailure', 'runCommands/terminalSelection', 'runCommands/terminalLastCommand', 'openSimpleBrowser', 'fetch', 'search/searchResults', 'githubRepo', 'extensions', 'runTests', 'edit/editFiles', 'runNotebooks', 'search', 'new', 'runCommands', 'runTasks', 'Azure MCP/*', 'Microsoft Docs/*']
+model: Claude Sonnet 4.7 (copilot)
 description: "Establishes post-migration monitoring, performance, and operational readiness."
 ---
-
-
 
 
 <!-- BEGIN: capability-matrix-gate (auto-managed by inject-capability-matrix-gates.mjs) -->
@@ -18,7 +15,7 @@ description: "Establishes post-migration monitoring, performance, and operationa
 |-------------------|----------|------------|
 | Discovery Dossier | `reports/Discovery-Dossier.md` | **STOP** — run `/assess-any-application` first |
 | Capability Matrix | `reports/Capability-Matrix.yaml` | **STOP** — run `/assess-any-application` first |
-| Approved Migration Plan | `reports/Migration-Plan.md` | **STOP** — run `/build-migration-plan` |
+| Approved Migration Plan | `reports/Migration-Plan.md` | **STOP** — run `/Phase1-Plan` (or the `/build-migration-plan` add-on) |
 
 ### If ANY of those three artifacts is missing
 
@@ -34,7 +31,7 @@ Missing artifacts:
 
 Required steps before re-running this phase:
   1. Open Copilot Chat → /assess-any-application  (or in CLI: "assess this application")
-  2. Then: /build-migration-plan                  (or in CLI: "build the migration plan")
+  2. Then: /Phase1-Plan                            (produces the Migration Plan, or use /build-migration-plan add-on)
   3. Then: /phase...
 
 To override (skip Discovery and accept risk), log a waiver entry in
@@ -55,10 +52,34 @@ this prompt with the `--accept-risk` natural-language flag in your request.
    - `migration_strategy.recommendation` → adjust phase emphasis based on the recommended strategy
    - `risk_flags` → load the matching risk skills (e.g., `risk-cross-region-data.md`)
    - `unresolved_questions` → if any remain unanswered, surface them BEFORE starting work
-2. Read `reports/Migration-Plan.md` for approved sequencing and any app-specific extra gates.
-3. Confirm Phase prerequisites are met.
+2. **Skill Gap Check (belt + suspenders)** — for each value above, verify a matching `<family>-<value>.md` exists in `.github/skills/`. If any is missing, invoke `.github/skills/skill-creator.md` to author it on the fly. Ask a single Y/n/N-for-session confirmation; default is Y.
+3. Read `reports/Migration-Plan.md` for approved sequencing and any app-specific extra gates.
+4. Confirm Phase prerequisites are met.
 
 <!-- END: capability-matrix-gate -->
+<!-- BEGIN: action-log-contract (auto-managed by inject-action-log-contract.mjs) -->
+
+## 📜 Action Log Contract
+
+**After each meaningful action** in this prompt, append one single-line entry to the `## 📜 Action Log` section at the bottom of `reports/Report-Status.md`.
+
+Canonical format:
+```
+- <ISO-8601-UTC> | actor=Phase6-PostMigrationOps | action=<verb-phrase> | files=<+created,~modified,-deleted> | tokens=~<bucket> | turn=<n> | notes="<free text>"
+```
+
+Rules:
+- Use `actor=Phase6-PostMigrationOps` for actions taken by this prompt.
+- Use `actor=User` for actions taken by the user (e.g., answering a decision).
+- Log **only meaningful actions**: phase transitions, artifact production, decision events, gate passes/blocks, user inputs, rollback events. Do NOT log every internal grep or file read.
+- Estimate `tokens` in buckets: `~0`, `~500`, `~2k`, `~8k`, `~30k`. The `turn` counter is exact; token estimate is best-effort. Point users to Copilot Dashboard for authoritative counts.
+- If `reports/Report-Status.md` doesn't exist yet, create it from `.github/skills/migration-report-template.md` first — it already includes the `## 📜 Action Log` section.
+
+Full spec: `.github/skills/action-log-format.md`.
+
+<!-- END: action-log-contract -->
+
+
 ## Skills Reference
 Use these operations skills:
 - `#file:.github/skills/azure-app-service.md`
@@ -85,7 +106,7 @@ Use this prompt after the application has been deployed to Azure and basic deplo
 ## Preconditions
 Before starting, confirm or infer the following from the repository and `reports/` folder:
 - Target Azure hosting platform (App Service, Azure Container Apps, or AKS)
-- Application type and runtime (.NET, Java, Node.js, or mixed)
+- Application stack and runtime (from `Capability-Matrix.stack.primary_stack` — e.g., dotnet, java, python, nodejs, php, ruby, go, etc.)
 - Deployment outputs, endpoints, and environment names
 - Monitoring resources already provisioned (Application Insights, Log Analytics, Azure Monitor)
 - Security controls already configured (managed identities, Key Vault, network controls)
@@ -115,9 +136,23 @@ If this information is incomplete, ask targeted follow-up questions before makin
 - Check for noisy telemetry and sampling gaps.
 
 ### 2.2 Instrumentation Expectations
-- For .NET, verify `ILogger`, OpenTelemetry, and Application Insights SDK configuration.
-- For Java, verify SLF4J/OpenTelemetry/Application Insights integration.
-- For containerized workloads, confirm stdout/stderr logs and platform diagnostics are connected to Azure Monitor or Log Analytics.
+
+For each stack in `Capability-Matrix.stack.primary_stack` (and `.stack.secondary_stacks`), verify observability wiring is in place. Only load the rows that apply — don't ask about instrumentation for stacks not in the matrix.
+
+| Stack | What to verify |
+|-------|----------------|
+| `dotnet` | `ILogger`, OpenTelemetry .NET SDK, `Microsoft.ApplicationInsights.AspNetCore` (or the OTLP exporter to Application Insights) |
+| `java` | SLF4J + Logback / Log4j2, OpenTelemetry Java agent auto-instrumentation OR `applicationinsights-agent-*.jar` attached to JVM |
+| `python` | `logging` module configured to stdout/stderr, `opentelemetry-instrumentation-*` packages, `azure-monitor-opentelemetry` (or OTLP exporter to Application Insights) |
+| `nodejs` | `winston` / `pino` writing JSON to stdout, `@azure/monitor-opentelemetry` (or `applicationinsights` SDK) |
+| `php` | `Monolog` writing to stdout, PHP OpenTelemetry SDK (or per-request Application Insights REST push) |
+| `ruby` | `Rails.logger` / `Lograge` for JSON logs, OpenTelemetry Ruby SDK OR `applicationinsights` gem |
+| `go` | `slog` / `zap` / `logrus` JSON logs, `go.opentelemetry.io/otel` with OTLP exporter |
+| `perl` | `Log::Log4perl` writing structured logs to stdout; Application Insights via REST push if available |
+| `rust` | `tracing` + `tracing-opentelemetry` with OTLP exporter |
+| Other / unknown | Confirm the app writes to stdout/stderr (containerized) OR to files that Diagnostic Settings can ship to Log Analytics |
+
+For **containerized workloads** of any stack, confirm stdout/stderr logs and platform diagnostics are connected to Azure Monitor / Log Analytics via the Container Apps / AKS / App Service diagnostic settings.
 
 ### 2.3 Dashboard and Workbook Creation
 Define a production-ready dashboard or workbook that includes:

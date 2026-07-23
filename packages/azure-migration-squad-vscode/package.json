@@ -65,15 +65,15 @@
         },
         {
           "id": "azureMigrationSquadPrompts",
-          "name": "Prompts",
+          "name": "🟢 Main path (Assess + Phase 1-6)",
           "icon": "media/activity-bar-icon.svg",
-          "contextualTitle": "Azure Migration Agent — Prompts"
+          "contextualTitle": "Azure Migration Agent — Main path"
         },
         {
-          "id": "azureMigrationSquadSkills",
-          "name": "Skills",
+          "id": "azureMigrationSquadAddons",
+          "name": "🔵 Optional add-ons",
           "icon": "media/activity-bar-icon.svg",
-          "contextualTitle": "Azure Migration Agent — Skills"
+          "contextualTitle": "Azure Migration Agent — Optional add-ons"
         }
       ]
     },
@@ -81,7 +81,7 @@
       "view/title": [
         {
           "command": "azureMigrationSquad.refreshTree",
-          "when": "view == azureMigrationSquadAgents || view == azureMigrationSquadPrompts || view == azureMigrationSquadSkills || view == azureMigrationSquadDecisions",
+          "when": "view == azureMigrationSquadAgents || view == azureMigrationSquadPrompts || view == azureMigrationSquadAddons || view == azureMigrationSquadDecisions",
           "group": "navigation"
         }
       ]
@@ -90,7 +90,7 @@
       {
         "id": "azureMigrationSquadGettingStarted",
         "title": "Migrate to Azure with the Azure Migration Agent",
-        "description": "Set up the agent, run Discovery, generate a migration plan, and execute Phases 1-6.",
+        "description": "Set up the agent, then run the main path (Phase 1 → Phase 6) to migrate your application.",
         "steps": [
           {
             "id": "install",
@@ -98,7 +98,7 @@
             "description": "Drops the agent definition, prompts, skills, and a 60-second quickstart into your project.\n[Initialize now](command:azureMigrationSquad.initialize)",
             "media": {
               "image": "media/walkthroughs/step-1-init.png",
-              "altText": "Initialize Azure Migration Squad screenshot"
+              "altText": "Initialize Azure Migration Agent screenshot"
             },
             "completionEvents": [
               "onCommand:azureMigrationSquad.initialize"
@@ -107,7 +107,7 @@
           {
             "id": "installCopilot",
             "title": "Install GitHub Copilot Chat",
-            "description": "The migration squad uses slash commands inside Copilot Chat (e.g. `/assess-any-application`). If you already have Copilot Chat installed, this step auto-completes.\n[Install Copilot Chat](command:azureMigrationSquad.installCopilotChat)",
+            "description": "The agent uses slash commands inside Copilot Chat (e.g. `/assess-any-application`). If you already have Copilot Chat installed, this step auto-completes.\n[Install Copilot Chat](command:azureMigrationSquad.installCopilotChat)",
             "media": {
               "image": "media/walkthroughs/step-2-copilot.png",
               "altText": "Install GitHub Copilot Chat extension"
@@ -118,20 +118,20 @@
           },
           {
             "id": "discovery",
-            "title": "Run Discovery — characterize your application",
-            "description": "The Discovery Engineer (Saul Bloom Jr.) interviews you about source, stack, workload, data, and integrations, then produces a Capability Matrix the rest of the squad consumes.\n[Open Discovery](command:azureMigrationSquad.openDiscovery)",
+            "title": "Start the main path — /assess-any-application",
+            "description": "Step 1 of the main path is Discovery. Interviews you about source, stack, workload, data, and integrations; produces the Capability Matrix that /Phase1-Plan and every subsequent phase consumes.\n[Start main path](command:azureMigrationSquad.openMainPath)",
             "media": {
               "image": "media/walkthroughs/step-3-discovery.png",
               "altText": "Run /assess-any-application in Copilot Chat"
             },
             "completionEvents": [
-              "onCommand:azureMigrationSquad.openDiscovery"
+              "onCommand:azureMigrationSquad.openMainPath"
             ]
           },
           {
             "id": "explore",
-            "title": "Explore the sidebar — agent, prompts, skills, decisions",
-            "description": "Look for the rocket icon 🚀 in the Activity Bar. Browse the agent definition, 26 prompts, 60+ skills, and pending architecture decisions. Click any item to open its source file.",
+            "title": "Explore the sidebar — Agent, Main path, Add-ons, Decisions",
+            "description": "Look for the rocket icon 🚀 in the Activity Bar. Browse the agent, the 6 main-path phases, optional add-ons grouped by purpose, and pending architecture decisions. Click any item to open its source file.",
             "media": {
               "image": "media/walkthroughs/step-4-sidebar.png",
               "altText": "Azure Migration Agent sidebar"
@@ -181,6 +181,12 @@
         "title": "Run health check (doctor)",
         "category": "Azure Migration",
         "icon": "$(pulse)"
+      },
+      {
+        "command": "azureMigrationSquad.openMainPath",
+        "title": "Start main path (/assess-any-application)",
+        "category": "Azure Migration",
+        "icon": "$(play)"
       },
       {
         "command": "azureMigrationSquad.openDiscovery",
@@ -254,7 +260,12 @@
     "test": "node ./out/test/runTest.js",
     "prepackage": "npm run sync",
     "package": "vsce package --no-dependencies",
-    "publish": "vsce publish --no-dependencies"
+    "publish": "vsce publish --no-dependencies",
+    "release:local": "node scripts/local-release.mjs",
+    "release:local:patch": "node scripts/local-release.mjs --patch",
+    "release:local:minor": "node scripts/local-release.mjs --minor",
+    "release:local:major": "node scripts/local-release.mjs --major",
+    "release:local:dry-run": "node scripts/local-release.mjs --dry-run"
   },
   "devDependencies": {
     "@types/mocha": "^10.0.6",

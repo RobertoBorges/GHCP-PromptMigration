@@ -58,7 +58,7 @@ When you're about to execute work that depends on any item from the catalog:
 3. Check its **Status:** line
    - `✅ DECIDED <date>` → proceed using the recorded answer
    - `⏸ PENDING` → STOP. Do not proceed.
-   - File missing → STOP. The Plan & Assess phase produces this file. Route the user to `/Phase1-PlanAndAssess` (or natural language: "build the migration plan").
+   - File missing → STOP. The Plan & Assess phase produces this file. Route the user to `/Phase1-Plan` (or natural language: "build the migration plan").
 
 ### Step 2 — Post the question (chat format)
 
@@ -150,7 +150,7 @@ A recommendation IS allowed, but it must:
 
 > 🚨 I can't proceed because `reports/Decisions-Required.md` doesn't exist yet. The Plan & Assess phase produces it.
 >
-> Please run `/Phase1-PlanAndAssess` first (or in CLI: "build the migration plan"). It will populate the decisions file based on what's in your Capability Matrix, then you can answer each one.
+> Please run `/Phase1-Plan` first (or in CLI: "build the migration plan"). It will populate the decisions file based on what's in your Capability Matrix, then you can answer each one.
 
 ### Decision PENDING
 

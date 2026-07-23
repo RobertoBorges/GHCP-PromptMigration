@@ -17,12 +17,14 @@ The extension bundles a copy of the canonical content from this repo and drops i
 
 1. Install the extension: open VS Code, `Ctrl+Shift+X`, search **"Azure Migration Agent"**, click Install.
 2. Open the folder you want to migrate.
-3. Accept the welcome notification → click **Get started** (or run the command "Azure Migration: Initialize in this workspace" from the Command Palette).
-4. Open GitHub Copilot Chat (`Ctrl+Alt+I`) → type `/assess-any-application`.
-5. The agent interviews you about source, stack, workload, then produces `reports/Discovery-Dossier.md` + `reports/Capability-Matrix.yaml`.
-6. Then `/build-migration-plan` produces `reports/Migration-Plan.md` and `reports/Decisions-Required.md`.
+3. Accept the welcome notification → click **Get started** (or run "Azure Migration: Initialize in this workspace" from the Command Palette).
+4. Open GitHub Copilot Chat (`Ctrl+Alt+I`) → type `/assess-any-application`. This is step 1 of the main path — discovery.
+5. Then `/Phase1-Plan` — produces `reports/Application-Assessment-Report.md`, `reports/Migration-Plan.md`, and `reports/Decisions-Required.md`.
+6. Answer each decision in `reports/Decisions-Required.md`, then run Phase 2 → Phase 3 → Phase 4 → Phase 5 → Phase 6 in order.
 
-After Phase 1, **Phases 2-6 hard-stop** until each major decision in `reports/Decisions-Required.md` is answered. See [`.github/skills/decision-hardstop.md`](./.github/skills/decision-hardstop.md) for the protocol.
+Phases 2-6 **hard-stop** until each required decision in `reports/Decisions-Required.md` is answered. See [`.github/skills/decision-hardstop.md`](./.github/skills/decision-hardstop.md) for the protocol.
+
+> **Optional add-ons** — `/Build-Migration-Plan`, `/PortfolioStrategy`, `/DatabaseMigration`, `/SecurityHardening`, `/CostOptimization`, and more are available for specialized needs. They are **not part of the default flow**. See [`MIGRATION-START-HERE.md`](./MIGRATION-START-HERE.md) for the full add-ons catalog.
 
 Full walkthrough: [docs/vscode-quickstart.md](./docs/vscode-quickstart.md).
 
@@ -42,7 +44,7 @@ Full walkthrough: [docs/vscode-quickstart.md](./docs/vscode-quickstart.md).
 
 | Sources | Stacks | Workloads |
 |---------|--------|-----------|
-| On-premise, AWS, GCP, Oracle, VMware, Kubernetes, container registries, GitHub repos, ZIPs, mainframes | .NET, Java, Python, Node.js, PHP, Ruby, Go, Perl, Rust, COBOL, Oracle Forms, PowerBuilder, Delphi/VB6, Scala/Kotlin, C++ Windows | Web app, API service, batch job, event-driven, serverless, data pipeline, desktop, packaged, mainframe transactional |
+| On-premise, AWS, GCP, Oracle, VMware, Kubernetes, container registries, GitHub repos, ZIPs | .NET, Java, Python, Node.js, PHP, Ruby, Go, Perl, Rust, Oracle Forms, PowerBuilder, Delphi/VB6, Scala/Kotlin, C++ Windows | Web app, API service, batch job, event-driven, serverless, data pipeline, desktop, packaged |
 
 ## The Decision Hardstop Protocol
 
@@ -50,7 +52,7 @@ The agent **does not decide major architecture on your behalf**. It surfaces opt
 
 | When | What the agent does |
 |------|---------------------|
-| Target framework version unclear | Posts options (.NET 8 vs 10, Java 17 vs 21, etc.) with tradeoffs, waits for your pick |
+| Target framework version unclear | Posts options (.NET 8 vs 10, Java 17 vs 21, Python 3.11 vs 3.12, Node 20 vs 22 LTS, PHP 8.2 vs 8.3, etc.) with tradeoffs, waits for your pick |
 | Database engine unclear | Posts options (Azure SQL, PostgreSQL, Cosmos, etc.), waits |
 | Hosting platform unclear | Posts options (App Service, Container Apps, AKS, Functions), waits |
 | IaC tool unclear | Posts options (Bicep, Terraform, ARM, Pulumi), waits |
@@ -115,7 +117,16 @@ npm test                 # 13 headless tests
 
 ## Publishing the extension
 
-See [`docs/publishing-vscode-extension.md`](./docs/publishing-vscode-extension.md). One-time marketplace setup, then tag `vscode-vX.Y.Z` to release.
+Versioning + changelog are automated via [release-please](https://github.com/googleapis/release-please). Use [Conventional Commits](./docs/conventional-commits.md) (`feat:` / `fix:` / `feat!:`) and merge to `main` — a Release PR opens automatically. Merge it and the marketplace publish workflow fires.
+
+To preview a release locally (or ship an emergency hotfix):
+
+```powershell
+cd packages/azure-migration-squad-vscode
+npm run release:local -- --dry-run
+```
+
+Full walkthrough: [`docs/publishing-vscode-extension.md`](./docs/publishing-vscode-extension.md).
 
 ## License
 

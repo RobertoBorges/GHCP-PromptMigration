@@ -29,7 +29,7 @@ Replace the flat prompt library with a modular, Agent-aware system that keeps sl
 │
 ├─ prompts/                                           # thin slash-command entrypoints only
 │  ├─ phase0-multirepoassessment.prompt.md
-│  ├─ phase1-planandassess.prompt.md
+│  ├─ phase1-plan.prompt.md
 │  ├─ phase2-migratecode.prompt.md
 │  ├─ phase3-generateinfra.prompt.md
 │  ├─ phase4-deploytoazure.prompt.md
@@ -198,7 +198,7 @@ Each slash-command prompt becomes a small manifest-like entrypoint that declares
 ---
 description: Modernize application code using role, tech, and skill composition.
 tools: ['search/codebase', 'usages', 'problems', 'changes', 'runTests', 'edit/editFiles', 'runCommands', 'new']
-model: Claude Sonnet 4.6 (copilot)
+model: Claude Sonnet 4.7 (copilot)
 phase: phase2
 lead: Coder
 assist: [Tester]
@@ -313,7 +313,7 @@ That keeps skill reuse explicit and searchable.
 | Phase | Primary prompt | Lead | Assists | Inputs | Outputs | Review gate |
 |---|---|---|---|---|---|---|
 | Phase0 | `phase0-multirepoassessment.prompt.md` | Architect | Security Auditor | `codebase-repos.md` | `reports/Repo-Portfolio-Assessment.md` | Repo complexity scored |
-| Phase1 | `phase1-planandassess.prompt.md` | Architect | Azure Specialist + Security Auditor | repo + user preferences | `reports/Application-Assessment-Report.md`, `reports/Report-Status.md`, `reports/Migration-Plan.md` | risks, target platform, IaC chosen |
+| Phase1 | `phase1-plan.prompt.md` | Architect | Azure Specialist + Security Auditor | repo + user preferences | `reports/Application-Assessment-Report.md`, `reports/Report-Status.md`, `reports/Migration-Plan.md` | risks, target platform, IaC chosen |
 | Phase2 | `phase2-migratecode.prompt.md` | Coder | Tester + Database Specialist | assessment + plan | modernized app, `reports/Migration-Change-Log.md`, updated status | build + smoke validation |
 | Phase3 | `phase3-generateinfra.prompt.md` | Azure Specialist | DevOps Engineer + Security Auditor + Observability Engineer | assessment + modernized app | `infra/`, `azure.yaml`, `reports/Infra-Plan.md` | IaC validation + security review |
 | Phase4 | `phase4-deploytoazure.prompt.md` | DevOps Engineer | Azure Specialist + Cutover Commander + Observability Engineer | validated app + infra | deployment artifacts, `reports/Deployment-Summary.md` | deployment + health checks |
@@ -372,10 +372,10 @@ The monolith is replaced by a **master orchestrator** plus narrow specialist cha
 ---
 description: Master Agent-aware migration coordinator for multi-phase and multi-app Azure modernization.
 tools: ['search/codebase', 'usages', 'runCommands', 'runTests', 'edit/editFiles', 'new', 'Azure MCP/*', 'Microsoft Docs/*']
-model: Claude Sonnet 4.6 (copilot)
+model: Claude Sonnet 4.7 (copilot)
 leadRole: Architect
 assistRoles: [Coder, Tester, Azure-Specialist, DevOps-Engineer, Observability-Engineer, Database-Specialist, Performance-Engineer, Security-Auditor, Evaluator, Cutover-Commander, Scribe]
-entryPrompts: [/phase0-multirepoassessment, /phase1-planandassess, /phase2-migratecode, /phase3-generateinfra, /phase4-deploytoazure, /phase5-setupcicd, /phase6-postmigrationops, /quickassessment, /databasemigration, /securityhardening, /costoptimization, /phase-rollback, /getstatus]
+entryPrompts: [/phase0-multirepoassessment, /phase1-plan, /phase2-migratecode, /phase3-generateinfra, /phase4-deploytoazure, /phase5-setupcicd, /phase6-postmigrationops, /quickassessment, /databasemigration, /securityhardening, /costoptimization, /phase-rollback, /getstatus]
 requiredArtifacts: []
 producedArtifacts: [reports/Report-Status.md, reports/Application-Assessment-Report.md, PORTFOLIO.md]
 ---
@@ -393,7 +393,7 @@ producedArtifacts: [reports/Report-Status.md, reports/Application-Assessment-Rep
 ---
 description: Phase2 mode for code migration, framework upgrades, refactors, and modernization validation.
 tools: ['search/codebase', 'usages', 'vscodeAPI', 'problems', 'changes', 'testFailure', 'runCommands/terminalSelection', 'runCommands/terminalLastCommand', 'fetch', 'search/searchResults', 'githubRepo', 'extensions', 'runTests', 'edit/editFiles', 'search', 'new', 'runCommands', 'runTasks', 'Microsoft Docs/*']
-model: Claude Sonnet 4.6 (copilot)
+model: Claude Sonnet 4.7 (copilot)
 leadRole: Coder
 assistRoles: [Tester, Database-Specialist, Performance-Engineer, Security-Auditor]
 entryPrompts: [/phase2-migratecode, /databasemigration]
@@ -414,7 +414,7 @@ producedArtifacts: [reports/Migration-Change-Log.md, reports/Report-Status.md]
 ---
 description: Phase3 mode for Azure architecture, IaC generation, identity, networking, and observability setup.
 tools: ['search/codebase', 'runCommands', 'edit/editFiles', 'new', 'Azure MCP/*', 'Microsoft Docs/*']
-model: Claude Sonnet 4.6 (copilot)
+model: Claude Sonnet 4.7 (copilot)
 leadRole: Azure-Specialist
 assistRoles: [DevOps-Engineer, Security-Auditor, Observability-Engineer]
 entryPrompts: [/phase3-generateinfra]
@@ -435,7 +435,7 @@ producedArtifacts: [infra/, azure.yaml, reports/Infra-Plan.md, reports/Report-St
 ---
 description: Phase4 and Phase5 mode for deployment, release validation, and CI/CD setup.
 tools: ['runCommands', 'runTasks', 'runTests', 'edit/editFiles', 'new', 'Azure MCP/*', 'Microsoft Docs/*']
-model: Claude Sonnet 4.6 (copilot)
+model: Claude Sonnet 4.7 (copilot)
 leadRole: Coder
 assistRoles: [Azure-Specialist, DevOps-Engineer, Tester]
 entryPrompts: [/phase4-deploytoazure, /phase5-setupcicd, /phase-rollback]
@@ -456,7 +456,7 @@ producedArtifacts: [reports/Deployment-Summary.md, reports/CICD-Setup-Report.md]
 ---
 description: Root-cause mode for failures across build, runtime, infrastructure, deployment, and configuration drift.
 tools: ['search/codebase', 'problems', 'testFailure', 'runCommands', 'runTasks', 'edit/editFiles', 'Azure MCP/*', 'Microsoft Docs/*']
-model: Claude Sonnet 4.6 (copilot)
+model: Claude Sonnet 4.7 (copilot)
 leadRole: Coder
 assistRoles: [Tester, Azure-Specialist]
 entryPrompts: [/getstatus, /phase2-migratecode, /phase3-generateinfra, /phase4-deploytoazure, /phase-rollback]
@@ -477,7 +477,7 @@ producedArtifacts: [reports/Migration-Debug-Log.md]
 ---
 description: 5-minute triage mode for rapid modernization feasibility and next-step recommendation.
 tools: ['search/codebase', 'search/searchResults', 'runCommands', 'new']
-model: Claude Sonnet 4.6 (copilot)
+model: Claude Sonnet 4.7 (copilot)
 leadRole: Architect
 assistRoles: []
 entryPrompts: [/quickassessment]
@@ -498,7 +498,7 @@ producedArtifacts: [reports/Quick-Assessment-Report.md, reports/Report-Status.md
 ---
 description: Security-focused review mode for identity, secrets, network posture, dependency risks, and release readiness.
 tools: ['search/codebase', 'usages', 'runCommands', 'edit/editFiles', 'new', 'Azure MCP/*', 'Microsoft Docs/*']
-model: Claude Sonnet 4.6 (copilot)
+model: Claude Sonnet 4.7 (copilot)
 leadRole: Security-Auditor
 assistRoles: [Architect, Azure-Specialist, Cutover-Commander]
 entryPrompts: [/securityhardening, /phase-rollback, /getstatus]
@@ -519,7 +519,7 @@ producedArtifacts: [reports/Security-Audit-Report.md, reports/Security-Go-NoGo.m
 ---
 description: Azure cost analysis mode for right-sizing, scaling policy, environment design, and spend reduction opportunities.
 tools: ['search/codebase', 'runCommands', 'edit/editFiles', 'new', 'Azure MCP/*', 'Microsoft Docs/*']
-model: Claude Sonnet 4.6 (copilot)
+model: Claude Sonnet 4.7 (copilot)
 leadRole: Azure-Specialist
 assistRoles: [Performance-Engineer, Observability-Engineer]
 entryPrompts: [/costoptimization, /phase6-postmigrationops, /getstatus]
@@ -643,7 +643,7 @@ Use-case folders can override any global prompt, skill, template, or route witho
 Use-cases/05-BookShop/
 ├─ .github/
 │  ├─ prompts/
-│  │  ├─ phase1-planandassess.prompt.md
+│  │  ├─ phase1-plan.prompt.md
 │  │  ├─ phase2-migratecode.prompt.md
 │  │  └─ getstatus.prompt.md
 │  ├─ skills/
@@ -722,7 +722,7 @@ graph TD
 ```mermaid
 graph LR
     CM0[Migration-Orchestrator] --> P0[/phase0-multirepoassessment]
-    CM0 --> P1[/phase1-planandassess]
+    CM0 --> P1[/phase1-plan]
     CM1[Code-Migration-Modernization] --> P2[/phase2-migratecode]
     CM2[Azure-Infrastructure] --> P3[/phase3-generateinfra]
     CM0 --> P4[/phase4-deploytoazure]

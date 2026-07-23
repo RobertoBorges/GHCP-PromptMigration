@@ -53,7 +53,7 @@ Use this skill when:
 - A prior strategy report needs updating with new artifacts (incremental iteration).
 
 Do NOT use this skill for:
-- Per-application code modernization → use the Modernize an App flow (`/Phase1-PlanAndAssess` for single apps, `/Phase0-Multi-repo-assessment` for multi-repo business solutions).
+- Per-application code modernization → use the Modernize an App flow (`/Phase1-Plan` for single apps, `/Phase0-Multi-repo-assessment` for multi-repo business solutions).
 - Data migration execution → refer to Azure Database Migration Service.
 - Dependency / binary scanning → refer to AppCAT, .NET Upgrade Assistant.
 
@@ -402,7 +402,7 @@ Or use the `create`/`editFiles` tool.
 After writing, surface a clickable next-step:
 > ✅ Handoff written to `reports/portfolio-handoff.json`. Click **🚀 Modernize a single application** to start on `<App.Name>`.
 
-If the user wants to pick MULTIPLE apps for a multi-app modernization wave, write one handoff file per app, e.g., `reports/portfolio-handoff-<AppName>.json`, and inform the user that `/Phase1-PlanAndAssess` reads `reports/portfolio-handoff.json` by default (so they'll need to rename or copy when switching apps).
+If the user wants to pick MULTIPLE apps for a multi-app modernization wave, write one handoff file per app, e.g., `reports/portfolio-handoff-<AppName>.json`, and inform the user that `/Phase1-Plan` reads `reports/portfolio-handoff.json` by default (so they'll need to rename or copy when switching apps).
 
 - Classification rules → [references/classification-algorithm.md](references/classification-algorithm.md)
 - Cross-pillar slides → [references/slides-common.md](references/slides-common.md)

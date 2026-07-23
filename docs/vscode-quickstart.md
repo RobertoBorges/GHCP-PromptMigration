@@ -50,7 +50,7 @@ A notification offers to open the welcome doc — click **Open**.
 
 A second notification offers to **reload the VS Code window** so Copilot Chat picks up the new prompts and chatmodes. Click **Reload**.
 
-## Step 4 — Run Discovery
+## Step 4 — Run the main path — Step 1: Discovery
 
 In **Copilot Chat** (open with `Ctrl+Alt+I`):
 
@@ -63,24 +63,27 @@ The agent interviews you about source, stack, workload, data, and integrations. 
 - `reports/Discovery-Dossier.md` — narrative + evidence
 - `reports/Capability-Matrix.yaml` — structured classification
 
-## Step 5 — Build the migration plan + answer decisions
+## Step 5 — Run the main path — Step 2: Plan
 
 ```
-/build-migration-plan
+/Phase1-Plan
 ```
 
-The agent produces:
+Phase 1 reads the Capability Matrix and produces:
 
-- `reports/Migration-Plan.md` — the migration plan
-- `reports/Decisions-Required.md` — **18 major architecture decisions you need to answer** before later phases can run
+- `reports/Application-Assessment-Report.md` — the per-app assessment
+- `reports/Migration-Plan.md` — the migration plan (if not already produced via `/build-migration-plan`)
+- `reports/Decisions-Required.md` — **major architecture decisions you need to answer** before later phases can run
+
+## Step 6 — Answer the decisions
 
 Open `reports/Decisions-Required.md`. For each decision (Target framework, Database engine, Hosting platform, IaC tool, etc.), the agent shows options + tradeoffs. Pick one and fill in your rationale.
 
-The **status bar** (bottom-left) shows **"⚠ AMS: N/M decisions pending"** with a warning background until all are answered.
+The **status bar** (bottom-left) shows **"⚠ AMA: N/M decisions pending"** with a warning background until all are answered.
 
 The **🛑 Decisions Required tree view** in the sidebar (rocket icon 🚀 in the Activity Bar) shows each decision's status. Click any entry to jump to that section of the file.
 
-## Step 6 — Run the phases
+## Step 7 — Run Phase 2 through Phase 6
 
 Once all required decisions are `✅ DECIDED`:
 
@@ -93,6 +96,15 @@ Once all required decisions are `✅ DECIDED`:
 ```
 
 Each phase **hard-stops** if any decision it depends on is still `⏸ PENDING`. The agent will tell you which decisions block its work.
+
+## Optional add-ons
+
+These are **not part of the default flow**. Use them when you need a specific specialized task:
+
+- **Alternative intakes:** `/build-migration-plan`, `/QuickAssessment`, `/QuickTriage`, `/InteractiveMigrationInterview`, `/TeamSkillAssessment`
+- **Portfolio / multi-app:** `/PortfolioStrategy`, `/Phase0-Multi-repo-assessment`
+- **Specialized deep-dives:** `/DatabaseMigration`, `/SecurityHardening`, `/CostOptimization`
+- **Utility / recovery:** `/Phase-Rollback`, `/GetStatus`
 
 ## Useful Command Palette commands
 
@@ -116,7 +128,7 @@ Each phase **hard-stops** if any decision it depends on is still `⏸ PENDING`. 
 |---------|-----|
 | Slash commands don't show in Copilot Chat | **Reload VS Code window** (`Ctrl+Shift+P` → "Developer: Reload Window") |
 | Welcome notification keeps showing every time | Click **"Don't show again"** — it persists per workspace |
-| Status bar shows "AMS: N/M decisions pending" | Open `reports/Decisions-Required.md` and answer each PENDING decision |
+| Status bar shows "AMA: N/M decisions pending" | Open `reports/Decisions-Required.md` and answer each PENDING decision |
 | Sidebar shows "Click to install Azure Migration Agent here" | Click the entry — it runs Initialize |
 | Tree views are empty after init | Reload VS Code window OR click the refresh button on each tree title |
 

@@ -8,7 +8,7 @@
 import * as vscode from 'vscode';
 import { AgentsProvider } from './treeProviders/agentsProvider';
 import { PromptsProvider } from './treeProviders/promptsProvider';
-import { SkillsProvider } from './treeProviders/skillsProvider';
+import { AddonsProvider } from './treeProviders/addonsProvider';
 import { DecisionsProvider } from './treeProviders/decisionsProvider';
 import { registerCommands } from './commands';
 import { AmsStatusBar } from './statusBar';
@@ -19,7 +19,7 @@ export function activate(context: vscode.ExtensionContext): void {
 
   const agentsProvider = new AgentsProvider();
   const promptsProvider = new PromptsProvider();
-  const skillsProvider = new SkillsProvider();
+  const addonsProvider = new AddonsProvider();
   const decisionsProvider = new DecisionsProvider();
 
   context.subscriptions.push(
@@ -31,8 +31,8 @@ export function activate(context: vscode.ExtensionContext): void {
       treeDataProvider: promptsProvider,
       showCollapseAll: true,
     }),
-    vscode.window.createTreeView('azureMigrationSquadSkills', {
-      treeDataProvider: skillsProvider,
+    vscode.window.createTreeView('azureMigrationSquadAddons', {
+      treeDataProvider: addonsProvider,
       showCollapseAll: true,
     }),
     vscode.window.createTreeView('azureMigrationSquadDecisions', {
@@ -65,7 +65,7 @@ export function activate(context: vscode.ExtensionContext): void {
   const refreshAll = () => {
     agentsProvider.refresh();
     promptsProvider.refresh();
-    skillsProvider.refresh();
+    addonsProvider.refresh();
     decisionsProvider.refresh();
     statusBar.refresh();
   };

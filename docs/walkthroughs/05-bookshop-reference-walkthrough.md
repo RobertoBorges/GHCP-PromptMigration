@@ -161,4 +161,4 @@ You do not need to restart the walkthrough to ask for clarification. Natural pro
 
 ## 💡 Power-User Shortcut
 
-> Optional prompt-name references only: assessment ≈ `Phase1-PlanAndAssess`, code ≈ `Phase2-MigrateCode`, infra ≈ `Phase3-GenerateInfra`, deploy ≈ `Phase4-DeployToAzure`, ops ≈ `Phase6-PostMigrationOps`.
+> Optional prompt-name references only: assessment ≈ `Phase1-Plan`, code ≈ `Phase2-MigrateCode`, infra ≈ `Phase3-GenerateInfra`, deploy ≈ `Phase4-DeployToAzure`, ops ≈ `Phase6-PostMigrationOps`.

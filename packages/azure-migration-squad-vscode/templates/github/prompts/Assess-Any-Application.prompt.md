@@ -1,10 +1,32 @@
 ---
 agent: Code Migration Modernization Agent
-model: Claude Sonnet 4.6 (copilot)
-tools: ['search/codebase', 'usages', 'vscodeAPI', 'problems', 'changes', 'runCommands/terminalSelection', 'runCommands/terminalLastCommand', 'openSimpleBrowser', 'fetch', 'search/searchResults', 'githubRepo', 'extensions', 'edit/editFiles', 'search', 'runCommands', 'runTasks', 'Azure MCP/*', 'Microsoft Docs/*']
+model: Claude Sonnet 4.7 (copilot)
+tools: ['search/codebase', 'search/usages', 'vscode/vscodeAPI', 'read/problems', 'search/changes', 'vscode/runCommand', 'read/terminalLastCommand', 'openSimpleBrowser', 'web/fetch', 'search/searchResults', 'web/githubRepo', 'vscode/extensions', 'edit/editFiles', 'search', 'execute/runTask', 'Azure MCP/*', 'Microsoft Docs/*']
 description: "Universal application-to-Azure migration intake. Discovers ANY application (any source, any stack, any workload) and produces a Discovery Dossier + Capability Matrix that every downstream Phase prompt consumes."
 ---
 
+
+<!-- BEGIN: action-log-contract (auto-managed by inject-action-log-contract.mjs) -->
+
+## 📜 Action Log Contract
+
+**After each meaningful action** in this prompt, append one single-line entry to the `## 📜 Action Log` section at the bottom of `reports/Report-Status.md`.
+
+Canonical format:
+```
+- <ISO-8601-UTC> | actor=Assess-Any-Application | action=<verb-phrase> | files=<+created,~modified,-deleted> | tokens=~<bucket> | turn=<n> | notes="<free text>"
+```
+
+Rules:
+- Use `actor=Assess-Any-Application` for actions taken by this prompt.
+- Use `actor=User` for actions taken by the user (e.g., answering a decision).
+- Log **only meaningful actions**: phase transitions, artifact production, decision events, gate passes/blocks, user inputs, rollback events. Do NOT log every internal grep or file read.
+- Estimate `tokens` in buckets: `~0`, `~500`, `~2k`, `~8k`, `~30k`. The `turn` counter is exact; token estimate is best-effort. Point users to Copilot Dashboard for authoritative counts.
+- If `reports/Report-Status.md` doesn't exist yet, create it from `.github/skills/migration-report-template.md` first — it already includes the `## 📜 Action Log` section.
+
+Full spec: `.github/skills/action-log-format.md`.
+
+<!-- END: action-log-contract -->
 # Assess Any Application — Universal Migration Intake
 
 ## Agent Role
@@ -44,10 +66,10 @@ application:
   name: <string>
   business_priority: <speed | modernize | cost | risk>
 source_hint:
-  type: <on-premise | aws | gcp | azure | oracle | kubernetes | mainframe | github-repo | zip | rvtools>
+  type: <on-premise | aws | gcp | azure | oracle | kubernetes | github-repo | zip | rvtools | unsupported>
   access: <git-url | file-path | aws-profile | rvtools-file | "describe-only">
 stack_hint:
-  primary: <dotnet | java | python | nodejs | php | ruby | go | perl | rust | cobol | oracle-forms | powerbuilder | delphi-vb6 | scala | kotlin | cpp | "unknown">
+  primary: <dotnet | java | python | nodejs | php | ruby | go | perl | rust | oracle-forms | powerbuilder | delphi-vb6 | scala | kotlin | cpp | "unknown">
   framework: <optional>
 data_hint:
   primary_datastore: <optional>
@@ -72,17 +94,17 @@ constraints:
 
 Load **only** the source skill that matches the application's current home:
 
-- `source-github-repo`, `source-zip-filesystem`, `source-on-premise`, `source-aws`, `source-gcp`, `source-oracle-db`, `source-vmware-rvtools`, `source-mainframe`, `source-kubernetes-cluster`, `source-container-registry`, `source-unsupported-escalation`
+- `source-github-repo`, `source-zip-filesystem`, `source-on-premise`, `source-aws`, `source-gcp`, `source-oracle-db`, `source-vmware-rvtools`, `source-kubernetes-cluster`, `source-container-registry`, `source-unsupported-escalation` (covers mainframe / midrange / SaaS-embedded — escalate to specialist)
 
 ## Stack Adapter Skills (pick one or more)
 
 Load the stack skill that matches the primary language/framework. Multiple may apply to a polyglot app.
 
-- `stack-dotnet`, `stack-java`, `stack-python`, `stack-nodejs`, `stack-php`, `stack-ruby`, `stack-go`, `stack-perl`, `stack-rust`, `stack-cobol-mainframe`, `stack-oracle-forms`, `stack-powerbuilder`, `stack-delphi-vb6`, `stack-scala-kotlin`, `stack-cpp-windows`
+- `stack-dotnet`, `stack-java`, `stack-python`, `stack-nodejs`, `stack-php`, `stack-ruby`, `stack-go`, `stack-perl`, `stack-rust`, `stack-oracle-forms`, `stack-powerbuilder`, `stack-delphi-vb6`, `stack-scala-kotlin`, `stack-cpp-windows` (COBOL / RPG / Natural on mainframe / midrange → escalate via `source-unsupported-escalation`)
 
 ## Workload Pattern Skills (pick one or more)
 
-- `workload-webapp`, `workload-api-service`, `workload-batch-job`, `workload-event-driven`, `workload-serverless`, `workload-desktop-client-server`, `workload-packaged-app`, `workload-data-pipeline`, `workload-mainframe-transactional`
+- `workload-webapp`, `workload-api-service`, `workload-batch-job`, `workload-event-driven`, `workload-serverless`, `workload-desktop-client-server`, `workload-packaged-app`, `workload-data-pipeline` (mainframe transactional / CICS / IMS workloads → escalate via `source-unsupported-escalation`)
 
 ## Orchestration Hooks
 
@@ -97,7 +119,7 @@ Load the stack skill that matches the primary language/framework. Multiple may a
 
 Ask the user, one block at a time, accepting brief answers:
 
-1. **Where does the app run today?** (on-prem / AWS / GCP / Azure / Oracle / Kubernetes / mainframe / "I'll share a repo" / "I'll upload a ZIP" / "describe-only")
+1. **Where does the app run today?** (on-prem / AWS / GCP / Azure / Oracle / Kubernetes / "I'll share a repo" / "I'll upload a ZIP" / "describe-only" — for mainframe / IBM i / AS-400 / z/OS answer "describe-only" and Discovery will route to `source-unsupported-escalation`)
 2. **How can we access it?** (git URL / file path / AWS profile / RVTools export / network share / "describe-only")
 3. **What language(s) and framework(s)?** (or "I don't know — probe it")
 4. **What datastore(s)?** (or "unknown")
@@ -157,7 +179,6 @@ Map evidence to workload pattern(s):
 | Desktop UI + backend service | `desktop-client-server` |
 | Vendor binary or installable | `packaged-app` |
 | ETL/ELT, data movement, DataFrame work, scheduled extracts | `data-pipeline` |
-| CICS / IMS / transactional mainframe | `mainframe-transactional` |
 
 Pick one **primary** pattern and any **secondary** patterns. Load matching `workload-*` skill(s).
 
@@ -178,7 +199,6 @@ Trigger **only** the follow-ups that apply:
 | If detected in Steps 3–6 | Follow-up to ask |
 |--------------------------|------------------|
 | Regulated data (PII / PCI / HIPAA / GDPR) | "What residency, audit, and encryption requirements apply?" |
-| Mainframe / RPG / COBOL | "Batch vs online split? Scheduler? RACF or other security?" |
 | Vendor runtime (Oracle, IBM, SAP) | "Licensing and support contract details?" |
 | No test environment | "What RTO/RPO? Allowed cutover window?" |
 | Large or very-large data gravity | "Replication needs? Reporting downstream consumers?" |
@@ -200,6 +220,42 @@ Apply the `migration-strategy-decision-tree` skill. The output is **not** just a
 - Risk flags
 
 Apply confidence labels. If any axis is `low` confidence, the recommendation must include a "blocking probe" — a specific next step that would raise confidence.
+
+## Step 8.5 — Skill Gap Check (BEFORE writing Capability Matrix)
+
+Before emitting the Capability Matrix in Step 9, verify that every classification value you're about to record has a matching skill file in `.github/skills/`. Without a matching skill, downstream Phase prompts won't have stack-/source-/workload-specific guidance for this app.
+
+For each of the following axes, do a `file_search` for the matching filename pattern:
+
+| Classification axis | Expected filename pattern | Example |
+|--------------------|---------------------------|---------|
+| `stack.primary_stack` | `stack-<value>.md` | `stack-elixir.md` |
+| `stack.secondary_stacks[*]` | `stack-<value>.md` | `stack-clojure.md` |
+| `source.primary_adapter` | `source-<value>.md` | `source-nutanix.md` |
+| `workload.primary_pattern` | `workload-<value>.md` | `workload-iot-edge.md` |
+| each entry in `integrations` (if it looks like a well-known system) | `integration-<value>.md` | `integration-tibco-ems.md` |
+
+For **each miss** (file not found):
+
+1. **Announce the gap plainly:**
+   > *"I've classified this app's `<axis>` as **<value>**, but I don't yet have a `<family>-<value>.md` skill. Without it, downstream phases will have generic guidance instead of `<value>`-specific patterns."*
+
+2. **Ask a single confirmation** (default Y):
+   > **I can create a `<family>-<value>.md` skill on the fly — I'll research authoritative docs (~2-5 min) and write it so this migration and future migrations benefit. Should I proceed? [Y / n / N-for-this-session-only]**
+
+3. **On Y (or empty response)** → invoke `.github/skills/skill-creator.md` following its full flow (Detect Gap → Confirm → Research → Draft → Smoke-test → Log → Continue). The new skill goes into `.github/skills/<family>-<value>.md`.
+
+4. **On n** → skip THIS gap. Continue Discovery with reduced guidance. Log the skip:
+   ```
+   - <UTC> | actor=Assess-Any-Application | action=gap-skipped | tokens=~0 | turn=<n> | notes="user declined to create <family>-<value>.md"
+   ```
+
+5. **On N-for-this-session-only** → skip THIS and all subsequent gap prompts for the rest of the session. Log:
+   ```
+   - <UTC> | actor=Assess-Any-Application | action=gap-skipped-session-wide | tokens=~0 | turn=<n> | notes="user declined skill-creator for the session"
+   ```
+
+After processing all gaps (or if there are none), proceed to Step 9.
 
 ## Step 9 — Capability Matrix
 

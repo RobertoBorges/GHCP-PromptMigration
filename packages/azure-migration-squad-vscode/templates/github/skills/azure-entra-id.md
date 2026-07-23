@@ -154,6 +154,6 @@ Use certificates or managed identity where possible instead of long-lived client
 When this skill is applied, the prompt should:
 
 - list required app registrations, scopes, roles, and redirect URIs
-- generate auth wiring for .NET or Java
+- generate auth wiring for the target stack (`.NET`, `Java`, `Python`, `Node.js`, `PHP`, `Ruby`, `Go`, etc.) — see the SDK reference table below
 - distinguish user identity from workload identity
 - call out remaining legacy auth dependencies explicitly

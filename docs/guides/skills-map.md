@@ -7,7 +7,7 @@ Production-ready mapping for Roberto Borges' migration crew: which skills, promp
 ## Command legend
 
 - `/quickassessment` — fast triage and complexity scoring
-- `/phase1-planandassess` — full assessment and target-state plan
+- `/phase1-plan` — full assessment and target-state plan
 - `/phase2-migratecode` — code modernization
 - `/databasemigration` — database schema/provider/data planning
 - `/phase3-generateinfra` — Bicep/Terraform + `azure.yaml`
@@ -148,7 +148,7 @@ Production-ready mapping for Roberto Borges' migration crew: which skills, promp
 ### 01-ASPClassicApp
 1. `/quickassessment`
 2. `Assess Use-cases/01-ASPClassicApp as a Classic ASP + VBScript + ADODB application. Target .NET 8 on Azure App Service with Azure SQL, Bicep, and GitHub Actions. Call out session state, include files, COM/ADODB dependencies, and global.asa risks.`
-3. `/phase1-planandassess`
+3. `/phase1-plan`
 4. `Create a page-by-page migration map for default.asp, products.asp, product-detail.asp, cart.asp, about.asp, and contact.asp. Show how includes, Session variables, and global.asa events map to ASP.NET Core.`
 5. `/databasemigration`
 6. `/phase2-migratecode`
@@ -164,7 +164,7 @@ Production-ready mapping for Roberto Borges' migration crew: which skills, promp
 ### 02-NetFramework30-ASPNET-WEB
 1. `/quickassessment`
 2. `Assess Use-cases/02-NetFramework30-ASPNET-WEB as a .NET Framework 3.0 WebForms app. Target .NET 8 on Azure App Service with Azure SQL and Bicep. Flag WebForms, code-behind, Web.config, and Windows Authentication blockers.`
-3. `/phase1-planandassess`
+3. `/phase1-plan`
 4. `Inventory Default.aspx, About.aspx, Secure.aspx, and Web.config. Map each page, server-side event, and auth rule to Razor Pages or MVC endpoints while preserving Secure.aspx behavior.`
 5. `/phase2-migratecode`
 6. `/securityhardening`
@@ -179,7 +179,7 @@ Production-ready mapping for Roberto Borges' migration crew: which skills, promp
 ### 03-WCFNet35
 1. `/quickassessment`
 2. `Assess Use-cases/03-WCFNet35 for WCF .NET 3.5 to ASP.NET Core REST migration. Target Azure Container Apps. Score SOAP contract risk, app.config migration risk, and client compatibility risk.`
-3. `/phase1-planandassess`
+3. `/phase1-plan`
 4. `Map every ServiceContract and OperationContract in WCFDemo.Service to REST endpoints, DTOs, status codes, and breaking changes. Recommend container boundaries and API versioning.`
 5. `/phase2-migratecode`
 6. `/securityhardening`
@@ -194,7 +194,7 @@ Production-ready mapping for Roberto Borges' migration crew: which skills, promp
 ### 04-ContosoUniversityDiPS
 1. `/quickassessment`
 2. `Assess Use-cases/04-ContosoUniversityDiPS as one multi-project solution with API, Web, React SPA, Data, Common, and Tests. Keep project boundaries explicit. Target .NET 8 on Azure App Service with Azure SQL.`
-3. `/phase1-planandassess`
+3. `/phase1-plan`
 4. `Produce a dependency map across ContosoUniversity.Api, .Web, .Spa.React, .Data, .Common, and test projects. Flag JWT, Identity, SendGrid, Twilio, EF Core provider, and SPA build risks.`
 5. `/databasemigration`
 6. `/phase2-migratecode`
@@ -219,7 +219,7 @@ Production-ready mapping for Roberto Borges' migration crew: which skills, promp
 ### 06-Java-API-BusReservation
 1. `/quickassessment`
 2. `Assess Use-cases/06-Java-API-BusReservation for Java 8 + Spring Boot 2.3 modernization to Java 21 + Spring Boot 3 on Azure Container Apps with PostgreSQL. Flag javax->jakarta, H2->PostgreSQL, and Docker risks.`
-3. `/phase1-planandassess`
+3. `/phase1-plan`
 4. `Review RestApi.java, pom.xml, and application.properties. Produce an endpoint inventory, dependency upgrade plan, and H2-to-PostgreSQL migration plan.`
 5. `/databasemigration`
 6. `/phase2-migratecode`
@@ -235,7 +235,7 @@ Production-ready mapping for Roberto Borges' migration crew: which skills, promp
 ### 07-PartsUnlimited-aspnet45
 1. `/quickassessment`
 2. `Assess Use-cases/07-PartsUnlimited-aspnet45 as an ASP.NET MVC 5 / .NET Framework 4.5.1 e-commerce site. Target .NET 8 on Azure App Service with Azure SQL. Flag EF6, ASP.NET Identity, OWIN, deployment scripts, and test migration risk.`
-3. `/phase1-planandassess`
+3. `/phase1-plan`
 4. `Map the MVC controllers, EF6 models, ASP.NET Identity/OWIN configuration, and deploy.cmd flow to ASP.NET Core MVC, EF Core, modern auth, and Azure deployment equivalents.`
 5. `/databasemigration`
 6. `/phase2-migratecode`

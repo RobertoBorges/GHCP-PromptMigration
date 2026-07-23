@@ -34,7 +34,7 @@ if (catalogIds.length === 0) {
 
 // Each prompt's gate references catalog IDs. We grep across all phase prompts.
 const PHASE_PROMPTS = [
-  'Phase1-PlanAndAssess.prompt.md',
+  'Phase1-Plan.prompt.md',
   'Phase2-MigrateCode.prompt.md',
   'Phase3-GenerateInfra.prompt.md',
   'Phase4-DeployToAzure.prompt.md',

@@ -15,7 +15,7 @@ The old `Assess-*` prompts were narrow assessments tied to specific .NET / Java 
 Under Universal Mode, the **Discovery Engineer (Saul Bloom Jr.)** handles intake for any application via `/assess-any-application`. Stack-specific guidance is now delivered through stack adapter skills, which the Discovery Engineer loads dynamically based on the detected stack.
 
 This avoids:
-- Prompt explosion as we add more stacks (Python, Node, PHP, COBOL, Oracle Forms, etc.)
+- Prompt explosion as we add more stacks (Python, Node, PHP, Oracle Forms, etc.)
 - Stale routing pinned to a fixed set of use-cases
 - Duplicate maintenance when a skill needs to be updated in multiple places
 

@@ -2,7 +2,7 @@
 name: business-logic-mapping
 description: |
   Business logic discovery, mapping, and preservation during application migration.
-  **Use when:** Migrating .NET or Java applications and need to ensure all business logic is preserved.
+  **Use when:** Migrating any legacy application (any stack — .NET, Java, Python, Node.js, PHP, Ruby, Go, Oracle Forms, etc.) and need to ensure all business logic is preserved.
   **Triggers on:** Phase 2 code migration, business rule identification, logic preservation verification.
   **Covers:** Business rule extraction, logic mapping between source/target, validation tracking, media asset preservation.
   **Critical:** Ensures no business logic is lost during migration by creating traceable mappings.

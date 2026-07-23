@@ -3,14 +3,36 @@ name: PortfolioStrategy
 description: Generate an executive-ready Migration Strategy Report (HTML deck) for a customer portfolio — invokes the migration-strategy-report skill on the customer folder you specify.
 argument-hint: "Specify the path to the customer folder containing CMDB, RVTools, DMA, or other artifacts (e.g., 'Generate a migration strategy report for Customers/Contoso')"
 agent: Code Migration Modernization Agent
-model: Claude Sonnet 4.6 (copilot)
+model: Claude Sonnet 4.7 (copilot)
 ---
 
+
+<!-- BEGIN: action-log-contract (auto-managed by inject-action-log-contract.mjs) -->
+
+## 📜 Action Log Contract
+
+**After each meaningful action** in this prompt, append one single-line entry to the `## 📜 Action Log` section at the bottom of `reports/Report-Status.md`.
+
+Canonical format:
+```
+- <ISO-8601-UTC> | actor=PortfolioStrategy | action=<verb-phrase> | files=<+created,~modified,-deleted> | tokens=~<bucket> | turn=<n> | notes="<free text>"
+```
+
+Rules:
+- Use `actor=PortfolioStrategy` for actions taken by this prompt.
+- Use `actor=User` for actions taken by the user (e.g., answering a decision).
+- Log **only meaningful actions**: phase transitions, artifact production, decision events, gate passes/blocks, user inputs, rollback events. Do NOT log every internal grep or file read.
+- Estimate `tokens` in buckets: `~0`, `~500`, `~2k`, `~8k`, `~30k`. The `turn` counter is exact; token estimate is best-effort. Point users to Copilot Dashboard for authoritative counts.
+- If `reports/Report-Status.md` doesn't exist yet, create it from `.github/skills/migration-report-template.md` first — it already includes the `## 📜 Action Log` section.
+
+Full spec: `.github/skills/action-log-format.md`.
+
+<!-- END: action-log-contract -->
 # Portfolio Migration Strategy Report
 
 ## What This Prompt Does
 
-Invokes the `migration-strategy-report` skill to analyze a customer portfolio and produce a CIO-ready HTML migration deck. This is the **Portfolio Planning flow** — produces an executive plan that informs which apps to modernize via the per-app flow (`/Phase1-PlanAndAssess`).
+Invokes the `migration-strategy-report` skill to analyze a customer portfolio and produce a CIO-ready HTML migration deck. This is the **Portfolio Planning flow** — produces an executive plan that informs which apps to modernize via the per-app flow (`/Phase1-Plan`).
 
 ## When to Use
 
@@ -19,7 +41,7 @@ Invokes the `migration-strategy-report` skill to analyze a customer portfolio an
 - An RVTools, Azure Migrate, or DMA export needs to become a leadership-ready story
 - Mixed artifacts (data + meeting notes + vendor proposals) need synthesis into one coherent deck
 
-If you only need to modernize one application's code, use `/Phase0-Multi-repo-assessment` or `/Phase1-PlanAndAssess` instead.
+If you only need to modernize one application's code, use `/Phase0-Multi-repo-assessment` or `/Phase1-Plan` instead.
 
 ## Required Input
 
@@ -91,7 +113,7 @@ Also offer:
 
 ## Handoff File: portfolio-handoff.json
 
-When the user picks an application to start modernizing (Step 4), this skill writes a structured handoff file to `reports/portfolio-handoff.json` that the per-app modernization flow (`/Phase1-PlanAndAssess`) reads automatically to pre-populate setup questions.
+When the user picks an application to start modernizing (Step 4), this skill writes a structured handoff file to `reports/portfolio-handoff.json` that the per-app modernization flow (`/Phase1-Plan`) reads automatically to pre-populate setup questions.
 
 ### Schema
 
@@ -108,8 +130,8 @@ When the user picks an application to start modernizing (Step 4), this skill wri
 | `app.target_platform` | string | Azure hosting platform | `App Service` \| `Container Apps` \| `AKS` |
 | `app.iac_preference` | string | Infrastructure-as-Code tool | `Bicep` \| `Terraform` |
 | `app.database_strategy` | string | Target Azure database service | e.g., `Azure SQL Database`, `Cosmos DB`, `Azure Database for PostgreSQL` |
-| `app.current_stack` | string | Current framework/version | e.g., `.NET Framework 4.8`, `Java 8 + Spring 4.x` |
-| `app.target_stack` | string | Target framework/version | e.g., `.NET 10 LTS`, `Spring Boot 3.x + Java 21` |
+| `app.current_stack` | string | Current framework/version | e.g., `.NET Framework 4.8`, `Java 8 + Spring 4.x`, `Python 2.7 + Django 1.11`, `Node.js 12 + Express 4`, `PHP 5.6 + Laravel 5`, `Ruby 2.6 + Rails 5`, `Delphi 7`, `Oracle Forms 11g` |
+| `app.target_stack` | string | Target framework/version | e.g., `.NET 10 LTS`, `Spring Boot 3.x + Java 21`, `Python 3.12 + Django 5`, `Node.js 20 LTS + Express 5`, `PHP 8.3 + Laravel 11`, `Ruby 3.3 + Rails 7`, or `unchanged (rehost only)` |
 | `app.criticality` | string | Business criticality from deck | `Low` \| `Medium` \| `High` \| `Critical` |
 | `app.notes` | string | Free-form context to carry forward | optional |
 
@@ -160,6 +182,6 @@ When the Portfolio Strategy Report is complete:
    >
    > For a **multi-repo deep assessment** of the portfolio, run **`/Phase0-Multi-repo-assessment`**.
    >
-   > For a **single-app modernization** starting with the pilot, run **`/Phase1-PlanAndAssess`** — it automatically reads `portfolio-handoff.json` to pre-fill setup choices.
+   > For a **single-app modernization** starting with the pilot, run **`/Phase1-Plan`** — it automatically reads `portfolio-handoff.json` to pre-fill setup choices.
    >
    > Or click **🚀 Modernize a single application** / **🗂️ Run multi-repo assessment** if the handoff buttons are visible in your UI.

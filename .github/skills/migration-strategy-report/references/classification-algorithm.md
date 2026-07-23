@@ -70,7 +70,7 @@ Classify as **Retire** if ANY of:
 
 Classify as **Retain** if ANY of:
 - Complexity = "Very Complex" AND Integration Count > 20 AND Criticality ≥ High — too interconnected and critical to move safely in near term
-- Tech Stack contains mainframe technologies (COBOL, RPG, AS/400, iSeries, PL/I) AND not assigned to early migration phases (Phase 1–4)
+- Tech Stack contains legacy platforms explicitly out of scope for this tool (COBOL, RPG, PL/I, Natural on mainframe / IBM i / midrange) — these require a specialist-partner engagement (Micro Focus / Astadia / Kyndryl / LzLabs)
 - Regulatory/compliance constraints explicitly block cloud migration (data sovereignty, air-gapped requirements, specific regulatory hold)
 - Assigned to Phase 7–8 AND Complexity = "Very Complex" AND Architecture Type = "Platform" — intentionally deferred
 - Database Platform = "DB2" or "Teradata" AND Complexity = "Very Complex" — deep platform lock-in with no near-term migration driver
@@ -228,7 +228,7 @@ An app is **ISD / Partner** if ANY ONE of these conditions is true:
 - Database Platform contains "Sybase"/"SAP ASE" AND (version < 11.9.2 OR version is unknown/blank) — ISD / Partner unless version is confirmed ≥ 11.9.2. SAP ASE 11.9.2+ IS Factory-eligible, but eligibility requires version proof.
 - Regulatory field contains "ePHI" AND Criticality >= 4 (Mission Critical with health data = specialized handling)
 - Application Owner/BU = vendor name (not internal IT)
-- Tech Stack contains "Mainframe" or "COBOL" or "RPG" or "Solaris" or "AIX" or "HP-UX" (legacy platforms requiring re-architecture)
+- Tech Stack contains "Solaris" or "AIX" or "HP-UX" (legacy platforms requiring re-architecture; mainframe/COBOL/RPG platforms are out of scope for this tool and route to `source-unsupported-escalation`)
 
 **GHCP Factory-Supported Languages & Frameworks (for tech stack evaluation):**
 Apps using ANY of these are Factory-eligible from a language perspective:

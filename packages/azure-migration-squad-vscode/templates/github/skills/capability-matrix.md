@@ -33,7 +33,7 @@ application:
   business_priority: <speed | modernize | cost | risk>
 
 source:
-  primary_adapter: <source-github-repo | source-zip-filesystem | source-on-premise | source-aws | source-gcp | source-oracle-db | source-vmware-rvtools | source-mainframe | source-kubernetes-cluster | source-container-registry | source-unsupported-escalation>
+  primary_adapter: <source-github-repo | source-zip-filesystem | source-on-premise | source-aws | source-gcp | source-oracle-db | source-vmware-rvtools | source-kubernetes-cluster | source-container-registry | source-unsupported-escalation>
   access_method: <git-url | ssh | aws-profile | gcp-project | filesystem-path | rvtools-export | kubectl-context | acr-url | describe-only>
   secondary_adapters: []                    # e.g., DB on a separate source
   evidence_confidence: <high | medium | low>
@@ -41,7 +41,7 @@ source:
     - <relative file path or command>
 
 stack:
-  primary_stack: <dotnet | java | python | nodejs | php | ruby | go | perl | rust | cobol-mainframe | oracle-forms | powerbuilder | delphi-vb6 | scala-kotlin | cpp-windows | unknown>
+  primary_stack: <dotnet | java | python | nodejs | php | ruby | go | perl | rust | oracle-forms | powerbuilder | delphi-vb6 | scala-kotlin | cpp-windows | unknown>
   primary_framework: <e.g., spring-boot-3 | aspnet-core-8 | django-4 | laravel-10 | none>
   secondary_stacks: []
   build_system: <msbuild | maven | gradle | npm | pnpm | yarn | pip | poetry | composer | bundler | cargo | go-modules | sbt | mix | make | cmake | unknown>
@@ -51,7 +51,7 @@ stack:
     - <relative file path>
 
 workload:
-  primary_pattern: <webapp | api-service | batch-job | event-driven | serverless | desktop-client-server | packaged-app | data-pipeline | mainframe-transactional>
+  primary_pattern: <webapp | api-service | batch-job | event-driven | serverless | desktop-client-server | packaged-app | data-pipeline>
   secondary_patterns: []
   entry_points:
     - <e.g., src/Program.cs main()>
@@ -59,7 +59,7 @@ workload:
   evidence_confidence: <high | medium | low>
 
 data:
-  primary_datastore: <sql-server | azure-sql | oracle | postgresql | mysql | mongo | dynamodb | cosmos | files | s3 | gcs | blob | hdfs | mainframe-vsam | unknown>
+  primary_datastore: <sql-server | azure-sql | oracle | postgresql | mysql | mongo | dynamodb | cosmos | files | s3 | gcs | blob | hdfs | unknown>
   datastore_version: <e.g., "SQL Server 2016" | "PostgreSQL 14" | unknown>
   data_gravity: <none | small | medium | large | very-large>
   schema_highlights:
@@ -84,7 +84,7 @@ network:
 
 risk_flags:
   # Add any that apply — these auto-dispatch specialists per .github/copilot-instructions.md
-  - <regulated-data | production-only-system | large-data-gravity | no-source-code-available | unsupported-runtime | vendor-licensed-runtime | tight-cutover-window | mainframe | saas-embedded | high-integration-fanout | low-evidence-confidence>
+  - <regulated-data | production-only-system | large-data-gravity | no-source-code-available | unsupported-runtime | vendor-licensed-runtime | tight-cutover-window | unsupported-source | saas-embedded | high-integration-fanout | low-evidence-confidence>
 
 compliance:
   regulations: [<pii | pci | hipaa | gdpr | sox | fedramp | other>]
@@ -172,7 +172,7 @@ Use only the canonical values (in `.github/copilot-instructions.md`). Each flag 
 
 ## Consumer Contract
 
-Every Phase prompt (`/phase1-planandassess` through `/phase6-postmigrationops`) reads this matrix at startup. If the matrix is missing or `schema_version` doesn't match, the Phase prompt **must**:
+Every Phase prompt (`/phase1-plan` through `/phase6-postmigrationops`) reads this matrix at startup. If the matrix is missing or `schema_version` doesn't match, the Phase prompt **must**:
 
 1. Refuse to proceed
 2. Print a clear error pointing to `/assess-any-application`

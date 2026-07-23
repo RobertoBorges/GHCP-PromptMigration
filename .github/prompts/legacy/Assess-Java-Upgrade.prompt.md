@@ -1,6 +1,6 @@
 ---
 agent: Code Migration Modernization Agent
-model: Claude Sonnet 4.6 (copilot)
+model: Claude Sonnet 4.7 (copilot)
 tools: ['search/codebase', 'usages', 'vscodeAPI', 'problems', 'changes', 'testFailure', 'runCommands/terminalSelection', 'runCommands/terminalLastCommand', 'openSimpleBrowser', 'fetch', 'search/searchResults', 'githubRepo', 'extensions', 'runTests', 'edit/editFiles', 'runNotebooks', 'search', 'new', 'runCommands', 'runTasks', 'Azure MCP/*', 'Microsoft Docs/*']
 description: "Assesses Java applications and upgrade paths for Azure migration."
 ---
@@ -221,7 +221,7 @@ At the end:
 - State the detected Java version and framework plainly
 - State whether Spring Boot 3 + Java 21 is recommended, conditional, or blocked
 - Call out the top 5 blockers for the upgrade
-- Recommend `/Phase1-PlanAndAssess` if broader Azure architecture planning is still needed
+- Recommend `/Phase1-Plan` if broader Azure architecture planning is still needed
 - Recommend `/QuickTriage` if the user wants a fast estate-wide screen before deeper work
 
 ---

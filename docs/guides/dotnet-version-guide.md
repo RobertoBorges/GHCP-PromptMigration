@@ -6,13 +6,13 @@ Quick reference for Robert Borges' Ocean's Twelve crew when choosing between inc
 
 | Source | Recommended path to .NET 8 | Typical landing pattern | Use-cases in this repo | Primary prompts |
 |---|---|---|---|---|
-| ASP Classic | Rewrite directly to ASP.NET Core 8 | Razor Pages/MVC on App Service | 01 | `/quickassessment`, `/phase1-planandassess`, `/phase2-migratecode`, `/databasemigration` |
-| .NET Framework 2.0/3.0 WebForms | Assess directly for rewrite; optional short stabilization on 3.5/4.8 only if needed to inventory behavior | Razor Pages/MVC on App Service | 02 | `/quickassessment`, `/phase1-planandassess`, `/phase2-migratecode` |
-| .NET Framework 3.5 WebForms | Rewrite web tier; reuse business/data logic selectively | ASP.NET Core 8 web app + Azure SQL | 05 (reference path) | `/quickassessment`, `/phase1-planandassess`, `/phase2-migratecode`, `/databasemigration` |
-| .NET Framework 3.5 WCF | Prefer contract-first REST rewrite; keep SOAP only if external compatibility requires bridge strategy | ASP.NET Core Web API on Container Apps | 03 | `/quickassessment`, `/phase1-planandassess`, `/phase2-migratecode` |
-| .NET Framework 4.0-4.5.x MVC/Web API | Stabilize on 4.8 if package debt is high, then move to .NET 8 | ASP.NET Core MVC/Web API on App Service | 07 | `/quickassessment`, `/phase1-planandassess`, `/phase2-migratecode`, `/databasemigration` |
-| .NET Framework 4.6-4.8 libraries/services | Upgrade Assistant + try-convert are more viable; web UI still needs System.Web rewrite | SDK-style projects, ASP.NET Core host, EF Core | 07-adjacent path | `/quickassessment`, `/phase1-planandassess`, `/phase2-migratecode` |
-| ASP.NET Core 2.1 | Incremental package/runtime modernization to .NET 8; usually no rewrite | ASP.NET Core 8 App Service solution | 04 | `/quickassessment`, `/phase1-planandassess`, `/phase2-migratecode` |
+| ASP Classic | Rewrite directly to ASP.NET Core 8 | Razor Pages/MVC on App Service | 01 | `/quickassessment`, `/phase1-plan`, `/phase2-migratecode`, `/databasemigration` |
+| .NET Framework 2.0/3.0 WebForms | Assess directly for rewrite; optional short stabilization on 3.5/4.8 only if needed to inventory behavior | Razor Pages/MVC on App Service | 02 | `/quickassessment`, `/phase1-plan`, `/phase2-migratecode` |
+| .NET Framework 3.5 WebForms | Rewrite web tier; reuse business/data logic selectively | ASP.NET Core 8 web app + Azure SQL | 05 (reference path) | `/quickassessment`, `/phase1-plan`, `/phase2-migratecode`, `/databasemigration` |
+| .NET Framework 3.5 WCF | Prefer contract-first REST rewrite; keep SOAP only if external compatibility requires bridge strategy | ASP.NET Core Web API on Container Apps | 03 | `/quickassessment`, `/phase1-plan`, `/phase2-migratecode` |
+| .NET Framework 4.0-4.5.x MVC/Web API | Stabilize on 4.8 if package debt is high, then move to .NET 8 | ASP.NET Core MVC/Web API on App Service | 07 | `/quickassessment`, `/phase1-plan`, `/phase2-migratecode`, `/databasemigration` |
+| .NET Framework 4.6-4.8 libraries/services | Upgrade Assistant + try-convert are more viable; web UI still needs System.Web rewrite | SDK-style projects, ASP.NET Core host, EF Core | 07-adjacent path | `/quickassessment`, `/phase1-plan`, `/phase2-migratecode` |
+| ASP.NET Core 2.1 | Incremental package/runtime modernization to .NET 8; usually no rewrite | ASP.NET Core 8 App Service solution | 04 | `/quickassessment`, `/phase1-plan`, `/phase2-migratecode` |
 
 ## 2. Breaking changes by version jump
 
@@ -62,28 +62,28 @@ Quick reference for Robert Borges' Ocean's Twelve crew when choosing between inc
 ### .NET Framework 3.0 / 3.5 WebForms
 1. `/quickassessment`
 2. `Assess this WebForms application for direct migration to .NET 8 on Azure App Service. Inventory .aspx pages, code-behind, ViewState, server controls, Windows Authentication, and config risks.`
-3. `/phase1-planandassess`
+3. `/phase1-plan`
 4. `/phase2-migratecode`
 5. `/securityhardening`
 
 ### .NET Framework 3.5 WCF
 1. `/quickassessment`
 2. `Assess this WCF solution for conversion to ASP.NET Core REST APIs on Azure Container Apps. Map ServiceContract and OperationContract items to REST endpoints and flag compatibility gaps.`
-3. `/phase1-planandassess`
+3. `/phase1-plan`
 4. `/phase2-migratecode`
 5. `/phase3-generateinfra`
 
 ### .NET Framework 4.5.x MVC / EF6
 1. `/quickassessment`
 2. `Assess this ASP.NET MVC / EF6 / Identity solution for modernization to .NET 8 on Azure App Service with Azure SQL. Identify EF6, OWIN, and deployment-script blockers.`
-3. `/phase1-planandassess`
+3. `/phase1-plan`
 4. `/databasemigration`
 5. `/phase2-migratecode`
 
 ### ASP.NET Core 2.1
 1. `/quickassessment`
 2. `Assess this ASP.NET Core 2.1 multi-project solution for in-place modernization to .NET 8 while preserving API, Web, SPA, Data, and test boundaries.`
-3. `/phase1-planandassess`
+3. `/phase1-plan`
 4. `/phase2-migratecode`
 5. `/phase5-setupcicd`
 
@@ -93,7 +93,7 @@ Quick reference for Robert Borges' Ocean's Twelve crew when choosing between inc
 |---|---|---|
 | .NET Upgrade Assistant | Project analysis, SDK-style conversion, dependency guidance | Strongest for libraries and newer framework apps; still requires manual work for System.Web apps |
 | try-convert | Convert old csproj to SDK-style | Useful for libraries and some non-web projects; not enough by itself for WebForms/WCF/MVC |
-| dotnet-migration analyzer | Inventory unsupported APIs and packages | Good before `/phase1-planandassess`; use findings to scope rewrite vs incremental path |
+| dotnet-migration analyzer | Inventory unsupported APIs and packages | Good before `/phase1-plan`; use findings to scope rewrite vs incremental path |
 | `dotnet` CLI | Build, test, restore, package validation | Core loop during Phase 2-5 |
 | `az` + `azd` | Azure validation and deployment | Use once target architecture is approved |
 | Bicep / Terraform | IaC generation | App Service-heavy migrations fit Bicep well; mixed Java/container estates may prefer Terraform |

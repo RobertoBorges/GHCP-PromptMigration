@@ -4,17 +4,49 @@ These instructions apply to all GitHub Copilot interactions within this reposito
 
 ## Project Purpose (Universal Mode)
 
-This repository is a **universal application-to-Azure migration system**. It can assess, modernize, and migrate **any application** — regardless of source environment (on-premise, AWS, GCP, Oracle, VMware, Kubernetes, container registry, GitHub repo, ZIP, mainframe) or stack (.NET, Java, Python, Node.js, PHP, Ruby, Go, Perl, Rust, COBOL, Oracle Forms, PowerBuilder, Delphi/VB6, Scala/Kotlin, C++ Windows, and more) — into Azure.
+This repository is a **universal application-to-Azure migration system**. It can assess, modernize, and migrate **any application** — regardless of source environment (on-premise, AWS, GCP, Oracle, VMware, Kubernetes, container registry, GitHub repo, ZIP) or stack (.NET, Java, Python, Node.js, PHP, Ruby, Go, Perl, Rust, Oracle Forms, PowerBuilder, Delphi/VB6, Scala/Kotlin, C++ Windows, and more) — into Azure.
+
+> **Mainframe and midrange workloads** (z/OS, z/VSE, IBM i / AS-400, COBOL / RPG / Natural / PL/I, CICS/IMS, VSAM) are **out of scope** as a first-class family. Discovery redirects these to `source-unsupported-escalation.md`, which provides a specialist-partner escalation playbook (Micro Focus, Astadia, Kyndryl, LzLabs, TCS, NTT DATA). This tool does not attempt code-level COBOL/RPG/Natural migration.
 
 The system supports **three complementary flows**:
 
-1. **Universal Application Migration Flow (default)** — Starts with `/assess-any-application`. The agent characterizes the application's source, stack, workload pattern, data, and integrations; produces a **Discovery Dossier** and a **Capability Matrix**; recommends a migration strategy (Rehost/Replatform/Refactor/Rearchitect/Rebuild/Retire/Retain) using the `migration-strategy-decision-tree` skill; and proceeds to execution via Phases 1–6.
+1. **Per-Application Modernization Flow (default, main path)** — Guided execution of ONE application at a time via **`/assess-any-application` → `/Phase1-Plan` → `/Phase2-MigrateCode` → `/Phase3-GenerateInfra` → `/Phase4-DeployToAzure` → `/Phase5-SetupCICD` → `/Phase6-PostMigrationOps`**. Stack-agnostic: Phase prompts consume the Capability Matrix produced by Discovery and apply the right stack/source/workload-specific guidance via skills.
 
-2. **Portfolio Planning Flow (pre-engagement)** — Generates executive-ready Migration Strategy Reports from CMDB / RVTools / DMA / mixed customer artifacts. Produces a CIO-level HTML deck with CAF-aligned 6 Rs classification and Factory / ISD-Partner / Unknown execution ownership. Invoke with `/PortfolioStrategy` or use the `migration-strategy-report` skill.
+2. **Portfolio Planning Flow (pre-engagement, optional add-on)** — Generates executive-ready Migration Strategy Reports from CMDB / RVTools / DMA / mixed customer artifacts. Produces a CIO-level HTML deck with CAF-aligned 6 Rs classification and Factory / ISD-Partner / Unknown execution ownership. Invoke with `/PortfolioStrategy` or use the `migration-strategy-report` skill.
 
-3. **Per-Application Modernization Flow (Phases 1–5, optionally Phase 0)** — Guided execution of ONE application at a time. Stack-agnostic: Phase prompts consume the Capability Matrix produced by Discovery and apply the right stack/source/workload-specific guidance via skills.
+3. **Multi-repo assessment (optional add-on)** — `/Phase0-Multi-repo-assessment` runs cross-repo dependency + sequencing analysis for business solutions that span multiple repos, before the main path.
 
 The seven legacy use-cases (`01-ASPClassicApp` … `07-PartsUnlimited`) remain in the repository as **reference walkthroughs**, not as a fixed catalog.
+
+## Main path vs optional add-ons
+
+The default migration flow is **Assess + 6 phases** run in order (7 total commands). Everything else is an **optional add-on** offered when the user has a specific specialized need.
+
+### 🟢 Main path (default — 7 steps)
+
+Present these first. Run in order.
+
+| # | Step | Command |
+|---|------|---------|
+| 1 | Assess (Discovery) | `/assess-any-application` |
+| 2 | Plan | `/Phase1-Plan` |
+| 3 | Migrate Code | `/Phase2-MigrateCode` |
+| 4 | Generate Infra | `/Phase3-GenerateInfra` |
+| 5 | Deploy | `/Phase4-DeployToAzure` |
+| 6 | Setup CI/CD | `/Phase5-SetupCICD` |
+| 7 | Post-Migration Ops | `/Phase6-PostMigrationOps` |
+
+### 🔵 Optional add-ons (offer only when relevant)
+
+**Alternative intakes** — `/build-migration-plan`, `/QuickAssessment`, `/QuickTriage`, `/InteractiveMigrationInterview`, `/TeamSkillAssessment`
+**Portfolio / multi-app** — `/PortfolioStrategy`, `/Phase0-Multi-repo-assessment`
+**Specialized deep-dives** — `/DatabaseMigration`, `/SecurityHardening`, `/CostOptimization`
+**Utility / recovery** — `/Phase-Rollback`, `/GetStatus`
+
+**Agent behavior:**
+- When a user starts a new migration, recommend the **main path**: run `/assess-any-application` first, then `/Phase1-Plan`, etc.
+- Only surface add-ons when the user's question maps to one (e.g., "how do I move the DB?" → suggest `/DatabaseMigration`).
+- The natural-language mapping table below still maps ALL commands so users can type any of them — but presentation should always foreground the main path.
 
 ## How to Invoke the Agent (CLI vs Chat)
 
@@ -27,28 +59,35 @@ The seven legacy use-cases (`01-ASPClassicApp` … `07-PartsUnlimited`) remain i
 
 ### Natural-language → action mapping (for CLI users)
 
-When the user says any of the phrases below, take the matching action:
+When the user says any of the phrases below, take the matching action. **Rows are ordered main-path first, then add-ons.**
 
 | User says (any of) | Action |
 |---|---|
-| "assess this application", "assess any application", "discover this app", "discover this application", "what is this app", "characterize this application", "scan this repo", "/assess-any-application", "azure migration of this app" | Read `.github/prompts/Assess-Any-Application.prompt.md` and follow it. Produce `reports/Discovery-Dossier.md` + `reports/Capability-Matrix.yaml`. |
-| "build migration plan", "approve discovery", "build the plan", "make the migration plan", "/build-migration-plan" | Read `.github/prompts/Build-Migration-Plan.prompt.md`. Produce `reports/Migration-Plan.md`. Requires Discovery Dossier + Capability Matrix to already exist. |
-| "phase 1", "plan and assess", "/phase1-planandassess" | Read `.github/prompts/Phase1-PlanAndAssess.prompt.md` |
+| **🟢 Main path — Assess + 6 phases (Phase 1-6)** | |
+| "assess this application", "assess any application", "discover this app", "characterize this application", "scan this repo", "/assess-any-application", "run discovery", "start migration" | Read `.github/prompts/Assess-Any-Application.prompt.md` and follow it. Produce `reports/Discovery-Dossier.md` + `reports/Capability-Matrix.yaml`. This is **step 1** of the main path. |
+| "phase 1", "plan", "make the plan", "plan this migration", "/phase1-plan" | Read `.github/prompts/Phase1-Plan.prompt.md`. Requires Discovery Dossier + Capability Matrix. |
 | "phase 2", "migrate code", "/phase2-migratecode" | Read `.github/prompts/Phase2-MigrateCode.prompt.md` |
 | "phase 3", "generate infra", "/phase3-generateinfra" | Read `.github/prompts/Phase3-GenerateInfra.prompt.md` |
 | "phase 4", "deploy to azure", "/phase4-deploytoazure" | Read `.github/prompts/Phase4-DeployToAzure.prompt.md` |
 | "phase 5", "setup cicd", "/phase5-setupcicd" | Read `.github/prompts/Phase5-SetupCICD.prompt.md` |
 | "phase 6", "post-migration ops", "/phase6-postmigrationops" | Read `.github/prompts/Phase6-PostMigrationOps.prompt.md` |
+| **🔵 Alternative intakes (add-ons)** | |
+| "build migration plan", "approve discovery", "build the plan", "/build-migration-plan" | Read `.github/prompts/Build-Migration-Plan.prompt.md`. Produces `reports/Migration-Plan.md` separately from Phase 1. |
+| "quick assessment", "/quickassessment", "quick triage", "/quicktriage" | Read the matching prompt |
+| "interview me", "/InteractiveMigrationInterview" | Read `.github/prompts/InteractiveMigrationInterview.prompt.md` |
+| "team skill assessment", "/TeamSkillAssessment" | Read `.github/prompts/TeamSkillAssessment.prompt.md` |
+| **🔵 Portfolio / multi-app (add-ons)** | |
 | "portfolio strategy", "/PortfolioStrategy", "analyze portfolio", "CMDB analysis", "RVTools analysis", "migration strategy report" | Read `.github/prompts/PortfolioStrategy.prompt.md` and the `migration-strategy-report` skill |
 | "phase 0", "multi-repo assessment", "/phase0-multi-repo-assessment" | Read `.github/prompts/Phase0-Multi-repo-assessment.prompt.md` |
+| **🔵 Specialized deep-dives (add-ons)** | |
 | "database migration", "/databasemigration", "migrate the database" | Read `.github/prompts/DatabaseMigration.prompt.md` |
 | "security hardening", "/securityhardening", "harden security" | Read `.github/prompts/SecurityHardening.prompt.md` |
 | "cost optimization", "/costoptimization", "optimize cost" | Read `.github/prompts/CostOptimization.prompt.md` |
-| "quick assessment", "/quickassessment", "quick triage", "/quicktriage" | Read the matching prompt |
+| **🔵 Utility / recovery (add-ons)** | |
 | "rollback", "phase rollback", "/phase-rollback" | Read `.github/prompts/Phase-Rollback.prompt.md` |
 | "status", "/getstatus", "show migration status" | Read `.github/prompts/GetStatus.prompt.md` and consult `reports/Report-Status.md` |
-| "interview me", "/InteractiveMigrationInterview" | Read `.github/prompts/InteractiveMigrationInterview.prompt.md` |
-| "team skill assessment", "/TeamSkillAssessment" | Read `.github/prompts/TeamSkillAssessment.prompt.md` |
+| **🧠 Skill creation (auto-invoked + user-invokable)** | |
+| "create a skill for X", "add a skill for X", "we need a skill for X", "research this and create a skill", "/skill-creator" | Read `.github/skills/skill-creator.md` and follow its 7-step flow (Detect Gap → Confirm → Research → Draft → Smoke-test → Log → Continue). Also invoked **automatically** by `/assess-any-application` (Step 8.5) and `/Phase1-Plan` (in the capability-matrix-gate) when the Capability Matrix contains a stack/source/workload/integration value with no matching `.github/skills/<family>-<value>.md` file. |
 
 **If the user types a slash command that isn't in the table above, look for a matching file at `.github/prompts/<command-no-slash>.prompt.md` (case-insensitive) and read it.**
 
@@ -81,7 +120,7 @@ For any application that does not already have a Capability Matrix:
 
 ### What This Project Does NOT Do ❌
 - **Data Migration tooling** itself — recommends and orchestrates Azure DMS / DMA but does not replace them
-- **Binary/dependency scanning of compiled artifacts** — recommends .NET Upgrade Assistant or equivalent external tools for that
+- **Binary/dependency scanning of compiled artifacts** — recommends stack-appropriate external tools (`.NET Upgrade Assistant`, `Spring Boot Migrator`, `Python 2to3`, `Node.js n`, etc.) for that
 - **Wholesale replacement of SaaS-embedded code** — escalates to specialist (not a Copilot-only task)
 
 ## Always Apply These Rules
@@ -112,6 +151,7 @@ Read [`.github/hooks/decision-gates.md`](./hooks/decision-gates.md) for the orch
 
 ### Documentation
 - Track migration progress in `reports/Report-Status.md`
+- **Append an Action Log entry** to `reports/Report-Status.md` after every meaningful action (phase transition, artifact production, decision, gate event, user input, rollback). Format spec: [`.github/skills/action-log-format.md`](./skills/action-log-format.md). The Action Log is the migration's **trace memory** — it's what allows a new session to recover if the previous session was lost.
 - Generate assessment artifacts in `reports/Discovery-Dossier.md` + `reports/Capability-Matrix.yaml`
 - Generate per-application reports in `reports/Application-Assessment-Report.md`
 - Use Mermaid diagrams for architecture visualization
@@ -154,7 +194,6 @@ Read [`.github/hooks/decision-gates.md`](./hooks/decision-gates.md) for the orch
 | PHP 5.x / 7.x | PHP 8.3+ |
 | Ruby 2.x | Ruby 3.3+ |
 | Go ≤ 1.19 | Go 1.22+ |
-| COBOL / OpenCOBOL on z/OS | Java 21 on AKS via Micro Focus / Astadia, or rebuild |
 | Oracle Forms | APEX / Spring Boot rewrite, or refactor to web UI |
 | Delphi / VB6 / PowerBuilder | Rebuild on .NET 10 or modern web stack |
 

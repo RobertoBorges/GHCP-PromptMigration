@@ -1,43 +1,39 @@
 ---
-name: Phase1-PlanAndAssess
-description: Start planning and generate an assessment report for your application
-argument-hint: "Specify the folder path to your legacy application, e.g., 'Assess the app in Use-cases/02-NetFramework30-ASPNET-WEB'"
+name: Phase1-Plan
+description: Generate the migration plan, Application-Assessment-Report, and Decisions-Required file for one application
+argument-hint: "Specify the folder path to your legacy application, e.g., 'Plan the app in Use-cases/02-NetFramework30-ASPNET-WEB'"
 agent: Code Migration Modernization Agent
-model: Claude Sonnet 4.6 (copilot)
+model: Claude Sonnet 4.7 (copilot)
 ---
-
-
-
 
 
 <!-- BEGIN: capability-matrix-gate (auto-managed by inject-capability-matrix-gates.mjs) -->
 
 ## 🚦 MANDATORY OPENING CHECK — Capability Matrix Required
 
-**Before doing ANY work for Phase 1 — Plan & Assess, verify the Discovery contract:**
+**Before doing ANY work for Phase 1 — Plan, verify the Discovery contract:**
 
 | Required artifact | Location | If missing |
 |-------------------|----------|------------|
 | Discovery Dossier | `reports/Discovery-Dossier.md` | **STOP** — run `/assess-any-application` first |
 | Capability Matrix | `reports/Capability-Matrix.yaml` | **STOP** — run `/assess-any-application` first |
-| Approved Migration Plan | `reports/Migration-Plan.md` | **STOP** — run `/build-migration-plan` |
 
-### If ANY of those three artifacts is missing
+> **Note:** `reports/Migration-Plan.md` is **produced by Phase 1**. If it doesn't exist yet, Phase 1 will generate it. If you'd like to produce it separately first, use the `/build-migration-plan` add-on.
+
+### If EITHER of those two artifacts is missing
 
 Reply with exactly:
 
 ```
-🚨 Phase 1 — Plan & Assess cannot proceed without the Discovery contract.
+🚨 Phase 1 — Plan cannot proceed without the Discovery contract.
 
 Missing artifacts:
   - reports/Discovery-Dossier.md          [missing/present]
   - reports/Capability-Matrix.yaml         [missing/present]
-  - reports/Migration-Plan.md              [missing/present]
 
 Required steps before re-running this phase:
   1. Open Copilot Chat → /assess-any-application  (or in CLI: "assess this application")
-  2. Then: /build-migration-plan                  (or in CLI: "build the migration plan")
-  3. Then: /phase...
+  2. Then re-run: /Phase1-Plan
 
 To override (skip Discovery and accept risk), log a waiver entry in
 reports/Decision-Log.md with `Waiver: skip-discovery=<reason>` and re-invoke
@@ -45,7 +41,7 @@ this prompt with the `--accept-risk` natural-language flag in your request.
 ```
 
 **Do NOT proceed past this gate unless:**
-- All three artifacts exist, OR
+- Both artifacts exist, OR
 - A waiver entry exists in `reports/Decision-Log.md` AND the user explicitly said "skip discovery" or similar
 
 ### When the gate passes
@@ -57,26 +53,50 @@ this prompt with the `--accept-risk` natural-language flag in your request.
    - `migration_strategy.recommendation` → adjust phase emphasis based on the recommended strategy
    - `risk_flags` → load the matching risk skills (e.g., `risk-cross-region-data.md`)
    - `unresolved_questions` → if any remain unanswered, surface them BEFORE starting work
-2. Read `reports/Migration-Plan.md` for approved sequencing and any app-specific extra gates.
-3. Confirm Phase prerequisites are met.
+2. **Skill Gap Check (belt + suspenders)** — for each value above, verify a matching `<family>-<value>.md` exists in `.github/skills/`. If any is missing, invoke `.github/skills/skill-creator.md` to author it on the fly. Ask a single Y/n/N-for-session confirmation; default is Y.
+3. If `reports/Migration-Plan.md` exists, read it for approved sequencing. Otherwise Phase 1 will produce it as part of its work.
+4. Confirm Phase prerequisites are met.
 
 <!-- END: capability-matrix-gate -->
-# Modernize a Single Application
+<!-- BEGIN: action-log-contract (auto-managed by inject-action-log-contract.mjs) -->
+
+## 📜 Action Log Contract
+
+**After each meaningful action** in this prompt, append one single-line entry to the `## 📜 Action Log` section at the bottom of `reports/Report-Status.md`.
+
+Canonical format:
+```
+- <ISO-8601-UTC> | actor=Phase1-Plan | action=<verb-phrase> | files=<+created,~modified,-deleted> | tokens=~<bucket> | turn=<n> | notes="<free text>"
+```
+
+Rules:
+- Use `actor=Phase1-Plan` for actions taken by this prompt.
+- Use `actor=User` for actions taken by the user (e.g., answering a decision).
+- Log **only meaningful actions**: phase transitions, artifact production, decision events, gate passes/blocks, user inputs, rollback events. Do NOT log every internal grep or file read.
+- Estimate `tokens` in buckets: `~0`, `~500`, `~2k`, `~8k`, `~30k`. The `turn` counter is exact; token estimate is best-effort. Point users to Copilot Dashboard for authoritative counts.
+- If `reports/Report-Status.md` doesn't exist yet, create it from `.github/skills/migration-report-template.md` first — it already includes the `## 📜 Action Log` section.
+
+Full spec: `.github/skills/action-log-format.md`.
+
+<!-- END: action-log-contract -->
+
+
+# Plan a Single Application Migration to Azure
 
 ## Migration Scope
 
 This guided migration helps you:
-- ✅ **Upgrade** your application to a framework version compatible with Azure
-- ✅ **Modernize** code patterns for cloud-native deployment
-- ✅ **Generate** infrastructure as code for your target platform
-- ✅ **Set up** CI/CD pipelines for automated deployment
+- ✅ **Make your application Azure-compatible** — replace on-prem-only dependencies (identity providers, file shares, in-process caches, machine keys, local certificate stores, etc.) with their Azure equivalents
+- ✅ **Upgrade the runtime** to a version supported by your chosen Azure hosting platform (only when the current version is out-of-support or incompatible)
+- ✅ **Generate infrastructure as code** for your target Azure platform
+- ✅ **Set up CI/CD** for automated deployment
 
 This migration does **NOT** include:
-- ❌ **Data Migration** — Use Azure Database Migration Service (DMS) or Data Migration Assistant
-- ❌ **Binary/Dependency Scanning** — Use .NET Upgrade Assistant or similar external tools
-- ❌ **Lift-and-Shift** — This requires code upgrades, not containerizing legacy code as-is
+- ❌ **Data Migration tooling** — Use Azure Database Migration Service (DMS), Data Migration Assistant, or Azure Database Migration Service Extension. This prompt orchestrates but doesn't replace them.
+- ❌ **Binary/Dependency Scanning** — Use stack-appropriate external tools (`.NET Upgrade Assistant`, `Spring Boot Migrator`, `Python 2to3`, `Node.js n`, etc.)
+- ❌ **Wholesale rewrite to microservices / event-driven / cloud-native patterns** — that's an explicit `rearchitect` or `rebuild` migration strategy. The default is `replatform` or `refactor` — **minimum viable Azure compatibility**, not a re-architecture. Only run architecture rewrites when the user explicitly picks that strategy in Discovery.
 
-**Goal:** Take your existing .NET or Java application and upgrade it to a version compatible with your selected Azure hosting platform (App Service, Container Apps, or AKS).
+**Goal:** Take an existing application — regardless of language, framework, or where it runs today — and make **only the changes required** to host it on your selected Azure platform (App Service, Container Apps, AKS, Functions, VMs, etc.). The specific changes are dictated by `reports/Capability-Matrix.yaml` (source, stack, workload, integrations, data).
 
 ---
 
@@ -183,24 +203,48 @@ After writing the file, post this message:
 
 ### Step 3: Environment Setup
 1. **Create reports folder** if it doesn't exist: `reports/`
-2. **Build the solution** to verify all dependencies resolve:
-   - For .NET: `dotnet build` or `msbuild`
-   - For Java: `mvn compile` or `gradle build`
-   - For Node.js: `npm install`
-3. **Document any build failures** - these indicate migration blockers
+2. **Build the solution** to verify all dependencies resolve. Pick the command for the stack in `Capability-Matrix.stack.primary_stack`:
+
+   | Stack | Build command |
+   |-------|---------------|
+   | `dotnet` (Framework or Core) | `dotnet build` (or `msbuild` for legacy SDK-style projects) |
+   | `java` | `mvn compile` (or `gradle build`) |
+   | `nodejs` | `npm install && npm run build` (script may be missing — that's a signal) |
+   | `python` | `pip install -r requirements.txt` (or `poetry install` / `uv pip install`) |
+   | `php` | `composer install` |
+   | `ruby` | `bundle install` |
+   | `go` | `go build ./...` |
+   | `perl` | `cpanm --installdeps .` |
+   | `rust` | `cargo build` |
+   | `scala` / `kotlin` | `sbt compile` or `gradle build` |
+   | `oracle-forms` / `powerbuilder` / `delphi-vb6` / `cpp-windows` | Vendor IDE — typically no headless build. Document the manual build step. |
+   | Other / unknown | Skip; ask the user for the build command they use today. |
+3. **Document any build failures** — these indicate migration blockers.
 
 ### Step 4: Automated Discovery
 Use the following tools to analyze the codebase:
 
 #### 4.1 Project Detection
 ```
-Use `file_search` for: *.csproj, *.sln, pom.xml, build.gradle, package.json, web.config, *.fsproj, *.vbproj
-Use `grep_search` to identify framework versions in project files
+Use `file_search` for stack-appropriate manifests:
+  .NET:      *.csproj, *.sln, *.fsproj, *.vbproj, web.config, app.config
+  Java:      pom.xml, build.gradle, build.gradle.kts, web.xml
+  Node.js:   package.json, package-lock.json, tsconfig.json
+  Python:    requirements.txt, pyproject.toml, setup.py, Pipfile, poetry.lock
+  PHP:       composer.json, composer.lock
+  Ruby:      Gemfile, Gemfile.lock, *.gemspec
+  Go:        go.mod, go.sum
+  Perl:      cpanfile, Makefile.PL, dist.ini
+  Rust:      Cargo.toml, Cargo.lock
+  Scala/Kotlin: build.sbt, build.gradle.kts
+Use `grep_search` to identify framework versions in the detected manifests.
 ```
 
 #### 4.2 Application Type Analysis
 
-**For .NET Applications:**
+**Load only the sections that match `Capability-Matrix.stack.primary_stack`** (and `.stack.secondary_stacks`). Skip the rest.
+
+**For `dotnet`:**
 | Discovery Target | Tool & Pattern |
 |-----------------|----------------|
 | Framework version | `grep_search`: `<TargetFramework`, `<TargetFrameworkVersion` |
@@ -211,7 +255,7 @@ Use `grep_search` to identify framework versions in project files
 | Database access | `semantic_search`: "SqlConnection", "DbContext", "EntityFramework" |
 | Config files | `grep_search` in `web.config`, `app.config`, `appsettings.json` |
 
-**For Java Applications:**
+**For `java`:**
 | Discovery Target | Tool & Pattern |
 |-----------------|----------------|
 | Java/Spring version | `grep_search`: `<java.version>`, `sourceCompatibility`, `spring-boot` |
@@ -221,6 +265,57 @@ Use `grep_search` to identify framework versions in project files
 | Authentication | `semantic_search`: "JAAS", "Spring Security", "@Secured" |
 | Database access | `semantic_search`: "JdbcTemplate", "JPA", "@Repository", "Hibernate" |
 | Config files | `grep_search` in `application.properties`, `application.yml` |
+
+**For `python`:**
+| Discovery Target | Tool & Pattern |
+|-----------------|----------------|
+| Python version | `grep_search`: `python_requires`, `python = "`, `.python-version`, `runtime.txt` |
+| Web framework | `grep_search`: `Django`, `Flask`, `FastAPI`, `Starlette`, `Tornado`, `Bottle` |
+| WSGI/ASGI entry | `file_search`: `wsgi.py`, `asgi.py`, `app.py`, `main.py`; grep for `gunicorn` / `uvicorn` |
+| Authentication | `grep_search`: `django.contrib.auth`, `flask-login`, `authlib`, `msal`, `authentik` |
+| Database access | `grep_search`: `django.db.models`, `sqlalchemy`, `psycopg2`, `pymysql`, `cx_Oracle` |
+| Config files | `grep_search` in `settings.py`, `.env`, `config.py`, `pyproject.toml` |
+
+**For `nodejs`:**
+| Discovery Target | Tool & Pattern |
+|-----------------|----------------|
+| Node version | `grep_search`: `"engines"`, `.nvmrc`, `package.json.engines.node` |
+| Framework | `grep_search`: `express`, `fastify`, `koa`, `nestjs`, `hapi`, `next`, `nuxt` |
+| Authentication | `grep_search`: `passport`, `express-session`, `jsonwebtoken`, `@azure/msal-node` |
+| Database access | `grep_search`: `mongoose`, `sequelize`, `typeorm`, `prisma`, `pg`, `mysql2` |
+| Config files | `grep_search` in `.env`, `config/`, `dotenv`, `next.config.js` |
+
+**For `php`:**
+| Discovery Target | Tool & Pattern |
+|-----------------|----------------|
+| PHP version | `grep_search`: `composer.json.require.php`, `php_version` in Dockerfile |
+| Framework | `grep_search`: `Laravel`, `Symfony`, `CodeIgniter`, `CakePHP`, `Slim`, `Yii` |
+| Web server config | `file_search`: `.htaccess`, `nginx.conf`, `php.ini` |
+| Authentication | `grep_search`: `auth.php`, `Illuminate\\Auth`, `Symfony\\Component\\Security` |
+| Database access | `grep_search`: `PDO`, `mysqli`, `Eloquent`, `Doctrine`, `ADOdb` |
+
+**For `ruby`:**
+| Discovery Target | Tool & Pattern |
+|-----------------|----------------|
+| Ruby version | `grep_search`: `Gemfile.ruby`, `.ruby-version` |
+| Framework | `grep_search`: `Rails`, `Sinatra`, `Hanami`, `Padrino` |
+| Authentication | `grep_search`: `devise`, `warden`, `sorcery`, `omniauth` |
+| Database access | `grep_search`: `ActiveRecord`, `Sequel`, `pg`, `mysql2` |
+
+**For `go`:**
+| Discovery Target | Tool & Pattern |
+|-----------------|----------------|
+| Go version | `grep_search`: `go 1.` in `go.mod`, `runtime.Version()` |
+| Framework | `grep_search`: `gin-gonic`, `echo`, `fiber`, `net/http`, `chi`, `gorilla/mux` |
+| Authentication | `grep_search`: `jwt-go`, `oauth2`, `casbin`, `azuread` |
+| Database access | `grep_search`: `database/sql`, `gorm.io`, `pgx`, `sqlx` |
+
+**For `perl` / `rust` / `scala-kotlin` / `oracle-forms` / `powerbuilder` / `delphi-vb6` / `cpp-windows`:**
+Load the matching `stack-*.md` skill for its detection patterns and Azure compatibility guidance.
+
+**For mainframe / midrange sources (z/OS, z/VSE, IBM i / AS-400) or COBOL / RPG / Natural / PL/I applications:** these are **out of scope** for this tool. Skip Phase 1 and use `source-unsupported-escalation.md` to route the user to a specialist partner (Micro Focus / Astadia / Kyndryl / LzLabs / TCS / NTT DATA).
+
+**Mixed-stack applications** (`.stack.secondary_stacks` is non-empty): run the discovery for each stack in scope, then reconcile findings in the assessment report.
 
 #### 4.3 Dependency Analysis
 - Extract all third-party dependencies from project files

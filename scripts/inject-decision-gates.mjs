@@ -104,7 +104,7 @@ function buildGate(phase, decisions) {
     '   - Record the answer in `reports/Decision-Log.md`.',
     '   - Update Status to `✅ DECIDED <ISO date>` in `reports/Decisions-Required.md`.',
     '   - THEN re-run the check sequence.',
-    '5. If `reports/Decisions-Required.md` is missing → STOP and route the user to `/Phase1-PlanAndAssess`.',
+    '5. If `reports/Decisions-Required.md` is missing → STOP and route the user to `/Phase1-Plan`.',
     '',
     '### Hard rules',
     '',

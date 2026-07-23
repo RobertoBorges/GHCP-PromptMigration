@@ -46,6 +46,10 @@ export function registerCommands(
       cmdOpenDiscovery()
     ),
 
+    vscode.commands.registerCommand('azureMigrationSquad.openMainPath', () =>
+      cmdOpenMainPath()
+    ),
+
     vscode.commands.registerCommand('azureMigrationSquad.showCatalog', () => cmdShowCatalog()),
 
     vscode.commands.registerCommand('azureMigrationSquad.openSettings', () =>
@@ -172,7 +176,7 @@ async function cmdDoctor(context: vscode.ExtensionContext): Promise<void> {
   out.appendLine(`  GitHub Copilot Chat ext:   ${copilotChat ? '✓ installed' : '✗ NOT installed'}`);
 
   const decisionsExists = fs.existsSync(path.join(ws.root, 'reports', 'Decisions-Required.md'));
-  out.appendLine(`  reports/Decisions-Req...:  ${decisionsExists ? '✓ generated' : '⏸ not yet (run /Phase1-PlanAndAssess)'}`);
+  out.appendLine(`  reports/Decisions-Req...:  ${decisionsExists ? '✓ generated' : '⏸ not yet (run /Phase1-Plan)'}`);
 
   const extensionVersion = (() => {
     try {
@@ -196,7 +200,14 @@ async function cmdDoctor(context: vscode.ExtensionContext): Promise<void> {
 }
 
 async function cmdOpenDiscovery(): Promise<void> {
-  const query = '/assess-any-application';
+  return sendChatQuery('/assess-any-application', 'discovery');
+}
+
+async function cmdOpenMainPath(): Promise<void> {
+  return sendChatQuery('/assess-any-application', 'main-path');
+}
+
+async function sendChatQuery(query: string, kind: string): Promise<void> {
   const attempts: Array<() => Thenable<unknown>> = [
     () => vscode.commands.executeCommand('workbench.action.chat.open', { query }),
     () => vscode.commands.executeCommand('workbench.action.chat.openInSidebar', { query }),
@@ -217,7 +228,7 @@ async function cmdOpenDiscovery(): Promise<void> {
 
   await vscode.env.clipboard.writeText(query);
   vscode.window.showInformationMessage(
-    `Couldn't auto-open Copilot Chat. The discovery command "${query}" is on your clipboard — paste it into the chat.`
+    `Couldn't auto-open Copilot Chat. The ${kind} command "${query}" is on your clipboard — paste it into the chat.`
   );
 }
 

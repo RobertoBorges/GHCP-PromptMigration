@@ -131,5 +131,5 @@ By the end, the agent should be able to tell you:
 - how deployment, rollback, CI/CD, and monitoring work end to end
 
 ## 💡 Power-User Shortcut
-> Old advanced equivalents, if you already know them: QuickAssessment, Phase1-PlanAndAssess, DatabaseMigration, Phase2-MigrateCode, Phase3-GenerateInfra, Phase4-DeployToAzure, Phase5-SetupCICD, Phase6-PostMigrationOps, SecurityHardening.
+> Old advanced equivalents, if you already know them: QuickAssessment, Phase1-Plan, DatabaseMigration, Phase2-MigrateCode, Phase3-GenerateInfra, Phase4-DeployToAzure, Phase5-SetupCICD, Phase6-PostMigrationOps, SecurityHardening.
 > Canonical path for this walkthrough: stay in Copilot CLI and keep talking to `@agent`.

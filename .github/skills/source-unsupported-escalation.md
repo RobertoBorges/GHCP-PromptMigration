@@ -9,6 +9,8 @@ Catch-all path for applications the standard adapter library cannot characterize
 ## When to Use
 
 - Source environment is SaaS-embedded (Salesforce Apex, ServiceNow, SharePoint customizations, Power Platform, Dynamics 365 plugins, SAP ABAP extensions, Workday Studio, Lotus Notes / Domino)
+- Source environment is a **mainframe or midrange** (IBM z/OS, z/VSE, z/VM, IBM i / AS-400 / iSeries, CICS, IMS, VSAM data stores, JCL-driven batch, Unisys ClearPath, Bull GCOS)
+- Application is written in **COBOL, PL/I, RPG, Assembler, or Natural** on any of the platforms above
 - Source environment is a niche legacy (Tuxedo, Progress OpenEdge, IBM Informix-4GL, Sybase ASE, Adabas/Natural, CA-IDMS)
 - Source code is in a proprietary archive format we cannot inspect
 - User cannot provide any structured artifact or access
@@ -23,7 +25,7 @@ Catch-all path for applications the standard adapter library cannot characterize
 ## Probes
 
 - Check vendor documentation for Azure migration guides
-- Identify partner specialists with mainstream relationship (Microsoft Migration Factory, ISD partners, ISV-specific consultancies)
+- Identify partner specialists with mainstream relationship (Microsoft Migration Factory, ISD partners, ISV-specific consultancies, mainframe modernization partners such as Micro Focus / Astadia / TCS / Kyndryl / LzLabs / NTT DATA)
 - Capture what the customer has tried already
 - Capture the business pressure / timeline driving the escalation
 
@@ -31,7 +33,7 @@ Catch-all path for applications the standard adapter library cannot characterize
 
 There is **no direct Azure mapping**. The output of this adapter is a **manual playbook**, not a mechanical target. The Architect's job is to:
 
-1. Decide whether to bring in a specialist partner
+1. Decide whether to bring in a specialist partner (**required** for mainframe/midrange workloads — this tool does not attempt code-level COBOL/RPG/Natural migration)
 2. Decide whether to `retire` or `retain` the application
 3. Decide whether to `rebuild` on a different stack the agent can support
 4. Document the escalation path in `reports/Decision-Log.md`
@@ -40,7 +42,8 @@ There is **no direct Azure mapping**. The output of this adapter is a **manual p
 
 - **High risk of mis-classification** if Discovery Engineer doesn't escalate and instead picks a "close-enough" adapter.
 - **Vendor lock-in** — many SaaS-embedded platforms have no real exit; migration may mean rewrite on Azure-native.
-- **Specialist availability** — niche stacks may have limited consultancies. Add lead time.
+- **Specialist availability** — niche stacks and mainframe workloads may have limited consultancies. Add lead time.
+- **Mainframe workloads** typically involve tightly-coupled data (VSAM, DB2, IDMS), batch schedulers, and 40+ years of business logic. Migration is a multi-quarter to multi-year program — do not scope with the same effort model as a webapp migration.
 - **Cost of escalation path** is typically higher than standard migration; flag Cost Engineer.
 
 ## Output Checklist

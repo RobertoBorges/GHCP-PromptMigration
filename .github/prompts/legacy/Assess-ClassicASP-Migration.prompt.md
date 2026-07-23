@@ -1,6 +1,6 @@
 ---
 agent: Code Migration Modernization Agent
-model: Claude Sonnet 4.6 (copilot)
+model: Claude Sonnet 4.7 (copilot)
 tools: ['search/codebase', 'usages', 'vscodeAPI', 'problems', 'changes', 'testFailure', 'runCommands/terminalSelection', 'runCommands/terminalLastCommand', 'openSimpleBrowser', 'fetch', 'search/searchResults', 'githubRepo', 'extensions', 'runTests', 'edit/editFiles', 'runNotebooks', 'search', 'new', 'runCommands', 'runTasks', 'Azure MCP/*', 'Microsoft Docs/*']
 description: "Assesses Classic ASP applications for Azure migration readiness."
 ---
@@ -180,7 +180,7 @@ At the end:
 - State the top 5 blockers and the proposed rewrite waves
 - Call out whether EF Core, Dapper, or hybrid data access is recommended
 - Recommend `/Assess-DotNet-Upgrade` if a shared .NET target platform must be defined for the rewrite
-- Recommend `/Phase1-PlanAndAssess` for broader Azure hosting and cutover planning
+- Recommend `/Phase1-Plan` for broader Azure hosting and cutover planning
 
 ---
 

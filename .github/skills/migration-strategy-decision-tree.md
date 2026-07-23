@@ -64,11 +64,11 @@ If `risk_flags` contains `no-source-code-available`:
 
 This branch ends decisively. Code-touching strategies are off the table.
 
-### Branch 3 — Mainframe / SaaS-embedded / unsupported runtime
+### Branch 3 — SaaS-embedded / unsupported source / unsupported runtime
 
-If `risk_flags` contains `mainframe`, `saas-embedded`, or `unsupported-runtime`:
+If `risk_flags` contains `saas-embedded`, `unsupported-source`, or `unsupported-runtime`:
 
-- → Open `source-unsupported-escalation`. Recommendation depends on escalation outcome. Default to **Rearchitect** (modernization is the only durable path for mainframe; SaaS-embedded usually requires specialist tooling).
+- → Open `source-unsupported-escalation`. Recommendation depends on escalation outcome. For **mainframe / midrange / IBM i** and other explicitly-unsupported source families (COBOL, RPG, Natural, PL/I on z/OS, z/VSE, or AS-400), this tool does not attempt code-level migration — escalate to a specialist partner (Micro Focus / Astadia / Kyndryl / LzLabs / TCS / NTT DATA). Default strategy field to **Retain** or **Rearchitect** pending partner engagement.
 - Add Architect + Cost Engineer + Security Auditor as required specialists.
 
 ### Branch 4 — Business priority = `speed-to-cloud`
@@ -117,7 +117,6 @@ After choosing from Branches 4–7, apply workload-pattern overrides:
 |---------|---------|
 | `data-pipeline` | Strongly prefer **Replatform to Data Factory / Synapse / Databricks** even if `speed-to-cloud`. ETL apps don't survive a pure rehost. |
 | `event-driven` | Strongly prefer **Refactor to Functions** over Container Apps when triggers map cleanly. |
-| `mainframe-transactional` | Force escalation (Branch 3). |
 | `desktop-client-server` | Force **Rebuild** path (web/PaaS replacement) unless explicit Rehost approval. |
 | `packaged-app` | Force **Rehost** unless vendor offers PaaS SKU. |
 
@@ -196,7 +195,7 @@ Every recommendation must record the path taken. Example:
 decision_path:
   - "Branch 1 (Retire/Retain): not triggered — app is active, owner wants Azure"
   - "Branch 2 (No source): not triggered — full source in GitHub repo"
-  - "Branch 3 (Mainframe/SaaS/Unsupported): not triggered"
+  - "Branch 3 (SaaS/unsupported-source/unsupported-runtime): not triggered"
   - "Branch 4 (speed-first): not triggered — priority is 'modernize'"
   - "Branch 5 (modernize-first): TRIGGERED — small codebase + tests + supported stack → Refactor"
   - "Branch 8 (workload override): workload=api-service, no override"

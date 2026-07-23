@@ -1,11 +1,11 @@
 ---
 agent: Code Migration Modernization Agent
-model: Claude Sonnet 4.6 (copilot)
+model: Claude Sonnet 4.7 (copilot)
 tools: ['search/codebase', 'github/*', 'web/fetch']
-description: Rapid migration triage mode for legacy .NET and Java applications. Produces a concise Azure migration assessment, routes to the right specialists, and preserves hook-aware handoff guidance.
+description: Rapid migration triage mode for any legacy application (stack-agnostic). Produces a concise Azure migration assessment, routes to the right specialists, and preserves hook-aware handoff guidance.
 leadRole: Architect
 assistRoles: [Azure Specialist]
-entryPrompts: [/quickassessment, /phase1-planandassess, /getstatus]
+entryPrompts: [/quickassessment, /phase1-plan, /getstatus]
 requiredArtifacts: []
 producedArtifacts: [reports/Application-Assessment-Report.md, reports/Report-Status.md]
 ---

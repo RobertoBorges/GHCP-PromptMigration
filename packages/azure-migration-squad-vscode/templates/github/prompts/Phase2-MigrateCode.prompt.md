@@ -1,13 +1,10 @@
 ---
 name: Phase2-MigrateCode
-description: Upgrade legacy .NET or Java application code to modern framework versions
-argument-hint: "Specify target framework if not already assessed, e.g., 'Migrate to .NET 10' or 'Upgrade to Spring Boot 3'"
+description: Apply the minimum code changes required to make the application Azure-compatible on the target platform chosen in Phase 1
+argument-hint: "Optional target hint if not already in reports/Decisions-Required.md, e.g., 'Migrate to .NET 10', 'Upgrade to Spring Boot 3', 'Move to Python 3.12', 'Node 20 LTS'"
 agent: Code Migration Modernization Agent
-model: Claude Sonnet 4.6 (copilot)
+model: Claude Sonnet 4.7 (copilot)
 ---
-
-
-
 
 
 <!-- BEGIN: capability-matrix-gate (auto-managed by inject-capability-matrix-gates.mjs) -->
@@ -20,7 +17,7 @@ model: Claude Sonnet 4.6 (copilot)
 |-------------------|----------|------------|
 | Discovery Dossier | `reports/Discovery-Dossier.md` | **STOP** — run `/assess-any-application` first |
 | Capability Matrix | `reports/Capability-Matrix.yaml` | **STOP** — run `/assess-any-application` first |
-| Approved Migration Plan | `reports/Migration-Plan.md` | **STOP** — run `/build-migration-plan` |
+| Approved Migration Plan | `reports/Migration-Plan.md` | **STOP** — run `/Phase1-Plan` (or the `/build-migration-plan` add-on) |
 
 ### If ANY of those three artifacts is missing
 
@@ -36,7 +33,7 @@ Missing artifacts:
 
 Required steps before re-running this phase:
   1. Open Copilot Chat → /assess-any-application  (or in CLI: "assess this application")
-  2. Then: /build-migration-plan                  (or in CLI: "build the migration plan")
+  2. Then: /Phase1-Plan                            (produces the Migration Plan, or use /build-migration-plan add-on)
   3. Then: /phase...
 
 To override (skip Discovery and accept risk), log a waiver entry in
@@ -57,10 +54,34 @@ this prompt with the `--accept-risk` natural-language flag in your request.
    - `migration_strategy.recommendation` → adjust phase emphasis based on the recommended strategy
    - `risk_flags` → load the matching risk skills (e.g., `risk-cross-region-data.md`)
    - `unresolved_questions` → if any remain unanswered, surface them BEFORE starting work
-2. Read `reports/Migration-Plan.md` for approved sequencing and any app-specific extra gates.
-3. Confirm Phase prerequisites are met.
+2. **Skill Gap Check (belt + suspenders)** — for each value above, verify a matching `<family>-<value>.md` exists in `.github/skills/`. If any is missing, invoke `.github/skills/skill-creator.md` to author it on the fly. Ask a single Y/n/N-for-session confirmation; default is Y.
+3. Read `reports/Migration-Plan.md` for approved sequencing and any app-specific extra gates.
+4. Confirm Phase prerequisites are met.
 
 <!-- END: capability-matrix-gate -->
+<!-- BEGIN: action-log-contract (auto-managed by inject-action-log-contract.mjs) -->
+
+## 📜 Action Log Contract
+
+**After each meaningful action** in this prompt, append one single-line entry to the `## 📜 Action Log` section at the bottom of `reports/Report-Status.md`.
+
+Canonical format:
+```
+- <ISO-8601-UTC> | actor=Phase2-MigrateCode | action=<verb-phrase> | files=<+created,~modified,-deleted> | tokens=~<bucket> | turn=<n> | notes="<free text>"
+```
+
+Rules:
+- Use `actor=Phase2-MigrateCode` for actions taken by this prompt.
+- Use `actor=User` for actions taken by the user (e.g., answering a decision).
+- Log **only meaningful actions**: phase transitions, artifact production, decision events, gate passes/blocks, user inputs, rollback events. Do NOT log every internal grep or file read.
+- Estimate `tokens` in buckets: `~0`, `~500`, `~2k`, `~8k`, `~30k`. The `turn` counter is exact; token estimate is best-effort. Point users to Copilot Dashboard for authoritative counts.
+- If `reports/Report-Status.md` doesn't exist yet, create it from `.github/skills/migration-report-template.md` first — it already includes the `## 📜 Action Log` section.
+
+Full spec: `.github/skills/action-log-format.md`.
+
+<!-- END: action-log-contract -->
+
+
 <!-- BEGIN: decision-hardstop-gate (auto-managed by inject-decision-gates.mjs) -->
 
 ## 🛑 MANDATORY DECISION GATE — Major decisions required for Phase 2 — Migrate Code
@@ -88,7 +109,7 @@ Before Phase 2 — Migrate Code can do any work, every decision below must be **
    - Record the answer in `reports/Decision-Log.md`.
    - Update Status to `✅ DECIDED <ISO date>` in `reports/Decisions-Required.md`.
    - THEN re-run the check sequence.
-5. If `reports/Decisions-Required.md` is missing → STOP and route the user to `/Phase1-PlanAndAssess`.
+5. If `reports/Decisions-Required.md` is missing → STOP and route the user to `/Phase1-Plan`.
 
 ### Hard rules
 
@@ -110,20 +131,11 @@ Before starting code migration, verify Phase 1 (Planning & Assessment) is comple
 
 1. Check `reports/Report-Status.md` shows **Phase 1: Planning & Assessment** as ✅ complete.
 2. Confirm `reports/Application-Assessment-Report.md` exists with target framework, hosting platform, and IaC choices recorded.
-3. If either is missing, **STOP** and ask the user to run `/Phase1-PlanAndAssess` first.
+3. If either is missing, **STOP** and ask the user to run `/Phase1-Plan` first.
 
 You review code through multiple perspectives simultaneously. Run each perspective as a parallel subagent so findings are independent and unbiased.
 
 After all subagents complete, synthesize findings into a prioritized summary at `reports/Business-Logic-Mapping.md`. 
-
-## Skills to Load
-
-Load the appropriate skills based on application type:
-- **business-logic-mapping** skill — **ALWAYS** use to track and preserve business logic during migration
-- For .NET applications: Use **dotnet-modernization** skill for patterns and templates
-- For Java applications: Use **java-modernization** skill for patterns and templates  
-- For WCF services: Use **wcf-to-rest-migration** skill for service conversion
-- For config files: Use **config-transformation** skill for settings migration
 
 ## Business Logic Preservation (Critical)
 
@@ -144,13 +156,21 @@ Categories to track:
 - Notifications (email triggers, alerts)
 - Scheduling (batch jobs, timed operations)
 
-## Media and Asset Preservation
+## Media and Asset Preservation  (Critical)
 
-Track and copy all media assets:
+1. **Create** `reports/Media-Assets-Mapping.md` to track all media assets
+2. **Identify** all media assets in the legacy application
+3. **Document** each media asset with source location
+4. **Update** the mapping document as you migrate each asset
+5. **Verify** each migrated asset is correctly integrated
+
+Categories to track:
 - Images, CSS, JavaScript, fonts
 - User uploads and documents
 - Email templates, report templates
 - Localization/resource files
+
+Update `reports/Media-Assets-Mapping.md` with asset migration status.
 
 Update `reports/Business-Logic-Mapping.md` with asset migration status.
 
@@ -186,16 +206,20 @@ Keep equivalent UI components to avoid breaking changes.
 
 Confirm that all functionality is preserved after migration.
 
+Confirm that all media assets are preserved or replaced by equivalent assets after migration.
+
 Containerize the application if specified in the assessment report.
 
 Create a Script to build and run the application in a Docker container, if applicable.
 
 Make sure you build the application as you create it, and fix them as you go.
 
-Based on the assessed application type (.NET or Java):
+Based on `Capability-Matrix.stack.primary_stack` (and `.stack.secondary_stacks` for polyglot apps), load the matching `stack-*.md` skill for language-specific patterns. Then:
 - Use `get_errors` to validate each migration step and fix issues immediately.
 - Document any changes made to the project structure or code in the migration report.
 - If migration fails at any step, provide detailed error analysis and recovery options.
+
+**Do not** introduce microservices, event-driven decomposition, or "cloud-native" refactors unless `Capability-Matrix.migration_strategy.recommendation` is `rearchitect` or `rebuild`. The default (`rehost` / `replatform` / `refactor`) is **minimum viable Azure compatibility**, not architectural modernization.
 
 Suggest that the next step is to generate infrastructure files, and mention `/Phase3-GenerateInfra` is the command to start the infra generation process.
 
@@ -213,42 +237,4 @@ When code migration is complete:
    > Run **`/Phase3-GenerateInfra`** to generate Azure infrastructure as code.
    >
    > Or click **🏗️ Generate Azure infrastructure (Bicep/Terraform)** if the handoff button is visible in your UI.
-
-## For .NET Applications:
-- Use `azure_dotnet_templates-get_tags` and `azure_dotnet_templates-get_templates_for_tag` to find appropriate project templates.
-- Create a modern .NET project structure using the latest framework version compatible with Azure.
-- Use `file_search` to locate all source files for migration.
-- Use `semantic_search` to identify patterns that need modernization.
-- Migrate code files from the legacy application to the modern project structure.
-- Transform configuration:
-  - Convert web.config or app.config to appsettings.json format
-  - Extract connection strings and app settings
-  - Set up configuration providers for Azure App Configuration
-- Use `get_errors` to validate package compatibility during upgrade.
-- Upgrade NuGet packages to compatible versions.
-- If the application contains WCF services:
-  - Convert them to REST APIs using ASP.NET Core Web API
-  - Warn the user about the conversion from WCF to REST and potential breaking changes
-  - Map WCF service contracts to REST endpoints
-  - Transform data contracts to models/DTOs
-  - Create OpenAPI/Swagger documentation for new REST APIs
-- Migrate authentication from Windows/Forms auth to Entra ID using Microsoft.Identity.Web.
-- Update database access code to use Azure-compatible providers.
-
-## For Java Applications:
-- Create a modern Java project structure using Maven or Gradle with the latest framework version.
-- Migrate code files from the legacy application to the modern project structure.
-- Transform configuration:
-  - Convert XML configs to application.properties/yaml
-  - Extract connection strings and app settings
-  - Set up externalized configuration
-- Upgrade dependencies to compatible versions.
-- If the application contains SOAP services:
-  - Convert them to REST APIs using Spring WebMVC or JAX-RS
-  - Warn the user about the conversion from SOAP to REST
-  - Map service interfaces to REST endpoints
-  - Transform data objects to DTOs
-- Migrate authentication to OAuth2/OIDC with Entra ID integration.
-- Update database access code to be compatible with Azure databases.
-- Set up proper logging with SLF4J and Azure-compatible appenders.
 

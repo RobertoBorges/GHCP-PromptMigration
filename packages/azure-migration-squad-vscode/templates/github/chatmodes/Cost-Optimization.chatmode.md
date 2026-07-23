@@ -1,6 +1,6 @@
 ---
 agent: Code Migration Modernization Agent
-model: Claude Sonnet 4.6 (copilot)
+model: Claude Sonnet 4.7 (copilot)
 tools: ['search/codebase', 'edit/editFiles']
 description: Azure cost analysis mode for migration programs. Routes spend and right-sizing work to The Accountant, using deployment context to recommend savings, scaling changes, budget guardrails, and presentation-ready outputs when needed.
 leadRole: Cost Engineer
