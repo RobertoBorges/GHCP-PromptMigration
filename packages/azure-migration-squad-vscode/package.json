@@ -2,7 +2,7 @@
   "name": "azure-migration-squad-vscode",
   "displayName": "Azure Migration Agent",
   "description": "Migrate any application to Azure with GitHub Copilot. Universal source/stack/workload coverage (15 source adapters, 15 stack adapters, 9 workload patterns). Discovery-first workflow. Hard-stop user-decision gates so the agent never picks framework/database/hosting on your behalf.",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "publisher": "robertoborges",
   "private": false,
   "license": "MIT",
@@ -146,7 +146,11 @@
         "azureMigrationSquad.autoInstallCopilot": {
           "type": "string",
           "default": "prompt",
-          "enum": ["prompt", "auto", "never"],
+          "enum": [
+            "prompt",
+            "auto",
+            "never"
+          ],
           "enumDescriptions": [
             "Ask once per workspace before installing the GitHub Copilot Chat extension.",
             "Install GitHub Copilot Chat automatically without asking.",
