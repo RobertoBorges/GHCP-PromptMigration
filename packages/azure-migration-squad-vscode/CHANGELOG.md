@@ -4,6 +4,19 @@ All notable changes to the Azure Migration Agent VS Code extension are documente
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.1](https://github.com/RobertoBorges/GHCP-PromptMigration/compare/vscode-v0.3.0...vscode-v0.3.1) (2026-07-23)
+
+
+### Bug Fixes
+
+* **ci:** produce two clean artifacts (agent content pack + .vsix) and slim the extension ([1843dbb](https://github.com/RobertoBorges/GHCP-PromptMigration/commit/1843dbb5a5a0195d48a43fedbb3cd4ae64e6d6d2))
+* **icon:** rename extension icon AMS -&gt; AMA to match new name ([5b61a14](https://github.com/RobertoBorges/GHCP-PromptMigration/commit/5b61a14131ac7ef6dad598cb2aca821a14786cad))
+
+
+### Documentation
+
+* **readme:** update both READMEs with accurate counts + prominent language coverage ([b9495bb](https://github.com/RobertoBorges/GHCP-PromptMigration/commit/b9495bb0160884a337da2ad5c5443975cb592883))
+
 ## [0.3.0](https://github.com/RobertoBorges/GHCP-PromptMigration/compare/vscode-v0.2.0...vscode-v0.3.0) (2026-07-23)
 
 
