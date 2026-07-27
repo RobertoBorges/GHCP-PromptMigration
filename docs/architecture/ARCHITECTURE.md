@@ -247,18 +247,18 @@ If native `@include` support is unavailable, keep the exact same structure but t
 
 | Skill file | Used by | Purpose |
 |---|---|---|
-| `skills/azure-app-service.md` | Phase1, 3, 4 | Hosting choice, app settings, diagnostics, deployment gotchas |
-| `skills/wcf-to-rest-api.md` | Phase1, 2 | WCF inventory, contract mapping, REST replacement patterns |
-| `skills/azure-entra-id.md` | Phase1, 2, 3, 4 | Auth modernization, app registration, managed identity patterns |
-| `skills/bicep-modules.md` | Phase3, 5 | Bicep layout, module boundaries, parameter strategy |
-| `skills/terraform-azure.md` | Phase3, 5 | Azure Terraform module structure and state hygiene |
-| `skills/docker-containerize.md` | Phase2, 4, 5 | Dockerfile, build/run scripts, runtime hardening |
-| `skills/azure-sql-migration.md` | Phase1, 2, 3 | DB discovery, target fit, migration/cutover strategies |
-| `skills/managed-identity.md` | Phase3, 4, 5 | Secretless auth and managed identity patterns |
-| `skills/github-actions-cicd.md` | Phase5 | GitHub Actions pipeline templates and Azure login patterns |
-| `skills/azure-devops-pipelines.md` | Phase5 | Azure DevOps pipeline structure and release gates |
-| `skills/secret-management.md` | Phase1, 3, 4, 5 | Security controls, secret handling, and review checklist |
-| `skills/cost-optimization.md` | Phase1, 3, 6 | Right-sizing, environment cost controls, scaling policy |
+| `.github/skills/azure-app-service.md` | Phase1, 3, 4 | Hosting choice, app settings, diagnostics, deployment gotchas |
+| `.github/skills/wcf-to-rest-api.md` | Phase1, 2 | WCF inventory, contract mapping, REST replacement patterns |
+| `.github/skills/azure-entra-id.md` | Phase1, 2, 3, 4 | Auth modernization, app registration, managed identity patterns |
+| `.github/skills/bicep-modules.md` | Phase3, 5 | Bicep layout, module boundaries, parameter strategy |
+| `.github/skills/terraform-azure.md` | Phase3, 5 | Azure Terraform module structure and state hygiene |
+| `.github/skills/docker-containerize.md` | Phase2, 4, 5 | Dockerfile, build/run scripts, runtime hardening |
+| `.github/skills/azure-sql-migration.md` | Phase1, 2, 3 | DB discovery, target fit, migration/cutover strategies |
+| `.github/skills/managed-identity.md` | Phase3, 4, 5 | Secretless auth and managed identity patterns |
+| `.github/skills/github-actions-cicd.md` | Phase5 | GitHub Actions pipeline templates and Azure login patterns |
+| `.github/skills/azure-devops-pipelines.md` | Phase5 | Azure DevOps pipeline structure and release gates |
+| `.github/skills/secret-management.md` | Phase1, 3, 4, 5 | Security controls, secret handling, and review checklist |
+| `.github/skills/cost-optimization.md` | Phase1, 3, 6 | Right-sizing, environment cost controls, scaling policy |
 
 ### Example composition by scenario
 
@@ -268,12 +268,12 @@ If native `@include` support is unavailable, keep the exact same structure but t
 phase: phase2
 role: coder
 skills:
-  - skills/dotnet-framework-to-dotnet8.md
-  - skills/webforms-to-razor.md
-  - skills/config-transformation.md
-  - skills/azure-entra-id.md
-  - skills/azure-app-service.md
-  - skills/migration-report-template.md
+  - .github/skills/dotnet-framework-to-dotnet8.md
+  - .github/skills/webforms-to-razor.md
+  - .github/skills/config-transformation.md
+  - .github/skills/azure-entra-id.md
+  - .github/skills/azure-app-service.md
+  - .github/skills/migration-report-template.md
 reviewers:
   - tester/validation-checklist.md
 ```
@@ -284,12 +284,12 @@ reviewers:
 phase: phase3
 role: azure-specialist
 skills:
-  - skills/java8-to-java21.md
-  - skills/terraform-azure.md
-  - skills/azure-container-apps.md
-  - skills/managed-identity.md
-  - skills/azure-sql-migration.md
-  - skills/secret-management.md
+  - .github/skills/java8-to-java21.md
+  - .github/skills/terraform-azure.md
+  - .github/skills/azure-container-apps.md
+  - .github/skills/managed-identity.md
+  - .github/skills/azure-sql-migration.md
+  - .github/skills/secret-management.md
 reviewers:
   - security-auditor/least-privilege-review.md
 ```
@@ -693,8 +693,8 @@ graph TD
 BookShop should not keep a giant reference manual. Instead:
 
 - `bookshop-webforms-to-razor.md` captures UI-specific migration patterns.
-- `skills/azure-sql-migration.md` captures schema and data migration patterns that BookShop can extend with use-case-specific notes.
-- `skills/azure-app-service.md` captures the baseline target hosting decision that BookShop can override if needed.
+- `.github/skills/azure-sql-migration.md` captures schema and data migration patterns that BookShop can extend with use-case-specific notes.
+- `.github/skills/azure-app-service.md` captures the baseline target hosting decision that BookShop can override if needed.
 - `docs/modernization/prompt-index.md` points to the small set of BookShop-specific overrides.
 
 ---

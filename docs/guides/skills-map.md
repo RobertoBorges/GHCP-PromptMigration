@@ -26,35 +26,35 @@ Production-ready mapping for Roberto Borges' migration crew: which skills, promp
 - **Migration pattern skills:** Classic ASP -> ASP.NET Core rewrite, include-file decomposition, Request/Response/session mapping, ADO/ADODB -> EF Core or repository pattern, `global.asa` -> middleware/startup/services
 - **Azure target skills:** Azure App Service, Azure SQL, Key Vault, Application Insights, Entra ID, managed identity
 - **Tool skills:** VS Code, GitHub Copilot chat, `az`, `azd`, `dotnet`, Bicep, SQL migration tooling, GitHub Actions
-- **Skill files to compose:** `skills/asp-classic-to-dotnet.md`, `skills/config-transformation.md`, `skills/azure-app-service.md`, `skills/azure-sql-migration.md`, `skills/bicep-modules.md`, `skills/github-actions-cicd.md`, `skills/secret-management.md`
+- **Skill files to compose:** `.github/skills/asp-classic-to-dotnet.md`, `.github/skills/config-transformation.md`, `.github/skills/azure-app-service.md`, `.github/skills/azure-sql-migration.md`, `.github/skills/bicep-modules.md`, `.github/skills/github-actions-cicd.md`, `.github/skills/secret-management.md`
 
 ### 02-NetFramework30-ASPNET-WEB — The Fossil
 - **Language/framework skills:** C#, ASP.NET WebForms, `.aspx`, code-behind, `Web.config`, Windows Authentication
 - **Migration pattern skills:** WebForms -> Razor Pages/MVC, `System.Web` -> ASP.NET Core, `Web.config` -> `appsettings.json`, Windows Auth -> Entra ID/App Service auth, server controls/ViewState/postback removal
 - **Azure target skills:** Azure App Service, Azure SQL, Key Vault, App Service auth, Application Insights
 - **Tool skills:** `dotnet`, Upgrade Assistant, try-convert, `az`, `azd`, Bicep, GitHub Actions
-- **Skill files to compose:** `skills/dotnet-framework-to-dotnet8.md`, `skills/webforms-to-razor.md`, `skills/config-transformation.md`, `skills/azure-app-service.md`, `skills/azure-entra-id.md`, `skills/azure-monitor-appinsights.md`, `skills/github-actions-cicd.md`
+- **Skill files to compose:** `.github/skills/dotnet-framework-to-dotnet8.md`, `.github/skills/webforms-to-razor.md`, `.github/skills/config-transformation.md`, `.github/skills/azure-app-service.md`, `.github/skills/azure-entra-id.md`, `.github/skills/azure-monitor-appinsights.md`, `.github/skills/github-actions-cicd.md`
 
 ### 03-WCFNet35 — The Wire
 - **Language/framework skills:** C#, .NET Framework 3.5, WCF, `ServiceContract`, `OperationContract`, SOAP, `basicHttpBinding`, `app.config`
 - **Migration pattern skills:** WCF -> ASP.NET Core REST API, DTO contract flattening, SOAP endpoint inventory, `app.config` -> `appsettings.json`, self-hosted service -> containerized API, client proxy -> HTTP client/OpenAPI client
 - **Azure target skills:** Azure Container Apps, Azure Container Registry, Key Vault, Application Insights, Entra ID for APIs
 - **Tool skills:** `dotnet`, Docker, OpenAPI/Swagger, `az`, `azd`, Bicep or Terraform, GitHub Actions
-- **Skill files to compose:** `skills/wcf-to-rest-api.md`, `skills/dotnet-framework-to-dotnet8.md`, `skills/config-transformation.md`, `skills/docker-containerize.md`, `skills/azure-container-apps.md`, `skills/azure-key-vault.md`, `skills/azure-monitor-appinsights.md`
+- **Skill files to compose:** `.github/skills/wcf-to-rest-api.md`, `.github/skills/dotnet-framework-to-dotnet8.md`, `.github/skills/config-transformation.md`, `.github/skills/docker-containerize.md`, `.github/skills/azure-container-apps.md`, `.github/skills/azure-key-vault.md`, `.github/skills/azure-monitor-appinsights.md`
 
 ### 04-ContosoUniversityDiPS — The Campus
 - **Language/framework skills:** C#, ASP.NET Core 2.1, MVC, Razor, React SPA, REST API, EF Core 2.1, Identity 2.0, JWT, SendGrid, Twilio
 - **Migration pattern skills:** ASP.NET Core 2.1 -> .NET 8, shared library cleanup, SPA/API/Web boundary preservation, EF Core provider review, auth/token refresh review, config split cleanup, package modernization
 - **Azure target skills:** Azure App Service, Azure SQL, App Service deployment slots, Key Vault, App Insights, Entra ID, Static asset strategy for SPA
 - **Tool skills:** `dotnet`, npm, `az`, `azd`, Bicep, GitHub Actions, Playwright/Selenium follow-up as needed
-- **Skill files to compose:** `skills/dotnet-framework-to-dotnet8.md`, `skills/config-transformation.md`, `skills/ef-migration.md`, `skills/azure-app-service.md`, `skills/azure-entra-id.md`, `skills/azd-configuration.md`, `skills/github-actions-cicd.md`
+- **Skill files to compose:** `.github/skills/dotnet-framework-to-dotnet8.md`, `.github/skills/config-transformation.md`, `.github/skills/ef-migration.md`, `.github/skills/azure-app-service.md`, `.github/skills/azure-entra-id.md`, `.github/skills/azd-configuration.md`, `.github/skills/github-actions-cicd.md`
 
 ### 05-BookShop — The Vault (reference)
 - **Language/framework skills:** .NET 8, ASP.NET Core, Razor Pages, `Microsoft.Data.SqlClient`, DI, xUnit, Moq
 - **Migration pattern skills:** WebForms -> ASP.NET Core reference patterns, SQL migration reference, deployment/runbook reference, `Legacy-Archive` preservation, report/status model
 - **Azure target skills:** Azure App Service, Azure SQL, Key Vault, Application Insights, managed identity
 - **Tool skills:** `dotnet`, `az`, Bicep, GitHub Actions, Docker, deployment scripts
-- **Skill files to study:** `skills/azure-app-service.md`, `skills/azure-sql-migration.md`, `skills/bicep-modules.md`, `skills/azd-configuration.md`, `skills/github-actions-cicd.md`, `skills/rollback-strategy.md`
+- **Skill files to study:** `.github/skills/azure-app-service.md`, `.github/skills/azure-sql-migration.md`, `.github/skills/bicep-modules.md`, `.github/skills/azd-configuration.md`, `.github/skills/github-actions-cicd.md`, `.github/skills/rollback-strategy.md`
 - **Reference note:** the implemented BookShop assets in this repo show **App Service + Azure SQL** and should be treated as the canonical reference architecture.
 
 ### 06-Java-API-BusReservation — The Express
@@ -62,14 +62,14 @@ Production-ready mapping for Roberto Borges' migration crew: which skills, promp
 - **Migration pattern skills:** Java 8 -> Java 21, Spring Boot 2.x -> 3.x, `javax` -> `jakarta`, H2 -> PostgreSQL, containerization, actuator hardening, property migration
 - **Azure target skills:** Azure Container Apps, Azure Database for PostgreSQL, Key Vault, Managed Identity/Workload Identity, Application Insights/Azure Monitor
 - **Tool skills:** Maven, JDK 21, Docker, `az`, `azd`, Terraform or Bicep, GitHub Actions
-- **Skill files to compose:** `skills/java8-to-java21.md`, `skills/docker-containerize.md`, `skills/azure-container-apps.md`, `skills/terraform-azure.md`, `skills/azure-key-vault.md`, `skills/azure-monitor-appinsights.md`, `skills/cost-optimization.md`
+- **Skill files to compose:** `.github/skills/java8-to-java21.md`, `.github/skills/docker-containerize.md`, `.github/skills/azure-container-apps.md`, `.github/skills/terraform-azure.md`, `.github/skills/azure-key-vault.md`, `.github/skills/azure-monitor-appinsights.md`, `.github/skills/cost-optimization.md`
 
 ### 07-PartsUnlimited-aspnet45 — The Machine
 - **Language/framework skills:** C#, ASP.NET MVC 5, .NET Framework 4.5.1, EF6, ASP.NET Identity, OWIN, SQL Server, deployment scripts, test projects
 - **Migration pattern skills:** MVC5 -> ASP.NET Core MVC, EF6 -> EF Core, `packages.config` -> SDK-style `PackageReference`, OWIN auth -> ASP.NET Core auth/Entra ID, deployment script replacement, `Web.config` transformation
 - **Azure target skills:** Azure App Service, Azure SQL, deployment slots, Key Vault, App Insights, managed identity
 - **Tool skills:** Upgrade Assistant, try-convert, `dotnet`, `az`, `azd`, Bicep, GitHub Actions/Azure DevOps
-- **Skill files to compose:** `skills/dotnet-framework-to-dotnet8.md`, `skills/ef-migration.md`, `skills/config-transformation.md`, `skills/azure-app-service.md`, `skills/azure-sql-migration.md`, `skills/azure-entra-id.md`, `skills/rollback-strategy.md`
+- **Skill files to compose:** `.github/skills/dotnet-framework-to-dotnet8.md`, `.github/skills/ef-migration.md`, `.github/skills/config-transformation.md`, `.github/skills/azure-app-service.md`, `.github/skills/azure-sql-migration.md`, `.github/skills/azure-entra-id.md`, `.github/skills/rollback-strategy.md`
 
 ## Section B. Agent dispatch per use-case
 
