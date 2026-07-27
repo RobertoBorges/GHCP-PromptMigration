@@ -2,7 +2,9 @@ name: Release VS Code extension
 
 # ╔═════════════════════════════════════════════════════════════════════════╗
 # ║  PUBLISHES azure-migration-squad-vscode to the VS Code Marketplace     ║
-# ║  AND the Open VSX Registry (for VS Codium etc).                         ║
+# ║  ONLY. This extension is VS Code-only by design — VSCodium, Cursor,    ║
+# ║  Windsurf, Positron, and other forks are intentionally not supported   ║
+# ║  and Open VSX Registry publication is disabled.                         ║
 # ║                                                                          ║
 # ║  Triggered by:                                                           ║
 # ║    1. Push of a tag matching `vscode-vX.Y.Z` (manual release)          ║
@@ -11,7 +13,6 @@ name: Release VS Code extension
 # ║  Required secrets:                                                       ║
 # ║    VSCE_PAT       — Personal Access Token for Visual Studio Marketplace ║
 # ║                     (Azure DevOps PAT with Marketplace > Publish scope) ║
-# ║    OVSX_PAT       — (optional) Open VSX Registry token                  ║
 # ║                                                                          ║
 # ║  See: docs/publishing-vscode-extension.md for setup steps.              ║
 # ╚═════════════════════════════════════════════════════════════════════════╝
@@ -158,10 +159,10 @@ jobs:
           fi
           npm run publish
 
-      - name: Publish to Open VSX Registry
-        if: (github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.dryRun == 'false')) && env.OVSX_PAT != ''
-        working-directory: packages/azure-migration-squad-vscode
-        env:
-          OVSX_PAT: ${{ secrets.OVSX_PAT }}
-        run: |
-          npx -y ovsx publish *.vsix -p "$OVSX_PAT"
+      # ────────────────────────────────────────────────────────────────────
+      # Open VSX Registry publication is intentionally NOT performed.
+      # This extension is VS Code-only by design (see extension.ts host
+      # check + the "VS Code only" note in the extension README). Forks
+      # like VSCodium, Cursor, Windsurf, Positron, and Theia-based IDEs
+      # cannot install it from any marketplace.
+      # ────────────────────────────────────────────────────────────────────

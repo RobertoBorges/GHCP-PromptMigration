@@ -92,9 +92,11 @@ The **status bar** (bottom-left) shows your current migration phase, or **"⚠ A
 
 ## Requirements
 
-- **VS Code** ≥ 1.85
+- **VS Code** ≥ 1.85 (Visual Studio Code, VS Code Insiders, VS Code Exploration, or Microsoft-signed Code - OSS builds)
 - **GitHub Copilot Chat** extension — the extension offers to install it for you on first use
 - **Node.js** is NOT required to run the extension (it bundles all content)
+
+> ⚠ **VS Code only.** This extension is intentionally **not supported on VS Code forks** — VSCodium, Cursor, Windsurf, Positron, and Eclipse Theia-based IDEs. If you install the `.vsix` on one of those hosts, the extension will refuse to activate and show a message pointing you at the VS Code Marketplace listing. The extension is not published to the Open VSX Registry either.
 
 ## Settings
 

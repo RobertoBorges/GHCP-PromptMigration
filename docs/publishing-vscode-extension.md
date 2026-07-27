@@ -1,9 +1,10 @@
 # Publishing the Azure Migration Agent VS Code extension
 
-The extension is published to **two registries**:
+The extension is published to **one registry only**:
 
-1. **Visual Studio Marketplace** — used by Visual Studio Code (the main one)
-2. **Open VSX Registry** — used by VS Codium, Gitpod, Eclipse Theia (open-source forks)
+- **Visual Studio Marketplace** — used by Visual Studio Code
+
+> **Why not Open VSX?** This extension is **VS Code only** by design. Publishing to Open VSX would surface it in VS Codium, Cursor, Windsurf, Positron, and Eclipse Theia-based IDEs, where we cannot validate behavior. The extension also refuses to activate on non-VS Code hosts via a runtime `vscode.env.appName` check (see `packages/azure-migration-squad-vscode/src/extension.ts`).
 
 Versioning is fully automated via [release-please](https://github.com/googleapis/release-please). You **never edit `package.json` version by hand** for a normal release.
 
@@ -62,20 +63,13 @@ Go to https://github.com/RobertoBorges/GHCP-PromptMigration/settings/secrets/act
 | Secret name | Value | Required? |
 |-------------|-------|-----------|
 | `VSCE_PAT` | The Azure DevOps PAT from Step 2 | **Required** |
-| `OVSX_PAT` | Token from https://open-vsx.org (see Step 4) | Optional — but recommended for VS Codium reach |
 | `RELEASE_PLEASE_TOKEN` | A GitHub Fine-Grained PAT with `contents:write` + `pull-requests:write` | Optional but recommended (see note below) |
 
 **About `RELEASE_PLEASE_TOKEN`:** When release-please creates the tag using the default `GITHUB_TOKEN`, GitHub does NOT trigger downstream workflows (a security feature). So `release-vscode-extension.yml` won't fire, and nothing publishes. If you provide `RELEASE_PLEASE_TOKEN`, the tag fires downstream workflows normally. Without it, you'll need to push the tag manually.
 
 Create the PAT at https://github.com/settings/personal-access-tokens/new. Scope it to this single repo with `contents:write` + `pull-requests:write`.
 
-### Step 4 (optional) — Open VSX setup
-
-1. Sign in at https://open-vsx.org with GitHub
-2. Avatar → **Settings** → **Access Tokens** → generate
-3. Add to GitHub Secrets as `OVSX_PAT`
-
-If `OVSX_PAT` is missing, the publish workflow simply skips the Open VSX step (non-fatal).
+> **No Open VSX setup.** This extension is intentionally VS Code-only. The publish workflow does not push to Open VSX Registry, and the extension refuses to activate on VS Code forks (VSCodium, Cursor, Windsurf, Positron, Theia-based IDEs) via a runtime host check.
 
 ---
 
@@ -125,7 +119,6 @@ The tag push triggers `.github/workflows/release-vscode-extension.yml`, which:
 - Builds the extension (`npm run sync && npm run build`)
 - Packages the `.vsix` (`vsce package`)
 - Publishes to VS Code Marketplace (`vsce publish` with `VSCE_PAT`)
-- Publishes to Open VSX (with `OVSX_PAT`, if present)
 - Uploads the `.vsix` as a workflow artifact (90-day retention)
 
 Marketplace listing goes live in ~5 minutes.
@@ -133,7 +126,6 @@ Marketplace listing goes live in ~5 minutes.
 ### Step 6 — Verify
 
 - **VS Code Marketplace:** https://marketplace.visualstudio.com/items?itemName=robertoborges.azure-migration-squad-vscode
-- **Open VSX:** https://open-vsx.org/extension/robertoborges/azure-migration-squad-vscode
 - **Fresh install** in VS Code: `Ctrl+Shift+X` → search "Azure Migration Agent" → verify the version number
 
 ---
@@ -212,7 +204,6 @@ git push origin HEAD vscode-v0.2.1
 | `Version X.Y.Z already published` | You retagged the same version | Bump the version (via release-please or `--patch`), commit, retag |
 | `Missing required field 'icon'` | `media/icon.png` is missing | `git status` and confirm it's committed |
 | `License field is required` | LICENSE file not in `.vsix` | Verify `.vscodeignore` doesn't exclude `LICENSE` |
-| Open VSX `Namespace 'X' not found` | Publisher namespace doesn't exist on Open VSX | Sign in at open-vsx.org and create the namespace once |
 | **release-please doesn't open a PR** | No `feat:` / `fix:` / `perf:` commits since last release | That's by design — only `feat/fix/perf` + breaking changes trigger releases. Add a `feat:` commit if you want to force one, or use the local flow. |
 | **Tag pushed but marketplace didn't publish** | The tag was created by the default `GITHUB_TOKEN` (release-please), which doesn't trigger downstream workflows | Set `RELEASE_PLEASE_TOKEN` (see Step 3 above), OR push the tag manually |
 | `Tag $TAG does not match package.json version` | You bumped one without the other | Never edit `package.json` version by hand — use release-please or the local script |
