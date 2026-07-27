@@ -32,6 +32,34 @@ The agent **never picks framework / database / hosting / IaC tool on your behalf
 
 > **Out of scope as a first-class family:** mainframe / midrange code migration (z/OS, IBM i, COBOL / RPG / Natural). These route to a specialist-partner playbook instead of pretending we can migrate their code.
 
+## Where this extension fits alongside Microsoft's other migration options
+
+Microsoft ships two first-party migration tools that are excellent when they cover your scenario. This extension complements them:
+
+### 🔷 [GitHub Copilot Upgrade](https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.upgrade-agent)
+**In-place .NET code upgrades.** .NET Framework/Core → .NET 8/9/10, Web Forms → Blazor, Azure Functions in-process → isolated, SDK-style conversion, Newtonsoft → System.Text.Json, SqlClient migration, and more. If you have a .NET app and want an in-place upgrade, **start there**.
+
+### 🔷 [Azure Migrate](https://learn.microsoft.com/en-us/azure/migrate/migrate-services-overview)
+**Infrastructure discovery + lift-and-shift.** VMware/Hyper-V/physical servers → Azure VMs, SQL Server → Azure SQL (via Data Migration Assistant + Azure DMS), ASP.NET on VMware → App Service (via App Service Migration Assistant), business case analysis, dependency mapping. If you have on-prem VMs/databases to move as-is, **start there**.
+
+### 🟢 What this extension does differently
+
+| Capability | This extension | Copilot Upgrade | Azure Migrate |
+|------------|----------------|-----------------|---------------|
+| Non-.NET stacks (Java, Python, Node.js, PHP, Ruby, Go, +8 more) | ✅ 15 stack adapters | ❌ .NET only | ⚠ IaaS lift only, no code changes |
+| Universal source intake (GitHub repo, ZIP, "describe-only", any cloud) | ✅ 10 source adapters | ⚠ workspace only | ✅ VMware / Hyper-V / physical / other cloud |
+| **Decision Hardstop Protocol** — 18 architecture Qs answered before code changes; never silently defaults framework, DB engine, hosting, IaC tool | ✅ | ❌ | ❌ |
+| **On-the-fly skill authoring** — mid-migration, agent researches + writes a new skill for any novel stack | ✅ | ❌ | ❌ |
+| **Cross-session trace memory** — canonical Action Log with per-action token accounting | ✅ | ❌ | ❌ |
+| **Portfolio 6Rs strategy report** — CIO-ready HTML deck with Factory / ISD-Partner ownership | ✅ | ❌ | ✅ (business case, different format) |
+| **Cross-stack post-migration observability** — App Insights + OpenTelemetry recipes for 11+ languages | ✅ | ❌ | ❌ |
+
+**How to combine them:**
+- .NET app needing an in-place upgrade → **GitHub Copilot Upgrade**
+- On-prem VMs / SQL / web apps to lift into Azure → **Azure Migrate**
+- Java / Python / Node.js / PHP / Ruby / Go / other-stack modernization → **this extension**
+- Mixed-stack portfolio needing a CIO plan → **this extension** for the 6Rs report, then hand off IaaS candidates to Azure Migrate and .NET candidates to GitHub Copilot Upgrade
+
 ## Quick install
 
 1. `Ctrl+Shift+X` in VS Code → search **"Azure Migration Agent"** → Install
