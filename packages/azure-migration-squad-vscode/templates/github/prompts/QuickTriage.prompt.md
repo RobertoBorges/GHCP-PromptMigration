@@ -1,6 +1,6 @@
 ---
 agent: Code Migration Modernization Agent
-model: Claude Sonnet 4.7 (copilot)
+model: Claude Sonnet 4.6 (copilot)
 description: "Rapid intake triage for a legacy application migration — stack-agnostic. Returns a Go/No-Go signal in ~5 minutes with the dominant stack, top blockers, complexity, and the next command to run."
 ---
 

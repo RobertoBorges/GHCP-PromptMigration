@@ -198,7 +198,7 @@ Each slash-command prompt becomes a small manifest-like entrypoint that declares
 ---
 description: Modernize application code using role, tech, and skill composition.
 tools: ['search/codebase', 'usages', 'problems', 'changes', 'runTests', 'edit/editFiles', 'runCommands', 'new']
-model: Claude Sonnet 4.7 (copilot)
+model: Claude Sonnet 4.6 (copilot)
 phase: phase2
 lead: Coder
 assist: [Tester]
@@ -247,18 +247,18 @@ If native `@include` support is unavailable, keep the exact same structure but t
 
 | Skill file | Used by | Purpose |
 |---|---|---|
-| `skills/azure-app-service.md` | Phase1, 3, 4 | Hosting choice, app settings, diagnostics, deployment gotchas |
-| `skills/wcf-to-rest-api.md` | Phase1, 2 | WCF inventory, contract mapping, REST replacement patterns |
-| `skills/azure-entra-id.md` | Phase1, 2, 3, 4 | Auth modernization, app registration, managed identity patterns |
-| `skills/bicep-modules.md` | Phase3, 5 | Bicep layout, module boundaries, parameter strategy |
-| `skills/terraform-azure.md` | Phase3, 5 | Azure Terraform module structure and state hygiene |
-| `skills/docker-containerize.md` | Phase2, 4, 5 | Dockerfile, build/run scripts, runtime hardening |
-| `skills/azure-sql-migration.md` | Phase1, 2, 3 | DB discovery, target fit, migration/cutover strategies |
-| `skills/managed-identity.md` | Phase3, 4, 5 | Secretless auth and managed identity patterns |
-| `skills/github-actions-cicd.md` | Phase5 | GitHub Actions pipeline templates and Azure login patterns |
-| `skills/azure-devops-pipelines.md` | Phase5 | Azure DevOps pipeline structure and release gates |
-| `skills/secret-management.md` | Phase1, 3, 4, 5 | Security controls, secret handling, and review checklist |
-| `skills/cost-optimization.md` | Phase1, 3, 6 | Right-sizing, environment cost controls, scaling policy |
+| `.github/skills/azure-app-service.md` | Phase1, 3, 4 | Hosting choice, app settings, diagnostics, deployment gotchas |
+| `.github/skills/wcf-to-rest-api.md` | Phase1, 2 | WCF inventory, contract mapping, REST replacement patterns |
+| `.github/skills/azure-entra-id.md` | Phase1, 2, 3, 4 | Auth modernization, app registration, managed identity patterns |
+| `.github/skills/bicep-modules.md` | Phase3, 5 | Bicep layout, module boundaries, parameter strategy |
+| `.github/skills/terraform-azure.md` | Phase3, 5 | Azure Terraform module structure and state hygiene |
+| `.github/skills/docker-containerize.md` | Phase2, 4, 5 | Dockerfile, build/run scripts, runtime hardening |
+| `.github/skills/azure-sql-migration.md` | Phase1, 2, 3 | DB discovery, target fit, migration/cutover strategies |
+| `.github/skills/managed-identity.md` | Phase3, 4, 5 | Secretless auth and managed identity patterns |
+| `.github/skills/github-actions-cicd.md` | Phase5 | GitHub Actions pipeline templates and Azure login patterns |
+| `.github/skills/azure-devops-pipelines.md` | Phase5 | Azure DevOps pipeline structure and release gates |
+| `.github/skills/secret-management.md` | Phase1, 3, 4, 5 | Security controls, secret handling, and review checklist |
+| `.github/skills/cost-optimization.md` | Phase1, 3, 6 | Right-sizing, environment cost controls, scaling policy |
 
 ### Example composition by scenario
 
@@ -268,12 +268,12 @@ If native `@include` support is unavailable, keep the exact same structure but t
 phase: phase2
 role: coder
 skills:
-  - skills/dotnet-framework-to-dotnet8.md
-  - skills/webforms-to-razor.md
-  - skills/config-transformation.md
-  - skills/azure-entra-id.md
-  - skills/azure-app-service.md
-  - skills/migration-report-template.md
+  - .github/skills/dotnet-framework-to-dotnet8.md
+  - .github/skills/webforms-to-razor.md
+  - .github/skills/config-transformation.md
+  - .github/skills/azure-entra-id.md
+  - .github/skills/azure-app-service.md
+  - .github/skills/migration-report-template.md
 reviewers:
   - tester/validation-checklist.md
 ```
@@ -284,12 +284,12 @@ reviewers:
 phase: phase3
 role: azure-specialist
 skills:
-  - skills/java8-to-java21.md
-  - skills/terraform-azure.md
-  - skills/azure-container-apps.md
-  - skills/managed-identity.md
-  - skills/azure-sql-migration.md
-  - skills/secret-management.md
+  - .github/skills/java8-to-java21.md
+  - .github/skills/terraform-azure.md
+  - .github/skills/azure-container-apps.md
+  - .github/skills/managed-identity.md
+  - .github/skills/azure-sql-migration.md
+  - .github/skills/secret-management.md
 reviewers:
   - security-auditor/least-privilege-review.md
 ```
@@ -372,7 +372,7 @@ The monolith is replaced by a **master orchestrator** plus narrow specialist cha
 ---
 description: Master Agent-aware migration coordinator for multi-phase and multi-app Azure modernization.
 tools: ['search/codebase', 'usages', 'runCommands', 'runTests', 'edit/editFiles', 'new', 'Azure MCP/*', 'Microsoft Docs/*']
-model: Claude Sonnet 4.7 (copilot)
+model: Claude Sonnet 4.6 (copilot)
 leadRole: Architect
 assistRoles: [Coder, Tester, Azure-Specialist, DevOps-Engineer, Observability-Engineer, Database-Specialist, Performance-Engineer, Security-Auditor, Evaluator, Cutover-Commander, Scribe]
 entryPrompts: [/phase0-multirepoassessment, /phase1-plan, /phase2-migratecode, /phase3-generateinfra, /phase4-deploytoazure, /phase5-setupcicd, /phase6-postmigrationops, /quickassessment, /databasemigration, /securityhardening, /costoptimization, /phase-rollback, /getstatus]
@@ -393,7 +393,7 @@ producedArtifacts: [reports/Report-Status.md, reports/Application-Assessment-Rep
 ---
 description: Phase2 mode for code migration, framework upgrades, refactors, and modernization validation.
 tools: ['search/codebase', 'usages', 'vscodeAPI', 'problems', 'changes', 'testFailure', 'runCommands/terminalSelection', 'runCommands/terminalLastCommand', 'fetch', 'search/searchResults', 'githubRepo', 'extensions', 'runTests', 'edit/editFiles', 'search', 'new', 'runCommands', 'runTasks', 'Microsoft Docs/*']
-model: Claude Sonnet 4.7 (copilot)
+model: Claude Sonnet 4.6 (copilot)
 leadRole: Coder
 assistRoles: [Tester, Database-Specialist, Performance-Engineer, Security-Auditor]
 entryPrompts: [/phase2-migratecode, /databasemigration]
@@ -414,7 +414,7 @@ producedArtifacts: [reports/Migration-Change-Log.md, reports/Report-Status.md]
 ---
 description: Phase3 mode for Azure architecture, IaC generation, identity, networking, and observability setup.
 tools: ['search/codebase', 'runCommands', 'edit/editFiles', 'new', 'Azure MCP/*', 'Microsoft Docs/*']
-model: Claude Sonnet 4.7 (copilot)
+model: Claude Sonnet 4.6 (copilot)
 leadRole: Azure-Specialist
 assistRoles: [DevOps-Engineer, Security-Auditor, Observability-Engineer]
 entryPrompts: [/phase3-generateinfra]
@@ -435,7 +435,7 @@ producedArtifacts: [infra/, azure.yaml, reports/Infra-Plan.md, reports/Report-St
 ---
 description: Phase4 and Phase5 mode for deployment, release validation, and CI/CD setup.
 tools: ['runCommands', 'runTasks', 'runTests', 'edit/editFiles', 'new', 'Azure MCP/*', 'Microsoft Docs/*']
-model: Claude Sonnet 4.7 (copilot)
+model: Claude Sonnet 4.6 (copilot)
 leadRole: Coder
 assistRoles: [Azure-Specialist, DevOps-Engineer, Tester]
 entryPrompts: [/phase4-deploytoazure, /phase5-setupcicd, /phase-rollback]
@@ -456,7 +456,7 @@ producedArtifacts: [reports/Deployment-Summary.md, reports/CICD-Setup-Report.md]
 ---
 description: Root-cause mode for failures across build, runtime, infrastructure, deployment, and configuration drift.
 tools: ['search/codebase', 'problems', 'testFailure', 'runCommands', 'runTasks', 'edit/editFiles', 'Azure MCP/*', 'Microsoft Docs/*']
-model: Claude Sonnet 4.7 (copilot)
+model: Claude Sonnet 4.6 (copilot)
 leadRole: Coder
 assistRoles: [Tester, Azure-Specialist]
 entryPrompts: [/getstatus, /phase2-migratecode, /phase3-generateinfra, /phase4-deploytoazure, /phase-rollback]
@@ -477,7 +477,7 @@ producedArtifacts: [reports/Migration-Debug-Log.md]
 ---
 description: 5-minute triage mode for rapid modernization feasibility and next-step recommendation.
 tools: ['search/codebase', 'search/searchResults', 'runCommands', 'new']
-model: Claude Sonnet 4.7 (copilot)
+model: Claude Sonnet 4.6 (copilot)
 leadRole: Architect
 assistRoles: []
 entryPrompts: [/quickassessment]
@@ -498,7 +498,7 @@ producedArtifacts: [reports/Quick-Assessment-Report.md, reports/Report-Status.md
 ---
 description: Security-focused review mode for identity, secrets, network posture, dependency risks, and release readiness.
 tools: ['search/codebase', 'usages', 'runCommands', 'edit/editFiles', 'new', 'Azure MCP/*', 'Microsoft Docs/*']
-model: Claude Sonnet 4.7 (copilot)
+model: Claude Sonnet 4.6 (copilot)
 leadRole: Security-Auditor
 assistRoles: [Architect, Azure-Specialist, Cutover-Commander]
 entryPrompts: [/securityhardening, /phase-rollback, /getstatus]
@@ -519,7 +519,7 @@ producedArtifacts: [reports/Security-Audit-Report.md, reports/Security-Go-NoGo.m
 ---
 description: Azure cost analysis mode for right-sizing, scaling policy, environment design, and spend reduction opportunities.
 tools: ['search/codebase', 'runCommands', 'edit/editFiles', 'new', 'Azure MCP/*', 'Microsoft Docs/*']
-model: Claude Sonnet 4.7 (copilot)
+model: Claude Sonnet 4.6 (copilot)
 leadRole: Azure-Specialist
 assistRoles: [Performance-Engineer, Observability-Engineer]
 entryPrompts: [/costoptimization, /phase6-postmigrationops, /getstatus]
@@ -693,8 +693,8 @@ graph TD
 BookShop should not keep a giant reference manual. Instead:
 
 - `bookshop-webforms-to-razor.md` captures UI-specific migration patterns.
-- `skills/azure-sql-migration.md` captures schema and data migration patterns that BookShop can extend with use-case-specific notes.
-- `skills/azure-app-service.md` captures the baseline target hosting decision that BookShop can override if needed.
+- `.github/skills/azure-sql-migration.md` captures schema and data migration patterns that BookShop can extend with use-case-specific notes.
+- `.github/skills/azure-app-service.md` captures the baseline target hosting decision that BookShop can override if needed.
 - `docs/modernization/prompt-index.md` points to the small set of BookShop-specific overrides.
 
 ---

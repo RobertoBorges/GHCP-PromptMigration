@@ -1,6 +1,6 @@
 ---
 agent: Code Migration Modernization Agent
-model: Claude Sonnet 4.7 (copilot)
+model: Claude Sonnet 4.6 (copilot)
 tools: ['search/codebase', 'search/usages', 'vscode/vscodeAPI', 'read/problems', 'search/changes', 'vscode/runCommand', 'read/terminalLastCommand', 'openSimpleBrowser', 'web/fetch', 'search/searchResults', 'web/githubRepo', 'vscode/extensions', 'edit/editFiles', 'search', 'execute/runTask', 'Azure MCP/*', 'Microsoft Docs/*']
 description: "Plans database migration, validation, and cutover for Azure targets."
 ---
