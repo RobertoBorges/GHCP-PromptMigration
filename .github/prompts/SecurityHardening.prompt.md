@@ -1,6 +1,6 @@
 ---
 agent: Code Migration Modernization Agent
-model: Claude Sonnet 4.7 (copilot)
+model: Claude Sonnet 4.6 (copilot)
 description: "Applies security hardening guidance for Azure migration targets."
 ---
 
