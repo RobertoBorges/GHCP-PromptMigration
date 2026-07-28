@@ -50,7 +50,7 @@ A **customer folder path** containing at least ONE artifact. Supported types inc
 The skill will:
 1. Recursively scan the customer folder
 2. Auto-detect workload pillars (Apps / DB / Infra)
-3. Apply CAF-aligned deterministic classification (6 Rs + Factory/Partner/Unknown)
+3. Apply CAF-aligned deterministic classification (6 Rs + Microsoft/Partner/Unknown)
 4. Generate a self-contained HTML deck named `{CustomerName}_Migration_Strategy_Report.html` saved into the same customer folder
 
 ## Workflow
@@ -89,7 +89,7 @@ List the candidate applications from the deck, showing for each:
 - Current stack
 - Target stack
 - 6 Rs strategy
-- Execution ownership (Factory / ISD-Partner / Unknown)
+- Execution ownership (Microsoft / Partner / Unknown)
 
 Once the user picks an app, write `reports/portfolio-handoff.json` per the schema defined in [## Handoff File: portfolio-handoff.json](#handoff-file-portfolio-handoffjson) below, then confirm:
 
@@ -102,7 +102,7 @@ Also offer:
 ## Prerequisites (Local Setup)
 
 - Customer artifacts placed in a folder (any structure; recursive scan handles it)
-- Optional: `Cloud Accelerate Factory - Service Descriptions.PDF` placed at workspace root (gitignored — provides verification reference for Factory/Partner classification). The skill's classification algorithm is already aligned with this document, so the PDF is optional but recommended.
+- Optional: `Migration Service Descriptions.PDF` placed at workspace root (gitignored — provides verification reference for Microsoft/Partner classification). The skill's classification algorithm is already aligned with this document, so the PDF is optional but recommended.
 - Optional: Python + Playwright installed if PDF export is needed (`pip install playwright && playwright install chromium`)
 
 ## Critical Reminders
@@ -125,7 +125,7 @@ When the user picks an application to start modernizing (Step 4), this skill wri
 | `customer` | string | Customer name | free-form |
 | `app.name` | string | Application name as it appears in the deck | free-form |
 | `app.code_path` | string | Relative path to the application's code/repo | e.g., `Customers/Contoso/repos/order-processing` |
-| `app.factory_or_partner` | string | Execution ownership classification | `Factory` \| `ISD-Partner` \| `Unknown` |
+| `app.execution_ownership` | string | Execution ownership classification | `Microsoft` \| `Partner` \| `Unknown` |
 | `app.six_r_strategy` | string | CAF 6 Rs strategy | `Rehost` \| `Replatform` \| `Refactor` \| `Replace` \| `Retire` \| `Retain` |
 | `app.target_platform` | string | Azure hosting platform | `App Service` \| `Container Apps` \| `AKS` |
 | `app.iac_preference` | string | Infrastructure-as-Code tool | `Bicep` \| `Terraform` |
@@ -145,7 +145,7 @@ When the user picks an application to start modernizing (Step 4), this skill wri
   "app": {
     "name": "OrderProcessing",
     "code_path": "Customers/Contoso/repos/order-processing",
-    "factory_or_partner": "Factory",
+    "execution_ownership": "Microsoft",
     "six_r_strategy": "Replatform",
     "target_platform": "Container Apps",
     "iac_preference": "Bicep",
@@ -164,7 +164,7 @@ A self-contained HTML deck saved to the customer folder, ready for executive rev
 - Title + Portfolio Overview (KPI cards)
 - Pillar-specific slides (tech stack, EOS, infra discovery, network, DB strategy — only those with data)
 - 6 Rs Strategy distribution (if apps pillar)
-- Execution Ownership (Factory / ISD-Partner / Unknown)
+- Execution Ownership (Microsoft / Partner / Unknown)
 - Phased Roadmap + Dependency Mapping + Move Groups
 - Risks & Dependencies + Recommended Next Steps + Appendix Statistics
 

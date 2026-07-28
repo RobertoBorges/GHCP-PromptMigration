@@ -36,7 +36,7 @@ python .github/skills/migration-strategy-report/scripts/export_to_pdf.py "Custom
 ├── SKILL.md                                  # Skill definition (frontmatter + critical rules + workflow)
 ├── README.md                                 # This file (human-facing)
 ├── references/                               # Pillar-based reference files (progressive loading)
-│   ├── classification-algorithm.md           # 6 Rs + Factory/Partner/Unknown rules (always loaded)
+│   ├── classification-algorithm.md           # 6 Rs + Microsoft/Partner/Unknown rules (always loaded)
 │   ├── slides-common.md                      # Cross-pillar slides (1, 2, 5b, 6, 6b, 6c, 10, 11, 12) (always loaded)
 │   ├── slides-application-pillar.md          # Apps slides (3, 4, 5, 7, 8, 9) — loads if apps detected
 │   ├── slides-database-pillar.md             # DB slides (4b DB portion, 4e) + target matrix — loads if DB detected
@@ -52,7 +52,7 @@ python .github/skills/migration-strategy-report/scripts/export_to_pdf.py "Custom
 |---|---|
 | At least one artifact in the customer folder | Skill needs SOMETHING to analyze (data, narrative, visual, anything) |
 | Customer/organization name | Used in titles, output filenames, classification context; can be inferred from folder name |
-| (Optional) `Cloud Accelerate Factory - Service Descriptions.PDF` at workspace root | Verification reference for Factory/Partner classification. Gitignored. The skill's algorithm is already aligned with this document, so the PDF is optional but recommended. |
+| (Optional) `Migration Service Descriptions.PDF` at workspace root | Verification reference for Microsoft/Partner classification. Gitignored. The skill's algorithm is already aligned with this document, so the PDF is optional but recommended. |
 | (Optional) Python 3.8+ + Playwright | Only needed if exporting to PDF |
 | (Optional) WorkIQ configuration | Enriches reports with meeting context, decisions, blockers, vendor commitments |
 
@@ -64,7 +64,7 @@ python .github/skills/migration-strategy-report/scripts/export_to_pdf.py "Custom
 4. **WorkIQ Enrichment** (if configured) — pulls meeting context to enrich risks, decisions, vendor timelines
 5. **Classification** — applies deterministic, priority-ordered algorithms:
    - 6 Rs Strategy (Retire → Retain → Replace → Refactor → Replatform → Rehost)
-   - Execution Ownership per pillar (Factory / ISD-Partner / Unknown; Apps also has "No Migration Needed")
+   - Execution Ownership per pillar (Microsoft / Partner / Unknown; Apps also has "No Migration Needed")
 6. **Slide Selection** — evidence-driven; skips slides without strong data support
 7. **HTML Generation** — produces a self-contained HTML deck with inline CSS, KPI cards, charts, callouts
 8. **Verification** — math checks (sums equal in-scope total), disclaimers attached, single source citation
@@ -74,9 +74,9 @@ python .github/skills/migration-strategy-report/scripts/export_to_pdf.py "Custom
 Generated reports follow strict executive rules:
 - **No internal/meta language** — no "algorithm", "formula", "scenario", "step-by-step trace" in the output
 - **No zero-count items** — platforms/categories with 0 occurrences are omitted
-- **Executive tone** — "Classification Note" not "Disclaimer", "Factory Scope Opportunity" not "Impact Analysis"
+- **Executive tone** — "Classification Note" not "Disclaimer", "Microsoft Scope Opportunity" not "Impact Analysis"
 - **Deterministic** — same inputs produce identical classification numbers every time
-- **Single source citation** — *"Cloud Accelerate Factory — Service Descriptions, May 2026"* (no version-diff explanation)
+- **Single source citation** — *"Migration Service Descriptions, May 2026"* (no version-diff explanation)
 
 ## Critical Rules
 

@@ -31,9 +31,9 @@ Slide specs and field references that apply ONLY when the Database pillar is det
 
 ## Database Target Service Matrix
 
-Factory-default engine → Azure target mappings (per Cloud Accelerate Factory Service Descriptions, May 2026). See also the full deterministic classification algorithm in `classification-algorithm.md`.
+Microsoft-default engine → Azure target mappings (per Migration Service Descriptions, May 2026). See also the full deterministic classification algorithm in `classification-algorithm.md`.
 
-### Engine → Azure Target (Factory scope)
+### Engine → Azure Target (Microsoft scope)
 
 - **SQL Server 2012+** → Azure SQL DB / Azure SQL MI / SQL Server on Azure VM (via Azure Migrate / DMS)
   - Sources: On-premises, AWS EC2, AWS RDS, GCP Cloud SQL, GCP Compute Engine
@@ -73,7 +73,7 @@ Factory-default engine → Azure target mappings (per Cloud Accelerate Factory S
   - Schema conversion supported via SSMA for Oracle, VS Code PostgreSQL extension (integrated with Azure OpenAI)
   - Data migration via SSMA, Ora2Pg, Striim (license provided by Microsoft for large workloads)
   - Estimated 8 weeks per wave
-  - **EXCLUDED from Oracle Factory:** E-Business Suite, Enterprise Manager, JD Edwards, Middleware, PeopleSoft, Siebel, Cloud Applications
+  - **EXCLUDED from Oracle Microsoft-led migration:** E-Business Suite, Enterprise Manager, JD Edwards, Middleware, PeopleSoft, Siebel, Cloud Applications
   - Customer must actively participate in schema conversion and testing
 
 - **SAP ASE (Sybase) 11.9.2+** → Azure SQL DB/MI/VM (AI-assisted, via SSMA for Sybase)
@@ -81,21 +81,21 @@ Factory-default engine → Azure target mappings (per Cloud Accelerate Factory S
   - Schema conversion via SSMA for Sybase (integrated with Azure OpenAI)
   - HA/DR configuration and setup included
 
-- **Oracle Database@Azure [ODAA]** (May 2026 — new Factory track)
+- **Oracle Database@Azure [ODAA]** (May 2026 — new Microsoft-led track)
   - Migration of on-premises or any public cloud Oracle database estate to Oracle Database@Azure (Exadata, Exascale, Autonomous, Base DB)
   - Includes scope of infrastructure migration hosting applications connected to Oracle database estate
   - Sources: On-premises, AWS, GCP, Oracle Cloud
   - Customer and OCI must have collaborated in advance; contract and purchase must be completed
   - Explicitly EXCLUDED if customer has signed for OCI CES/LIFT or competing OCI services (requires alignment)
 
-### Factory Analytics Tracks (May 2026 — DB/data workloads)
+### Microsoft-led Analytics Tracks (May 2026 — DB/data workloads)
 - **Fabric Lakehouse** migration (Medallion Architecture — new implementation, legacy warehouse migration, or new use case on existing deployment)
   - Valid sources: Azure SQL DB, Azure SQL MI, ADLS Gen2, SQL Server, Oracle (on-premises), Dedicated SQL Pool
 - **Fabric Warehouse** migration (from Synapse Dedicated SQL Pool, SQL Server Product Family, Power BI DataMart EOL)
 - **Power BI Migration** (SSRS → Power BI, SSAS/AAS → Power BI, Power BI Premium P SKU → Fabric F SKU)
   - Complexity tiers: Simple (18 days), Medium (26 days), High (32 days)
 
-### ISD / Partner scope (NOT Factory-eligible for DB migration)
+### Partner scope (NOT Microsoft-eligible for DB migration)
 - DB2 (any version)
 - Teradata / Netezza (unless Synapse Dedicated SQL Pool → Fabric Warehouse)
 - Informix
@@ -112,7 +112,7 @@ Factory-default engine → Azure target mappings (per Cloud Accelerate Factory S
 - Migration target = Azure SQL Edge
 - Migration target = Synapse Analytics (unless source is Synapse Dedicated SQL Pool → Fabric Warehouse)
 
-### What Factory does NOT cover (ISD / Partner/Customer responsibility)
+### What The Microsoft-led scope does NOT cover (Partner/Customer responsibility)
 - Application dependency testing and validation (pre- and post-migration)
 - Performing and configuring backups, monitoring, alerts (pre- and post-migration)
 - Database performance testing and tuning
@@ -141,7 +141,7 @@ Include this callout when SQL version data is missing from the inventory:
 
 > **SQL Server Discovery Gap:** SQL Server version data was not present in the source inventory. SQL Server EOS instances cannot be identified without version-level data. Recommend running DMA or Azure Migrate database assessment to capture SQL Server versions across the estate before finalizing the EOS impact count.
 
-### ESU via Azure Arc (Factory delivery)
+### ESU via Azure Arc (Microsoft-led delivery)
 - Azure Arc ESU enrollment can be completed in approximately 15 days
 - Back-charge billing model applies (Arc ESU billed from EOS date, not enrollment date)
 - SQL Server 2014 ESU window: active until Jul 2027
@@ -167,8 +167,8 @@ This is a **conditional slide** — include when database instance inventory dat
   | SQL Server (by version) | n | n | n TB | Azure SQL DB / MI / VM |
   | PostgreSQL | n | n | n TB | Azure DB for PostgreSQL Flex |
   | MySQL / MariaDB | n | n | n TB | Azure DB for MySQL Flex |
-  | Oracle | n | n | n TB | ISD / Partner scope (OCI interconnect / Oracle on Azure VMs / refactor to PG) |
-  | DB2 | n | n | n TB | ISD / Partner scope (refactor to PG/SQL) |
+  | Oracle | n | n | n TB | Partner scope (OCI interconnect / Oracle on Azure VMs / refactor to PG) |
+  | DB2 | n | n | n TB | Partner scope (refactor to PG/SQL) |
   | MongoDB | n | n | n TB | Cosmos DB for MongoDB / Azure managed |
   | Cassandra | n | n | n TB | Cosmos DB for Apache Cassandra |
   | Other (Teradata, Sybase, Informix) | n | n | n TB | Assessment needed |
@@ -205,7 +205,7 @@ This is a **conditional slide** — include when database instance inventory dat
   | Always On AG | n | SQL MI AG / VM AG | Medium |
   | Log Shipping | n | SQL MI auto-backup / VM log shipping | Low |
   | Replication | n | Azure SQL geo-replication | Medium |
-  | Oracle RAC | n | ISD / Partner scope — Oracle on Azure VMs or refactor | High |
+  | Oracle RAC | n | Partner scope — Oracle on Azure VMs or refactor | High |
   | No HA | n | Add Azure HA (auto-failover groups, zone redundancy) | Low |
 - **Performance Tier Recommendations (when utilization data exists):**
   - DTU vs vCore model recommendation per instance

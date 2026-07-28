@@ -12,7 +12,7 @@ The system supports **three complementary flows**:
 
 1. **Per-Application Modernization Flow (default, main path)** — Guided execution of ONE application at a time via **`/assess-any-application` → `/Phase1-Plan` → `/Phase2-MigrateCode` → `/Phase3-GenerateInfra` → `/Phase4-DeployToAzure` → `/Phase5-SetupCICD` → `/Phase6-PostMigrationOps`**. Stack-agnostic: Phase prompts consume the Capability Matrix produced by Discovery and apply the right stack/source/workload-specific guidance via skills.
 
-2. **Portfolio Planning Flow (pre-engagement, optional add-on)** — Generates executive-ready Migration Strategy Reports from CMDB / RVTools / DMA / mixed customer artifacts. Produces a CIO-level HTML deck with CAF-aligned 6 Rs classification and Factory / ISD-Partner / Unknown execution ownership. Invoke with `/PortfolioStrategy` or use the `migration-strategy-report` skill.
+2. **Portfolio Planning Flow (pre-engagement, optional add-on)** — Generates executive-ready Migration Strategy Reports from CMDB / RVTools / DMA / mixed customer artifacts. Produces a CIO-level HTML deck with CAF-aligned 6 Rs classification and Microsoft / Partner / Unknown execution ownership. Invoke with `/PortfolioStrategy` or use the `migration-strategy-report` skill.
 
 3. **Multi-repo assessment (optional add-on)** — `/Phase0-Multi-repo-assessment` runs cross-repo dependency + sequencing analysis for business solutions that span multiple repos, before the main path.
 
@@ -107,7 +107,7 @@ For any application that does not already have a Capability Matrix:
 ### What This Project Does ✅
 - **Universal intake & discovery** for applications from any source environment and any stack
 - **Portfolio assessment** of customer estates (apps + databases + infrastructure)
-- **Deterministic classification** via the migration-strategy-decision-tree (6 Rs strategy + Factory/Partner/Unknown ownership where applicable)
+- **Deterministic classification** via the migration-strategy-decision-tree (6 Rs strategy + Microsoft/Partner/Unknown ownership where applicable)
 - **Code modernization** for any supported stack (see list above) to current Azure-compatible runtimes
 - **Lift-and-shift (rehost)** when the decision tree says so — supported for applications where modernization is out of scope or out of budget
 - **Replatform / refactor / rearchitect / rebuild** as appropriate

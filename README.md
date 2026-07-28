@@ -53,7 +53,7 @@ Great for **infrastructure discovery + lift-and-shift** of on-prem/other-cloud w
 | **Decision Hardstop Protocol** — 18 major architecture decisions forced before code changes; user picks target framework, DB engine, hosting platform, IaC tool, etc. | ✅ | ❌ | ❌ |
 | **On-the-fly skill authoring** (`skill-creator`) — mid-migration, agent researches + writes a new skill for any stack it hasn't seen (Elixir, F#, Clojure, ABAP, etc.) | ✅ | ❌ | ❌ |
 | **Cross-session trace memory** — canonical Action Log in `Report-Status.md` for recovery + per-action token accounting | ✅ | ❌ | ❌ |
-| **Portfolio 6Rs strategy report** — CIO-ready HTML deck with Factory / ISD-Partner / Unknown ownership across mixed-stack portfolios | ✅ | ❌ | ✅ (business case, different format) |
+| **Portfolio 6Rs strategy report** — CIO-ready HTML deck with Microsoft / Partner / Unknown ownership across mixed-stack portfolios | ✅ | ❌ | ✅ (business case, different format) |
 | **Cross-stack post-migration observability wiring** — App Insights + OpenTelemetry recipes for 11+ languages | ✅ | ❌ | ❌ |
 | **Universal Discovery Dossier + Capability Matrix** — a mechanical contract every downstream Phase prompt consumes | ✅ | ❌ | ⚠ separate discovery report |
 | **Never picks major architecture for you** — options + tradeoffs, waits for user pick, "stay-as-is" is always option 1 | ✅ | ⚠ some prompts | ❌ |

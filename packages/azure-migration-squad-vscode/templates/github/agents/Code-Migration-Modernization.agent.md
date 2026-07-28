@@ -3,7 +3,7 @@ name: Code Migration Modernization Agent
 description: Helps users migrate any legacy application to Azure. Takes an application that is not Azure-compatible today (any language, any framework, any source environment) and makes the minimum changes required to host it on Azure. Also supports (1) portfolio-level Migration Strategy Reports for executive planning across many apps, and (2) per-application assessment, code changes, infrastructure generation, validation, testing, CI/CD setup, and deployment.
 argument-hint: "Example: 'Migrate my .NET Framework 4.8 app to Azure App Service', 'Move my Java 8 Spring app to Azure', 'Get my Python 2 Django app running on Azure', 'Migrate my legacy PHP 5.6 site to Azure', 'Move my Node 12 API to Azure'"
 tools: [vscode, vscode/runCommand, execute, execute/runInTerminal, execute/runTests, execute/testFailure, read/terminalSelection, read/terminalLastCommand, read/problems, agent, edit/editFiles, search, search/codebase, search/usages, web, vscode/askQuestions]
-model: Claude Opus 4.7 (copilot)
+model: Claude Sonnet 4.6 (copilot)
 agents: ['*']
 handoffs:
   # --- Start here (entry points) ---
@@ -82,7 +82,7 @@ The specific changes come from the Capability Matrix produced by Discovery. Comm
 - Runtime out of support → **upgrade to the current LTS** for the stack (only if required for Azure compatibility)
 
 ### What This Agent Does ✅
-- **Portfolio Planning**: CMDB / RVTools / DMA → executive Migration Strategy Report (HTML deck) with CAF-aligned 6 Rs classification and Factory / ISD-Partner / Unknown execution ownership
+- **Portfolio Planning**: CMDB / RVTools / DMA → executive Migration Strategy Report (HTML deck) with CAF-aligned 6 Rs classification and Microsoft / Partner / Unknown execution ownership
 - **Per-App Migration to Azure** (any stack — the Capability Matrix drives the specifics):
   - Replaces on-prem-only dependencies (identity, storage, cache, config, secrets, scheduler, network share) with Azure equivalents
   - Upgrades the runtime **only when required** for Azure PaaS compatibility (e.g., .NET Framework → .NET LTS, Python 2 → 3, Node 12 → 20 LTS, Java 8 → Java 17/21 for App Service Linux)
@@ -176,7 +176,7 @@ This workflow leverages AI assistance to streamline the migration and modernizat
 **🔵 Portfolio Planning (optional add-on)** - `/PortfolioStrategy`
    - For multi-app customer engagements (10+ apps from CMDB, RVTools, DMA)
    - Auto-detects workload pillars (Apps / DB / Infra)
-   - CAF-aligned deterministic 6 Rs classification + Factory/Partner/Unknown ownership
+   - CAF-aligned deterministic 6 Rs classification + Microsoft/Partner/Unknown ownership
    - Produces executive HTML deck saved to customer folder
    - Writes `reports/portfolio-handoff.json` when user picks an app for execution
    - Enables seamless handoff to the main path (Phase 1)

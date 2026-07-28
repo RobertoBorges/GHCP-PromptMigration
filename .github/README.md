@@ -79,7 +79,7 @@ Skills are automatically loaded based on context. Each skill provides:
 | `wcf-to-rest-migration` | WCF service → REST API conversion |
 | `config-transformation` | web.config → appsettings.json transformation |
 | `migration-unit-testing` | xUnit/JUnit 5 patterns for validation |
-| `migration-strategy-report` | **NEW** - Portfolio-level Migration Strategy Report generator (HTML executive deck from CMDB/RVTools/DMA artifacts; CAF-aligned 6 Rs + Factory/Partner/Unknown classification) |
+| `migration-strategy-report` | **NEW** - Portfolio-level Migration Strategy Report generator (HTML executive deck from CMDB/RVTools/DMA artifacts; CAF-aligned 6 Rs + Microsoft/Partner/Unknown ownership classification) |
 
 ## 🎯 Supported Migration Paths
 
