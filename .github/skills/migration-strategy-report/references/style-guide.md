@@ -82,8 +82,8 @@ The `export_to_pdf.py` script includes a pre-flight check: if it prints `*** No 
 | Success / Green | `#107c10` | On-track indicators, ≥80% coverage, positive KPI delta |
 | Warning / Orange | `#d83b01` or `#ff8c00` | At-risk indicators, 50–79% coverage, medium risk |
 | Critical / Red | `#a80000` | Blocker indicators, <50% coverage, high risk |
-| Factory Blue | `#0078d4` | Factory ownership segment in donuts |
-| Partner/ISD Amber | `#ff8c00` | ISD / Partner ownership segment |
+| Microsoft Blue | `#0078d4` | Microsoft ownership segment in donuts |
+| Partner Amber | `#ff8c00` | Partner ownership segment |
 | Unknown Grey | `#a19f9d` | Unknown / unclassified segment |
 | Retire segment | `#d83b01` | Retire strategy in 6 Rs donut |
 | Retain segment | `#605e5c` | Retain strategy in 6 Rs donut |
@@ -207,7 +207,7 @@ Used on risk slides, decision-required banners, and scope summary callouts.
 - Use SVG `<circle>` elements with `stroke-dasharray` / `stroke-dashoffset` to render segments.
 - Center label: show total count (large, bold) and a one-word descriptor below (regular, grey).
 - Legend: horizontal or vertical list of `●  Label  Count  (%)` using the semantic color palette.
-- Segments order (clockwise from 12 o'clock): Factory (blue) → ISD / Partner (amber) → Unknown (grey) → No Migration Needed (light grey).
+- Segments order (clockwise from 12 o'clock): Microsoft (blue) → Partner (amber) → Unknown (grey) → No Migration Needed (light grey).
 - For 6 Rs donuts: Rehost → Replatform → Refactor → Replace → Retire → Retain (order by count descending if no standard preference).
 
 **Bar / horizontal bar chart rules:**
@@ -229,12 +229,12 @@ These rules apply to every word of generated HTML report content. Violations req
 - **No zero-count chart segments** — omit legend entries and donut segments for any bucket with count = 0.
 - **Executive vocabulary:**
   - Use **"Classification Note"** — not "Disclaimer"
-  - Use **"Factory Scope Opportunity"** — not "Impact Analysis"
+  - Use **"Microsoft Scope Opportunity"** — not "Impact Analysis"
   - Use **"Recommendation"** — not "Action"
   - Write for a **CIO / leadership audience** — no jargon, no internal tool names, no engineering-level trace output
-- **Single source citation** — cite the reference document once (e.g., *"Cloud Accelerate Factory — Service Descriptions, May 2026"*) without explaining version differences or changelogs.
-- **Deterministic verification totals** — always show the math: e.g., "Factory 1,200 + ISD / Partner 180 + Unknown 45 = 1,425 ✓". Totals must reconcile.
-- **Scope fluidity disclaimer** — on Factory/Partner ownership slides, include a standard note that ISD / Partner workloads can shift to Factory eligibility after OS upgrade, PCI clearance, or cluster decomposition.
+- **Single source citation** — cite the reference document once (e.g., *"Migration Service Descriptions, May 2026"*) without explaining version differences or changelogs.
+- **Deterministic verification totals** — always show the math: e.g., "Microsoft 1,200 + Partner 180 + Unknown 45 = 1,425 ✓". Totals must reconcile.
+- **Scope fluidity disclaimer** — on Microsoft/Partner ownership slides, include a standard note that Partner workloads can shift to Microsoft eligibility after OS upgrade, PCI clearance, or cluster decomposition.
 - **Every claim traces to an artifact** — each major data point must be attributable to a specific source file listed in the Source Artifacts appendix slide.
 - **Gap = finding, not blank** — missing data is surfaced as a leadership finding (e.g., "Discovery workshop needed for 40% of apps with no complexity rating"), never left as an empty cell or omitted section.
 

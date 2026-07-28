@@ -1,6 +1,6 @@
 # Classification Algorithms — Reference
 
-This reference is loaded by the `migration-strategy-report` skill whenever classification work occurs (which is almost always). Contains the deterministic 6 Rs strategy classification and execution ownership classification (Factory / Partner / Unknown) for Apps, Databases, and Infrastructure pillars.
+This reference is loaded by the `migration-strategy-report` skill whenever classification work occurs (which is almost always). Contains the deterministic 6 Rs strategy classification and execution ownership classification (Microsoft / Partner / Unknown) for Apps, Databases, and Infrastructure pillars.
 
 ## Why These Algorithms Are Deterministic
 
@@ -188,10 +188,10 @@ Given the same CMDB export with the same field values, this algorithm produces t
 
 **Key rules for mixed scenarios (Scenario 4):**
 1. **Each pillar classified independently** — an app's ownership is determined ONLY by the APP algorithm; a DB instance ONLY by the DB algorithm; a VM ONLY by the INFRA algorithm. No cross-contamination.
-2. **App-level DB Platform field ≠ separate DB pillar data** — If the app CMDB has a "Database Platform" column (e.g., "Oracle", "SQL Server"), that field is used within the APP algorithm to evaluate app-level ISD / Partner triggers. This is separate from a dedicated DB instance inventory. Both can coexist.
+2. **App-level DB Platform field ≠ separate DB pillar data** — If the app CMDB has a "Database Platform" column (e.g., "Oracle", "SQL Server"), that field is used within the APP algorithm to evaluate app-level Partner triggers. This is separate from a dedicated DB instance inventory. Both can coexist.
 3. **No double-counting** — If a DB instance appears in BOTH an app-level "Database Platform" field AND a standalone DB inventory, classify it once under the DB pillar algorithm only. The app-level reference informs the app's classification but does not create a second DB workload entry.
-4. **Combined totals** — The combined estate donut sums all three pillar totals: Total = (Apps in-scope) + (DB instances in-scope) + (VMs in-scope). Factory/ISD / Partner/Unknown are summed across pillars.
-5. **Verification** — Each pillar MUST independently verify (F+P+U = pillar total), AND the combined estate MUST verify (sum of all pillar Factories + sum of all pillar Partners + sum of all pillar Unknowns = grand total).
+4. **Combined totals** — The combined estate donut sums all three pillar totals: Total = (Apps in-scope) + (DB instances in-scope) + (VMs in-scope). Microsoft/Partner/Unknown are summed across pillars.
+5. **Verification** — Each pillar MUST independently verify (M+P+U = pillar total), AND the combined estate MUST verify (sum of all pillar Factories + sum of all pillar Partners + sum of all pillar Unknowns = grand total).
 
 **What if a field is ambiguous between pillars?**
 - A CMDB row with Application Name + Database Platform + Host Server = **one app workload** (classify under APP algorithm; the DB Platform and Host Server fields are inputs to the app formula, not separate DB/Infra workloads)
@@ -201,70 +201,70 @@ Given the same CMDB export with the same field values, this algorithm produces t
 
 ---
 
-### Application Pillar — Factory / ISD-Partner / Unknown / No Migration Needed
+### Application Pillar — Microsoft / Partner / Unknown / No Migration Needed
 
-**CRITICAL:** This algorithm MUST produce identical results given the same input data. The LLM does NOT make judgment calls — it applies the rules below in strict priority order. There are exactly **4 output buckets**: Factory, ISD / Partner, No Migration Needed, Unknown. No other buckets (e.g., "Collaborate") may be invented.
+**CRITICAL:** This algorithm MUST produce identical results given the same input data. The LLM does NOT make judgment calls — it applies the rules below in strict priority order. There are exactly **4 output buckets**: Microsoft, Partner, No Migration Needed, Unknown. No other buckets (e.g., "Collaborate") may be invented.
 
 **Step 0: Classify as NO MIGRATION NEEDED first (highest priority — before all other checks):**
 An app is **No Migration Needed** if ANY of:
 - Application Type = "SaaS" or "SaaS - NOT using On-Prem Components" or any pure SaaS indicator (already cloud-hosted, no on-prem execution)
 - Application Type = "Already running in Cloud" or "Already in Cloud" (already migrated)
-- These apps require zero migration execution — they are accounted for in the total portfolio but excluded from Factory/ISD / Partner/Unknown workload counts.
+- These apps require zero migration execution — they are accounted for in the total portfolio but excluded from Microsoft/Partner/Unknown workload counts.
 
-**Step 1: Classify as UNKNOWN (checked before Factory/ISD / Partner):**
+**Step 1: Classify as UNKNOWN (checked before Microsoft/Partner):**
 An app is **Unknown** if ANY of:
 - Complexity field is blank/null/missing
 - 2+ of these fields are blank: {Complexity, Tech Stack, Integration Count, Application Owner, Architecture Type}
 - No Proposed Modernization Phase AND no Pilot Flag (i.e., not in-scope — but if the app IS in-scope and just has bad data, still Unknown)
 
-**Step 2: Classify as ISD / PARTNER (second priority — checked before Factory):**
-An app is **ISD / Partner** if ANY ONE of these conditions is true:
+**Step 2: Classify as PARTNER (second priority — checked before Microsoft):**
+An app is **Partner** if ANY ONE of these conditions is true:
 - Complexity = "Very Complex" or "Complex"
-- Architecture Type = "Vendor" or "COTS" or "Vendor-Managed" (any vendor-supplied indicator) — label these as **ISD / Partner / COTS Vendor** in the detail table
-- Tech Stack contains languages/frameworks NOT supported by GHCP automated tooling (i.e., NOT in the Factory-supported list below)
-- Database Platform contains "DB2" or "Teradata" or "Informix" (no Factory migration path exists for these engines)
-- Database Platform contains "Oracle" AND (version < 12c Release 2 OR version is unknown/blank) — ISD / Partner unless version is confirmed ≥ 12c R2. Oracle 12c R2+ IS Factory-eligible via AI-assisted heterogeneous migration, but eligibility requires version proof.
-- Database Platform contains "Oracle" AND workload is E-Business Suite, JD Edwards, PeopleSoft, Siebel, or Enterprise Manager (explicitly excluded from Factory Oracle scope regardless of version)
-- Database Platform contains "Sybase"/"SAP ASE" AND (version < 11.9.2 OR version is unknown/blank) — ISD / Partner unless version is confirmed ≥ 11.9.2. SAP ASE 11.9.2+ IS Factory-eligible, but eligibility requires version proof.
+- Architecture Type = "Vendor" or "COTS" or "Vendor-Managed" (any vendor-supplied indicator) — label these as **Partner (COTS Vendor)** in the detail table
+- Tech Stack contains languages/frameworks NOT supported by GHCP automated tooling (i.e., NOT in the Microsoft-supported list below)
+- Database Platform contains "DB2" or "Teradata" or "Informix" (no Microsoft migration path exists for these engines)
+- Database Platform contains "Oracle" AND (version < 12c Release 2 OR version is unknown/blank) — Partner unless version is confirmed ≥ 12c R2. Oracle 12c R2+ IS Microsoft-eligible via AI-assisted heterogeneous migration, but eligibility requires version proof.
+- Database Platform contains "Oracle" AND workload is E-Business Suite, JD Edwards, PeopleSoft, Siebel, or Enterprise Manager (explicitly excluded from Microsoft Oracle scope regardless of version)
+- Database Platform contains "Sybase"/"SAP ASE" AND (version < 11.9.2 OR version is unknown/blank) — Partner unless version is confirmed ≥ 11.9.2. SAP ASE 11.9.2+ IS Microsoft-eligible, but eligibility requires version proof.
 - Regulatory field contains "ePHI" AND Criticality >= 4 (Mission Critical with health data = specialized handling)
 - Application Owner/BU = vendor name (not internal IT)
 - Tech Stack contains "Solaris" or "AIX" or "HP-UX" (legacy platforms requiring re-architecture; mainframe/COBOL/RPG platforms are out of scope for this tool and route to `source-unsupported-escalation`)
 
-**GHCP Factory-Supported Languages & Frameworks (for tech stack evaluation):**
-Apps using ANY of these are Factory-eligible from a language perspective:
+**GHCP Microsoft-Supported Languages & Frameworks (for tech stack evaluation):**
+Apps using ANY of these are Microsoft-eligible from a language perspective:
 - **.NET / C#** — ASP.NET, ASP.NET Core, WinForms, WPF, Blazor, .NET MAUI
 - **VB.NET** — ASP.NET WebForms, WinForms
-- **Java** — Spring Boot, Spring MVC, Jakarta EE, Quarkus, Micronaut, Servlet/JSP, Tomcat 8.5+, JBoss EAP 7.4+, WebSphere, WebLogic (migration FROM these app servers to Azure PaaS is Factory-eligible)
+- **Java** — Spring Boot, Spring MVC, Jakarta EE, Quarkus, Micronaut, Servlet/JSP, Tomcat 8.5+, JBoss EAP 7.4+, WebSphere, WebLogic (migration FROM these app servers to Azure PaaS is Microsoft-eligible)
 - **JavaScript / TypeScript** — Node.js, Express, Next.js, Angular, React, Vue.js, Svelte
 - **Python** — Django, Flask, FastAPI (containerization supported; code/config changes are customer/partner responsibility)
 - **PHP** — Laravel, Symfony, WordPress, Drupal
 - **Go** — Gin, Echo, standard library (containerization supported; code/config changes are customer/partner responsibility)
 - **Ruby** — Rails, Sinatra
 
-**Factory-Supported Container Migration Sources (May 2026):**
+**Microsoft-Supported Container Migration Sources (May 2026):**
 On-premises containers, **AWS EKS**, **OpenShift**, **GCP GKE** → AKS, ARO, or Azure Container Apps. Includes migrating current-state architecture to targeted AKS/ACA architecture including network, storage, and policies.
 
-Apps using languages/frameworks NOT in this list (e.g., Perl, Fortran, PowerBuilder, Delphi, Classic ASP/VBScript, Cold Fusion, Lotus Notes/Domino, Progress 4GL) trigger ISD / Partner classification — GHCP does not have automated migration tooling for these stacks.
+Apps using languages/frameworks NOT in this list (e.g., Perl, Fortran, PowerBuilder, Delphi, Classic ASP/VBScript, Cold Fusion, Lotus Notes/Domino, Progress 4GL) trigger Partner classification — GHCP does not have automated migration tooling for these stacks.
 
 **Step 3: Everything else is FACTORY (lowest priority — the default for in-scope apps with sufficient data):**
-An app is **Factory** if:
+An app is **Microsoft** if:
 - It was NOT classified as Unknown (has sufficient data)
-- It was NOT classified as ISD / Partner (none of the ISD / Partner conditions triggered)
+- It was NOT classified as Partner (none of the Partner conditions triggered)
 - This means: Simple/Medium complexity + internally developed + GHCP-supported language + no exotic DB + no critical compliance burden
 
 **Tie-breaking rules:**
-- If an app matches BOTH Unknown and ISD / Partner criteria, classify as **Unknown** (data quality must be fixed first)
-- If an app matches ISD / Partner on ONE condition but seems borderline, it is still **ISD / Partner** — the algorithm is intentionally aggressive on ISD / Partner to avoid under-scoping complexity
+- If an app matches BOTH Unknown and Partner criteria, classify as **Unknown** (data quality must be fixed first)
+- If an app matches Partner on ONE condition but seems borderline, it is still **Partner** — the algorithm is intentionally aggressive on Partner to avoid under-scoping complexity
 - The threshold boundaries (>10 integrations, complexity labels, vendor indicators) come from the SOURCE DATA as-is — do NOT re-interpret or soften them
 
 **What "Collaborate" IS (execution model annotation, NOT a classification bucket):**
-- Collaborate is a **delivery model note** on the roadmap: "Factory executes with GHCP tooling, ISD / Partner validates and certifies"
-- It applies to SOME Factory-classified apps at the complexity boundary (e.g., medium complexity with 6-10 integrations)
-- It does NOT change the count. If 339 apps are Factory, they stay 339. A note may say "~X of these will use Collaborate delivery model"
+- Collaborate is a **delivery model note** on the roadmap: "Microsoft executes with GHCP tooling, Partner validates and certifies"
+- It applies to SOME Microsoft-classified apps at the complexity boundary (e.g., medium complexity with 6-10 integrations)
+- It does NOT change the count. If 339 apps are Microsoft, they stay 339. A note may say "~X of these will use Collaborate delivery model"
 - Never show Collaborate as a separate donut segment, legend item, or appendix row with its own count
 
 **Verification step (MANDATORY before generating the slide):**
-- Factory + ISD / Partner + No Migration Needed + Unknown MUST = In-Scope total (e.g., 706)
+- Microsoft + Partner + No Migration Needed + Unknown MUST = In-Scope total (e.g., 706)
 - If the sum doesn't match, recount. Do NOT adjust numbers to force a total.
 - Show your math: "132 + 366 + 227 + 128 = 853 ✓" (or whatever the actual counts are)
 
@@ -274,16 +274,16 @@ An app is **Factory** if:
 - **Never mention zero-count platforms** — if no apps use Sybase, Teradata, Informix, etc., do NOT list them with "0 apps". Only mention platforms that actually appear in the data.
 - **No internal/meta language** — never use phrases like "New Formula", "Updated Algorithm", "Step-by-Step formula trace", "Pillar Scenario", or "Impact Analysis (New Formula)" in the report. The report is the final deliverable, not a changelog.
 - **No algorithm documentation in the report** — the step-by-step classification logic lives in SKILL.md. The report shows the RESULT (counts, criteria summary, verification) but not the internal execution trace.
-- **Executive tone** — use "Classification Note" not "Disclaimer"; use "Factory Scope Opportunity" not "Impact Analysis"; use "Recommendation" not "Action". Write for a CIO audience.
-- **Cite the source document** once (e.g., "Cloud Accelerate Factory — Service Descriptions, May 2026") without explaining what changed between versions.
+- **Executive tone** — use "Classification Note" not "Disclaimer"; use "Microsoft Scope Opportunity" not "Impact Analysis"; use "Recommendation" not "Action". Write for a CIO audience.
+- **Cite the source document** once (e.g., "Migration Service Descriptions, May 2026") without explaining what changed between versions.
 
 ---
 
-### Database Pillar — Factory / ISD-Partner / Unknown
+### Database Pillar — Microsoft / Partner / Unknown
 
 Classification rules (when DATABASE data available — DMA, MAP, Azure Migrate DB):
 
-**CRITICAL:** This algorithm MUST produce identical results given the same input data. There are exactly **3 output buckets**: Factory, ISD / Partner, Unknown. Apply rules in strict priority order.
+**CRITICAL:** This algorithm MUST produce identical results given the same input data. There are exactly **3 output buckets**: Microsoft, Partner, Unknown. Apply rules in strict priority order.
 
 **Step 1: Classify as UNKNOWN first (highest priority):**
 A DB instance is **Unknown** if ANY of:
@@ -291,27 +291,27 @@ A DB instance is **Unknown** if ANY of:
 - No size data AND no owner AND no migration readiness assessment
 - Cannot determine engine type from available fields
 
-**Step 2: Classify as ISD / PARTNER (second priority) — if ANY ONE condition is true:**
-A DB instance is **ISD / Partner** if:
-- Engine = DB2 (any version) — no Factory migration path exists
-- Engine = Teradata or Netezza — requires Synapse/Fabric specialized migration (note: Fabric Warehouse migration IS now a Factory Analytics track for Synapse Dedicated SQL Pool sources)
+**Step 2: Classify as PARTNER (second priority) — if ANY ONE condition is true:**
+A DB instance is **Partner** if:
+- Engine = DB2 (any version) — no Microsoft migration path exists
+- Engine = Teradata or Netezza — requires Synapse/Fabric specialized migration (note: Fabric Warehouse migration IS now a Microsoft Analytics track for Synapse Dedicated SQL Pool sources)
 - Engine = Informix — no automated Azure migration path
-- Engine = Oracle AND version < 12c Release 2 (below Factory minimum) AND migration target is NOT Oracle Database@Azure [ODAA] (ODAA has its own Factory track regardless of Oracle version)
-- Engine = Oracle AND workload is E-Business Suite, Enterprise Manager, JD Edwards, Middleware, PeopleSoft, Siebel, or Cloud Applications (explicitly excluded from Factory heterogeneous migration — but MAY be Factory-eligible for ODAA lift-and-shift if OCI contract is in place)
-- Engine = SAP ASE (Sybase) AND version < 11.9.2 (below Factory minimum)
-- Engine = SQL Server AND version < 2012 (below Factory minimum: SQL Server 2012+)
-- Engine = PostgreSQL AND version < 9.5 (below Factory minimum)
-- Engine = MySQL AND version < 5.6 (below Factory minimum)
-- Engine = MariaDB AND version < 10.2 (below Factory minimum)
-- Engine = MongoDB AND version < 3.6 (below Factory minimum)
-- Engine = Cassandra AND version < 3.11 (below Factory minimum)
-- Migration requires SSIS package migration (explicitly out of Factory scope)
-- Migration target is Azure SQL Edge (out of Factory scope for DB migration track)
-- Migration target is Synapse Analytics — ISD / Partner UNLESS source is Synapse Dedicated SQL Pool migrating to Fabric Warehouse (which IS Factory Analytics scope)
-- Any migration path NOT listed in Factory scope documentation
+- Engine = Oracle AND version < 12c Release 2 (below Microsoft minimum) AND migration target is NOT Oracle Database@Azure [ODAA] (ODAA has its own Microsoft track regardless of Oracle version)
+- Engine = Oracle AND workload is E-Business Suite, Enterprise Manager, JD Edwards, Middleware, PeopleSoft, Siebel, or Cloud Applications (explicitly excluded from Microsoft heterogeneous migration — but MAY be Microsoft-eligible for ODAA lift-and-shift if OCI contract is in place)
+- Engine = SAP ASE (Sybase) AND version < 11.9.2 (below Microsoft minimum)
+- Engine = SQL Server AND version < 2012 (below Microsoft minimum: SQL Server 2012+)
+- Engine = PostgreSQL AND version < 9.5 (below Microsoft minimum)
+- Engine = MySQL AND version < 5.6 (below Microsoft minimum)
+- Engine = MariaDB AND version < 10.2 (below Microsoft minimum)
+- Engine = MongoDB AND version < 3.6 (below Microsoft minimum)
+- Engine = Cassandra AND version < 3.11 (below Microsoft minimum)
+- Migration requires SSIS package migration (explicitly out of Microsoft scope)
+- Migration target is Azure SQL Edge (out of Microsoft scope for DB migration track)
+- Migration target is Synapse Analytics — Partner UNLESS source is Synapse Dedicated SQL Pool migrating to Fabric Warehouse (which IS Microsoft Analytics scope)
+- Any migration path NOT listed in Microsoft scope documentation
 
 **Step 3: Everything else is FACTORY (default for DB instances with sufficient data):**
-A DB instance is **Factory** if it was NOT classified as Unknown or ISD / Partner. This includes:
+A DB instance is **Microsoft** if it was NOT classified as Unknown or Partner. This includes:
 - **SQL Server 2012+** → Azure SQL DB / Azure SQL MI / SQL Server on Azure VM (via Azure Migrate / DMS)
   - Sources: On-premises, AWS EC2, AWS RDS, GCP Cloud SQL, GCP Compute Engine
   - HA/DR configuration and setup included for Azure SQL DB and Azure SQL MI

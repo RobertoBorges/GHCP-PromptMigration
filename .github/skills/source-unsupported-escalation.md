@@ -25,7 +25,7 @@ Catch-all path for applications the standard adapter library cannot characterize
 ## Probes
 
 - Check vendor documentation for Azure migration guides
-- Identify partner specialists with mainstream relationship (Microsoft Migration Factory, ISD partners, ISV-specific consultancies, mainframe modernization partners such as Micro Focus / Astadia / TCS / Kyndryl / LzLabs / NTT DATA)
+- Identify partner specialists with mainstream relationship (Microsoft consulting services, specialist consulting partners, ISV-specific consultancies, mainframe modernization partners such as Micro Focus / Astadia / TCS / Kyndryl / LzLabs / NTT DATA)
 - Capture what the customer has tried already
 - Capture the business pressure / timeline driving the escalation
 

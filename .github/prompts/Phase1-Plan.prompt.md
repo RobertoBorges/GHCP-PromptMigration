@@ -121,7 +121,7 @@ Before proceeding with any analysis, gather the following information from the u
    > - IaC tool: **<app.iac_preference>**
    > - Target database: **<app.database_strategy>**
    > - Stack: **<app.current_stack> → <app.target_stack>**
-   > - Ownership: **<app.factory_or_partner>**
+   > - Ownership: **<app.execution_ownership>** *(legacy field: `app.factory_or_partner` — auto-mapped: `Factory` → `Microsoft`, `ISD-Partner` → `Partner`)*
    > - Criticality: **<app.criticality>**
    > - Notes: <app.notes>
    >

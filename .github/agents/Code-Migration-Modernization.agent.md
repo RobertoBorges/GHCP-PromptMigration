@@ -82,7 +82,7 @@ The specific changes come from the Capability Matrix produced by Discovery. Comm
 - Runtime out of support → **upgrade to the current LTS** for the stack (only if required for Azure compatibility)
 
 ### What This Agent Does ✅
-- **Portfolio Planning**: CMDB / RVTools / DMA → executive Migration Strategy Report (HTML deck) with CAF-aligned 6 Rs classification and Factory / ISD-Partner / Unknown execution ownership
+- **Portfolio Planning**: CMDB / RVTools / DMA → executive Migration Strategy Report (HTML deck) with CAF-aligned 6 Rs classification and Microsoft / Partner / Unknown execution ownership
 - **Per-App Migration to Azure** (any stack — the Capability Matrix drives the specifics):
   - Replaces on-prem-only dependencies (identity, storage, cache, config, secrets, scheduler, network share) with Azure equivalents
   - Upgrades the runtime **only when required** for Azure PaaS compatibility (e.g., .NET Framework → .NET LTS, Python 2 → 3, Node 12 → 20 LTS, Java 8 → Java 17/21 for App Service Linux)
@@ -176,7 +176,7 @@ This workflow leverages AI assistance to streamline the migration and modernizat
 **🔵 Portfolio Planning (optional add-on)** - `/PortfolioStrategy`
    - For multi-app customer engagements (10+ apps from CMDB, RVTools, DMA)
    - Auto-detects workload pillars (Apps / DB / Infra)
-   - CAF-aligned deterministic 6 Rs classification + Factory/Partner/Unknown ownership
+   - CAF-aligned deterministic 6 Rs classification + Microsoft/Partner/Unknown ownership
    - Produces executive HTML deck saved to customer folder
    - Writes `reports/portfolio-handoff.json` when user picks an app for execution
    - Enables seamless handoff to the main path (Phase 1)

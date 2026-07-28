@@ -4,7 +4,7 @@ description: |
   Generate an executive-ready Migration Strategy Report (HTML deck) from a customer portfolio — CMDB exports, RVTools/Azure Migrate inventories, DMA outputs, vendor proposals, architecture diagrams.
   **Use when:** producing a CIO-ready migration plan for a customer portfolio (apps, databases, infra, or any mix). Starts the Portfolio Planning flow for multi-app engagements.
   **Triggers:** "generate migration report", "analyze CMDB", "portfolio analysis", "migration strategy report for X", "RVTools export analysis", "Azure Migrate analysis", "portfolio assessment", "build a deck from these artifacts".
-  **Covers:** auto-detected workload pillars (Apps/DB/Infra), CAF-aligned 6 Rs classification, deterministic Factory / ISD-Partner / Unknown ownership, phased roadmap, dependency mapping, move groups, risks, executive HTML output.
+  **Covers:** auto-detected workload pillars (Apps/DB/Infra), CAF-aligned 6 Rs classification, deterministic Microsoft / Partner / Unknown ownership, phased roadmap, dependency mapping, move groups, risks, executive HTML output.
 argument-hint: "Path to the customer folder (e.g., 'generate migration strategy report for Customers/Contoso')"
 ---
 
@@ -38,7 +38,7 @@ These rules ALWAYS apply when this skill is active. They are absolute. Violating
 - The customer folder must contain at least ONE meaningful artifact (CMDB CSV, RVTools XLSX, DMA JSON, meeting notes, etc.).
 
 ### 4. Determinism Guarantee
-- All classification algorithms (6 Rs, Factory / Partner / Unknown) MUST produce identical results for identical inputs. See [references/classification-algorithm.md](references/classification-algorithm.md). No subjective judgment in counts.
+- All classification algorithms (6 Rs, Microsoft / Partner / Unknown) MUST produce identical results for identical inputs. See [references/classification-algorithm.md](references/classification-algorithm.md). No subjective judgment in counts.
 - Verification is mandatory: classification counts MUST sum to the in-scope total. Show the math.
 
 ---
@@ -66,7 +66,7 @@ STEP -1  Artifact Discovery       → scan customer folder, classify every file
 STEP -0.5 Workload Detection      → auto-detect Apps / DB / Infra pillars
 STEP 0   Scope Identification     → split Total Portfolio vs. In-Scope
 STEP 1   Optional WorkIQ Query    → enrich with meeting context
-STEP 2   Apply Classification     → 6 Rs + Factory/Partner/Unknown (see references)
+STEP 2   Apply Classification     → 6 Rs + Microsoft/Partner/Unknown (see references)
 STEP 3   Select Slides            → evidence-driven, per detected pillar
 STEP 4   Generate HTML Deck       → self-contained, styled per references/style-guide.md
 STEP 5   Verify & Cite            → math checks, source citations, disclaimers
@@ -167,7 +167,7 @@ If portfolio data is available, ALWAYS split:
 4. **In-Scope for Migration** = instances with assigned target service or migration phase.
 5. **Shared vs Dedicated** = databases serving multiple apps vs single-app databases.
 
-**Reporting rule:** Always report BOTH numbers prominently. The Factory/Partner/Unknown split and 6 Rs distribution apply ONLY to In-Scope.
+**Reporting rule:** Always report BOTH numbers prominently. The Microsoft/Partner/Unknown split and 6 Rs distribution apply ONLY to In-Scope.
 
 **Never conflate total portfolio with in-scope. Always show both.**
 
@@ -202,10 +202,10 @@ If WorkIQ is configured and the customer has meeting history, query BEFORE gener
 All classification logic lives in [references/classification-algorithm.md](references/classification-algorithm.md). It is deterministic, priority-ordered, and CAF-aligned.
 
 - **6 Rs (Strategy)**: Retire → Retain → Replace → Refactor → Replatform → Rehost
-- **Execution Ownership (per pillar)**: Factory / ISD-Partner / Unknown / (Apps only) No Migration Needed
+- **Execution Ownership (per pillar)**: Microsoft / Partner / Unknown / (Apps only) No Migration Needed
 - **Mixed scenarios**: Run each detected pillar's algorithm independently, then combine. No double-counting.
 
-**Source document:** Cloud Accelerate Factory — Service Descriptions, May 2026 (place the PDF at your workspace root locally; it is gitignored).
+**Source document:** Migration Service Descriptions, May 2026 (place the PDF at your workspace root locally; it is gitignored).
 
 ---
 
@@ -222,7 +222,7 @@ All classification logic lives in [references/classification-algorithm.md](refer
 | Network & Landing Zone | Network/identity data | No network data |
 | Database Migration Strategy | DB pillar + DB inventory with engine/version/size | No DB data |
 | 6 Rs Strategy | Apps pillar + ≥10 classifiable apps | Infra-only / DB-only (use 5b + 4e instead) |
-| Execution Ownership (Factory/Partner) | Any pillar with ownership signals | No ownership clarity AND no VM inventory |
+| Execution Ownership (Microsoft/Partner) | Any pillar with ownership signals | No ownership clarity AND no VM inventory |
 | Phased Roadmap | Phase assignments or timeline data | No temporal data |
 | Dependency Mapping | Integration data OR architecture maps OR middleware refs OR cross-pillar links | No dependency signals |
 | Move Group Recommendations | Integration data + ≥2 of: shared-DB, capability, criticality, phase, infra | Flat app list with no relationship data |
@@ -276,18 +276,18 @@ Before declaring the report complete:
 
 ### Mandatory Math Checks
 - 6 Rs sum: `Retire + Retain + Replace + Refactor + Replatform + Rehost = In-Scope total`
-- App ownership sum: `Factory + ISD-Partner + No Migration Needed + Unknown = In-Scope total` (per pillar)
-- DB ownership sum: `Factory + ISD-Partner + Unknown = DB In-Scope total`
-- Infra ownership sum: `Factory + ISD-Partner + Unknown = Infra In-Scope total`
+- App ownership sum: `Microsoft + Partner + No Migration Needed + Unknown = In-Scope total` (per pillar)
+- DB ownership sum: `Microsoft + Partner + Unknown = DB In-Scope total`
+- Infra ownership sum: `Microsoft + Partner + Unknown = Infra In-Scope total`
 - Combined-estate verification (mixed scenarios): sum of pillar totals = grand total
 - **If the math doesn't add up, recount. Do NOT adjust numbers to force a total.**
 
 ### Required Disclaimers (ALWAYS include)
-1. **Execution Ownership slide:** *"This classification is based on currently available CMDB data. Workloads may move between buckets (Factory, ISD-Partner, or Unknown) as further discovery and assessment activities provide additional clarity."*
+1. **Execution Ownership slide:** *"This classification is based on currently available CMDB data. Workloads may move between buckets (Microsoft, Partner, or Unknown) as further discovery and assessment activities provide additional clarity."*
 2. **Assessment Tooling Gap:** Flag that Python, Node.js, Angular, React, PHP, Ruby have NO automated pre-migration blocker detection (unlike .NET/Java). Add 20-30% buffer for these stacks.
 
 ### Citation
-Cite the source document ONCE (e.g., *"Cloud Accelerate Factory — Service Descriptions, May 2026"*) without explaining what changed between versions. The report is a deliverable, not a changelog.
+Cite the source document ONCE (e.g., *"Migration Service Descriptions, May 2026"*) without explaining what changed between versions. The report is a deliverable, not a changelog.
 
 ---
 
@@ -358,7 +358,7 @@ List the candidate applications with their key attributes from the deck:
 - Name
 - Current stack → Target stack
 - 6 Rs strategy
-- Factory / ISD-Partner / Unknown ownership
+- Microsoft / Partner / Unknown ownership
 - Criticality
 
 Once the user picks an application, write `reports/portfolio-handoff.json` with the full schema (defined in [.github/prompts/PortfolioStrategy.prompt.md](../../prompts/PortfolioStrategy.prompt.md#handoff-file-portfolio-handoffjson)).
@@ -368,7 +368,7 @@ Once the user picks an application, write `reports/portfolio-handoff.json` with 
 - `source_deck`: path to the HTML deck
 - `generated_at`: ISO-8601 UTC timestamp
 - `customer`: customer name
-- `app.name`, `app.code_path`, `app.factory_or_partner`, `app.six_r_strategy`, `app.target_platform`, `app.iac_preference`, `app.database_strategy`, `app.current_stack`, `app.target_stack`, `app.criticality`, `app.notes`
+- `app.name`, `app.code_path`, `app.execution_ownership`, `app.six_r_strategy`, `app.target_platform`, `app.iac_preference`, `app.database_strategy`, `app.current_stack`, `app.target_stack`, `app.criticality`, `app.notes`
 
 **How to write the file:**
 Use Python (NOT PowerShell — PS strips dollar signs):
@@ -382,7 +382,7 @@ handoff = {
     "app": {
         "name": "OrderProcessing",
         "code_path": "Customers/Contoso/repos/order-processing",
-        "factory_or_partner": "Factory",
+        "execution_ownership": "Microsoft",
         "six_r_strategy": "Replatform",
         "target_platform": "Container Apps",
         "iac_preference": "Bicep",
