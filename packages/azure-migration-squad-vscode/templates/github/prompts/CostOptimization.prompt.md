@@ -1,6 +1,6 @@
 ---
 agent: Code Migration Modernization Agent
-model: Claude Sonnet 4.6 (copilot)
+model: Claude Sonnet 5 (copilot)
 tools: ['search/codebase', 'search/usages', 'vscode/vscodeAPI', 'read/problems', 'search/changes', 'vscode/runCommand', 'read/terminalLastCommand', 'openSimpleBrowser', 'web/fetch', 'search/searchResults', 'web/githubRepo', 'vscode/extensions', 'edit/editFiles', 'search', 'execute/runTask', 'Azure MCP/*', 'Microsoft Docs/*']
 description: "Identifies Azure cost risks and optimization opportunities after migration through the Cost Engineer role."
 ---

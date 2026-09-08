@@ -1,6 +1,6 @@
 ---
 agent: Code Migration Modernization Agent
-model: Claude Sonnet 4.6 (copilot)
+model: Claude Sonnet 5 (copilot)
 description: "Assesses team readiness and skill gaps for delivering an Azure migration — stack-agnostic. Scoped to the specific stack(s) in the target application(s) plus universal Azure hosting/CI-CD/security fundamentals."
 ---
 

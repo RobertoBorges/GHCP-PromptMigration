@@ -1,6 +1,6 @@
 ---
 agent: Code Migration Modernization Agent
-model: Claude Sonnet 4.6 (copilot)
+model: Claude Sonnet 5 (copilot)
 description: "Establishes post-migration monitoring, performance, and operational readiness."
 ---
 
