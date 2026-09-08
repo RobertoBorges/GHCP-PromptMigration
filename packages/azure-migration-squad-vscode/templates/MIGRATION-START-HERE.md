@@ -114,6 +114,17 @@ Use this **after** Discovery (or after `/AWSAssess-Phase6-AzureReadiness`) when 
 | `/Phase-Rollback` | You need to **rollback an in-flight migration** to a safe state. |
 | `/GetStatus` | You want to see the **current migration progress** at a glance. |
 
+### 🛠️ Standalone utility tools (not prompts — scripts + agents under `tools/`)
+
+Use these **before** the main path, when a customer says "here are our repos — clone everything first."
+
+| Tool | Use when |
+|------|----------|
+| `tools/GHCP-GitHub-BulkClone/` | Clone every repo of a GitHub user/org locally via `gh` CLI. Includes public + private + archived + forks. Resumable. Windows checkout self-healing. |
+| `tools/GHCP-AzureDevOps-BulkClone/` | Clone every Git repo of an Azure DevOps project locally (device-code login, no subscription required). Same Windows self-healing. |
+
+Each ships as both a standalone PowerShell script AND a Copilot agent — open the tool folder in VS Code and select the agent, or run `scripts\clone-all.ps1` directly. See `tools/README.md` for details.
+
 ---
 
 ## Useful extension commands

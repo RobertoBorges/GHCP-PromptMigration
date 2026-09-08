@@ -119,6 +119,9 @@ jobs:
           cp -R .github/hooks "$STAGE/.github/"
           cp .github/copilot-instructions.md "$STAGE/.github/"
           cp MIGRATION-START-HERE.md "$STAGE/"
+          if [ -d tools ]; then
+            cp -R tools "$STAGE/"
+          fi
           cat > "$STAGE/README.md" <<'EOF'
           # Azure Migration Agent — content pack
 

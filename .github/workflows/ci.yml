@@ -19,6 +19,7 @@ on:
       - 'packages/azure-migration-squad-vscode/**'
       - '.github/**'
       - 'MIGRATION-START-HERE.md'
+      - 'tools/**'
       - 'package.json'
       - 'package-lock.json'
       - 'scripts/**'
@@ -28,6 +29,7 @@ on:
       - 'packages/azure-migration-squad-vscode/**'
       - '.github/**'
       - 'MIGRATION-START-HERE.md'
+      - 'tools/**'
       - 'package.json'
       - 'package-lock.json'
       - 'scripts/**'
@@ -119,6 +121,10 @@ jobs:
           cp .github/copilot-instructions.md "$STAGE/.github/"
           # Top-level welcome doc
           cp MIGRATION-START-HERE.md "$STAGE/"
+          # Standalone utility tools (bulk-clone scripts + agents)
+          if [ -d tools ]; then
+            cp -R tools "$STAGE/"
+          fi
           # Small README explaining how to use the pack
           cat > "$STAGE/README.md" <<'EOF'
           # Azure Migration Agent — content pack
