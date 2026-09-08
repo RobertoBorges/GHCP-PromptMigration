@@ -4,6 +4,14 @@ All notable changes to the Azure Migration Agent VS Code extension are documente
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.0](https://github.com/RobertoBorges/GHCP-PromptMigration/compare/vscode-v0.4.0...vscode-v0.5.0) (2026-07-28)
+
+
+### Features
+
+* **portfolio:** rename Microsoft-internal Factory/ISD terms to customer-neutral labels ([95e0375](https://github.com/RobertoBorges/GHCP-PromptMigration/commit/95e0375b1ea6edff8eb13dfae44d25529f3f774e))
+* **portfolio:** rename Microsoft-internal Factory/ISD terms to customer-neutral labels ([eefb4e6](https://github.com/RobertoBorges/GHCP-PromptMigration/commit/eefb4e6337c26d6e6f1785dfb1ae12967209f7eb))
+
 ## [0.4.0](https://github.com/RobertoBorges/GHCP-PromptMigration/compare/vscode-v0.3.2...vscode-v0.4.0) (2026-07-27)
 
 
