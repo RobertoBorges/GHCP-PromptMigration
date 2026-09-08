@@ -1,0 +1,18 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "type": "command",
+        "command": "bash .github/hooks/scripts/aws-assessment/block-aws-write-commands.sh",
+        "windows": "pwsh -ExecutionPolicy Bypass -File .github/hooks/scripts/aws-assessment/block-aws-write-commands.ps1",
+        "timeout": 10
+      },
+      {
+        "type": "command",
+        "command": "bash .github/hooks/scripts/aws-assessment/block-secret-reads.sh",
+        "windows": "pwsh -ExecutionPolicy Bypass -File .github/hooks/scripts/aws-assessment/block-secret-reads.ps1",
+        "timeout": 10
+      }
+    ]
+  }
+}
