@@ -268,6 +268,18 @@ playwright install chromium
 python .github/skills/migration-strategy-report/scripts/export_to_pdf.py "<path-to>/<CustomerName>_Migration_Strategy_Report.html"
 ```
 
+### Optional: Multi-level HTML site (for large portfolios with 10+ apps)
+
+For portfolios large enough that a single deck becomes unwieldy, the user can ask for a **drill-down HTML site** — one landing page per customer group, per app, per source-cloud domain. A structural scaffold + starter stylesheet lives at [`templates/html-report-scaffold/`](templates/html-report-scaffold/).
+
+To generate the site instead of (or in addition to) the deck:
+
+1. First produce the standard deck output as above
+2. Then ask: `Convert the portfolio deck into a multi-level HTML site under reports/site/, one page per app per domain, using the scaffold at .github/skills/migration-strategy-report/templates/html-report-scaffold/`
+3. The agent will read the assessment reports + scaffold `style.css` + generate per-customer / per-app / per-domain pages populated from Discovery data
+
+The scaffold intentionally contains NO sample customer content — see its [README.md](templates/html-report-scaffold/README.md) for the recommended folder layout and page inventory.
+
 ---
 
 ## STEP 5: Verify & Cite
