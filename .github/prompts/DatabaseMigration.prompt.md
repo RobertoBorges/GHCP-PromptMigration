@@ -127,7 +127,7 @@ and [`.github/skills/decision-catalog.md`](../skills/decision-catalog.md) for ca
 ## Skills Reference
 Use these database skills:
 - `#file:.github/skills/ef-migration.md`
-- `#file:.github/skills/config-transformation.md`
+- `#file:.github/skills/config-transformation/SKILL.md`
 - `#file:.github/skills/rollback-strategy.md`
 - `#file:.github/skills/migration-handoff.md`
 

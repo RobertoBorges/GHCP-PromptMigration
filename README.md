@@ -144,6 +144,9 @@ Every prompt, skill, and hook was swept to remove ".NET or Java only" phrasing. 
 ├── copilot-instructions.md                       (✏️ EDIT — top-level rules)
 └── workflows/                                    (✏️ EDIT — CI + release-please)
 docs/                                             (✏️ EDIT — user docs)
+tools/                                            (✏️ EDIT — standalone utility scripts + agents)
+├── GHCP-GitHub-BulkClone/                        (Clone every repo of a GitHub org)
+└── GHCP-AzureDevOps-BulkClone/                   (Clone every repo of an ADO project)
 packages/azure-migration-squad-vscode/
 ├── src/                                          (✏️ EDIT — TypeScript)
 ├── templates/                                    (❌ DO NOT EDIT — auto-synced)

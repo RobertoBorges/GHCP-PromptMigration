@@ -40,12 +40,14 @@ Present these first. Run in order.
 
 **Alternative intakes** — `/build-migration-plan`, `/QuickAssessment`, `/QuickTriage`, `/InteractiveMigrationInterview`, `/TeamSkillAssessment`
 **Portfolio / multi-app** — `/PortfolioStrategy`, `/Phase0-Multi-repo-assessment`
+**AWS-source add-ons** — `/AWSAssess-Phase0-SetupAndScope` … `/AWSAssess-Phase6-AzureReadiness` (read-only live AWS estate discovery), `/AWS2Azure-Phase0-Multi-repo-assessment` … `/AWS2Azure-Phase5-SetupCICD` (AWS-to-Azure workload migration: SDKs, IAM, networking, observability, IaC, CI/CD)
 **Specialized deep-dives** — `/DatabaseMigration`, `/SecurityHardening`, `/CostOptimization`
 **Utility / recovery** — `/Phase-Rollback`, `/GetStatus`
 
 **Agent behavior:**
 - When a user starts a new migration, recommend the **main path**: run `/assess-any-application` first, then `/Phase1-Plan`, etc.
 - Only surface add-ons when the user's question maps to one (e.g., "how do I move the DB?" → suggest `/DatabaseMigration`).
+- **When Discovery classifies source as AWS** with medium/high confidence, additionally offer the AWS-source add-ons (`/AWSAssess-...` for read-only estate discovery, `/AWS2Azure-...` for the workload conversion).
 - The natural-language mapping table below still maps ALL commands so users can type any of them — but presentation should always foreground the main path.
 
 ## How to Invoke the Agent (CLI vs Chat)
@@ -83,6 +85,22 @@ When the user says any of the phrases below, take the matching action. **Rows ar
 | "database migration", "/databasemigration", "migrate the database" | Read `.github/prompts/DatabaseMigration.prompt.md` |
 | "security hardening", "/securityhardening", "harden security" | Read `.github/prompts/SecurityHardening.prompt.md` |
 | "cost optimization", "/costoptimization", "optimize cost" | Read `.github/prompts/CostOptimization.prompt.md` |
+| **🟣 AWS-source add-ons (activate when Discovery classifies source as AWS)** | |
+| "assess my AWS account", "scan AWS", "AWS inventory", "/AWSAssess-Phase0-SetupAndScope" | Read `.github/prompts/AWSAssess-Phase0-SetupAndScope.prompt.md`. Starts read-only sweep of the live AWS account (Phases 0-6). **Read-only enforcement is programmatic** via `.github/hooks/aws-assessment-security.json` — blocks any non-read AWS CLI verb. |
+| "AWS resource discovery", "/AWSAssess-Phase1-ResourceDiscovery" | Read `.github/prompts/AWSAssess-Phase1-ResourceDiscovery.prompt.md` |
+| "AWS deep inventory", "/AWSAssess-Phase2-DeepInventory" | Read `.github/prompts/AWSAssess-Phase2-DeepInventory.prompt.md` |
+| "AWS enrichment", "/AWSAssess-Phase3-Enrichment" | Read `.github/prompts/AWSAssess-Phase3-Enrichment.prompt.md` |
+| "AWS relationships", "/AWSAssess-Phase4-Relationships" | Read `.github/prompts/AWSAssess-Phase4-Relationships.prompt.md` |
+| "AWS report", "AWS assessment report", "/AWSAssess-Phase5-Reports" | Read `.github/prompts/AWSAssess-Phase5-Reports.prompt.md` |
+| "Azure readiness", "readiness overlay", "/AWSAssess-Phase6-AzureReadiness" | Read `.github/prompts/AWSAssess-Phase6-AzureReadiness.prompt.md` — hands off to `/AWS2Azure-Phase1-Plan` |
+| "AWS assessment status", "/AWSAssess-GetStatus" | Read `.github/prompts/AWSAssess-GetStatus.prompt.md` |
+| "migrate from AWS to Azure", "convert Lambda to Functions", "/AWS2Azure-Phase0-Multi-repo-assessment" | Read `.github/prompts/AWS2Azure-Phase0-Multi-repo-assessment.prompt.md`. Starts the AWS-to-Azure workload migration (SDK/services/IaC/CI-CD conversion). |
+| "AWS2Azure plan", "/AWS2Azure-Phase1-Plan" | Read `.github/prompts/AWS2Azure-Phase1-Plan.prompt.md` |
+| "convert AWS SDK", "migrate boto3", "/AWS2Azure-Phase2-MigrateCode" | Read `.github/prompts/AWS2Azure-Phase2-MigrateCode.prompt.md`. Loads the `aws-sdk-migration` skill for per-language SDK translation. |
+| "convert CloudFormation", "convert CDK", "/AWS2Azure-Phase3-GenerateInfra" | Read `.github/prompts/AWS2Azure-Phase3-GenerateInfra.prompt.md` |
+| "AWS cutover", "/AWS2Azure-Phase4-DeployToAzure" | Read `.github/prompts/AWS2Azure-Phase4-DeployToAzure.prompt.md` |
+| "AWS CI/CD migration", "CodePipeline to GitHub Actions", "/AWS2Azure-Phase5-SetupCICD" | Read `.github/prompts/AWS2Azure-Phase5-SetupCICD.prompt.md` |
+| "AWS2Azure status", "/AWS2Azure-GetStatus" | Read `.github/prompts/AWS2Azure-GetStatus.prompt.md` |
 | **🔵 Utility / recovery (add-ons)** | |
 | "rollback", "phase rollback", "/phase-rollback" | Read `.github/prompts/Phase-Rollback.prompt.md` |
 | "status", "/getstatus", "show migration status" | Read `.github/prompts/GetStatus.prompt.md` and consult `reports/Report-Status.md` |
@@ -143,6 +161,24 @@ Read [`.github/hooks/decision-gates.md`](./hooks/decision-gates.md) for the orch
 - Store secrets in Azure Key Vault with RBAC (no access policies)
 - Do not query or modify Azure resources without explicit user consent
 - Never store secrets in the repository
+
+### Customer Data Isolation (multi-customer workspaces only)
+
+When multiple customer portfolios coexist under a `Customers/<Name>/` convention:
+
+- Set `COPILOT_CUSTOMER_CONTEXT` to the active customer's path (`Customers/Contoso`) before starting Copilot
+- The `customer-data-isolation` PreToolUse hook (`.github/hooks/customer-data-isolation.json`) blocks any Read/edit/search/create/edit that targets files inside a DIFFERENT customer folder
+- Each customer folder is a separate NDA — never cross-reference customer folders, not even for template/style examples
+- If the env var is unset, the hook is a no-op — safe default for single-customer workspaces
+
+### Session lifecycle hooks
+
+Two hook configurations coexist:
+
+- `.github/hooks/session-lifecycle.json` — the main-path session lifecycle (loads `reports/Report-Status.md` at SessionStart, appends session-end line at Stop)
+- `.github/hooks/aws-assessment-session-lifecycle.json` — dedicated lifecycle for the AWS Assessment flow (uses `reports/raw/<account-id>/` per-account state instead of a single Migration state)
+
+The user's active client (Copilot Chat / CLI) should register both if AWS assessment is in scope for the workspace, but they're kept separate to avoid state-format collision.
 
 ### Commands and Tools
 - Use PowerShell (pwsh) for all shell commands

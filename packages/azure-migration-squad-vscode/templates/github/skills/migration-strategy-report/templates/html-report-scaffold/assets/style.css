@@ -1,0 +1,128 @@
+/* Microsoft brand palette + Segoe UI */
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0;height:100%}
+body{font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,'Helvetica Neue',Arial,sans-serif;
+  background:#f3f2f1;color:#323130;font-size:14px;line-height:1.55}
+a{color:#0078d4;text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* ---- Layout ---- */
+.app{display:grid;grid-template-columns:300px 1fr;min-height:100vh}
+.sidebar{background:#ffffff;border-right:1px solid #edebe9;overflow-y:auto;position:sticky;top:0;height:100vh}
+.sidebar-head{background:linear-gradient(135deg,#0078d4,#005a9e);color:#fff;padding:18px 20px}
+.sidebar-head h1{margin:0;font-size:15px;font-weight:600;letter-spacing:.3px}
+.sidebar-head .sub{opacity:.85;font-size:11.5px;margin-top:3px}
+.sidebar nav{padding:10px 0 30px}
+
+/* Tree */
+.tree{list-style:none;padding:0;margin:0}
+.tree ul{list-style:none;padding-left:14px;margin:0;border-left:1px dotted #d2d0ce}
+.tree li{margin:0}
+.tree details{margin:0}
+.tree details summary{list-style:none;cursor:pointer;padding:5px 16px 5px 20px;
+  border-radius:4px;position:relative;font-size:12.5px;color:#323130;font-weight:600;
+  display:flex;align-items:center;gap:6px}
+.tree details summary::-webkit-details-marker{display:none}
+.tree details summary::before{content:'\25B8';color:#605e5c;font-size:10px;transition:transform .12s;
+  display:inline-block;width:9px}
+.tree details[open]>summary::before{transform:rotate(90deg)}
+.tree details summary:hover{background:#f3f2f1}
+.tree a{display:block;padding:5px 16px 5px 34px;color:#323130;font-size:12.5px;border-radius:4px}
+.tree a:hover{background:#eff6fc;text-decoration:none}
+.tree a.active{background:#0078d4;color:#fff;font-weight:600}
+.tree .badge{display:inline-block;margin-left:auto;background:#605e5c;color:#fff;
+  border-radius:9px;padding:0 7px;font-size:10px;line-height:16px;font-weight:600}
+.tree details summary .badge{margin-left:auto}
+
+/* Content */
+.content{padding:24px 34px 60px;max-width:1400px}
+.crumbs{color:#605e5c;font-size:12px;margin-bottom:10px}
+.crumbs a{color:#605e5c}
+.content h1{font-size:26px;font-weight:600;color:#323130;margin:0 0 4px}
+.content h2{font-size:20px;font-weight:600;color:#323130;margin:24px 0 10px;
+  padding-bottom:6px;border-bottom:1px solid #edebe9}
+.content h3{font-size:15px;font-weight:600;color:#0078d4;margin:18px 0 8px}
+.content h4{font-size:13.5px;font-weight:600;color:#323130;margin:14px 0 6px}
+.content p,.content li{font-size:13.5px}
+.content table{border-collapse:collapse;margin:12px 0;width:100%;table-layout:auto;
+  background:#fff;border:1px solid #edebe9;border-radius:6px;overflow:hidden}
+.content th{background:#0078d4;color:#fff;font-size:12px;font-weight:600;
+  padding:8px 12px;text-align:left;border:none}
+.content td{font-size:12.5px;padding:7px 12px;border-bottom:1px solid #edebe9;vertical-align:top}
+.content tr:nth-child(even) td{background:#f9f9f9}
+.content code{background:#eff6fc;padding:1px 5px;border-radius:3px;font-size:12px;
+  font-family:'Cascadia Code','Consolas',monospace;color:#0055a0}
+.content pre{background:#1e1e1e;color:#e0e0e0;padding:12px 16px;border-radius:6px;overflow-x:auto;font-size:12px}
+.content pre code{background:none;color:inherit;padding:0}
+.content blockquote{border-left:4px solid #0078d4;background:#eff6fc;
+  padding:10px 14px;margin:12px 0;color:#323130;font-size:13px;border-radius:0 4px 4px 0}
+.content hr{border:none;border-top:1px solid #edebe9;margin:22px 0}
+.content ul,.content ol{padding-left:22px;margin:8px 0}
+
+/* KPI cards / dashboard */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:18px 0}
+.kpi{background:#fff;border:1px solid #edebe9;border-top:4px solid #0078d4;border-radius:8px;
+  padding:16px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.kpi .v{font-size:34px;font-weight:700;color:#0078d4;line-height:1.08}
+.kpi .l{font-size:12px;color:#605e5c;margin-top:4px}
+.kpi .s{font-size:10.5px;color:#a19f9d;margin-top:2px}
+.kpi.warn{border-top-color:#d83b01}.kpi.warn .v{color:#d83b01}
+.kpi.crit{border-top-color:#a80000}.kpi.crit .v{color:#a80000}
+.kpi.ok{border-top-color:#107c10}.kpi.ok .v{color:#107c10}
+
+/* Chip */
+.chip{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;color:#fff}
+.chip-crit{background:#a80000}
+.chip-alto{background:#d83b01}
+.chip-medio{background:#ff8c00}
+.chip-baixo{background:#0078d4}
+.chip-info{background:#605e5c}
+
+/* Grid cards */
+.grid{display:grid;gap:14px;margin:12px 0}
+.grid-3{grid-template-columns:repeat(3,1fr)}
+.grid-2{grid-template-columns:1fr 1fr}
+.card-box{background:#fff;border:1px solid #edebe9;border-radius:8px;padding:14px 18px;
+  box-shadow:0 1px 2px rgba(0,0,0,.03)}
+.card-box h3{margin-top:0}
+
+/* Bar */
+.bar{display:flex;align-items:center;gap:10px;margin:5px 0}
+.bar .nm{width:180px;font-size:12.5px;text-align:right;flex-shrink:0}
+.bar .tr{flex:1;background:#f3f2f1;height:18px;border-radius:3px;overflow:hidden}
+.bar .fl{height:100%;background:#0078d4}
+.bar .ct{width:36px;font-size:12px;font-weight:600;color:#323130;text-align:right}
+
+/* Donut inline */
+.donut-row{display:grid;grid-template-columns:220px 1fr;gap:20px;align-items:center;margin:10px 0}
+.legend-list{font-size:12.5px;line-height:1.85}
+.legend-list .dot{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:7px;vertical-align:middle}
+
+/* Alert card */
+.alert{background:#fff;border-left:4px solid #0078d4;border-radius:0 5px 5px 0;
+  padding:10px 14px;margin:8px 0}
+.alert.crit{border-left-color:#a80000;background:rgba(168,0,0,.04)}
+.alert.alto{border-left-color:#d83b01;background:rgba(216,59,1,.04)}
+.alert.medio{border-left-color:#ff8c00;background:rgba(255,140,0,.04)}
+.alert.baixo{border-left-color:#0078d4;background:rgba(0,120,212,.04)}
+.alert .t{font-weight:600;font-size:13px;margin-bottom:2px}
+
+/* Search box */
+.search{padding:10px 14px;border-bottom:1px solid #edebe9;background:#f9f9f9}
+.search input{width:100%;padding:6px 10px;border:1px solid #d2d0ce;border-radius:4px;font-size:12.5px;
+  outline:none}
+.search input:focus{border-color:#0078d4;box-shadow:0 0 0 2px rgba(0,120,212,.2)}
+
+/* Mermaid container */
+.mermaid{background:#fff;border:1px solid #edebe9;border-radius:6px;padding:12px;margin:14px 0;text-align:center}
+
+/* footer */
+.footer{margin-top:40px;padding-top:14px;border-top:1px solid #edebe9;
+  font-size:11.5px;color:#a19f9d;text-align:center}
+
+/* Print */
+@media print{
+  .sidebar,.search{display:none}
+  .app{grid-template-columns:1fr}
+  .content{padding:0}
+}

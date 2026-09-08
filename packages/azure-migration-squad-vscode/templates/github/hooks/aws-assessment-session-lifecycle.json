@@ -1,0 +1,20 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "type": "command",
+        "command": "bash .github/hooks/scripts/aws-assessment/load-assessment-state.sh",
+        "windows": "pwsh -ExecutionPolicy Bypass -File .github/hooks/scripts/aws-assessment/load-assessment-state.ps1",
+        "timeout": 15
+      }
+    ],
+    "Stop": [
+      {
+        "type": "command",
+        "command": "bash .github/hooks/scripts/aws-assessment/update-status-report.sh",
+        "windows": "pwsh -ExecutionPolicy Bypass -File .github/hooks/scripts/aws-assessment/update-status-report.ps1",
+        "timeout": 15
+      }
+    ]
+  }
+}

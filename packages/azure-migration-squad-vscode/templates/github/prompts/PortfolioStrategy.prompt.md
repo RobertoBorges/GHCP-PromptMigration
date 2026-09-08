@@ -43,6 +43,22 @@ Invokes the `migration-strategy-report` skill to analyze a customer portfolio an
 
 If you only need to modernize one application's code, use `/Phase0-Multi-repo-assessment` or `/Phase1-Plan` instead.
 
+## Multi-customer isolation (recommended for consultants)
+
+When you keep multiple customers' portfolios in the same workspace under a `Customers/<Name>/` convention, set the `COPILOT_CUSTOMER_CONTEXT` env var to the active customer's path **before** starting Copilot. The `customer-data-isolation` PreToolUse hook (`.github/hooks/customer-data-isolation.json`) will then block any Read/edit/search targeting files in a different customer's folder — this is a hard programmatic gate, not a soft advisory.
+
+```powershell
+# PowerShell
+$env:COPILOT_CUSTOMER_CONTEXT = "Customers/Contoso"
+```
+
+```bash
+# Bash
+export COPILOT_CUSTOMER_CONTEXT="Customers/Contoso"
+```
+
+If the env var is unset, the hook is a no-op — safe default for single-customer workspaces.
+
 ## Required Input
 
 A **customer folder path** containing at least ONE artifact. Supported types include CMDB exports (CSV/XLSX/JSON), RVTools/vCenter/Azure Migrate exports, DMA output, meeting notes, architecture diagrams, vendor proposals, prior reports, or any structured/unstructured data.

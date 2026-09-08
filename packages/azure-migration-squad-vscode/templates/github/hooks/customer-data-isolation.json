@@ -1,0 +1,12 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "type": "command",
+        "command": "bash .github/hooks/scripts/customer-data-isolation.sh",
+        "windows": "pwsh -ExecutionPolicy Bypass -File .github/hooks/scripts/customer-data-isolation.ps1",
+        "timeout": 10
+      }
+    ]
+  }
+}

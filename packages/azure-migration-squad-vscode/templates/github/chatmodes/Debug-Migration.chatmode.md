@@ -41,7 +41,7 @@ Default dispatch for debugging:
 
 ## Skills to Reference
 Select only the skills that match the failure mode:
-- `#file:.github/skills/config-transformation.md`
+- `#file:.github/skills/config-transformation/SKILL.md`
 - `#file:.github/skills/secret-management.md`
 - `#file:.github/skills/managed-identity.md`
 - `#file:.github/skills/azure-entra-id.md`

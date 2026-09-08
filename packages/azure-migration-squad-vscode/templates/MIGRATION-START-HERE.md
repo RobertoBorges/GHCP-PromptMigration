@@ -74,12 +74,56 @@ Use during or between phases when a specific concern needs focused work:
 | `/SecurityHardening` | You want a dedicated pass on **Entra ID, Key Vault, managed identity, and network security**. |
 | `/CostOptimization` | You want **right-sizing, savings plans, and budget setup** for the migrated workload. |
 
+### 🟣 AWS-source add-ons
+
+If your workload lives on AWS today, the main path still applies (`/assess-any-application` characterizes any source, including AWS). These add-ons go **deeper** for AWS-specific work.
+
+#### Discovering a live AWS account (read-only)
+
+Use this **before** deciding what to migrate, when you need an evidence-based inventory of an entire AWS estate. Strictly read-only — the `aws-assessment-security` PreToolUse hook blocks any non-read AWS CLI verb + any secret read.
+
+| Prompt | Use when |
+|--------|----------|
+| `/AWSAssess-Phase0-SetupAndScope` | Validate AWS CLI, enumerate accounts and enabled regions, confirm scope |
+| `/AWSAssess-Phase1-ResourceDiscovery` | Broad multi-region sweep via Resource Explorer / Tagging API / Config aggregator |
+| `/AWSAssess-Phase2-DeepInventory` | Per-service `describe`/`list` for every resource |
+| `/AWSAssess-Phase3-Enrichment` | Add tags, creation date, creator identity (CloudTrail), ownership, cost attribution |
+| `/AWSAssess-Phase4-Relationships` | Infer VPC topology, application dependency graph, cross-account trust |
+| `/AWSAssess-Phase5-Reports` | Generate consolidated Assessment / Inventory / Topology / Security / Cost reports (with Mermaid) |
+| `/AWSAssess-Phase6-AzureReadiness` | Overlay Azure equivalents + hand off to `/AWS2Azure-Phase1-Plan` |
+| `/AWSAssess-GetStatus` | Check current AWS assessment progress |
+
+#### Migrating an AWS workload to Azure
+
+Use this **after** Discovery (or after `/AWSAssess-Phase6-AzureReadiness`) when the migration is specifically AWS SDK → Azure SDK + IaC + CI/CD conversion.
+
+| Prompt | Use when |
+|--------|----------|
+| `/AWS2Azure-Phase0-Multi-repo-assessment` | Multiple AWS-hosted repos in one business solution |
+| `/AWS2Azure-Phase1-Plan` | Inventory AWS services, run Azure compatibility gate, produce migration plan |
+| `/AWS2Azure-Phase2-MigrateCode` | Convert AWS SDKs → Azure SDKs (loads `aws-sdk-migration` per-language templates) |
+| `/AWS2Azure-Phase3-GenerateInfra` | Convert CloudFormation / CDK → Bicep / Terraform |
+| `/AWS2Azure-Phase4-DeployToAzure` | Coexistence, DNS/cert cutover, rollback plan |
+| `/AWS2Azure-Phase5-SetupCICD` | Migrate CodePipeline / CodeBuild → GitHub Actions or Azure DevOps |
+| `/AWS2Azure-GetStatus` | Check current AWS-to-Azure migration progress |
+
 ### Utility / recovery
 
 | Prompt | Use when |
 |--------|----------|
 | `/Phase-Rollback` | You need to **rollback an in-flight migration** to a safe state. |
 | `/GetStatus` | You want to see the **current migration progress** at a glance. |
+
+### 🛠️ Standalone utility tools (not prompts — scripts + agents under `tools/`)
+
+Use these **before** the main path, when a customer says "here are our repos — clone everything first."
+
+| Tool | Use when |
+|------|----------|
+| `tools/GHCP-GitHub-BulkClone/` | Clone every repo of a GitHub user/org locally via `gh` CLI. Includes public + private + archived + forks. Resumable. Windows checkout self-healing. |
+| `tools/GHCP-AzureDevOps-BulkClone/` | Clone every Git repo of an Azure DevOps project locally (device-code login, no subscription required). Same Windows self-healing. |
+
+Each ships as both a standalone PowerShell script AND a Copilot agent — open the tool folder in VS Code and select the agent, or run `scripts\clone-all.ps1` directly. See `tools/README.md` for details.
 
 ---
 

@@ -15,7 +15,7 @@ Combine with:
 
 - `#file:.github/skills/wcf-to-rest-api.md` for WCF services
 - `#file:.github/skills/webforms-to-razor.md` for Web Forms UI
-- `#file:.github/skills/config-transformation.md` for config modernization
+- `#file:.github/skills/config-transformation/SKILL.md` for config modernization
 - `#file:.github/skills/ef-migration.md` for data access modernization
 
 ## Target Architecture

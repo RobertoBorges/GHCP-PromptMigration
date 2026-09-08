@@ -1,28 +1,60 @@
 ---
 name: config-transformation
 description: |
-  Configuration file transformation patterns for .NET and Java modernization.
-  **Use when:** Converting legacy config files to modern cloud-native formats.
-  **Triggers on:** web.config, app.config, applicationContext.xml, persistence.xml files.
-  **Covers:** web.config to appsettings.json, XML to YAML/properties, connection string externalization.
+  Legacy application configuration transformation to cloud-friendly providers.
+  **Use when:** Converting any format of legacy config (web.config, app.config, application.xml, Java properties, .env, INI, Python settings.py, PHP config, Ruby YAML) into modern cloud-native configuration.
+  **Triggers on:** web.config, app.config, applicationContext.xml, persistence.xml, application.properties, .env files with hardcoded secrets, ConfigurationManager references, direct XML section parsing.
+  **Covers:** web.config to appsettings.json, Java XML to YAML/properties, secret externalization (Key Vault), environment-specific overrides, Azure App Configuration integration, options-binding replacement for ConfigurationManager. Stack-agnostic — covers .NET, Java, Python, Node.js, PHP, Ruby, and any legacy format that needs migration.
 ---
 
 # Configuration Transformation Skill
 
-Use this skill when transforming legacy configuration files to modern formats for cloud-native applications.
+Use this skill when modernizing legacy application configuration from **any format** (XML `web.config` / `app.config`, Java properties, `.env`, YAML, INI, Python `settings.py`, PHP `.htaccess` + `php.ini`, Ruby YAML, etc.) into cloud-friendly configuration providers.
 
 ## When to Use This Skill
 
-- Converting web.config to appsettings.json
-- Converting app.config to JSON configuration
-- Migrating Java XML configs to YAML/properties
-- Externalizing configuration for Azure
-- Setting up environment-specific configuration
-- Integrating with Azure App Configuration or Key Vault
+Apply this skill when the source contains:
 
-## .NET Configuration Transformation
+- `web.config`, `app.config`, `Web.Release.config`, or custom XML sections
+- `connectionStrings`, `appSettings`, `ConfigurationManager`, or `NameValueCollection`
+- Spring `application.properties` with environment-specific overrides that need modernization
+- Legacy `applicationContext.xml`, `persistence.xml`, or `beans.xml`
+- Hardcoded connection strings, service URLs, or secrets in any language
+- `.env` files with production secrets that should move to Key Vault
+- Python `settings.py` or `django.settings` with hardcoded values
+- PHP config with database credentials
+- Any legacy format that needs to move to Azure App Configuration + Key Vault
 
-### web.config to appsettings.json Mapping
+## Target Configuration Stack
+
+Use this order of precedence unless the project needs a different override model:
+
+1. `appsettings.json` (.NET), `application.yml` (Java/Spring), env vars (Node/Python/PHP/Ruby)
+2. Environment-specific files (`appsettings.Production.json`, `application-prod.yml`)
+3. Environment variables (for machine-specific overrides)
+4. User secrets / local `.env` for developer machines (NEVER committed)
+5. **Azure Key Vault** for all secrets (production + shared dev)
+6. Optional **Azure App Configuration** for shared dynamic settings across services
+
+## Migration Workflow
+
+1. Inventory every setting and classify it as: config, secret, environment-specific, or legacy-only
+2. Move structured non-secret settings into JSON/YAML files
+3. Move secrets to user secrets (dev) and Key Vault/App Configuration (shared/prod)
+4. Replace direct `ConfigurationManager` / XML section parsing / language-specific config-file reads with options binding or typed config properties
+5. Replace `web.Release.config` transforms with environment-specific config files + env variables
+6. Wire Managed Identity for Key Vault access — never store the Key Vault access key itself
+
+## Starter templates
+
+Copy from the `templates/` folder next to this SKILL.md:
+
+- `templates/appsettings.template.jsonc` — .NET config with sections for Logging, ConnectionStrings, Auth, KeyVault, ApplicationInsights, and per-environment overrides
+- `templates/application.template.yml` — Spring Boot config with the same shape plus Actuator + management endpoints
+
+## `web.config` to `appsettings.json`
+
+### Element-by-element mapping
 
 | web.config Element | appsettings.json Equivalent |
 |--------------------|----------------------------|

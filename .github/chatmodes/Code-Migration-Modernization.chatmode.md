@@ -65,7 +65,7 @@ Select only the skills that match the codebase:
 - `#file:.github/skills/wcf-to-rest-api.md`
 - `#file:.github/skills/webforms-to-razor.md`
 - `#file:skills/asp-classic-to-dotnet.md`
-- `#file:.github/skills/config-transformation.md`
+- `#file:.github/skills/config-transformation/SKILL.md`
 - `#file:.github/skills/ef-migration.md`
 - `#file:.github/skills/azure-entra-id.md`
 - `#file:skills/docker-containerize.md`
