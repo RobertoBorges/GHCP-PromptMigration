@@ -270,7 +270,7 @@ role: coder
 skills:
   - .github/skills/dotnet-framework-to-dotnet8.md
   - .github/skills/webforms-to-razor.md
-  - .github/skills/config-transformation.md
+  - .github/skills/config-transformation/SKILL.md
   - .github/skills/azure-entra-id.md
   - .github/skills/azure-app-service.md
   - .github/skills/migration-report-template.md

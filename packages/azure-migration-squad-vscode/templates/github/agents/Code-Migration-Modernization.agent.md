@@ -268,7 +268,7 @@ Detailed migration patterns and examples live in the skills folder. Load only th
 - `azure-infrastructure/` — Bicep and Terraform templates using Azure Verified Modules
 - `azure-containerization/` — Multi-stage Dockerfiles, docker-compose, Container Apps configuration
 - `azure-entra-id.md`, `azure-keyvault-secrets.md`, `managed-identity.md`, `azure-network-security.md`, `azure-defender-compliance.md`
-- `config-transformation.md` — swaps legacy config (web.config, application.xml, .env, etc.) for cloud-native equivalents
+- `config-transformation/SKILL.md` — swaps legacy config (web.config, application.xml, .env, etc.) for cloud-native equivalents
 - `migration-unit-testing/` — Test patterns for validating migrated apps
 
 The agent loads these based on the Capability Matrix, not from user use-case name.

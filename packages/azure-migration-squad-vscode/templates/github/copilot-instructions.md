@@ -162,6 +162,24 @@ Read [`.github/hooks/decision-gates.md`](./hooks/decision-gates.md) for the orch
 - Do not query or modify Azure resources without explicit user consent
 - Never store secrets in the repository
 
+### Customer Data Isolation (multi-customer workspaces only)
+
+When multiple customer portfolios coexist under a `Customers/<Name>/` convention:
+
+- Set `COPILOT_CUSTOMER_CONTEXT` to the active customer's path (`Customers/Contoso`) before starting Copilot
+- The `customer-data-isolation` PreToolUse hook (`.github/hooks/customer-data-isolation.json`) blocks any Read/edit/search/create/edit that targets files inside a DIFFERENT customer folder
+- Each customer folder is a separate NDA — never cross-reference customer folders, not even for template/style examples
+- If the env var is unset, the hook is a no-op — safe default for single-customer workspaces
+
+### Session lifecycle hooks
+
+Two hook configurations coexist:
+
+- `.github/hooks/session-lifecycle.json` — the main-path session lifecycle (loads `reports/Report-Status.md` at SessionStart, appends session-end line at Stop)
+- `.github/hooks/aws-assessment-session-lifecycle.json` — dedicated lifecycle for the AWS Assessment flow (uses `reports/raw/<account-id>/` per-account state instead of a single Migration state)
+
+The user's active client (Copilot Chat / CLI) should register both if AWS assessment is in scope for the workspace, but they're kept separate to avoid state-format collision.
+
 ### Commands and Tools
 - Use PowerShell (pwsh) for all shell commands
 - Use Azure Developer CLI (azd) for deployments
