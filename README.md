@@ -1,6 +1,6 @@
 # Azure Migration Agent — GitHub Copilot agent skills for Azure migration
 
-> **Migrate any application to Azure** using a single GitHub Copilot agent definition plus 36 agent skills and 9 custom agents. Universal source/stack/workload coverage. Discovery-first. The agent **never decides major architecture for you** — it lays out options and waits.
+> **Migrate any application to Azure** using 36 agent skills and 8 custom agents — of which you only ever pick from **three**: migrate, assess, or debug. Universal source/stack/workload coverage. Discovery-first. The agent **never decides major architecture for you** — it lays out options and waits.
 
 [![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/robertoborges.azure-migration-squad-vscode?label=VS%20Code%20Marketplace&color=blueviolet&logo=visualstudiocode)](https://marketplace.visualstudio.com/items?itemName=robertoborges.azure-migration-squad-vscode)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
@@ -9,14 +9,16 @@ This repository is the canonical source for the **Azure Migration Agent** (`.git
 
 ## Supported languages, frameworks, and platforms
 
-**Not just .NET and Java.** The agent handles any application in any of these stacks — with a dedicated skill file per stack that knows the modernization patterns, Azure hosting options, and common blockers:
+**Not just .NET and Java.** The agent handles any application in any of these stacks — each with a dedicated adapter file covering framework detection, Azure hosting targets, effort sizing, and common blockers:
 
 | Category | Coverage |
 |----------|----------|
 | **Languages / frameworks (15 stack adapters)** | `.NET` (Framework 2.x → 10 LTS), `Java` (8/11 → 17/21 LTS + Spring Boot 3.x), `Python` (2.x → 3.12+, Django/Flask/FastAPI), `Node.js` (12/14/16 → 20/22 LTS, Express/NestJS/Next), `PHP` (5.x/7.x → 8.3+, Laravel/Symfony), `Ruby` (2.x → 3.3+, Rails), `Go` (≤ 1.19 → 1.22+), `Perl` (5.x), `Rust` (edition upgrades), `Scala/Kotlin`, `Oracle Forms` (→ APEX / Spring Boot rewrite), `PowerBuilder`, `Delphi/VB6`, `C++ Windows`, plus a `skill-creator` that authors a **new** stack adapter on the fly when the agent encounters something novel (Elixir, F#, Julia, Clojure, ABAP, etc.) |
-| **Sources (10 source adapters)** | On-premise, AWS, GCP, Oracle Cloud, VMware / RVTools export, Kubernetes cluster, container registry (ACR / ECR / Docker Hub), GitHub repo, ZIP archive, and a catch-all escalation path for SaaS-embedded workloads (Salesforce Apex, ServiceNow, SharePoint on-prem, Power Platform, SAP ABAP extensions) or mainframe/midrange (z/OS, IBM i, COBOL/RPG/Natural) — routes to a specialist-partner playbook |
+| **Sources (10 source adapters)** | On-premise, AWS, GCP, Oracle Database, VMware / RVTools export, Kubernetes cluster, container registry (ACR / ECR / Docker Hub), GitHub repo, ZIP archive, and a catch-all escalation path for SaaS-embedded workloads (Salesforce Apex, ServiceNow, SharePoint on-prem, Power Platform, SAP ABAP extensions) or mainframe/midrange (z/OS, IBM i, COBOL/RPG/Natural) — routes to a specialist-partner playbook |
 | **Workloads (8 patterns)** | Web app, API service, batch job, event-driven, serverless (Functions), data pipeline, desktop / client-server, packaged app |
 | **Azure targets** | App Service, Container Apps, AKS, Functions, VMs, Azure VMware Solution, Azure SQL / PostgreSQL / MySQL / Cosmos / Data Factory / Databricks / Synapse, Entra ID, Key Vault, Application Insights, and more |
+
+> **Adapter depth varies, by design.** Of the 33 adapters, 18 are full depth (.NET, Java, Python, Node.js, PHP, on-premise, AWS, the core workload patterns…) with step-by-step modernization guidance. The other 15 — Go, Ruby, Rust, Perl, Scala/Kotlin, C++ Windows, Delphi/VB6, PowerBuilder, GCP, Oracle DB, VMware/RVTools, and three workload patterns — are deliberately lighter: they classify the app, detect the sub-framework, pick Azure targets, size the effort, and flag risks, then hand off to the Architect. `skill-creator` deepens any of them on demand mid-migration.
 
 > **Out of scope as a first-class family:** mainframe / midrange code migration (z/OS, IBM i, COBOL / RPG / Natural / PL/I on CICS / IMS / VSAM). These workloads route to `.github/skills/source-adapters/references/source-unsupported-escalation.md`, which provides a specialist-partner playbook (Micro Focus / Astadia / Kyndryl / LzLabs / TCS / NTT DATA) instead of pretending we can migrate their code.
 
@@ -54,7 +56,6 @@ Great for **infrastructure discovery + lift-and-shift** of on-prem/other-cloud w
 | **On-the-fly skill authoring** (`skill-creator`) — mid-migration, agent researches + writes a new skill for any stack it hasn't seen (Elixir, F#, Clojure, ABAP, etc.) | ✅ | ❌ | ❌ |
 | **Cross-session trace memory** — canonical Action Log in `Report-Status.md` for recovery + per-action token accounting | ✅ | ❌ | ❌ |
 | **Portfolio 6Rs strategy report** — CIO-ready HTML deck with Microsoft / Partner / Unknown ownership across mixed-stack portfolios | ✅ | ❌ | ✅ (business case, different format) |
-| **Cross-stack post-migration observability wiring** — App Insights + OpenTelemetry recipes for 11+ languages | ✅ | ❌ | ❌ |
 | **Universal Discovery Dossier + Capability Matrix** — a mechanical contract every downstream Phase skill consumes | ✅ | ❌ | ⚠ separate discovery report |
 | **Never picks major architecture for you** — options + tradeoffs, waits for user pick, "stay-as-is" is always option 1 | ✅ | ⚠ some flows | ❌ |
 
@@ -75,9 +76,19 @@ The extension bundles a copy of the canonical content from this repo and drops i
 1. Install the extension: open VS Code, `Ctrl+Shift+X`, search **"Azure Migration Agent"**, click Install.
 2. Open the folder you want to migrate.
 3. Accept the welcome notification → click **Get started** (or run "Azure Migration: Initialize in this workspace" from the Command Palette).
-4. Open GitHub Copilot Chat (`Ctrl+Alt+I`) → type `/assess-any-application`. This is step 1 of the main path — discovery.
-5. Then `/phase1-plan` — produces `reports/Application-Assessment-Report.md`, `reports/Migration-Plan.md`, and `reports/Decisions-Required.md`.
-6. Answer each decision in `reports/Decisions-Required.md`, then run Phase 2 → Phase 3 → Phase 4 → Phase 5 → Phase 6 in order.
+4. Open GitHub Copilot Chat (`Ctrl+Alt+I`) and pick an agent from the agent dropdown. There are only three:
+
+   | Pick | When |
+   |---|---|
+   | **Code Migration Modernization** | **Start here** — you want to migrate an app to Azure |
+   | **Discovery Intake** | You are not yet sure what the app even is |
+   | **Debug Migration** | A migration already in flight has broken |
+
+   The five specialists (orchestrator, infrastructure, triage, security, cost) are dispatched for you automatically — you never have to pick the right one.
+
+5. Type `/assess-any-application`. This is step 1 of the main path — discovery.
+6. Then `/phase1-plan` — produces `reports/Application-Assessment-Report.md`, `reports/Migration-Plan.md`, and `reports/Decisions-Required.md`.
+7. Answer each decision in `reports/Decisions-Required.md`, then run Phase 2 → Phase 3 → Phase 4 → Phase 5 → Phase 6 in order.
 
 Phases 2-6 **hard-stop** until each required decision in `reports/Decisions-Required.md` is answered. See [`.github/skills/migration-decisions/references/decision-hardstop.md`](./.github/skills/migration-decisions/references/decision-hardstop.md) for the protocol.
 
@@ -89,9 +100,9 @@ Full walkthrough: [docs/vscode-quickstart.md](./docs/vscode-quickstart.md).
 
 | Path | Content |
 |------|---------|
-| `.github/agents/` | 8 custom agents. **3 appear in the VS Code agent picker** — `Code-Migration-Modernization` (migrate — start here), `Discovery-Intake` (assess first), `Debug-Migration` (when a migration breaks). The other 5 (Migration-Orchestrator, Azure-Infrastructure, Quick-Assessment, Security-Review, Cost-Optimization) set `user-invocable: false`: hidden from the picker, still dispatched automatically as subagents and still reachable via their slash commands |
-| `.github/skills/` | 36 agent skills — 20 user-invocable workflow skills (`/assess-any-application`, Phase 1-6, Portfolio, Database, Security, Cost, Interview, Rollback…) and 16 auto-loaded knowledge skills bundling 64 reference files (15 stack adapters, 10 source adapters, 8 workload patterns, plus Azure / security / decision / artifact skills) |
-| `.github/hooks/` | Orchestration files: `session-lifecycle.json`, `validation.json`, `phase-gates.md`, `decision-gates.md`, `quality-checklist.md`, and helper scripts (SessionStart context loader, Stop hook Action-Log writer, etc.) |
+| `.github/agents/` | 8 custom agents. 3 appear in the agent picker (see Quick start); the other 5 — Migration-Orchestrator, Azure-Infrastructure, Quick-Assessment, Security-Review, Cost-Optimization — set `user-invocable: false`, so they stay out of the dropdown while remaining dispatchable as subagents and reachable via their own slash commands |
+| `.github/skills/` | 36 agent skills — 20 user-invocable workflow skills (`/assess-any-application`, Phase 1-6, Portfolio, Database, Security, Cost, Interview, Rollback…) and 16 auto-loaded knowledge skills bundling 74 reference files (15 stack adapters, 10 source adapters, 8 workload patterns, plus Azure / security / decision / artifact references) |
+| `.github/hooks/` | Orchestration files: `session-lifecycle.json`, `validation.json`, `phase-gates.md`, `decision-gates.md`, `quality-checklist.md`, plus `scripts/` (SessionStart context loader, Stop-hook Action-Log writer, auto-validate — PowerShell and shell variants) |
 | `.github/copilot-instructions.md` | Top-level rules for Copilot |
 | `MIGRATION-START-HERE.md` | 60-second quickstart |
 
@@ -132,10 +143,11 @@ Every skill, agent, and hook was swept to remove ".NET or Java only" phrasing. T
 
 ```
 .github/
-├── agents/                                       (✏️ EDIT — 9 custom agents, *.agent.md)
+├── agents/                                       (✏️ EDIT — 8 custom agents, *.agent.md — 3 user-invocable)
 ├── skills/                                       (✏️ EDIT — 36 skills, each <name>/SKILL.md)
-│   └── <skill>/references/                       (✏️ EDIT — on-demand detail files)
-├── hooks/                                        (✏️ EDIT — orchestration rules + scripts)
+│   └── <skill>/references/                       (✏️ EDIT — 74 on-demand detail files)
+├── hooks/                                        (✏️ EDIT — orchestration rules)
+│   └── scripts/                                  (✏️ EDIT — .ps1 + .sh hook implementations)
 ├── copilot-instructions.md                       (✏️ EDIT — top-level rules)
 └── workflows/                                    (✏️ EDIT — CI + release-please)
 docs/                                             (✏️ EDIT — user docs)
@@ -195,6 +207,7 @@ npm run release:local -- --dry-run
 - ✅ `.vsix` packaging via `vsce`
 - ✅ Headless extension tests via `@vscode/test-electron`
 - ✅ `.vsix` uploaded as build artifact
+- ✅ Agent content pack (`.github/` skills, agents, hooks) staged, count-asserted, and uploaded as a portable artifact
 
 ## Publishing the extension
 

@@ -246,7 +246,7 @@ On-premises containers, **AWS EKS**, **OpenShift**, **GCP GKE** → AKS, ARO, or
 
 Apps using languages/frameworks NOT in this list (e.g., Perl, Fortran, PowerBuilder, Delphi, Classic ASP/VBScript, Cold Fusion, Lotus Notes/Domino, Progress 4GL) trigger Partner classification — GHCP does not have automated migration tooling for these stacks.
 
-**Step 3: Everything else is FACTORY (lowest priority — the default for in-scope apps with sufficient data):**
+**Step 3: Everything else is Microsoft (lowest priority — the default for in-scope apps with sufficient data):**
 An app is **Microsoft** if:
 - It was NOT classified as Unknown (has sufficient data)
 - It was NOT classified as Partner (none of the Partner conditions triggered)
@@ -310,7 +310,7 @@ A DB instance is **Partner** if:
 - Migration target is Synapse Analytics — Partner UNLESS source is Synapse Dedicated SQL Pool migrating to Fabric Warehouse (which IS Microsoft Analytics scope)
 - Any migration path NOT listed in Microsoft scope documentation
 
-**Step 3: Everything else is FACTORY (default for DB instances with sufficient data):**
+**Step 3: Everything else is Microsoft (default for DB instances with sufficient data):**
 A DB instance is **Microsoft** if it was NOT classified as Unknown or Partner. This includes:
 - **SQL Server 2012+** → Azure SQL DB / Azure SQL MI / SQL Server on Azure VM (via Azure Migrate / DMS)
   - Sources: On-premises, AWS EC2, AWS RDS, GCP Cloud SQL, GCP Compute Engine
