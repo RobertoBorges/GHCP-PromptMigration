@@ -41,21 +41,21 @@ Add a component in parentheses when it helps readers:
 
 ```
 feat(commands): add "Reload" command
-fix(templates): correct sync path for chatmodes
+fix(templates): correct sync path for agents
 refactor(statusBar): extract phase-inference logic
 ```
 
-Common scopes in this repo: `commands`, `templates`, `sync`, `statusBar`, `treeView`, `welcome`, `docs`, `ci`, `deps`.
+Common scopes in this repo: `commands`, `templates`, `skills`, `agents`, `sync`, `statusBar`, `treeView`, `welcome`, `docs`, `ci`, `deps`.
 
 ## Body
 
 Anything else you want to say. release-please picks up `BREAKING CHANGE:` markers from the body:
 
 ```
-feat: drop the sync command from the CLI
+feat: drop the standalone sync script
 
 BREAKING CHANGE: users must now use "Azure Migration: Initialize"
-from the Command Palette instead of running `npm run sync` manually.
+from the VS Code Command Palette instead of running `npm run sync` manually.
 ```
 
 ## Examples

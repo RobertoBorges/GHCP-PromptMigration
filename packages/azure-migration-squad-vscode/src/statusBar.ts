@@ -41,7 +41,7 @@ const PHASE_LABEL: Record<string, string> = {
   unknown: 'AMA: Ready',
 };
 
-const PHASE_PROMPT: Record<string, string> = {
+const PHASE_COMMAND: Record<string, string> = {
   'not-installed': 'azureMigrationSquad.initialize',
   discovery: 'azureMigrationSquad.openDiscovery',
   'phase-1': 'azureMigrationSquad.openDiscovery',
@@ -124,7 +124,7 @@ export class AmsStatusBar {
     const phase = inferPhase(ws.root, ws.isInstalled);
     const icon = PHASE_ICON[phase] || PHASE_ICON.unknown;
     const label = PHASE_LABEL[phase] || PHASE_LABEL.unknown;
-    const cmd = PHASE_PROMPT[phase] || PHASE_PROMPT.unknown;
+    const cmd = PHASE_COMMAND[phase] || PHASE_COMMAND.unknown;
 
     this.item.text = `${icon} ${label}`;
     this.item.tooltip = buildTooltip(ws.root, phase);

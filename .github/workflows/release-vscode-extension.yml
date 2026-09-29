@@ -113,17 +113,15 @@ jobs:
           STAGE="$RUNNER_TEMP/agent-content-pack"
           mkdir -p "$STAGE/.github"
           cp -R .github/agents "$STAGE/.github/"
-          cp -R .github/prompts "$STAGE/.github/"
           cp -R .github/skills "$STAGE/.github/"
-          cp -R .github/chatmodes "$STAGE/.github/"
           cp -R .github/hooks "$STAGE/.github/"
           cp .github/copilot-instructions.md "$STAGE/.github/"
           cp MIGRATION-START-HERE.md "$STAGE/"
           cat > "$STAGE/README.md" <<'EOF'
           # Azure Migration Agent — content pack
 
-          This ZIP contains the canonical agent definition, prompts, skills,
-          chatmodes, hooks, and welcome doc that back the Azure Migration Agent.
+          This ZIP contains the canonical agent definitions, skills,
+          hooks, and welcome doc that back the Azure Migration Agent.
 
           ## Usage (without the VS Code extension)
 
@@ -138,12 +136,23 @@ jobs:
 
           Source repo: https://github.com/RobertoBorges/GHCP-PromptMigration
           EOF
+          # Guard: the pack is worthless without the .github tree. Fail loudly
+          # rather than publishing a near-empty ZIP.
+          STAGED=$(find "$STAGE" -type f | wc -l)
+          echo "Staged content pack: $STAGED file(s)"
+          if [ "$STAGED" -lt 100 ]; then
+            echo "::error::content pack staged only $STAGED files; expected the full .github tree"
+            exit 1
+          fi
 
       - name: Upload agent content pack artifact
         uses: actions/upload-artifact@v4
         with:
           name: agent-content-pack-${{ github.run_number }}
           path: ${{ runner.temp }}/agent-content-pack/
+          # Required: .github is a dot-directory and upload-artifact@v4 skips
+          # hidden paths by default, which silently drops the entire pack.
+          include-hidden-files: true
           if-no-files-found: error
           retention-days: 90
 

@@ -142,10 +142,11 @@ async function cmdInitialize(
     }
   }
 
-  // Offer to reload the window so Copilot Chat picks up the new chatmodes
-  // (VS Code only registers .github/chatmodes/* on workspace load).
+  // Offer to reload the window so Copilot Chat picks up the new skills and
+  // agents (VS Code discovers `.github/skills/` and `.github/agents/` on
+  // workspace load).
   const reload = await vscode.window.showInformationMessage(
-    'Reload the VS Code window now so Copilot Chat picks up the new prompts and chatmodes?',
+    'Reload the VS Code window now so Copilot Chat picks up the new skills and agents?',
     'Reload',
     'Later'
   );
@@ -168,7 +169,6 @@ async function cmdDoctor(context: vscode.ExtensionContext): Promise<void> {
   out.appendLine('─'.repeat(78));
   out.appendLine(`  Workspace root:           ${ws.root}`);
   out.appendLine(`  .github/agents/...:        ${ws.hasAgent ? '✓' : '✗ missing'}`);
-  out.appendLine(`  .github/prompts/:          ${ws.hasPrompts ? '✓' : '✗ missing'}`);
   out.appendLine(`  .github/skills/:           ${ws.hasSkills ? '✓' : '✗ missing'}`);
   out.appendLine(`  .github/copilot-instr...:  ${ws.hasCopilotInstructions ? '✓' : '✗ missing'}`);
 
@@ -176,7 +176,7 @@ async function cmdDoctor(context: vscode.ExtensionContext): Promise<void> {
   out.appendLine(`  GitHub Copilot Chat ext:   ${copilotChat ? '✓ installed' : '✗ NOT installed'}`);
 
   const decisionsExists = fs.existsSync(path.join(ws.root, 'reports', 'Decisions-Required.md'));
-  out.appendLine(`  reports/Decisions-Req...:  ${decisionsExists ? '✓ generated' : '⏸ not yet (run /Phase1-Plan)'}`);
+  out.appendLine(`  reports/Decisions-Req...:  ${decisionsExists ? '✓ generated' : '⏸ not yet (run /phase1-plan)'}`);
 
   const extensionVersion = (() => {
     try {

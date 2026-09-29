@@ -2,14 +2,14 @@ name: CI
 
 # ╔═════════════════════════════════════════════════════════════════════════╗
 # ║  Builds and tests the VS Code extension that bundles the                ║
-# ║  Azure Migration Agent's prompts/skills/chatmodes/agents/hooks.         ║
-# ║                                                                          ║
-# ║  Edit canonical content here:                                            ║
-# ║    .github/{prompts,skills,chatmodes,hooks,agents}/                     ║
+# ║  Azure Migration Agent's skills/agents/hooks.                           ║
+# ║                                                                         ║
+# ║  Edit canonical content here:                                           ║
+# ║    .github/{skills,agents,hooks}/                                       ║
 # ║    .github/copilot-instructions.md                                      ║
-# ║                                                                          ║
+# ║                                                                         ║
 # ║  The extension bundles a copy at packages/azure-migration-squad-vscode/ ║
-# ║  templates/ via the package's sync script (run at build time).         ║
+# ║  templates/ via the package's sync script (run at build time).          ║
 # ╚═════════════════════════════════════════════════════════════════════════╝
 
 on:
@@ -57,8 +57,8 @@ jobs:
       # ────────────────────────────────────────────────────────────────────
       # DECISION HARDSTOP COVERAGE
       # Fails the build if any catalog item in decision-catalog.md is not
-      # referenced by at least one phase prompt. See
-      # .github/skills/decision-hardstop.md for the full protocol.
+      # referenced by at least one phase skill. See
+      # .github/skills/migration-decisions/references/decision-hardstop.md for the full protocol.
       # ────────────────────────────────────────────────────────────────────
       - name: Validate decision-catalog coverage
         run: npm run validate:decision-coverage
@@ -112,9 +112,7 @@ jobs:
           mkdir -p "$STAGE/.github" "$STAGE"
           # Canonical .github subfolders the extension bundles
           cp -R .github/agents "$STAGE/.github/"
-          cp -R .github/prompts "$STAGE/.github/"
           cp -R .github/skills "$STAGE/.github/"
-          cp -R .github/chatmodes "$STAGE/.github/"
           cp -R .github/hooks "$STAGE/.github/"
           cp .github/copilot-instructions.md "$STAGE/.github/"
           # Top-level welcome doc
@@ -123,8 +121,8 @@ jobs:
           cat > "$STAGE/README.md" <<'EOF'
           # Azure Migration Agent — content pack
 
-          This ZIP contains the canonical agent definition, prompts, skills,
-          chatmodes, hooks, and welcome doc that back the Azure Migration Agent.
+          This ZIP contains the canonical agent definitions, skills,
+          hooks, and welcome doc that back the Azure Migration Agent.
 
           ## Usage (without the VS Code extension)
 
@@ -142,11 +140,21 @@ jobs:
           echo "Staged content pack:"
           find "$STAGE" -type f | wc -l
           du -sh "$STAGE"
+          # Guard: the pack is worthless without the .github tree. Fail loudly
+          # rather than shipping a near-empty ZIP.
+          STAGED=$(find "$STAGE" -type f | wc -l)
+          if [ "$STAGED" -lt 100 ]; then
+            echo "::error::content pack staged only $STAGED files; expected the full .github tree"
+            exit 1
+          fi
 
       - name: Upload agent content pack artifact
         uses: actions/upload-artifact@v4
         with:
           name: agent-content-pack
           path: ${{ runner.temp }}/agent-content-pack/
+          # Required: .github is a dot-directory and upload-artifact@v4 skips
+          # hidden paths by default, which silently drops the entire pack.
+          include-hidden-files: true
           if-no-files-found: error
           retention-days: 30

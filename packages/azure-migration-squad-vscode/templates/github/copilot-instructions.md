@@ -6,15 +6,15 @@ These instructions apply to all GitHub Copilot interactions within this reposito
 
 This repository is a **universal application-to-Azure migration system**. It can assess, modernize, and migrate **any application** — regardless of source environment (on-premise, AWS, GCP, Oracle, VMware, Kubernetes, container registry, GitHub repo, ZIP) or stack (.NET, Java, Python, Node.js, PHP, Ruby, Go, Perl, Rust, Oracle Forms, PowerBuilder, Delphi/VB6, Scala/Kotlin, C++ Windows, and more) — into Azure.
 
-> **Mainframe and midrange workloads** (z/OS, z/VSE, IBM i / AS-400, COBOL / RPG / Natural / PL/I, CICS/IMS, VSAM) are **out of scope** as a first-class family. Discovery redirects these to `source-unsupported-escalation.md`, which provides a specialist-partner escalation playbook (Micro Focus, Astadia, Kyndryl, LzLabs, TCS, NTT DATA). This tool does not attempt code-level COBOL/RPG/Natural migration.
+> **Mainframe and midrange workloads** (z/OS, z/VSE, IBM i / AS-400, COBOL / RPG / Natural / PL/I, CICS/IMS, VSAM) are **out of scope** as a first-class family. Discovery redirects these to `source-adapters/references/source-unsupported-escalation.md`, which provides a specialist-partner escalation playbook (Micro Focus, Astadia, Kyndryl, LzLabs, TCS, NTT DATA). This tool does not attempt code-level COBOL/RPG/Natural migration.
 
 The system supports **three complementary flows**:
 
-1. **Per-Application Modernization Flow (default, main path)** — Guided execution of ONE application at a time via **`/assess-any-application` → `/Phase1-Plan` → `/Phase2-MigrateCode` → `/Phase3-GenerateInfra` → `/Phase4-DeployToAzure` → `/Phase5-SetupCICD` → `/Phase6-PostMigrationOps`**. Stack-agnostic: Phase prompts consume the Capability Matrix produced by Discovery and apply the right stack/source/workload-specific guidance via skills.
+1. **Per-Application Modernization Flow (default, main path)** — Guided execution of ONE application at a time via **`/assess-any-application` → `/phase1-plan` → `/phase2-migrate-code` → `/phase3-generate-infra` → `/phase4-deploy-to-azure` → `/phase5-setup-cicd` → `/phase6-post-migration-ops`**. Stack-agnostic: Phase skills consume the Capability Matrix produced by Discovery and apply the right stack/source/workload-specific guidance via skills.
 
-2. **Portfolio Planning Flow (pre-engagement, optional add-on)** — Generates executive-ready Migration Strategy Reports from CMDB / RVTools / DMA / mixed customer artifacts. Produces a CIO-level HTML deck with CAF-aligned 6 Rs classification and Microsoft / Partner / Unknown execution ownership. Invoke with `/PortfolioStrategy` or use the `migration-strategy-report` skill.
+2. **Portfolio Planning Flow (pre-engagement, optional add-on)** — Generates executive-ready Migration Strategy Reports from CMDB / RVTools / DMA / mixed customer artifacts. Produces a CIO-level HTML deck with CAF-aligned 6 Rs classification and Microsoft / Partner / Unknown execution ownership. Invoke with `/portfolio-strategy` or use the `migration-strategy-report` skill.
 
-3. **Multi-repo assessment (optional add-on)** — `/Phase0-Multi-repo-assessment` runs cross-repo dependency + sequencing analysis for business solutions that span multiple repos, before the main path.
+3. **Multi-repo assessment (optional add-on)** — `/phase0-multi-repo-assessment` runs cross-repo dependency + sequencing analysis for business solutions that span multiple repos, before the main path.
 
 The seven legacy use-cases (`01-ASPClassicApp` … `07-PartsUnlimited`) remain in the repository as **reference walkthroughs**, not as a fixed catalog.
 
@@ -29,78 +29,97 @@ Present these first. Run in order.
 | # | Step | Command |
 |---|------|---------|
 | 1 | Assess (Discovery) | `/assess-any-application` |
-| 2 | Plan | `/Phase1-Plan` |
-| 3 | Migrate Code | `/Phase2-MigrateCode` |
-| 4 | Generate Infra | `/Phase3-GenerateInfra` |
-| 5 | Deploy | `/Phase4-DeployToAzure` |
-| 6 | Setup CI/CD | `/Phase5-SetupCICD` |
-| 7 | Post-Migration Ops | `/Phase6-PostMigrationOps` |
+| 2 | Plan | `/phase1-plan` |
+| 3 | Migrate Code | `/phase2-migrate-code` |
+| 4 | Generate Infra | `/phase3-generate-infra` |
+| 5 | Deploy | `/phase4-deploy-to-azure` |
+| 6 | Setup CI/CD | `/phase5-setup-cicd` |
+| 7 | Post-Migration Ops | `/phase6-post-migration-ops` |
 
 ### 🔵 Optional add-ons (offer only when relevant)
 
-**Alternative intakes** — `/build-migration-plan`, `/QuickAssessment`, `/QuickTriage`, `/InteractiveMigrationInterview`, `/TeamSkillAssessment`
-**Portfolio / multi-app** — `/PortfolioStrategy`, `/Phase0-Multi-repo-assessment`
-**Specialized deep-dives** — `/DatabaseMigration`, `/SecurityHardening`, `/CostOptimization`
-**Utility / recovery** — `/Phase-Rollback`, `/GetStatus`
+**Alternative intakes** — `/build-migration-plan`, `/quick-assessment`, `/quick-triage`, `/interactive-migration-interview`, `/team-skill-assessment`
+**Portfolio / multi-app** — `/portfolio-strategy`, `/phase0-multi-repo-assessment`
+**Specialized deep-dives** — `/database-migration`, `/security-hardening`, `/cost-optimization`
+**Utility / recovery** — `/phase-rollback`, `/get-status`
 
 **Agent behavior:**
-- When a user starts a new migration, recommend the **main path**: run `/assess-any-application` first, then `/Phase1-Plan`, etc.
-- Only surface add-ons when the user's question maps to one (e.g., "how do I move the DB?" → suggest `/DatabaseMigration`).
+- When a user starts a new migration, recommend the **main path**: run `/assess-any-application` first, then `/phase1-plan`, etc.
+- Only surface add-ons when the user's question maps to one (e.g., "how do I move the DB?" → suggest `/database-migration`).
 - The natural-language mapping table below still maps ALL commands so users can type any of them — but presentation should always foreground the main path.
 
 ## How to Invoke the Agent (CLI vs Chat)
 
-**The Code Migration Modernization Agent (`.github/agents/Code-Migration-Modernization.agent.md`) is invokable on two surfaces:**
+Every workflow step in this repo is an **agent skill** (`.github/skills/<name>/SKILL.md`). Agent skills are an
+open standard, so the same `/<skill-name>` command works on every surface:
 
 | Surface | How to invoke |
 |---------|---------------|
-| **GitHub Copilot CLI** (the `copilot` terminal command) | **Use natural language.** Slash commands like `/assess-any-application` are NOT registered as CLI commands — they are reference labels. Just say what you want. |
-| **VS Code Copilot Chat** | Slash commands ARE registered. Type `/assess-any-application` directly. |
+| **VS Code Copilot Chat** | Type `/assess-any-application` directly. Skills are auto-discovered from `.github/skills/`. |
+| **GitHub Copilot CLI** (the `copilot` terminal command) | Type `/assess-any-application`, or just describe what you want in natural language. |
+| **Copilot coding agent / Codex** | Skills are portable — same folder, same command. |
 
-### Natural-language → action mapping (for CLI users)
+> **Skill names are lowercase-hyphen** (`/phase2-migrate-code`, not `/Phase2-MigrateCode`). The spec requires
+> the `name:` field to match the directory name using only lowercase letters, digits, and hyphens.
+
+Three of the custom agents in `.github/agents/*.agent.md` are selectable from the agent picker in
+VS Code Copilot Chat, chosen by intent:
+
+| Agent | Pick it when |
+|---|---|
+| `Code-Migration-Modernization` | **Start here** — you want to migrate an application to Azure |
+| `Discovery-Intake` | You are not yet sure what the application is and need it assessed first |
+| `Debug-Migration` | A migration already in flight has broken |
+
+The other five (`Migration-Orchestrator`, `Azure-Infrastructure`, `Quick-Assessment`, `Security-Review`,
+`Cost-Optimization`) set `user-invocable: false`. They are hidden from the picker but are dispatched
+automatically as subagents, and their slash commands still work. Do not tell a user to select them from
+the picker — route to them, or point at the slash command.
+
+### Natural-language → action mapping
 
 When the user says any of the phrases below, take the matching action. **Rows are ordered main-path first, then add-ons.**
 
 | User says (any of) | Action |
 |---|---|
 | **🟢 Main path — Assess + 6 phases (Phase 1-6)** | |
-| "assess this application", "assess any application", "discover this app", "characterize this application", "scan this repo", "/assess-any-application", "run discovery", "start migration" | Read `.github/prompts/Assess-Any-Application.prompt.md` and follow it. Produce `reports/Discovery-Dossier.md` + `reports/Capability-Matrix.yaml`. This is **step 1** of the main path. |
-| "phase 1", "plan", "make the plan", "plan this migration", "/phase1-plan" | Read `.github/prompts/Phase1-Plan.prompt.md`. Requires Discovery Dossier + Capability Matrix. |
-| "phase 2", "migrate code", "/phase2-migratecode" | Read `.github/prompts/Phase2-MigrateCode.prompt.md` |
-| "phase 3", "generate infra", "/phase3-generateinfra" | Read `.github/prompts/Phase3-GenerateInfra.prompt.md` |
-| "phase 4", "deploy to azure", "/phase4-deploytoazure" | Read `.github/prompts/Phase4-DeployToAzure.prompt.md` |
-| "phase 5", "setup cicd", "/phase5-setupcicd" | Read `.github/prompts/Phase5-SetupCICD.prompt.md` |
-| "phase 6", "post-migration ops", "/phase6-postmigrationops" | Read `.github/prompts/Phase6-PostMigrationOps.prompt.md` |
+| "assess this application", "assess any application", "discover this app", "characterize this application", "scan this repo", "/assess-any-application", "run discovery", "start migration" | Read `.github/skills/assess-any-application/SKILL.md` and follow it. Produce `reports/Discovery-Dossier.md` + `reports/Capability-Matrix.yaml`. This is **step 1** of the main path. |
+| "phase 1", "plan", "make the plan", "plan this migration", "/phase1-plan" | Read `.github/skills/phase1-plan/SKILL.md`. Requires Discovery Dossier + Capability Matrix. |
+| "phase 2", "migrate code", "/phase2-migrate-code" | Read `.github/skills/phase2-migrate-code/SKILL.md` |
+| "phase 3", "generate infra", "/phase3-generate-infra" | Read `.github/skills/phase3-generate-infra/SKILL.md` |
+| "phase 4", "deploy to azure", "/phase4-deploy-to-azure" | Read `.github/skills/phase4-deploy-to-azure/SKILL.md` |
+| "phase 5", "setup cicd", "/phase5-setup-cicd" | Read `.github/skills/phase5-setup-cicd/SKILL.md` |
+| "phase 6", "post-migration ops", "/phase6-post-migration-ops" | Read `.github/skills/phase6-post-migration-ops/SKILL.md` |
 | **🔵 Alternative intakes (add-ons)** | |
-| "build migration plan", "approve discovery", "build the plan", "/build-migration-plan" | Read `.github/prompts/Build-Migration-Plan.prompt.md`. Produces `reports/Migration-Plan.md` separately from Phase 1. |
-| "quick assessment", "/quickassessment", "quick triage", "/quicktriage" | Read the matching prompt |
-| "interview me", "/InteractiveMigrationInterview" | Read `.github/prompts/InteractiveMigrationInterview.prompt.md` |
-| "team skill assessment", "/TeamSkillAssessment" | Read `.github/prompts/TeamSkillAssessment.prompt.md` |
+| "build migration plan", "approve discovery", "build the plan", "/build-migration-plan" | Read `.github/skills/build-migration-plan/SKILL.md`. Produces `reports/Migration-Plan.md` separately from Phase 1. |
+| "quick assessment", "/quick-assessment", "quick triage", "/quick-triage" | Read `.github/skills/quick-assessment/SKILL.md` or `.github/skills/quick-triage/SKILL.md` |
+| "interview me", "/interactive-migration-interview" | Read `.github/skills/interactive-migration-interview/SKILL.md` |
+| "team skill assessment", "/team-skill-assessment" | Read `.github/skills/team-skill-assessment/SKILL.md` |
 | **🔵 Portfolio / multi-app (add-ons)** | |
-| "portfolio strategy", "/PortfolioStrategy", "analyze portfolio", "CMDB analysis", "RVTools analysis", "migration strategy report" | Read `.github/prompts/PortfolioStrategy.prompt.md` and the `migration-strategy-report` skill |
-| "phase 0", "multi-repo assessment", "/phase0-multi-repo-assessment" | Read `.github/prompts/Phase0-Multi-repo-assessment.prompt.md` |
+| "portfolio strategy", "/portfolio-strategy", "analyze portfolio", "CMDB analysis", "RVTools analysis", "migration strategy report" | Read `.github/skills/portfolio-strategy/SKILL.md` and the `migration-strategy-report` skill |
+| "phase 0", "multi-repo assessment", "/phase0-multi-repo-assessment" | Read `.github/skills/phase0-multi-repo-assessment/SKILL.md` |
 | **🔵 Specialized deep-dives (add-ons)** | |
-| "database migration", "/databasemigration", "migrate the database" | Read `.github/prompts/DatabaseMigration.prompt.md` |
-| "security hardening", "/securityhardening", "harden security" | Read `.github/prompts/SecurityHardening.prompt.md` |
-| "cost optimization", "/costoptimization", "optimize cost" | Read `.github/prompts/CostOptimization.prompt.md` |
+| "database migration", "/database-migration", "migrate the database" | Read `.github/skills/database-migration/SKILL.md` |
+| "security hardening", "/security-hardening", "harden security" | Read `.github/skills/security-hardening/SKILL.md` |
+| "cost optimization", "/cost-optimization", "optimize cost" | Read `.github/skills/cost-optimization/SKILL.md` |
 | **🔵 Utility / recovery (add-ons)** | |
-| "rollback", "phase rollback", "/phase-rollback" | Read `.github/prompts/Phase-Rollback.prompt.md` |
-| "status", "/getstatus", "show migration status" | Read `.github/prompts/GetStatus.prompt.md` and consult `reports/Report-Status.md` |
+| "rollback", "phase rollback", "/phase-rollback" | Read `.github/skills/phase-rollback/SKILL.md` |
+| "status", "/get-status", "show migration status" | Read `.github/skills/get-status/SKILL.md` and consult `reports/Report-Status.md` |
 | **🧠 Skill creation (auto-invoked + user-invokable)** | |
-| "create a skill for X", "add a skill for X", "we need a skill for X", "research this and create a skill", "/skill-creator" | Read `.github/skills/skill-creator.md` and follow its 7-step flow (Detect Gap → Confirm → Research → Draft → Smoke-test → Log → Continue). Also invoked **automatically** by `/assess-any-application` (Step 8.5) and `/Phase1-Plan` (in the capability-matrix-gate) when the Capability Matrix contains a stack/source/workload/integration value with no matching `.github/skills/<family>-<value>.md` file. |
+| "create a skill for X", "add a skill for X", "we need a skill for X", "research this and create a skill", "/skill-creator" | Read `.github/skills/skill-creator/SKILL.md` and follow its 7-step flow (Detect Gap → Confirm → Research → Draft → Smoke-test → Log → Continue). Also invoked **automatically** by `/assess-any-application` (Step 8.5) and `/phase1-plan` (in the capability-matrix-gate) when the Capability Matrix contains a stack/source/workload/integration value with no matching reference file under `.github/skills/{stack,source,workload}-adapters/references/`. |
 
-**If the user types a slash command that isn't in the table above, look for a matching file at `.github/prompts/<command-no-slash>.prompt.md` (case-insensitive) and read it.**
+**If the user types a slash command that isn't in the table above, look for a matching skill at `.github/skills/<command-no-slash>/SKILL.md` (lowercase-hyphen) and read it.**
 
 ## Universal Discovery Contract
 
 For any application that does not already have a Capability Matrix:
 
-1. **Run discovery first.** Use `/assess-any-application` or the `Discovery-Intake` chatmode.
+1. **Run discovery first.** Use `/assess-any-application` or the `Discovery-Intake` agent.
 2. **Capture evidence with confidence labels.** Every classification (`source`, `stack`, `workload`, `data`, `integrations`) must have `evidence_confidence: high | medium | low`.
-3. **Produce a Discovery Dossier.** Path: `reports/Discovery-Dossier.md`. Structure defined by `.github/skills/discovery-dossier-template.md`.
-4. **Produce a Capability Matrix.** Path: `reports/Capability-Matrix.yaml`. Schema defined by `.github/skills/capability-matrix.md`.
-5. **Recommend a migration strategy** using `.github/skills/migration-strategy-decision-tree.md` (6Rs is one output field; the decision tree weighs business priority, source constraints, code mutability, data gravity, integration complexity, target Azure options, cutover constraints, modernization depth, and team readiness).
-6. **Phase prompts consume the Capability Matrix.** They do NOT re-do classification. If a Phase prompt cannot find a matrix, it must request one before continuing.
+3. **Produce a Discovery Dossier.** Path: `reports/Discovery-Dossier.md`. Structure defined by `.github/skills/migration-artifacts/references/discovery-dossier-template.md`.
+4. **Produce a Capability Matrix.** Path: `reports/Capability-Matrix.yaml`. Schema defined by `.github/skills/migration-artifacts/references/capability-matrix.md`.
+5. **Recommend a migration strategy** using `.github/skills/migration-decisions/references/migration-strategy-decision-tree.md` (6Rs is one output field; the decision tree weighs business priority, source constraints, code mutability, data gravity, integration complexity, target Azure options, cutover constraints, modernization depth, and team readiness).
+6. **Phase skills consume the Capability Matrix.** They do NOT re-do classification. If a Phase skill cannot find a matrix, it must request one before continuing.
 
 ## Migration Scope
 
@@ -129,9 +148,9 @@ For any application that does not already have a Capability Matrix:
 
 The agent does **not** decide major architecture on the user's behalf. It lays out options with tradeoffs and waits.
 
-- Read [`.github/skills/decision-hardstop.md`](./skills/decision-hardstop.md) — the binding protocol
-- Consult [`.github/skills/decision-catalog.md`](./skills/decision-catalog.md) — the 18 canonical decisions
-- Phase 2-4 + DatabaseMigration prompts have hard-stop gates that block work until `reports/Decisions-Required.md` shows each required decision as `✅ DECIDED` (or `🚫 N/A`)
+- Read [`.github/skills/migration-decisions/references/decision-hardstop.md`](./skills/migration-decisions/references/decision-hardstop.md) — the binding protocol
+- Consult [`.github/skills/migration-decisions/references/decision-catalog.md`](./skills/migration-decisions/references/decision-catalog.md) — the 18 canonical decisions
+- Phase 2-4 + `/database-migration` skills have hard-stop gates that block work until `reports/Decisions-Required.md` shows each required decision as `✅ DECIDED` (or `🚫 N/A`)
 - **No silent defaults. No "newer is better." No expert-mode bypass.**
 - Even when surfacing a recommendation, label it `⚠ Default guess` and acknowledge the user owns the choice
 - Stay-as-is is always option 1 in every option block — force an active choice
@@ -151,7 +170,7 @@ Read [`.github/hooks/decision-gates.md`](./hooks/decision-gates.md) for the orch
 
 ### Documentation
 - Track migration progress in `reports/Report-Status.md`
-- **Append an Action Log entry** to `reports/Report-Status.md` after every meaningful action (phase transition, artifact production, decision, gate event, user input, rollback). Format spec: [`.github/skills/action-log-format.md`](./skills/action-log-format.md). The Action Log is the migration's **trace memory** — it's what allows a new session to recover if the previous session was lost.
+- **Append an Action Log entry** to `reports/Report-Status.md` after every meaningful action (phase transition, artifact production, decision, gate event, user input, rollback). Format spec: [`.github/skills/migration-artifacts/references/action-log-format.md`](./skills/migration-artifacts/references/action-log-format.md). The Action Log is the migration's **trace memory** — it's what allows a new session to recover if the previous session was lost.
 - Generate assessment artifacts in `reports/Discovery-Dossier.md` + `reports/Capability-Matrix.yaml`
 - Generate per-application reports in `reports/Application-Assessment-Report.md`
 - Use Mermaid diagrams for architecture visualization
@@ -165,7 +184,7 @@ Read [`.github/hooks/decision-gates.md`](./hooks/decision-gates.md) for the orch
 
 ### Agent Behavior
 - For unknown applications, **run discovery first** before any other work (see Universal Discovery Contract above)
-- Each Phase prompt is self-contained — it reads the Capability Matrix and Decisions-Required file, applies the relevant skills, and produces named output artifacts
+- Each Phase skill is self-contained — it reads the Capability Matrix and Decisions-Required file, applies the relevant skills, and produces named output artifacts
 - When parallel work is possible (e.g., assessment + risk audit), use the `task` tool with `mode: "background"` to dispatch sub-agents
 
 ## Target Platforms
@@ -197,14 +216,14 @@ Read [`.github/hooks/decision-gates.md`](./hooks/decision-gates.md) for the orch
 | Oracle Forms | APEX / Spring Boot rewrite, or refactor to web UI |
 | Delphi / VB6 / PowerBuilder | Rebuild on .NET 10 or modern web stack |
 
-> ⚠ The target framework is **not a default**. It is [a decision the user must make](./skills/decision-catalog.md). The table above shows common modernization targets, not a recommendation to silently apply.
+> ⚠ The target framework is **not a default**. It is [a decision the user must make](./skills/migration-decisions/references/decision-catalog.md). The table above shows common modernization targets, not a recommendation to silently apply.
 
 ## Distribution
 
 This project ships as a **VS Code extension** at `packages/azure-migration-squad-vscode/`. The extension:
 
-- Bundles all of `.github/{prompts,skills,chatmodes,hooks,agents,copilot-instructions.md}` into the user's workspace via the **Initialize** command
-- Surfaces the prompt catalog, agent definition, skills, and pending decisions in a sidebar tree view
+- Bundles all of `.github/{skills,agents,hooks,copilot-instructions.md}` into the user's workspace via the **Initialize** command
+- Surfaces the skill catalog, agent definitions, and pending decisions in a sidebar tree view
 - Shows current migration phase in the status bar
 - Auto-prompts to install GitHub Copilot Chat (with user consent)
 - Reads `reports/Decisions-Required.md` to surface pending architecture decisions

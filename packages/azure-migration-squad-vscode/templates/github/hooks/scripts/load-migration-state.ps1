@@ -1,6 +1,6 @@
 # Hook: SessionStart - Load migration state + recent Action Log for recovery
 # Returns: additionalContext with current migration status + last 5 Action Log entries
-# Spec: .github/skills/action-log-format.md
+# Spec: .github/skills/migration-artifacts/references/action-log-format.md
 $ErrorActionPreference = "SilentlyContinue"
 
 try {
@@ -84,7 +84,7 @@ try {
         $deckCount = $strategyDecks.Count
         $latestDeck = $strategyDecks | Sort-Object LastWriteTime -Descending | Select-Object -First 1
         $deckName = $latestDeck.Name
-        $summary += "Portfolio plan: $deckCount deck(s), latest='$deckName' (use /PortfolioStrategy to regenerate or iterate)"
+        $summary += "Portfolio plan: $deckCount deck(s), latest='$deckName' (use /portfolio-strategy to regenerate or iterate)"
     }
 } catch { }
 

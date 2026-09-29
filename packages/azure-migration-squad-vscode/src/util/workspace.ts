@@ -2,7 +2,7 @@
  * Workspace helpers — find the project root and detect install state.
  *
  * The extension supports multi-root workspaces, but for tree views we pick
- * the first workspace folder that contains a `.github/prompts/` directory
+ * the first workspace folder that contains a `.github/skills/` directory
  * (the marker that the migration agent has been initialized). If none is
  * found, the user hasn't initialized yet.
  */
@@ -16,8 +16,6 @@ export interface AmsWorkspace {
   root: string;
   /** True if `.github/agents/Code-Migration-Modernization.agent.md` exists. */
   hasAgent: boolean;
-  /** True if `.github/prompts/` exists. */
-  hasPrompts: boolean;
   /** True if `.github/skills/` exists. */
   hasSkills: boolean;
   /** True if `.github/copilot-instructions.md` exists. */
@@ -35,7 +33,7 @@ export function findAmsWorkspace(): AmsWorkspace | null {
   for (const folder of folders) {
     const root = folder.uri.fsPath;
     const ws = inspectWorkspace(root);
-    if (ws.hasPrompts || ws.hasAgent || ws.hasSkills) {
+    if (ws.hasSkills || ws.hasAgent) {
       return ws;
     }
   }
@@ -49,7 +47,6 @@ function inspectWorkspace(root: string): AmsWorkspace {
   const hasAgent = fs.existsSync(
     path.join(root, '.github', 'agents', 'Code-Migration-Modernization.agent.md')
   );
-  const hasPrompts = fs.existsSync(path.join(root, '.github', 'prompts'));
   const hasSkills = fs.existsSync(path.join(root, '.github', 'skills'));
   const hasCopilotInstructions = fs.existsSync(
     path.join(root, '.github', 'copilot-instructions.md')
@@ -57,10 +54,9 @@ function inspectWorkspace(root: string): AmsWorkspace {
   return {
     root,
     hasAgent,
-    hasPrompts,
     hasSkills,
     hasCopilotInstructions,
-    isInstalled: hasAgent && hasPrompts && hasSkills && hasCopilotInstructions,
+    isInstalled: hasAgent && hasSkills && hasCopilotInstructions,
   };
 }
 

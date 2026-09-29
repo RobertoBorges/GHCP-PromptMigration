@@ -1,4 +1,4 @@
-# 06-Java-API-BusReservation Cheat Sheet — The Express
+# 06-Java-API-BusReservation Cheat Sheet — The Duke
 
 ## What is this app?
 
@@ -17,7 +17,9 @@ A Java 8 Spring Boot API for bus reservation workflows, backed by Spring Web, Sp
 
 ## Target stack
 
-| Area | Recommended target |
+> ⚠ The rows below are **candidates, not defaults.** `/phase1-plan` presents each option with tradeoffs and records your answer in `reports/Decisions-Required.md`. The agent never picks a target framework, hosting platform, or database engine on your behalf.
+
+| Area | Candidate target (your decision) |
 |---|---|
 | Runtime | Java 21 |
 | Framework | Spring Boot 3 |
@@ -42,20 +44,22 @@ A Java 8 Spring Boot API for bus reservation workflows, backed by Spring Web, Sp
 - Introduce production-grade secret handling and monitoring
 - Validate actuator, health probes, and startup behavior for Container Apps
 
-## Prompt sequence
+## Command sequence
 
-1. `/run quick assessment`
+> Steps marked 🟢 are the 7-step main path. Steps marked 🔵 are optional add-ons. Free-text lines are follow-up requests you type in the same thread.
+
+1. `/assess-any-application`
 2. `Assess #file:Use-cases/06-Java-API-BusReservation for Java 8 + Spring Boot 2.3 modernization to Java 21 + Spring Boot 3 on Azure Container Apps with PostgreSQL. Highlight H2, javax->jakarta, Docker, and Maven risks.`
-3. `/run Phase 1 plan and assess`
+3. `/phase1-plan`
 4. `Review pom.xml, application.properties, and RestApi.java. Produce an endpoint inventory, dependency upgrade plan, and target architecture using Container Apps and PostgreSQL.`
-5. `/run database migration review`
-6. `/run Phase 2 code migration`
-7. `/run security hardening review`
-8. `/run Phase 3 infrastructure generation`
-9. `/run Phase 4 deploy to Azure`
-10. `/run Phase 5 CI/CD setup`
-11. `/run Phase 6 post-migration ops`
-12. `@agent show migration status`
+5. `/database-migration`
+6. `/phase2-migrate-code`
+7. `/security-hardening`
+8. `/phase3-generate-infra`
+9. `/phase4-deploy-to-azure`
+10. `/phase5-setup-cicd`
+11. `/phase6-post-migration-ops`
+12. `/get-status`
 
 ## Agent dispatch order
 
@@ -74,10 +78,13 @@ A Java 8 Spring Boot API for bus reservation workflows, backed by Spring Web, Sp
 
 ## Reference
 
+- [Full walkthrough for this app](../walkthroughs/06-java-api-walkthrough.md)
+- [Skill catalog](../architecture/SKILL-CATALOG.md) — all 36 skills and 9 custom agents
+- [Skills map](../guides/skills-map.md) — which skills load at which step
 - [BookShop reference cheat sheet](05-bookshop-reference.md)
-- [BookShop modernization reference](../../Use-cases/05-BookShop/docs/Modernization-Prompts-Reference.md)
+- [BookShop reference walkthrough](../walkthroughs/05-bookshop-reference-walkthrough.md)
 
-## Sample prompts
+## Sample requests
 
 - `Assess #file:Use-cases/06-Java-API-BusReservation for Java 21 + Spring Boot 3 migration and rank the biggest blockers.`
 - `Create an H2-to-PostgreSQL migration plan for this API and show what breaks first.`

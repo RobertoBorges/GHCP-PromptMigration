@@ -5,6 +5,7 @@ description: |
   **Use when:** Creating tests to verify migration correctness and prevent regressions.
   **Triggers on:** Test creation requests, validation phase, post-migration verification.
   **Covers:** xUnit/NUnit for .NET, JUnit 5 for Java, mocking strategies, test organization patterns.
+user-invocable: false
 ---
 
 # Migration Unit Testing Skill

@@ -1,6 +1,6 @@
 # Hook: Stop - Append canonical Action Log entry for session end
 # Emits: - <ISO-8601-UTC> | actor=hook | action=session-ended | tokens=~0 | turn=<final> | notes="session=<id>"
-# Spec: .github/skills/action-log-format.md
+# Spec: .github/skills/migration-artifacts/references/action-log-format.md
 $ErrorActionPreference = "SilentlyContinue"
 
 try {
@@ -40,7 +40,7 @@ if (Test-Path $statusPath) {
     } catch { }
 
     # Ensure the file has an Action Log section — append one if missing so subsequent
-    # session-start hooks + prompts can find it deterministically.
+    # session-start hooks + skills can find it deterministically.
     $hasSection = $false
     try {
         $lookup = Get-Content $statusPath -Raw -ErrorAction SilentlyContinue

@@ -119,7 +119,11 @@ The tag push triggers `.github/workflows/release-vscode-extension.yml`, which:
 - Builds the extension (`npm run sync && npm run build`)
 - Packages the `.vsix` (`vsce package`)
 - Publishes to VS Code Marketplace (`vsce publish` with `VSCE_PAT`)
-- Uploads the `.vsix` as a workflow artifact (90-day retention)
+- Uploads two workflow artifacts (90-day retention):
+  - **`vscode-extension-<run>`** — the `.vsix` itself
+  - **`agent-content-pack-<run>`** — the raw `.github/{agents,skills,hooks}` tree plus `copilot-instructions.md` and `MIGRATION-START-HERE.md`, for users who want the agent content without installing the extension
+
+> **Note on the content pack:** the upload step sets `include-hidden-files: true`. `actions/upload-artifact@v4` skips hidden paths by default, and `.github` is a dot-directory — without that flag the pack uploads only the two root files and silently ships empty. A staged-file-count assertion guards against the same class of regression.
 
 Marketplace listing goes live in ~5 minutes.
 
@@ -206,6 +210,7 @@ git push origin HEAD vscode-v0.2.1
 | `License field is required` | LICENSE file not in `.vsix` | Verify `.vscodeignore` doesn't exclude `LICENSE` |
 | **release-please doesn't open a PR** | No `feat:` / `fix:` / `perf:` commits since last release | That's by design — only `feat/fix/perf` + breaking changes trigger releases. Add a `feat:` commit if you want to force one, or use the local flow. |
 | **Tag pushed but marketplace didn't publish** | The tag was created by the default `GITHUB_TOKEN` (release-please), which doesn't trigger downstream workflows | Set `RELEASE_PLEASE_TOKEN` (see Step 3 above), OR push the tag manually |
+| **`agent-content-pack` artifact is only a few KB** | The upload step lost `include-hidden-files: true`, so `upload-artifact` skipped the `.github` dot-directory | Restore `include-hidden-files: true` on the upload step. The staged-file-count guard should fail the build first — check the "Stage agent content pack" step output |
 | `Tag $TAG does not match package.json version` | You bumped one without the other | Never edit `package.json` version by hand — use release-please or the local script |
 
 ---

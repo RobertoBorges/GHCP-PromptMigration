@@ -1,6 +1,6 @@
 /**
  * CI guard: validate that every decision in the canonical catalog is referenced
- * by at least one phase prompt's decision-hardstop gate.
+ * by at least one phase skill's decision-hardstop gate.
  *
  * If a catalog item is orphaned (no phase depends on it), the catalog is either
  * stale (entry should be removed) OR a phase is missing a dependency (gate
@@ -15,11 +15,18 @@ import { fileURLToPath } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(__dirname, '..');
-const catalogPath = path.join(repoRoot, '.github', 'skills', 'decision-catalog.md');
-const promptsDir = path.join(repoRoot, '.github', 'prompts');
+const catalogPath = path.join(
+  repoRoot,
+  '.github',
+  'skills',
+  'migration-decisions',
+  'references',
+  'decision-catalog.md'
+);
+const skillsDir = path.join(repoRoot, '.github', 'skills');
 
 if (!existsSync(catalogPath)) {
-  console.error('✗ Catalog file missing: .github/skills/decision-catalog.md');
+  console.error('✗ Catalog file missing: .github/skills/migration-decisions/references/decision-catalog.md');
   process.exit(2);
 }
 
@@ -32,40 +39,40 @@ if (catalogIds.length === 0) {
   process.exit(2);
 }
 
-// Each prompt's gate references catalog IDs. We grep across all phase prompts.
-const PHASE_PROMPTS = [
-  'Phase1-Plan.prompt.md',
-  'Phase2-MigrateCode.prompt.md',
-  'Phase3-GenerateInfra.prompt.md',
-  'Phase4-DeployToAzure.prompt.md',
-  'Phase5-SetupCICD.prompt.md',
-  'Phase6-PostMigrationOps.prompt.md',
-  'DatabaseMigration.prompt.md',
-  'SecurityHardening.prompt.md',
-  'CostOptimization.prompt.md',
+// Each phase skill's gate references catalog IDs. We grep across all phase skills.
+const PHASE_SKILLS = [
+  'phase1-plan',
+  'phase2-migrate-code',
+  'phase3-generate-infra',
+  'phase4-deploy-to-azure',
+  'phase5-setup-cicd',
+  'phase6-post-migration-ops',
+  'database-migration',
+  'security-hardening',
+  'cost-optimization',
 ];
 
 const referencedIds = new Set();
 const perPhase = {};
 
-for (const file of PHASE_PROMPTS) {
-  const fp = path.join(promptsDir, file);
+for (const dir of PHASE_SKILLS) {
+  const fp = path.join(skillsDir, dir, 'SKILL.md');
   if (!existsSync(fp)) continue;
   const content = readFileSync(fp, 'utf-8');
   const ids = Array.from(content.matchAll(/\b(D-\d{2})\b/g)).map((m) => m[1]);
-  perPhase[file] = ids;
+  perPhase[`${dir}/SKILL.md`] = ids;
   for (const id of ids) referencedIds.add(id);
 }
 
 console.log('[validate-decision-coverage] Catalog entries:', catalogIds.length);
-console.log('[validate-decision-coverage] Referenced in prompts:', referencedIds.size);
+console.log('[validate-decision-coverage] Referenced in skills:', referencedIds.size);
 
 const orphans = catalogIds.filter((id) => !referencedIds.has(id));
 const unknown = [...referencedIds].filter((id) => !catalogIds.includes(id));
 
 if (orphans.length > 0) {
   console.error('');
-  console.error('✗ Orphaned catalog entries — defined but not referenced by any phase prompt:');
+  console.error('✗ Orphaned catalog entries — defined but not referenced by any phase skill:');
   for (const id of orphans) {
     // Extract the decision name for clearer messaging
     const match = catalog.match(new RegExp(`^##\\s+${id}:\\s*(.+)$`, 'm'));
@@ -73,13 +80,13 @@ if (orphans.length > 0) {
     console.error(`  • ${id} — ${name}`);
   }
   console.error('');
-  console.error('Fix: either reference each orphan from at least one phase prompt');
-  console.error('     (via inject-decision-gates.mjs), or remove from .github/skills/decision-catalog.md.');
+  console.error('Fix: either reference each orphan from at least one phase skill');
+  console.error('     (via inject-decision-gates.mjs), or remove from .github/skills/migration-decisions/references/decision-catalog.md.');
 }
 
 if (unknown.length > 0) {
   console.error('');
-  console.error('✗ Phase prompts reference unknown decision IDs (not in catalog):');
+  console.error('✗ Phase skills reference unknown decision IDs (not in catalog):');
   for (const id of unknown) {
     const where = Object.entries(perPhase)
       .filter(([, ids]) => ids.includes(id))
@@ -88,7 +95,7 @@ if (unknown.length > 0) {
     console.error(`  • ${id} — referenced by: ${where}`);
   }
   console.error('');
-  console.error('Fix: add the missing entries to .github/skills/decision-catalog.md or correct the typo.');
+  console.error('Fix: add the missing entries to .github/skills/migration-decisions/references/decision-catalog.md or correct the typo.');
 }
 
 if (orphans.length === 0 && unknown.length === 0) {

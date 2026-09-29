@@ -26,9 +26,7 @@ export interface CopyResult {
  */
 const COPY_MAP: Array<{ src: string; dest: string }> = [
   { src: 'github/agents', dest: '.github/agents' },
-  { src: 'github/prompts', dest: '.github/prompts' },
   { src: 'github/skills', dest: '.github/skills' },
-  { src: 'github/chatmodes', dest: '.github/chatmodes' },
   { src: 'github/hooks', dest: '.github/hooks' },
   { src: 'github/copilot-instructions.md', dest: '.github/copilot-instructions.md' },
   { src: 'MIGRATION-START-HERE.md', dest: 'MIGRATION-START-HERE.md' },
@@ -71,7 +69,7 @@ export async function copyTemplatesToWorkspace(
     const srcPath = path.join(templatesRoot, src);
     const destPath = path.join(workspaceRoot, dest);
     if (!fs.existsSync(srcPath)) {
-      // Optional content missing — skip silently. Required content (prompts/agents) is asserted by the caller.
+      // Optional content missing — skip silently. Required content (skills/agents) is asserted by the caller.
       continue;
     }
     await copyRecursive(srcPath, destPath, overwrite, result, workspaceRoot);

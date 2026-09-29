@@ -2,11 +2,11 @@
 
 > Orchestration rules: **the agent never decides major architecture on behalf of the user**. It surfaces options and waits.
 
-This hook is loaded by every migration chatmode (Migration-Orchestrator, Discovery-Intake, Code-Migration-Modernization, etc.) and applies to every agent in the agent. It is enforced via the Phase prompts' opening gates and the agent charters.
+This hook is loaded by every migration agent (Migration-Orchestrator, Discovery-Intake, Code-Migration-Modernization, etc.) and applies to every sub-agent. It is enforced via the Phase skills' opening gates and the agent charters.
 
 ## Rule 1 — Read before acting
 
-Before any agent does work that touches one of the decisions in [`decision-catalog.md`](../skills/decision-catalog.md), it MUST read `reports/Decisions-Required.md` and check the relevant decision's **Status**.
+Before any agent does work that touches one of the decisions in [`migration-decisions/references/decision-catalog.md`](../skills/migration-decisions/references/decision-catalog.md), it MUST read `reports/Decisions-Required.md` and check the relevant decision's **Status**.
 
 - If `✅ DECIDED <date>` → proceed using the recorded answer.
 - If `⏸ PENDING` → STOP. Apply Rule 3 (ask format).
@@ -66,7 +66,7 @@ If `reports/Decisions-Required.md` doesn't exist, the agent must NOT proceed and
 This file is produced by Phase 1 — Plan & Assess, which enumerates every
 major architecture decision needed for your migration.
 
-Please run:  /Phase1-Plan
+Please run:  /phase1-plan
 (or in CLI: "build the migration plan")
 
 Once Phase 1 completes, I can resume work — but only against the decisions
@@ -116,6 +116,6 @@ NOT to "tell the user what they should do because I'm the specialist." Specialis
 
 ## See also
 
-- [`decision-hardstop.md`](../skills/decision-hardstop.md) — the binding protocol
-- [`decision-catalog.md`](../skills/decision-catalog.md) — the canonical list
-- [`decisions-required-template.md`](../skills/decisions-required-template.md) — the file structure
+- [`migration-decisions/references/decision-hardstop.md`](../skills/migration-decisions/references/decision-hardstop.md) — the binding protocol
+- [`migration-decisions/references/decision-catalog.md`](../skills/migration-decisions/references/decision-catalog.md) — the canonical list
+- [`migration-decisions/references/decisions-required-template.md`](../skills/migration-decisions/references/decisions-required-template.md) — the file structure

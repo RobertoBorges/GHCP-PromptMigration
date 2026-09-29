@@ -5,7 +5,7 @@
  * render. Tolerant of formatting variations — looks for the H2 "Decision N:"
  * heading and the "Status:" line to extract each decision.
  *
- * Schema mirrors .github/skills/decisions-required-template.md.
+ * Schema mirrors .github/skills/migration-decisions/references/decisions-required-template.md.
  */
 
 import * as fs from 'node:fs';
