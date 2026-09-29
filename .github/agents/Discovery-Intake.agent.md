@@ -205,8 +205,6 @@ Load only the skills relevant to this engagement. The starting set is:
 ## Hooks to Reference
 
 - `#file:.github/hooks/phase-gates.md`
-- `#file:.github/hooks/agent-dispatch.md`
-
 ## Handoff Protocol
 
 A good Discovery-Intake closeout includes:

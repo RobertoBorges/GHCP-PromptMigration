@@ -90,10 +90,6 @@ Use these optimization skills:
 ## Orchestration Hooks
 Apply orchestration rules from:
 - `#file:.github/hooks/phase-gates.md`
-- `#file:.github/hooks/agent-dispatch.md`
-- `#file:.github/hooks/use-case-routing.md`
-
-
 # Cost Optimization
 
 ## Agent Role

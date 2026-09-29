@@ -38,10 +38,6 @@ Use these triage skills when legacy patterns are detected:
 ## Orchestration Hooks
 Apply orchestration rules from:
 - `#file:.github/hooks/phase-gates.md`
-- `#file:.github/hooks/agent-dispatch.md`
-- `#file:.github/hooks/use-case-routing.md`
-
-
 # Quick Assessment
 
 ## Agent Role

@@ -95,9 +95,6 @@ Use these security and identity skills:
 ## Orchestration Hooks
 Apply orchestration rules from:
 - `#file:.github/hooks/phase-gates.md`
-- `#file:.github/hooks/agent-dispatch.md`
-- `#file:.github/hooks/use-case-routing.md`
-
 # Security Hardening
 
 ## Agent Role

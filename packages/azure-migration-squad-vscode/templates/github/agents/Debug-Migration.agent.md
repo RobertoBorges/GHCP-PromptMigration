@@ -41,8 +41,6 @@ Default dispatch for debugging:
 
 ## Hooks to Reference
 - `#file:.github/hooks/phase-gates.md`
-- `#file:.github/hooks/agent-dispatch.md`
-
 ## Skills to Reference
 Select only the skills that match the failure mode:
 - `#file:.github/skills/config-transformation/references/config-transformation-patterns.md`
@@ -73,22 +71,22 @@ Select only the skills that match the failure mode:
 ## Escalation Guidance
 - Code defect or framework mismatch -> `Code-Migration-Modernization`
 - Azure platform or hosting mismatch -> `Azure-Infrastructure`
-- Pipeline or release issue -> `/run Phase 5 setup CI/CD`
+- Pipeline or release issue -> `/phase5-setup-cicd`
 - Data or schema problem -> `/run database migration review`
 - Security or access blocker -> `/run security hardening review`
 - Performance regression -> `Cost-Optimization` or `Performance Engineer`
-- Operational visibility gap -> `/run Phase 6 post-migration ops`
+- Operational visibility gap -> `/phase6-post-migration-ops`
 - Status-only follow-up -> `@agent show migration status`
 - Rollback decision required -> `/run rollback planning`
 
 ## Recommended Follow-through Commands
 - `/run quick assessment` for fast triage when the migration path is still unclear.
-- `/run Phase 1 plan and assess` when the failure traces back to a bad migration decision.
-- `/run Phase 2 code migration` when the root cause is in application code or configuration.
-- `/run Phase 3 generate infrastructure` when Azure resource shape or IaC assumptions are wrong.
-- `/run Phase 4 deploy to Azure` when the fix is ready and deployment should be retried.
-- `/run Phase 5 setup CI/CD` when the failure belongs in pipeline automation.
-- `/run Phase 6 post-migration ops` when the issue is operational or observability-related.
+- `/phase1-plan` when the failure traces back to a bad migration decision.
+- `/phase2-migrate-code` when the root cause is in application code or configuration.
+- `/phase3-generate-infra` when Azure resource shape or IaC assumptions are wrong.
+- `/phase4-deploy-to-azure` when the fix is ready and deployment should be retried.
+- `/phase5-setup-cicd` when the failure belongs in pipeline automation.
+- `/phase6-post-migration-ops` when the issue is operational or observability-related.
 - `/run security hardening review` when the blocker is auth, secret, RBAC, or compliance related.
 - `/run cost optimization review` when the issue is cost-performance imbalance after stabilization.
 - `/run database migration review` when schema, connectivity, or cutover strategy is at fault.

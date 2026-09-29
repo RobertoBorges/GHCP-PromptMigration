@@ -39,8 +39,6 @@ Default dispatch for security review:
 
 ## Hooks to Reference
 - `#file:.github/hooks/phase-gates.md`
-- `#file:.github/hooks/agent-dispatch.md`
-
 ## Skills to Reference
 - `#file:.github/skills/azure-security-baseline/references/azure-entra-id.md`
 - `#file:.github/skills/azure-security-baseline/references/azure-keyvault-secrets.md`

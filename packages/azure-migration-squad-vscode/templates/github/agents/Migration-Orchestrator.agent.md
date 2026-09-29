@@ -50,8 +50,6 @@ Before routing **any** application-level work, verify the **Discovery Contract**
 
 ## Hooks to Reference
 - `#file:.github/hooks/phase-gates.md`
-- `#file:.github/hooks/agent-dispatch.md`
-
 ## Skill Composition Rules
 Combine only the skills that fit the situation. Start from the Capability Matrix.
 
@@ -105,10 +103,9 @@ Combine only the skills that fit the situation. Start from the Capability Matrix
 
 **Target/Azure:**
 - `#file:.github/skills/azure-infrastructure/references/azure-app-service.md`
-- `#file:skills/azure-container-apps.md`
-- `#file:skills/azure-aks.md`
+- `#file:.github/skills/azure-infrastructure/references/azure-container-apps.md`
 - `#file:.github/skills/azure-security-baseline/references/azure-network-security.md`
-- `#file:skills/cost-optimization.md`
+- `#file:.github/skills/cost-optimization/SKILL.md`
 - `#file:.github/skills/migration-strategy-report/references/pptx-generation.md`
 
 ## Sub-agents available
@@ -156,7 +153,7 @@ Use these mappings when deciding the next owner:
 
 - **unknown application or new engagement** → **Discovery Engineer (`/assess-any-application`)**
 - **migration strategy decision / 6Rs / Azure target choice** → Discovery Engineer first, then Architect
-- app modernization, runtime upgrade, code blockers → `Code-Migration-Modernization`
+- app modernization, runtime upgrade, code blockers → `Code-Modernization-Specialist`
 - Azure landing zone, service fit, identity wiring, IaC → `Azure-Infrastructure`
 - release execution, deployment safety, rollback, go-live → `Cutover Commander`
 - CI/CD pipelines, environment promotion, automation → `DevOps Engineer`

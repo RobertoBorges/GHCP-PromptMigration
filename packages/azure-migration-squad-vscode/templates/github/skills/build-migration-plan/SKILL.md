@@ -69,8 +69,6 @@ Load only the skills whose names appear in `source.primary_adapter`, `stack.prim
 ## Orchestration Hooks
 
 - `#file:.github/hooks/phase-gates.md`
-- `#file:.github/hooks/agent-dispatch.md`
-
 ---
 
 ## Step 1 — Load and validate the discovery contract

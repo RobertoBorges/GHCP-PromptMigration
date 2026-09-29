@@ -109,8 +109,6 @@ Load the stack skill that matches the primary language/framework. Multiple may a
 ## Orchestration Hooks
 
 - `#file:.github/hooks/phase-gates.md`
-- `#file:.github/hooks/agent-dispatch.md`
-
 ---
 
 ## Step 1 — Triage (Mode A) or Manifest Load (Mode B)

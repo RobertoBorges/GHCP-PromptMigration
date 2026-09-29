@@ -30,19 +30,13 @@ This mode generates platform assets. It does not own deep code refactoring.
 
 ## Hooks to Reference
 - `#file:.github/hooks/phase-gates.md`
-- `#file:.github/hooks/agent-dispatch.md`
-
 ## Skills to Reference
 - `#file:.github/skills/azure-infrastructure/references/bicep-modules.md`
-- `#file:skills/terraform-azure.md`
-- `#file:skills/azd-configuration.md`
 - `#file:.github/skills/azure-infrastructure/references/azure-app-service.md`
-- `#file:skills/azure-container-apps.md`
-- `#file:skills/azure-aks.md`
+- `#file:.github/skills/azure-infrastructure/references/azure-container-apps.md`
 - `#file:.github/skills/azure-security-baseline/references/azure-keyvault-secrets.md`
 - `#file:.github/skills/azure-security-baseline/references/managed-identity.md`
 - `#file:.github/skills/azure-security-baseline/references/rbac-least-privilege.md`
-- `#file:skills/azure-monitor-appinsights.md`
 - `#file:.github/skills/azure-security-baseline/references/azure-network-security.md`
 
 ## Phase Rules
@@ -64,8 +58,8 @@ Do not hand off to deployment until:
 ## Handoff Rules
 - Hand to `Migration-Orchestrator` after Phase 3 artifacts are ready.
 - Hand to `Security-Review` when identity, network, or secret controls need sign-off.
-- Hand to `/run Phase 4 deploy to Azure` when the gate is green.
-- Hand to `/run Phase 5 setup CI/CD` when pipeline integration changes are now unblocked.
+- Hand to `/phase4-deploy-to-azure` when the gate is green.
+- Hand to `/phase5-setup-cicd` when pipeline integration changes are now unblocked.
 
 ## Output Checklist
 - [ ] Assessment inputs read

@@ -47,8 +47,6 @@ Apply the most relevant reusable skills based on what you detect. Prefer stack-*
 ## Orchestration Hooks
 Enforce phase discipline with:
 - `#file:.github/hooks/phase-gates.md`
-- `#file:.github/hooks/agent-dispatch.md`
-
 ## Step 1: Perform the 5-Minute App Scan
 Inspect the highest-signal files first:
 - Solution and project manifests (any stack — see Step 2)

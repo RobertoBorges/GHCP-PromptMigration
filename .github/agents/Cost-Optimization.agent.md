@@ -33,14 +33,10 @@ When stakeholders need an executive-ready spend narrative, loop in **Presentatio
 
 ## Hooks to Reference
 - `#file:.github/hooks/phase-gates.md`
-- `#file:.github/hooks/agent-dispatch.md`
-
 ## Skills to Reference
-- `#file:skills/cost-optimization.md`
+- `#file:.github/skills/cost-optimization/SKILL.md`
 - `#file:.github/skills/azure-infrastructure/references/azure-app-service.md`
-- `#file:skills/azure-container-apps.md`
-- `#file:skills/azure-aks.md`
-- `#file:skills/azure-monitor-appinsights.md`
+- `#file:.github/skills/azure-infrastructure/references/azure-container-apps.md`
 - `#file:.github/skills/migration-strategy-report/references/pptx-generation.md`
 
 ## Operating Rules
@@ -60,7 +56,7 @@ This mode is complete when:
 ## Handoff Rules
 - Hand to `Migration-Orchestrator` for sequencing and portfolio rollup.
 - Hand to `Security-Review` if a savings recommendation would weaken controls.
-- Hand to `/run Phase 6 post-migration ops` when monitoring or retention tuning is required.
+- Hand to `/phase6-post-migration-ops` when monitoring or retention tuning is required.
 - Hand to `Performance Engineer` if a cost change needs baseline validation.
 - Hand to `Presentation Specialist (Tess Ocean)` when the cost report should become a stakeholder-facing presentation.
 
