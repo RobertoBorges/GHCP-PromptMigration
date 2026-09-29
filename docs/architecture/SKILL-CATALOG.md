@@ -151,18 +151,22 @@ These never appear in the `/` menu. The agent loads them when their `description
 
 ## Custom agents
 
-`.github/agents/` holds **9** `*.agent.md` custom agents. They set the persona, tool allow-list, and routing posture; skills supply the procedure.
+`.github/agents/` holds **8** `*.agent.md` custom agents. They set the persona, tool allow-list, and routing posture; skills supply the procedure.
 
-| Agent | Leads | Typical entry skills |
-|---|---|---|
-| `Migration-Orchestrator` | End-to-end routing, gates, portfolio visibility | any workflow skill |
-| `Discovery-Intake` | Universal intake and classification | `/assess-any-application`, `/quick-triage` |
-| `Code-Migration-Modernization` | The general migration agent surface; owns Phase 2 code work | any workflow skill |
-| `Azure-Infrastructure` | Phase 3 IaC, identity, networking | `/phase3-generate-infra` |
-| `Quick-Assessment` | Fast triage and effort sizing | `/quick-assessment` |
-| `Security-Review` | Security posture as a phase gate | `/security-hardening` |
-| `Cost-Optimization` | Spend, capacity, scaling | `/cost-optimization` |
-| `Debug-Migration` | Root-cause across build, runtime, infra, deploy | `/get-status`, any failing phase |
+**Three appear in the VS Code agent picker** — pick by what you are trying to do. The other five set
+`user-invocable: false`: hidden from the dropdown, still fully dispatchable as subagents and still
+reachable through their own slash commands.
+
+| Agent | Picker | Leads | Typical entry skills |
+|---|---|---|---|
+| `Code-Migration-Modernization` | **visible** | **START HERE** — migrating an application end to end; owns Phase 2 code work | any workflow skill |
+| `Discovery-Intake` | **visible** | **Before** migrating — universal intake and classification | `/assess-any-application`, `/quick-triage` |
+| `Debug-Migration` | **visible** | **When it breaks** — root-cause across build, runtime, infra, deploy | `/get-status`, any failing phase |
+| `Migration-Orchestrator` | subagent | End-to-end routing, gates, portfolio visibility | any workflow skill |
+| `Azure-Infrastructure` | subagent | Phase 3 IaC, identity, networking | `/phase3-generate-infra` |
+| `Quick-Assessment` | subagent | Fast triage and effort sizing | `/quick-assessment` |
+| `Security-Review` | subagent | Security posture as a phase gate | `/security-hardening` |
+| `Cost-Optimization` | subagent | Spend, capacity, scaling | `/cost-optimization` |
 
 ## Notes
 

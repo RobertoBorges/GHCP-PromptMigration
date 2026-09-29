@@ -1,8 +1,10 @@
 ---
 name: Discovery Intake
-description: Interactive discovery & intake conversation for any application. Walks the user through six fast triage questions, runs adaptive follow-ups based on detected risk, probes source/stack/workload, and produces the Discovery Dossier + Capability Matrix.
+description: Use this BEFORE migrating, when you are not yet sure what the application actually is. An interactive, one-question-at-a-time intake that runs fast triage, adapts its follow-ups to the risks it detects, probes source, stack, and workload, and produces the Discovery Dossier and Capability Matrix that every later migration step depends on.
+argument-hint: "Example: 'I have an app but I am not sure what it is', 'Help me work out what this codebase needs', 'Assess the app in my repo'"
 tools: [vscode, execute, read, agent, edit, search, web, azure-mcp/search, azure/search, browser, todo]
 model: Claude Sonnet 5
+agents: ['*']
 ---
 
 ## Role composition

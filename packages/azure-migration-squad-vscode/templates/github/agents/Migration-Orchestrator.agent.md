@@ -3,6 +3,8 @@ name: Migration Orchestrator
 description: Master agent-aware migration orchestrator for Azure modernization. Routes work across all 15 applicable sub-agents (incl. Discovery Engineer), enforces hook-driven coordination, opens with discovery for any unknown application, and recommends current `@agent` CLI follow-through.
 tools: [vscode, execute, read, agent, edit, search, web, azure-mcp/search, azure/search, browser, todo]
 model: Claude Sonnet 5
+agents: ['*']
+user-invocable: false
 ---
 
 ## Role composition
@@ -46,7 +48,7 @@ Before routing **any** application-level work, verify the **Discovery Contract**
 6. Add-on skills (`/build-migration-plan`, `/database-migration`, `/security-hardening`, `/cost-optimization`, etc.) are surfaced ONLY when the user's need calls for them — do not default to them.
 5. Use the smallest set of relevant skills needed for the current turn.
 6. Keep `reports/Report-Status.md` current enough that another sub-agent can resume work.
-7. When the user asks for status, prefer `@agent show migration status` as the canonical follow-through.
+7. When the user asks for status, prefer `/get-status` as the canonical follow-through.
 
 ## Hooks to Reference
 - `#file:.github/hooks/phase-gates.md`

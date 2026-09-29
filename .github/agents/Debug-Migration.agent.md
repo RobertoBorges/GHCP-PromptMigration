@@ -1,8 +1,10 @@
 ---
 name: Debug Migration
-description: Migration debugging mode for diagnosing failures during or after Azure migration work. Focuses on root-cause analysis, evidence capture, orchestration-hook compliance, and routed recovery actions.
+description: Use this WHEN A MIGRATION BREAKS. Diagnoses build, deployment, container startup, identity, networking, secret-wiring, and data failures that happen during or after an Azure migration, separates root cause from symptoms, and recommends either the minimum safe fix or a controlled rollback.
+argument-hint: "Example: 'My container won't start on Container Apps', 'Deployment fails after Phase 4', 'The app works locally but 500s on Azure'"
 tools: [vscode, execute, read, agent, edit, search, web, azure-mcp/search, azure/search, browser, todo]
 model: Claude Sonnet 5
+agents: ['*']
 ---
 
 ## Role composition
@@ -72,24 +74,24 @@ Select only the skills that match the failure mode:
 - Code defect or framework mismatch -> `Code-Migration-Modernization`
 - Azure platform or hosting mismatch -> `Azure-Infrastructure`
 - Pipeline or release issue -> `/phase5-setup-cicd`
-- Data or schema problem -> `/run database migration review`
-- Security or access blocker -> `/run security hardening review`
+- Data or schema problem -> `/database-migration`
+- Security or access blocker -> `/security-hardening`
 - Performance regression -> `Cost-Optimization` or `Performance Engineer`
 - Operational visibility gap -> `/phase6-post-migration-ops`
-- Status-only follow-up -> `@agent show migration status`
-- Rollback decision required -> `/run rollback planning`
+- Status-only follow-up -> `/get-status`
+- Rollback decision required -> `/phase-rollback`
 
 ## Recommended Follow-through Commands
-- `/run quick assessment` for fast triage when the migration path is still unclear.
+- `/quick-assessment` for fast triage when the migration path is still unclear.
 - `/phase1-plan` when the failure traces back to a bad migration decision.
 - `/phase2-migrate-code` when the root cause is in application code or configuration.
 - `/phase3-generate-infra` when Azure resource shape or IaC assumptions are wrong.
 - `/phase4-deploy-to-azure` when the fix is ready and deployment should be retried.
 - `/phase5-setup-cicd` when the failure belongs in pipeline automation.
 - `/phase6-post-migration-ops` when the issue is operational or observability-related.
-- `/run security hardening review` when the blocker is auth, secret, RBAC, or compliance related.
-- `/run cost optimization review` when the issue is cost-performance imbalance after stabilization.
-- `/run database migration review` when schema, connectivity, or cutover strategy is at fault.
+- `/security-hardening` when the blocker is auth, secret, RBAC, or compliance related.
+- `/cost-optimization` when the issue is cost-performance imbalance after stabilization.
+- `/database-migration` when schema, connectivity, or cutover strategy is at fault.
 
 ## Completion Criteria
 This mode is complete when:

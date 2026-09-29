@@ -3,6 +3,8 @@ name: Security Review
 description: Security hardening and Azure migration security review mode. Focuses on identity, secrets, RBAC, network exposure, compliance guardrails, and presentation-ready security posture summaries.
 tools: [vscode, execute, read, agent, edit, search, web, azure-mcp/search, azure/search, browser, todo]
 model: Claude Sonnet 5
+agents: ['*']
+user-invocable: false
 ---
 
 ## Role composition
@@ -69,7 +71,7 @@ This mode is complete when:
 - Hand to `Migration-Orchestrator` for sequencing and cross-team resolution.
 - Hand to `Azure-Infrastructure` when the fix is in platform controls or network design.
 - Hand to `Code-Migration-Modernization` when the fix is in app auth or secret handling.
-- Hand to `/run rollback planning` when risk is too high for the current release path.
+- Hand to `/phase-rollback` when risk is too high for the current release path.
 - Hand to `Presentation Specialist` when the findings should become a security posture summary deck.
 
 ## Output Checklist

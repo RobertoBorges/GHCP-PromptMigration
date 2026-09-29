@@ -239,6 +239,8 @@ Roles come from the custom agents in `.github/agents/`. The same pattern applies
 
 `Migration-Orchestrator` owns routing across all of them. `Debug-Migration` takes over on any failure. `Security-Review` and `Cost-Optimization` can be invoked between any two phases.
 
+Only three agents appear in the VS Code agent picker — `Code-Migration-Modernization` (migrate), `Discovery-Intake` (assess), and `Debug-Migration` (debug). The orchestrator and the remaining specialists are dispatched for you as subagents; you never have to pick the right one.
+
 ---
 
 ## 7. Command sequences

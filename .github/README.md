@@ -6,15 +6,17 @@ This folder contains VS Code GitHub Copilot customization files for the **Code M
 
 ```
 .github/
-├── agents/                              # Custom agent definitions (.agent.md)
-│   ├── Code-Migration-Modernization.agent.md   # Main universal migration agent
+├── agents/                              # 8 custom agent definitions (.agent.md)
+│   │   ── 3 front doors (shown in the agent picker) ──
+│   ├── Code-Migration-Modernization.agent.md   # migrate — START HERE
+│   ├── Discovery-Intake.agent.md               # assess — before you migrate
+│   ├── Debug-Migration.agent.md                # debug — when a migration breaks
+│   │   ── 5 specialists (user-invocable: false, dispatched as subagents) ──
 │   ├── Migration-Orchestrator.agent.md
-│   ├── Discovery-Intake.agent.md
 │   ├── Azure-Infrastructure.agent.md
 │   ├── Security-Review.agent.md
 │   ├── Cost-Optimization.agent.md
-│   ├── Quick-Assessment.agent.md
-│   └── Debug-Migration.agent.md
+│   └── Quick-Assessment.agent.md
 ├── skills/                              # 36 agent skills (each a folder with SKILL.md)
 │   │
 │   │   ── Workflow skills (user-invocable via `/`) ──

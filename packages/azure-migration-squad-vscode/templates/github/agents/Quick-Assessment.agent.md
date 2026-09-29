@@ -3,6 +3,8 @@ name: Quick Assessment
 description: Rapid migration triage mode for any legacy application (stack-agnostic). Produces a concise Azure migration assessment, routes to the right specialists, and preserves hook-aware handoff guidance.
 tools: [vscode, execute, read, agent, edit, search, web, azure-mcp/search, azure/search, browser, todo]
 model: Claude Sonnet 5
+agents: ['*']
+user-invocable: false
 ---
 
 ## Role composition
@@ -66,8 +68,8 @@ Produce a concise assessment that includes:
 ## Handoff Rules
 - Hand to `Code-Migration-Modernization` when the app changes are clear and Phase 2 can begin.
 - Hand to `Azure-Infrastructure` when the main unknown is Azure platform design.
-- Hand to `/run database migration review` when data movement or schema strategy is the dominant risk.
-- Hand to `/run security hardening review` when identity, secrets, or compliance are the main blocker.
+- Hand to `/database-migration` when data movement or schema strategy is the dominant risk.
+- Hand to `/security-hardening` when identity, secrets, or compliance are the main blocker.
 - Hand to `/phase1-plan` when the quick triage shows the team needs the full assessment workflow.
 
 ## Output Checklist

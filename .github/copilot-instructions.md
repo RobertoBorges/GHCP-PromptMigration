@@ -62,8 +62,19 @@ open standard, so the same `/<skill-name>` command works on every surface:
 > **Skill names are lowercase-hyphen** (`/phase2-migrate-code`, not `/Phase2-MigrateCode`). The spec requires
 > the `name:` field to match the directory name using only lowercase letters, digits, and hyphens.
 
-The custom agents in `.github/agents/*.agent.md` (including the main
-`Code-Migration-Modernization.agent.md`) are selectable from the agent picker in VS Code Copilot Chat.
+Three of the custom agents in `.github/agents/*.agent.md` are selectable from the agent picker in
+VS Code Copilot Chat, chosen by intent:
+
+| Agent | Pick it when |
+|---|---|
+| `Code-Migration-Modernization` | **Start here** — you want to migrate an application to Azure |
+| `Discovery-Intake` | You are not yet sure what the application is and need it assessed first |
+| `Debug-Migration` | A migration already in flight has broken |
+
+The other five (`Migration-Orchestrator`, `Azure-Infrastructure`, `Quick-Assessment`, `Security-Review`,
+`Cost-Optimization`) set `user-invocable: false`. They are hidden from the picker but are dispatched
+automatically as subagents, and their slash commands still work. Do not tell a user to select them from
+the picker — route to them, or point at the slash command.
 
 ### Natural-language → action mapping
 

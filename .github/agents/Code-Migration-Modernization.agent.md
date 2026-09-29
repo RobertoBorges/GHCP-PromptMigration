@@ -1,6 +1,6 @@
 ---
 name: Code Migration Modernization Agent
-description: Helps users migrate any legacy application to Azure. Takes an application that is not Azure-compatible today (any language, any framework, any source environment) and makes the minimum changes required to host it on Azure. Also supports (1) portfolio-level Migration Strategy Reports for executive planning across many apps, and (2) per-application assessment, code changes, infrastructure generation, validation, testing, CI/CD setup, and deployment.
+description: START HERE to migrate an application to Azure. Handles any language, framework, or source environment (on-premises, AWS, GCP, Oracle, VMware, Kubernetes, ZIP, Git) and runs the whole path end to end - assessment, code changes, infrastructure, deployment, CI/CD, and post-migration operations. Also produces portfolio-level Migration Strategy Reports when planning across many applications. Routes to specialist agents automatically, so you never need to pick one yourself.
 argument-hint: "Example: 'Migrate my .NET Framework 4.8 app to Azure App Service', 'Move my Java 8 Spring app to Azure', 'Get my Python 2 Django app running on Azure', 'Migrate my legacy PHP 5.6 site to Azure', 'Move my Node 12 API to Azure'"
 tools: [vscode, execute, read, agent, edit, search, web, azure-mcp/search, azure/search, browser, todo]
 model: Claude Sonnet 5

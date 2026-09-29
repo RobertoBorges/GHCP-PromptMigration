@@ -22,14 +22,18 @@ Make a migration reproducible for **any application** — any source environment
 ```text
 .github/
 ├─ agents/                                  # 8 custom agents — persona, tools, routing posture
+│  │
+│  │  ── 3 front doors (shown in the VS Code agent picker) ──
+│  ├─ Code-Migration-Modernization.agent.md  # migrate — START HERE
+│  ├─ Discovery-Intake.agent.md              # assess — before you migrate
+│  ├─ Debug-Migration.agent.md               # debug — when a migration breaks
+│  │
+│  │  ── 5 specialists (user-invocable: false — reached as subagents) ──
 │  ├─ Migration-Orchestrator.agent.md
-│  ├─ Code-Migration-Modernization.agent.md
-│  ├─ Discovery-Intake.agent.md
 │  ├─ Azure-Infrastructure.agent.md
 │  ├─ Quick-Assessment.agent.md
 │  ├─ Security-Review.agent.md
-│  ├─ Cost-Optimization.agent.md
-│  └─ Debug-Migration.agent.md
+│  └─ Cost-Optimization.agent.md
 │
 ├─ skills/                                  # 36 skills, each a folder with a SKILL.md
 │  │
@@ -318,16 +322,24 @@ model: Claude Sonnet 5
 - producedArtifacts: [reports/Application-Assessment-Report.md, reports/Report-Status.md, ...]
 ```
 
-| Agent | Scope | Entry skills |
-|---|---|---|
-| `Migration-Orchestrator` | End-to-end routing, gates, portfolio visibility | any workflow skill |
-| `Discovery-Intake` | Universal intake and classification only | `/assess-any-application`, `/quick-triage` |
-| `Code-Migration-Modernization` | General migration surface — the default agent; owns Phase 2 code work | any workflow skill |
-| `Azure-Infrastructure` | Phase 3 hosting selection, IaC, identity, networking | `/phase3-generate-infra` |
-| `Quick-Assessment` | Fast triage, effort sizing, go/no-go | `/quick-assessment` |
-| `Security-Review` | Security posture as a phase gate | `/security-hardening`, `/phase-rollback` |
-| `Cost-Optimization` | Spend, capacity, scaling | `/cost-optimization`, `/phase6-post-migration-ops` |
-| `Debug-Migration` | Root cause across build, runtime, infra, deploy, config drift | `/get-status`, any failing phase |
+Agents are split into **three front doors** and **five specialists**. Only the front doors appear in the
+VS Code agent picker; the specialists set `user-invocable: false`, which hides them from the dropdown
+while keeping them fully dispatchable as subagents. Nothing is unreachable — `disable-model-invocation`
+stays unset on every agent, so the orchestrator can still route to all five.
+
+| Agent | Picker | Scope | Entry skills |
+|---|---|---|---|
+| `Code-Migration-Modernization` | **visible** | **START HERE** — end-to-end migration; owns Phase 2 code work | any workflow skill |
+| `Discovery-Intake` | **visible** | Use **before** migrating — universal intake and classification | `/assess-any-application`, `/quick-triage` |
+| `Debug-Migration` | **visible** | Use when a migration **breaks** — root cause across build, runtime, infra, deploy, config drift | `/get-status`, any failing phase |
+| `Migration-Orchestrator` | subagent | End-to-end routing, gates, portfolio visibility | any workflow skill |
+| `Azure-Infrastructure` | subagent | Phase 3 hosting selection, IaC, identity, networking | `/phase3-generate-infra` |
+| `Quick-Assessment` | subagent | Fast triage, effort sizing, go/no-go | `/quick-assessment` |
+| `Security-Review` | subagent | Security posture as a phase gate | `/security-hardening`, `/phase-rollback` |
+| `Cost-Optimization` | subagent | Spend, capacity, scaling | `/cost-optimization`, `/phase6-post-migration-ops` |
+
+> The five specialists remain reachable directly through their slash commands — hiding an agent from the
+> picker does not hide its skills from the `/` menu.
 
 ### Dispatch behaviour
 
@@ -431,18 +443,23 @@ graph TD
 
 ```mermaid
 graph LR
-    CM0[Migration-Orchestrator] --> P0["/assess-any-application"]
+    CM1[Code-Migration-Modernization]:::door --> P2["/phase2-migrate-code"]
+    CMD[Discovery-Intake]:::door --> P0["/assess-any-application"]
+    CM3[Debug-Migration]:::door --> PX[Cross-phase recovery]
+
+    CM0[Migration-Orchestrator] --> P0
     CM0 --> P1["/phase1-plan"]
-    CMD[Discovery-Intake] --> P0
-    CM1[Code-Migration-Modernization] --> P2["/phase2-migrate-code"]
     CM2[Azure-Infrastructure] --> P3["/phase3-generate-infra"]
     CM0 --> P4["/phase4-deploy-to-azure"]
     CM0 --> P5["/phase5-setup-cicd"]
     CM0 --> P6["/phase6-post-migration-ops"]
-    CM3[Debug-Migration] --> PX[Cross-phase recovery]
     CM4[Security-Review] --> PS["/security-hardening"]
     CM5[Cost-Optimization] --> PC["/cost-optimization"]
+
+    classDef door stroke-width:3px;
 ```
+
+Bold-bordered nodes are the three agents a customer sees in the picker; the rest are subagent-only.
 
 ### Role handoff model
 
