@@ -17,8 +17,13 @@ deny() {
 command -v jq >/dev/null 2>&1 || allow
 
 TOOL_NAME="$(jq -r '.tool_name // empty' <<<"$INPUT" 2>/dev/null)" || allow
+# File-edit tools are named differently per surface: VS Code uses createFile /
+# editFiles, Copilot CLI uses create / edit / write, and toolset-qualified forms
+# appear as edit/<tool>. Mirrors the list in customer-data-isolation.sh.
 case "$TOOL_NAME" in
   createFile|editFiles|applyPatch|insertEdit|replaceString|multiReplaceString) ;;
+  edit|edit/createFile|edit/editFiles|edit/applyPatch) ;;
+  create|write|str_replace|str_replace_editor) ;;
   *) allow ;;
 esac
 

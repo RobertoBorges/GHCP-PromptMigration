@@ -11,7 +11,16 @@ try {
 }
 
 $toolName = $hookInput.tool_name
-if ($toolName -notin @("runInTerminal", "runTerminalCommand", "terminal", "awaitTerminal")) {
+# Terminal tools are named differently per surface: VS Code uses runInTerminal /
+# awaitTerminal, Copilot CLI uses bash / powershell / shell, and toolset-qualified
+# forms appear as execute/<tool>. A name this list misses means the read-only
+# guarantee silently does not hold on that surface.
+$terminalTools = @(
+    "runInTerminal", "runTerminalCommand", "terminal", "awaitTerminal", "runCommands",
+    "execute", "execute/runInTerminal", "execute/awaitTerminal", "execute/runCommands",
+    "bash", "shell", "powershell", "pwsh", "cmd"
+)
+if ($toolName -notin $terminalTools) {
     Write-Output '{"continue":true}'
     exit 0
 }
