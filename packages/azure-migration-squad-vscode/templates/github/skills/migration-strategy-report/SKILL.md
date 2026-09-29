@@ -415,3 +415,12 @@ If the user wants to pick MULTIPLE apps for a multi-app modernization wave, writ
 - HTML/CSS/output rules → [references/style-guide.md](references/style-guide.md)
 - PowerPoint generation → [references/pptx-generation.md](./references/pptx-generation.md) — Read when the portfolio strategy deliverable must also be produced or exported as a PowerPoint deck.
 - Scripts → [scripts/export_to_pdf.py](scripts/export_to_pdf.py)
+
+## HTML report scaffold
+
+The executive deck is generated from this scaffold. Read the README before editing any generated HTML.
+
+| Use when | File |
+|---|---|
+| Building or regenerating the executive HTML deck | [`README.md`](./templates/html-report-scaffold/README.md) |
+| Adjusting deck styling (edit the scaffold, never the generated output) | [`style.css`](./templates/html-report-scaffold/assets/style.css) |

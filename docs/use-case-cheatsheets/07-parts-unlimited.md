@@ -79,7 +79,7 @@ A fuller-featured ASP.NET MVC 5 commerce sample on .NET Framework 4.5.1 with EF6
 ## Reference
 
 - [Full walkthrough for this app](../walkthroughs/07-parts-unlimited-walkthrough.md)
-- [Skill catalog](../architecture/SKILL-CATALOG.md) — all 36 skills and 9 custom agents
+- [Skill catalog](../architecture/SKILL-CATALOG.md) — all 65 skills and 10 custom agents
 - [Skills map](../guides/skills-map.md) — which skills load at which step
 - [BookShop reference cheat sheet](05-bookshop-reference.md)
 - [BookShop reference walkthrough](../walkthroughs/05-bookshop-reference-walkthrough.md)

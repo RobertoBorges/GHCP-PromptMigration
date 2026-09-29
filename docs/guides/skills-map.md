@@ -8,7 +8,7 @@ Which skills apply to which phase, which router resolves which evidence, and wha
 
 ## 1. How the skill system is shaped
 
-`.github/skills/` holds **36 skills**. Each is a folder with a `SKILL.md`, and optionally a `references/` subfolder (**71 reference files** in total, plus three companion files: an `examples/` template, a `templates/` guide, and one skill-level `README.md`).
+`.github/skills/` holds **65 skills**. Each is a folder with a `SKILL.md`, and optionally a `references/` subfolder (**121 supporting files** (71 of them under `references/`) in total, plus three companion files: an `examples/` template, a `templates/` guide, and one skill-level `README.md`).
 
 ```text
 .github/skills/<skill-name>/

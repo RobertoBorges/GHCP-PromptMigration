@@ -23,6 +23,15 @@ handoffs:
     agent: Code Migration Modernization Agent
     prompt: /phase1-plan read the Capability Matrix and generate an Application-Assessment-Report.md, Migration-Plan.md, and Decisions-Required.md.
     send: false
+  # --- AWS source estate (specialist track) ---
+  - label: "🔎 Assess an AWS estate (read-only inventory)"
+    agent: AWS Account Assessment Agent
+    prompt: /aws-assess-phase0-setup-and-scope validate AWS CLI access, discover accounts and enabled regions, and define the read-only assessment scope.
+    send: false
+  - label: "🔀 Migrate AWS workloads to Azure"
+    agent: AWS to Azure Migration Agent
+    prompt: /aws2azure-phase1-plan read the codebase and generate an Application-Assessment-Report.md with AWS service inventory, Azure compatibility assessment, and migration plan.
+    send: false
   # --- Execution (after assessment is done) ---
   - label: "⚙️ Migrate the code"
     agent: Code Migration Modernization Agent

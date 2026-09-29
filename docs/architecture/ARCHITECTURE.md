@@ -21,7 +21,7 @@ Make a migration reproducible for **any application** — any source environment
 
 ```text
 .github/
-├─ agents/                                  # 8 custom agents — persona, tools, routing posture
+├─ agents/                                  # 10 custom agents — persona, tools, routing posture
 │  │
 │  │  ── 3 front doors (shown in the VS Code agent picker) ──
 │  ├─ Code-Migration-Modernization.agent.md  # migrate — START HERE
@@ -35,7 +35,7 @@ Make a migration reproducible for **any application** — any source environment
 │  ├─ Security-Review.agent.md
 │  └─ Cost-Optimization.agent.md
 │
-├─ skills/                                  # 36 skills, each a folder with a SKILL.md
+├─ skills/                                  # 65 skills, each a folder with a SKILL.md
 │  │
 │  │  ── 20 workflow skills (user-invocable: true) ──
 │  ├─ assess-any-application/SKILL.md
@@ -120,7 +120,7 @@ There is **no `.github/prompts/` folder and no `.github/chatmodes/` folder.** VS
 ### Why this shape works
 
 - One folder per skill means a skill can be added, versioned, or deleted without touching anything else.
-- `SKILL.md` stays small; `references/` absorbs the depth. 36 skills and 71 reference files still fit a normal context window.
+- `SKILL.md` stays small; `references/` absorbs the depth. 65 skills and 121 supporting files still fit a normal context window.
 - New stacks, sources, and workloads are **additive** — drop a reference into the matching router and add one selection-table row.
 - Custom agents stay thin because they delegate procedure to skills instead of embedding it.
 - The VS Code extension bundles `.github/{agents,skills,hooks,copilot-instructions.md}` verbatim, so what you read here is what ships.
@@ -516,7 +516,7 @@ They exist so the reporting format, `infra/` shape, and handoff discipline have 
 
 ## See also
 
-- [Skill catalog](./SKILL-CATALOG.md) — all 36 skills with commands, inputs, and outputs
+- [Skill catalog](./SKILL-CATALOG.md) — all 65 skills with commands, inputs, and outputs
 - [Skills map](../guides/skills-map.md) — which skills apply per phase and scenario
 - [Handoff protocol](../guides/handoff-protocol.md) — artifact contracts and quality gates
 - [VS Code quickstart](../vscode-quickstart.md) — install and run your first migration

@@ -80,7 +80,7 @@ A multi-project university solution already on ASP.NET Core 2.1, spanning a trad
 ## Reference
 
 - [Full walkthrough for this app](../walkthroughs/04-contoso-university-walkthrough.md)
-- [Skill catalog](../architecture/SKILL-CATALOG.md) — all 36 skills and 9 custom agents
+- [Skill catalog](../architecture/SKILL-CATALOG.md) — all 65 skills and 10 custom agents
 - [Skills map](../guides/skills-map.md) — which skills load at which step
 - [BookShop reference cheat sheet](05-bookshop-reference.md)
 - [BookShop reference walkthrough](../walkthroughs/05-bookshop-reference-walkthrough.md)

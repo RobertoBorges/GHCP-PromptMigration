@@ -77,7 +77,7 @@ A WCF demonstration solution centered on service contracts, data contracts, SOAP
 ## Reference
 
 - [Full walkthrough for this app](../walkthroughs/03-wcf-to-rest-walkthrough.md)
-- [Skill catalog](../architecture/SKILL-CATALOG.md) — all 36 skills and 9 custom agents
+- [Skill catalog](../architecture/SKILL-CATALOG.md) — all 65 skills and 10 custom agents
 - [Skills map](../guides/skills-map.md) — which skills load at which step
 - [BookShop reference cheat sheet](05-bookshop-reference.md)
 - [BookShop reference walkthrough](../walkthroughs/05-bookshop-reference-walkthrough.md)
