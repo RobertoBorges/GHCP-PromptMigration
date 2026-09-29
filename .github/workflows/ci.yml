@@ -140,11 +140,21 @@ jobs:
           echo "Staged content pack:"
           find "$STAGE" -type f | wc -l
           du -sh "$STAGE"
+          # Guard: the pack is worthless without the .github tree. Fail loudly
+          # rather than shipping a near-empty ZIP.
+          STAGED=$(find "$STAGE" -type f | wc -l)
+          if [ "$STAGED" -lt 100 ]; then
+            echo "::error::content pack staged only $STAGED files; expected the full .github tree"
+            exit 1
+          fi
 
       - name: Upload agent content pack artifact
         uses: actions/upload-artifact@v4
         with:
           name: agent-content-pack
           path: ${{ runner.temp }}/agent-content-pack/
+          # Required: .github is a dot-directory and upload-artifact@v4 skips
+          # hidden paths by default, which silently drops the entire pack.
+          include-hidden-files: true
           if-no-files-found: error
           retention-days: 30
