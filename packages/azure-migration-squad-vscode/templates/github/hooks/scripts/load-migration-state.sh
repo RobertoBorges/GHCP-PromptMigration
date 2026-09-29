@@ -1,7 +1,7 @@
 #!/bin/bash
 # Hook: SessionStart - Load migration state + recent Action Log for recovery
 # Returns: additionalContext with current migration status + last 5 Action Log entries
-# Spec: .github/skills/action-log-format.md
+# Spec: .github/skills/migration-artifacts/references/action-log-format.md
 # Requires: jq (returns {"continue":true} gracefully if missing)
 
 INPUT=$(cat)
@@ -66,7 +66,7 @@ fi
 DECK_COUNT=$(find "$CWD" -maxdepth 5 -name "*Migration_Strategy_Report*.html" 2>/dev/null | wc -l | tr -d ' ')
 if [ "$DECK_COUNT" -gt 0 ]; then
     LATEST_DECK=$(find "$CWD" -maxdepth 5 -name "*Migration_Strategy_Report*.html" 2>/dev/null | head -n 1 | xargs basename 2>/dev/null)
-    append_summary "Portfolio plan: $DECK_COUNT deck(s), latest='$LATEST_DECK' (use /PortfolioStrategy to iterate)"
+    append_summary "Portfolio plan: $DECK_COUNT deck(s), latest='$LATEST_DECK' (use /portfolio-strategy to iterate)"
 fi
 
 # Detect project stack — brief signal only

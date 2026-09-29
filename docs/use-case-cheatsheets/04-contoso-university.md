@@ -18,7 +18,9 @@ A multi-project university solution already on ASP.NET Core 2.1, spanning a trad
 
 ## Target stack
 
-| Area | Recommended target |
+> ⚠ The rows below are **candidates, not defaults.** `/phase1-plan` presents each option with tradeoffs and records your answer in `reports/Decisions-Required.md`. The agent never picks a target framework, hosting platform, or database engine on your behalf.
+
+| Area | Candidate target (your decision) |
 |---|---|
 | App runtime | .NET 8 |
 | Hosting | Azure App Service |
@@ -43,20 +45,22 @@ A multi-project university solution already on ASP.NET Core 2.1, spanning a trad
 - Revalidate EF Core provider behavior against Azure SQL
 - Modernize build, test, and SPA packaging before CI/CD hardening
 
-## Prompt sequence
+## Command sequence
 
-1. `/run quick assessment`
+> Steps marked 🟢 are the 7-step main path. Steps marked 🔵 are optional add-ons. Free-text lines are follow-up requests you type in the same thread.
+
+1. `/assess-any-application`
 2. `Assess #file:Use-cases/04-ContosoUniversityDiPS as one multi-project solution with API, Web, React SPA, Data, Common, and Tests. Target .NET 8 on Azure App Service with Azure SQL. Do not treat this as a multi-repo assessment.`
-3. `/run Phase 1 plan and assess`
+3. `/phase1-plan`
 4. `Produce a dependency map across the projects. Highlight JWT, Identity, SendGrid, Twilio, EF Core provider choices, SPA build pipeline, and test-suite impact.`
-5. `/run database migration review`
-6. `/run Phase 2 code migration`
-7. `/run security hardening review`
-8. `/run Phase 3 infrastructure generation`
-9. `/run Phase 4 deploy to Azure`
-10. `/run Phase 5 CI/CD setup`
-11. `/run Phase 6 post-migration ops`
-12. `@agent show migration status`
+5. `/database-migration`
+6. `/phase2-migrate-code`
+7. `/security-hardening`
+8. `/phase3-generate-infra`
+9. `/phase4-deploy-to-azure`
+10. `/phase5-setup-cicd`
+11. `/phase6-post-migration-ops`
+12. `/get-status`
 
 ## Agent dispatch order
 
@@ -75,10 +79,13 @@ A multi-project university solution already on ASP.NET Core 2.1, spanning a trad
 
 ## Reference
 
+- [Full walkthrough for this app](../walkthroughs/04-contoso-university-walkthrough.md)
+- [Skill catalog](../architecture/SKILL-CATALOG.md) — all 36 skills and 9 custom agents
+- [Skills map](../guides/skills-map.md) — which skills load at which step
 - [BookShop reference cheat sheet](05-bookshop-reference.md)
-- [BookShop modernization reference](../../Use-cases/05-BookShop/docs/Modernization-Prompts-Reference.md)
+- [BookShop reference walkthrough](../walkthroughs/05-bookshop-reference-walkthrough.md)
 
-## Sample prompts
+## Sample requests
 
 - `Assess #file:Use-cases/04-ContosoUniversityDiPS as a single multi-project modernization to .NET 8 on Azure App Service.`
 - `Map project dependencies across API, Web, SPA, Data, Common, and Tests, and recommend the safest migration order.`

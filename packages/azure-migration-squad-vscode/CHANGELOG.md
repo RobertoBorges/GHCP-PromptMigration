@@ -95,7 +95,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and 
 - **`AmsWorkspace` interface:** `hasManifest`/`hasSquad` → `hasAgent`/`isInstalled`.
 
 ### Kept
-- **Wave H Decision Hardstop Protocol** (all of it): `decision-hardstop.md`, `decision-catalog.md`, `decisions-required-template.md`, `decision-gates.md`, the injectors, the validator.
+- **Wave H Decision Hardstop Protocol** (all of it): `migration-decisions/references/decision-hardstop.md`, `migration-decisions/references/decision-catalog.md`, `migration-decisions/references/decisions-required-template.md`, `decision-gates.md`, the injectors, the validator.
 - **"🛑 Decisions Required" sidebar tree view** + status bar pending count (Wave I).
 - **Auto-prompt for Copilot Chat install** with consent (existing behavior).
 - **VS Code Walkthrough** (4 steps) — rephrased to drop Squad language.

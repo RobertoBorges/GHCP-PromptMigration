@@ -1,5 +1,6 @@
 # 🎯 Java API Migration — CLI Walkthrough
 > **Codename:** The Duke | **Source:** Java Spring Boot API (REST, JPA, Maven) | **Target:** Azure Container Apps + Azure PostgreSQL
+> ⚠ **The target runtime shown above is an example, not a default.** `/phase1-plan` presents supported LTS options with tradeoffs and records your answer in `reports/Decisions-Required.md`. Later steps hard-stop until that decision is `✅ DECIDED`.
 
 ## How This Works
 ```mermaid
@@ -32,8 +33,8 @@ When parallel work helps, say **fan out**.
 - `reports/Report-Status.md`
 - Updated app code, container assets, Azure deployment assets, and release guidance
 
-## Phase by Phase
-### Phase 1 — Assess the Java API
+## Step by Step
+### Steps 1-2: Discover and plan the Java API (`/assess-any-application` → `/phase1-plan`)
 ```text
 /assess Use-cases/06-JavaAPI for migration to Azure Container Apps plus Azure PostgreSQL. Map the REST endpoints, Spring Boot version, Maven dependencies, JPA usage, configuration files, database assumptions, and top blockers. Fan out across architecture, data, security, and hosting fit.
 ```
@@ -45,7 +46,7 @@ When parallel work helps, say **fan out**.
 - `@agent show me the top 3 upgrade blockers in plain English and tell me which one should be fixed first.`
 - `@agent compare the safest path versus the fastest path for this Java API modernization.`
 
-### Phase 2 — Modernize to Spring Boot 3
+### Step 3: Migrate code — modernize the Spring stack (`/phase2-migrate-code`)
 ```text
 @agent modernize Use-cases/06-JavaAPI to Java 21 and Spring Boot 3. Upgrade dependencies, convert `javax` imports to `jakarta`, preserve the REST contract, review whether Maven should stay or whether Gradle is worth it, and flag breaking changes before code is rewritten. Fan out.
 ```
@@ -57,7 +58,7 @@ When parallel work helps, say **fan out**.
 - `@agent list every javax-to-jakarta hotspot I should expect before coding starts.`
 - `@agent if we keep Maven, tell me exactly why. If we should move to Gradle, make the case clearly.`
 
-### Phase 3 — Plan the PostgreSQL Move
+### Add-on: Plan the PostgreSQL move (`/database-migration`)
 ```text
 @agent plan the database move for Use-cases/06-JavaAPI to Azure Database for PostgreSQL. Review JPA and Hibernate mappings, schema assumptions, SQL dialect issues, transactions, seed data, and cutover risk. Tell me what must change before the app can run safely on PostgreSQL. Fan out.
 ```
@@ -69,7 +70,7 @@ When parallel work helps, say **fan out**.
 - `@agent show me the highest-risk JPA or Hibernate mappings for PostgreSQL and how to fix them.`
 - `@agent what should we migrate first: schema, seed data, connection settings, or transaction behavior?`
 
-### Phase 4 — Generate the Azure Target
+### Step 4: Generate infrastructure (`/phase3-generate-infra`)
 ```text
 @agent generate the Azure target for Use-cases/06-JavaAPI on Azure Container Apps with Azure PostgreSQL. Include container build strategy, managed identity, Key Vault, secrets flow, ingress, environment variables, health probes, Application Insights, and deployment automation. Fan out.
 ```
@@ -81,7 +82,7 @@ When parallel work helps, say **fan out**.
 - `@agent explain the container runtime plan like I am handing it to an Azure platform engineer tomorrow.`
 - `@agent tell me which settings belong in code, which belong in environment variables, and which belong in Key Vault.`
 
-### Phase 5 — Deploy and Prove It Works
+### Step 5: Deploy to Azure (`/phase4-deploy-to-azure`)
 ```text
 @agent deploy the migrated Java API from Use-cases/06-JavaAPI to Azure Container Apps. Validate startup, endpoint health, PostgreSQL connectivity, secrets resolution, and rollback readiness. Summarize what passed, what failed, and what should block production. Fan out.
 ```
@@ -93,7 +94,7 @@ When parallel work helps, say **fan out**.
 - `@agent summarize the deployment in operator language: what is healthy, what is risky, and what needs another pass?`
 - `@agent if this deployment fails in production, what are the first three rollback moves?`
 
-### Phase 6 — Wire CI/CD and Operations
+### Steps 6-7: Set up CI/CD and operate (`/phase5-setup-cicd` → `/phase6-post-migration-ops`)
 ```text
 @agent set up the release and operations plan for Use-cases/06-JavaAPI. Cover build and test automation, container image publishing, infrastructure validation, deployment promotion, dashboards, alerts, API latency monitoring, JVM and container health, and PostgreSQL health checks. Fan out.
 ```

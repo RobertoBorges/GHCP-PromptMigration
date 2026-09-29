@@ -1,4 +1,4 @@
-# 07-PartsUnlimited-aspnet45 Cheat Sheet — The Machine
+# 07-PartsUnlimited-aspnet45 Cheat Sheet — The Warehouse
 
 ## What is this app?
 
@@ -17,7 +17,9 @@ A fuller-featured ASP.NET MVC 5 commerce sample on .NET Framework 4.5.1 with EF6
 
 ## Target stack
 
-| Area | Recommended target |
+> ⚠ The rows below are **candidates, not defaults.** `/phase1-plan` presents each option with tradeoffs and records your answer in `reports/Decisions-Required.md`. The agent never picks a target framework, hosting platform, or database engine on your behalf.
+
+| Area | Candidate target (your decision) |
 |---|---|
 | UI | ASP.NET Core 8 MVC |
 | Data | EF Core + Azure SQL |
@@ -42,20 +44,22 @@ A fuller-featured ASP.NET MVC 5 commerce sample on .NET Framework 4.5.1 with EF6
 - `packages.config` -> SDK-style project + PackageReference
 - Legacy deployment scripts -> Bicep + CI/CD pipeline + staged deployment
 
-## Prompt sequence
+## Command sequence
 
-1. `/run quick assessment`
+> Steps marked 🟢 are the 7-step main path. Steps marked 🔵 are optional add-ons. Free-text lines are follow-up requests you type in the same thread.
+
+1. `/assess-any-application`
 2. `Assess #file:Use-cases/07-PartsUnlimited-aspnet45 as an ASP.NET MVC 5 / .NET Framework 4.5.1 app targeting .NET 8 on Azure App Service with Azure SQL. Highlight EF6, ASP.NET Identity, OWIN, deployment scripts, and test migration risk.`
-3. `/run Phase 1 plan and assess`
+3. `/phase1-plan`
 4. `Map the MVC controllers, EF6 models, ASP.NET Identity/OWIN configuration, and deploy.cmd flow to ASP.NET Core MVC, EF Core, modern auth, and Azure deployment equivalents.`
-5. `/run database migration review`
-6. `/run Phase 2 code migration`
-7. `/run security hardening review`
-8. `/run Phase 3 infrastructure generation`
-9. `/run Phase 4 deploy to Azure`
-10. `/run Phase 5 CI/CD setup`
-11. `/run Phase 6 post-migration ops`
-12. `@agent show migration status`
+5. `/database-migration`
+6. `/phase2-migrate-code`
+7. `/security-hardening`
+8. `/phase3-generate-infra`
+9. `/phase4-deploy-to-azure`
+10. `/phase5-setup-cicd`
+11. `/phase6-post-migration-ops`
+12. `/get-status`
 
 ## Agent dispatch order
 
@@ -74,10 +78,13 @@ A fuller-featured ASP.NET MVC 5 commerce sample on .NET Framework 4.5.1 with EF6
 
 ## Reference
 
+- [Full walkthrough for this app](../walkthroughs/07-parts-unlimited-walkthrough.md)
+- [Skill catalog](../architecture/SKILL-CATALOG.md) — all 36 skills and 9 custom agents
+- [Skills map](../guides/skills-map.md) — which skills load at which step
 - [BookShop reference cheat sheet](05-bookshop-reference.md)
-- [BookShop modernization reference](../../Use-cases/05-BookShop/docs/Modernization-Prompts-Reference.md)
+- [BookShop reference walkthrough](../walkthroughs/05-bookshop-reference-walkthrough.md)
 
-## Sample prompts
+## Sample requests
 
 - `Assess #file:Use-cases/07-PartsUnlimited-aspnet45 for ASP.NET MVC 5 to ASP.NET Core MVC migration and rank the EF6 and auth blockers.`
 - `Create a migration plan for EF6, ASP.NET Identity, OWIN, deployment scripts, and test assets.`

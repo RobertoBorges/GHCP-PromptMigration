@@ -6,6 +6,7 @@ description: |
   **Triggers on:** Phase 2 code migration, business rule identification, logic preservation verification.
   **Covers:** Business rule extraction, logic mapping between source/target, validation tracking, media asset preservation.
   **Critical:** Ensures no business logic is lost during migration by creating traceable mappings.
+user-invocable: false
 ---
 
 # Business Logic Mapping Skill

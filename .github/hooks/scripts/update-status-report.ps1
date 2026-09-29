@@ -1,6 +1,6 @@
 # Hook: Stop - Append canonical Action Log entry for session end
 # Emits: - <ISO-8601-UTC> | actor=hook | action=session-ended | tokens=~0 | turn=<final> | notes="session=<id>"
-# Spec: .github/skills/action-log-format.md
+# Spec: .github/skills/migration-artifacts/references/action-log-format.md
 $ErrorActionPreference = "SilentlyContinue"
 
 try {

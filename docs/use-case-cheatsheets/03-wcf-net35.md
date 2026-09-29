@@ -17,7 +17,9 @@ A WCF demonstration solution centered on service contracts, data contracts, SOAP
 
 ## Target stack
 
-| Area | Recommended target |
+> ⚠ The rows below are **candidates, not defaults.** `/phase1-plan` presents each option with tradeoffs and records your answer in `reports/Decisions-Required.md`. The agent never picks a target framework, hosting platform, or database engine on your behalf.
+
+| Area | Candidate target (your decision) |
 |---|---|
 | API | ASP.NET Core 8 Web API |
 | Hosting | Azure Container Apps |
@@ -41,19 +43,21 @@ A WCF demonstration solution centered on service contracts, data contracts, SOAP
 - Containerize the API for Azure Container Apps
 - Document breaking changes and client replacement strategy before cutover
 
-## Prompt sequence
+## Command sequence
 
-1. `/run quick assessment`
+> Steps marked 🟢 are the 7-step main path. Steps marked 🔵 are optional add-ons. Free-text lines are follow-up requests you type in the same thread.
+
+1. `/assess-any-application`
 2. `Assess #file:Use-cases/03-WCFNet35 for WCF .NET 3.5 to ASP.NET Core REST migration on Azure Container Apps. Focus on ServiceContract, OperationContract, basicHttpBinding, app.config, and client compatibility.`
-3. `/run Phase 1 plan and assess`
+3. `/phase1-plan`
 4. `Map each operation in WCFDemo.Service to REST endpoints, request/response DTOs, status codes, and breaking changes. Recommend API versioning and authentication approach.`
-5. `/run Phase 2 code migration`
-6. `/run security hardening review`
-7. `/run Phase 3 infrastructure generation`
-8. `/run Phase 4 deploy to Azure`
-9. `/run Phase 5 CI/CD setup`
-10. `/run Phase 6 post-migration ops`
-11. `@agent show migration status`
+5. `/phase2-migrate-code`
+6. `/security-hardening`
+7. `/phase3-generate-infra`
+8. `/phase4-deploy-to-azure`
+9. `/phase5-setup-cicd`
+10. `/phase6-post-migration-ops`
+11. `/get-status`
 
 ## Agent dispatch order
 
@@ -72,10 +76,13 @@ A WCF demonstration solution centered on service contracts, data contracts, SOAP
 
 ## Reference
 
+- [Full walkthrough for this app](../walkthroughs/03-wcf-to-rest-walkthrough.md)
+- [Skill catalog](../architecture/SKILL-CATALOG.md) — all 36 skills and 9 custom agents
+- [Skills map](../guides/skills-map.md) — which skills load at which step
 - [BookShop reference cheat sheet](05-bookshop-reference.md)
-- [BookShop modernization reference](../../Use-cases/05-BookShop/docs/Modernization-Prompts-Reference.md)
+- [BookShop reference walkthrough](../walkthroughs/05-bookshop-reference-walkthrough.md)
 
-## Sample prompts
+## Sample requests
 
 - `Assess #file:Use-cases/03-WCFNet35 for WCF-to-REST conversion and list contract-breaking changes before Phase 2.`
 - `Map every ServiceContract and OperationContract to REST endpoints, DTOs, and status codes.`

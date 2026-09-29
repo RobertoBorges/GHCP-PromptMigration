@@ -3,7 +3,7 @@
 This skill generates **executive-ready Migration Strategy Reports** (self-contained HTML decks) from any customer portfolio artifacts — CMDB exports, RVTools dumps, Azure Migrate assessments, DMA outputs, meeting notes, vendor proposals, architecture diagrams, or any mix.
 
 The skill is invoked by:
-- The `/PortfolioStrategy` slash command (see [.github/prompts/PortfolioStrategy.prompt.md](../../prompts/PortfolioStrategy.prompt.md))
+- The `/portfolio-strategy` slash command (see [.github/skills/portfolio-strategy/SKILL.md](../../skills/portfolio-strategy/SKILL.md))
 - Trigger phrases like *"generate migration report"*, *"analyze CMDB"*, *"migration strategy report for [CUSTOMER]"*
 - The `Code Migration Modernization Agent` handoff for portfolio planning
 
@@ -19,7 +19,7 @@ Customers/Contoso/
 └── architecture_diagram.png
 
 # 2. In VS Code Chat:
-/PortfolioStrategy Generate a migration strategy report for Customers/Contoso
+/portfolio-strategy Generate a migration strategy report for Customers/Contoso
 
 # 3. Output saved to the customer folder:
 Customers/Contoso/Contoso_Migration_Strategy_Report.html
@@ -92,17 +92,16 @@ The skill is designed for progressive loading. Reference files are organized so 
 
 | Detected Pillar | Reference Files Loaded |
 |---|---|
-| Always | `classification-algorithm.md`, `slides-common.md`, `style-guide.md` (at gen time) |
-| Applications | + `slides-application-pillar.md` |
-| Databases | + `slides-database-pillar.md` |
-| Infrastructure | + `slides-infrastructure-pillar.md` |
+| Always | `migration-strategy-report/references/classification-algorithm.md`, `migration-strategy-report/references/slides-common.md`, `migration-strategy-report/references/style-guide.md` (at gen time) |
+| Applications | + `migration-strategy-report/references/slides-application-pillar.md` |
+| Databases | + `migration-strategy-report/references/slides-database-pillar.md` |
+| Infrastructure | + `migration-strategy-report/references/slides-infrastructure-pillar.md` |
 
 This keeps the active context window lean even though the full skill has substantial domain content.
 
 ## Related
 
 - Skill definition → [SKILL.md](SKILL.md)
-- Slash command → [.github/prompts/PortfolioStrategy.prompt.md](../../prompts/PortfolioStrategy.prompt.md)
-- Enforcement hook → [.github/hooks/customer-data-isolation.json](../../hooks/customer-data-isolation.json)
+- Slash command → [.github/skills/portfolio-strategy/SKILL.md](../../skills/portfolio-strategy/SKILL.md)
 - Context injection hook → [.github/hooks/scripts/load-migration-state.ps1](../../hooks/scripts/load-migration-state.ps1)
-- Per-app modernization → [.github/prompts/Phase1-Plan.prompt.md](../../prompts/Phase1-Plan.prompt.md)
+- Per-app modernization → [.github/skills/phase1-plan/SKILL.md](../../skills/phase1-plan/SKILL.md)

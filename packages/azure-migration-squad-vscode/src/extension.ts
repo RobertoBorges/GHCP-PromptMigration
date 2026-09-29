@@ -14,7 +14,7 @@
 
 import * as vscode from 'vscode';
 import { AgentsProvider } from './treeProviders/agentsProvider';
-import { PromptsProvider } from './treeProviders/promptsProvider';
+import { MainPathProvider } from './treeProviders/mainPathProvider';
 import { AddonsProvider } from './treeProviders/addonsProvider';
 import { DecisionsProvider } from './treeProviders/decisionsProvider';
 import { registerCommands } from './commands';
@@ -65,7 +65,7 @@ export function activate(context: vscode.ExtensionContext): void {
   console.log(`[azure-migration-agent] extension activated (host: ${appName})`);
 
   const agentsProvider = new AgentsProvider();
-  const promptsProvider = new PromptsProvider();
+  const mainPathProvider = new MainPathProvider();
   const addonsProvider = new AddonsProvider();
   const decisionsProvider = new DecisionsProvider();
 
@@ -74,8 +74,10 @@ export function activate(context: vscode.ExtensionContext): void {
       treeDataProvider: agentsProvider,
       showCollapseAll: true,
     }),
+    // View id kept as `azureMigrationSquadPrompts` for backwards compatibility
+    // with persisted workbench layout state; its title reads "Main path".
     vscode.window.createTreeView('azureMigrationSquadPrompts', {
-      treeDataProvider: promptsProvider,
+      treeDataProvider: mainPathProvider,
       showCollapseAll: true,
     }),
     vscode.window.createTreeView('azureMigrationSquadAddons', {
@@ -111,7 +113,7 @@ export function activate(context: vscode.ExtensionContext): void {
 
   const refreshAll = () => {
     agentsProvider.refresh();
-    promptsProvider.refresh();
+    mainPathProvider.refresh();
     addonsProvider.refresh();
     decisionsProvider.refresh();
     statusBar.refresh();
@@ -199,7 +201,7 @@ export function activate(context: vscode.ExtensionContext): void {
   context.subscriptions.push(
     vscode.commands.registerCommand('azureMigrationSquad.hello', () => {
       vscode.window.showInformationMessage(
-        'Azure Migration Agent extension is active — open the sidebar to browse the agent, prompts, skills, and decisions.'
+        'Azure Migration Agent extension is active — open the sidebar to browse the agents, skills, and decisions.'
       );
     })
   );

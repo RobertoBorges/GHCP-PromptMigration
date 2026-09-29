@@ -5,7 +5,7 @@ Use this hook to ensure migration outputs, prompt flows, and specialist reviews 
 ## Global Checklist
 
 - [ ] `reports/Report-Status.md` reflects the current phase, owner, blockers, and next command
-- [ ] Required artifacts for the active prompt or chatmode are created or updated
+- [ ] Required artifacts for the active skill or agent are created or updated
 - [ ] Assumptions, risks, and trade-offs are explicit
 - [ ] Specialist reviews are named when their domain was touched
 - [ ] Recommendations are actionable enough for the next agent to execute

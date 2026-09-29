@@ -1,5 +1,5 @@
 /**
- * Base class for the AMA tree providers (Agents, Prompts, Add-ons).
+ * Base class for the AMA tree providers (Agents, Main path, Add-ons).
  * Each subclass declares where its content lives and produces TreeItems.
  */
 
@@ -34,8 +34,8 @@ export class NotInstalledItem extends vscode.TreeItem {
     );
     this.iconPath = new vscode.ThemeIcon('rocket');
     this.tooltip =
-      'Run "Azure Migration: Initialize" to scaffold the agent definition, ' +
-      'prompts, skills, chatmodes, and hooks into this workspace.';
+      'Run "Azure Migration: Initialize" to scaffold the migration ' +
+      'skills, agents, and hooks into this workspace.';
     this.command = {
       command: 'azureMigrationSquad.initialize',
       title: 'Initialize',
@@ -58,6 +58,14 @@ export abstract class AmsTreeProviderBase implements vscode.TreeDataProvider<vsc
   filterFile(_absolutePath: string): boolean {
     return true;
   }
+  /** Subclasses can reorder the matched files (e.g., canonical phase order). Default: as listed. */
+  protected orderFiles(files: string[]): string[] {
+    return files;
+  }
+  /** Subclasses can override how a file is labelled (e.g., render skills as slash commands). */
+  protected labelFor(filePath: string): string {
+    return labelFromFile(filePath);
+  }
 
   refresh(): void {
     this._onDidChangeTreeData.fire();
@@ -79,9 +87,11 @@ export abstract class AmsTreeProviderBase implements vscode.TreeDataProvider<vsc
     }
 
     const dir = path.join(ws.root, this.getRelativeDir());
-    const files = listMarkdownFiles(dir, this.isRecursive())
-      .filter((f) => f.endsWith(this.getFileSuffix()))
-      .filter((f) => this.filterFile(f));
+    const files = this.orderFiles(
+      listMarkdownFiles(dir, this.isRecursive())
+        .filter((f) => f.endsWith(this.getFileSuffix()))
+        .filter((f) => this.filterFile(f))
+    );
     if (files.length === 0) {
       const empty = new vscode.TreeItem('(none found)');
       empty.iconPath = new vscode.ThemeIcon('info');
@@ -89,7 +99,7 @@ export abstract class AmsTreeProviderBase implements vscode.TreeDataProvider<vsc
     }
 
     return files.map((file) => {
-      const label = labelFromFile(file, this.getRelativeDir());
+      const label = this.labelFor(file);
       const description = extractDescription(file);
       return new AmsTreeItem(label, description, file, this.getIconId());
     });
@@ -99,7 +109,7 @@ export abstract class AmsTreeProviderBase implements vscode.TreeDataProvider<vsc
 /**
  * Convert a file path to a human-readable label.
  */
-function labelFromFile(filePath: string, _relDir: string): string {
+function labelFromFile(filePath: string): string {
   const base = path.basename(filePath);
   const parent = path.basename(path.dirname(filePath));
 
@@ -110,14 +120,6 @@ function labelFromFile(filePath: string, _relDir: string): string {
   // Skill folder pattern: .../<skill-name>/SKILL.md → use parent dir name
   if (base === 'SKILL.md') {
     return parent;
-  }
-  // Prompt pattern: <Name>.prompt.md → strip suffix
-  if (base.endsWith('.prompt.md')) {
-    return base.replace(/\.prompt\.md$/, '');
-  }
-  // Chatmode pattern: <Name>.chatmode.md → strip suffix
-  if (base.endsWith('.chatmode.md')) {
-    return base.replace(/\.chatmode\.md$/, '');
   }
   // Default: strip .md
   return base.replace(/\.md$/, '');

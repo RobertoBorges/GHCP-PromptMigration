@@ -5,6 +5,7 @@ description: |
   **Use when:** Generating IaC for App Service, Container Apps, or AKS deployments.
   **Triggers on:** Phase 3 infrastructure generation, azd init, Bicep/Terraform file creation.
   **Covers:** Azure Verified Modules, managed identities, Key Vault with RBAC, Application Insights, networking.
+user-invocable: false
 ---
 
 # Azure Infrastructure Skill
@@ -247,3 +248,16 @@ Use consistent naming with resource abbreviations:
 | SQL Database | sqldb | sqldb-myapp-prod |
 | Application Insights | appi | appi-myapp-prod |
 | Log Analytics | log | log-myapp-prod |
+
+## Template Files
+
+- [azure.yaml](./templates/azure.yaml) — Azure Developer CLI (`azd`) service definition
+- [bicep/main.bicep](./templates/bicep/main.bicep) — Bicep entry point
+- [bicep/modules/appService.bicep](./templates/bicep/modules/appService.bicep) — App Service module
+- [terraform/main.tf](./templates/terraform/main.tf) — Terraform entry point
+
+## Reference material
+
+- [Azure App Service patterns](./references/azure-app-service.md) — Read when generating IaC or deployment guidance for web apps and APIs on App Service.
+- [Azure Container Apps patterns](./references/azure-container-apps.md) — Read when the target platform is Container Apps, jobs, serverless containers, or revision-based traffic shifting.
+- [Bicep modules](./references/bicep-modules.md) — Read when composing Bicep with Azure Verified Modules, managed identities, Key Vault RBAC, and reusable module structure.

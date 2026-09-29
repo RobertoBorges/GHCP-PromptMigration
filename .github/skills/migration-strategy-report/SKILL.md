@@ -6,6 +6,7 @@ description: |
   **Triggers:** "generate migration report", "analyze CMDB", "portfolio analysis", "migration strategy report for X", "RVTools export analysis", "Azure Migrate analysis", "portfolio assessment", "build a deck from these artifacts".
   **Covers:** auto-detected workload pillars (Apps/DB/Infra), CAF-aligned 6 Rs classification, deterministic Microsoft / Partner / Unknown ownership, phased roadmap, dependency mapping, move groups, risks, executive HTML output.
 argument-hint: "Path to the customer folder (e.g., 'generate migration strategy report for Customers/Contoso')"
+user-invocable: false
 ---
 
 # Migration Strategy Report — Skill
@@ -53,7 +54,7 @@ Use this skill when:
 - A prior strategy report needs updating with new artifacts (incremental iteration).
 
 Do NOT use this skill for:
-- Per-application code modernization → use the Modernize an App flow (`/Phase1-Plan` for single apps, `/Phase0-Multi-repo-assessment` for multi-repo business solutions).
+- Per-application code modernization → use the Modernize an App flow (`/phase1-plan` for single apps, `/phase0-multi-repo-assessment` for multi-repo business solutions).
 - Data migration execution → refer to Azure Database Migration Service.
 - Dependency / binary scanning → refer to AppCAT, .NET Upgrade Assistant.
 
@@ -361,9 +362,9 @@ List the candidate applications with their key attributes from the deck:
 - Microsoft / Partner / Unknown ownership
 - Criticality
 
-Once the user picks an application, write `reports/portfolio-handoff.json` with the full schema (defined in [.github/prompts/PortfolioStrategy.prompt.md](../../prompts/PortfolioStrategy.prompt.md#handoff-file-portfolio-handoffjson)).
+Once the user picks an application, write `reports/portfolio-handoff.json` with the full schema (defined in [.github/skills/portfolio-strategy/SKILL.md](../portfolio-strategy/SKILL.md#handoff-file-portfolio-handoffjson)).
 
-**Schema summary** (must match the canonical spec in PortfolioStrategy.prompt.md):
+**Schema summary** (must match the canonical spec in the `/portfolio-strategy` skill):
 - `schema_version`: "1.0"
 - `source_deck`: path to the HTML deck
 - `generated_at`: ISO-8601 UTC timestamp
@@ -402,7 +403,9 @@ Or use the `create`/`editFiles` tool.
 After writing, surface a clickable next-step:
 > ✅ Handoff written to `reports/portfolio-handoff.json`. Click **🚀 Modernize a single application** to start on `<App.Name>`.
 
-If the user wants to pick MULTIPLE apps for a multi-app modernization wave, write one handoff file per app, e.g., `reports/portfolio-handoff-<AppName>.json`, and inform the user that `/Phase1-Plan` reads `reports/portfolio-handoff.json` by default (so they'll need to rename or copy when switching apps).
+If the user wants to pick MULTIPLE apps for a multi-app modernization wave, write one handoff file per app, e.g., `reports/portfolio-handoff-<AppName>.json`, and inform the user that `/phase1-plan` reads `reports/portfolio-handoff.json` by default (so they'll need to rename or copy when switching apps).
+
+## Reference material
 
 - Classification rules → [references/classification-algorithm.md](references/classification-algorithm.md)
 - Cross-pillar slides → [references/slides-common.md](references/slides-common.md)
@@ -410,4 +413,5 @@ If the user wants to pick MULTIPLE apps for a multi-app modernization wave, writ
 - Database slides → [references/slides-database-pillar.md](references/slides-database-pillar.md)
 - Infrastructure slides → [references/slides-infrastructure-pillar.md](references/slides-infrastructure-pillar.md)
 - HTML/CSS/output rules → [references/style-guide.md](references/style-guide.md)
+- PowerPoint generation → [references/pptx-generation.md](./references/pptx-generation.md) — Read when the portfolio strategy deliverable must also be produced or exported as a PowerPoint deck.
 - Scripts → [scripts/export_to_pdf.py](scripts/export_to_pdf.py)

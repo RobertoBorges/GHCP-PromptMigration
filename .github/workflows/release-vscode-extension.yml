@@ -113,17 +113,15 @@ jobs:
           STAGE="$RUNNER_TEMP/agent-content-pack"
           mkdir -p "$STAGE/.github"
           cp -R .github/agents "$STAGE/.github/"
-          cp -R .github/prompts "$STAGE/.github/"
           cp -R .github/skills "$STAGE/.github/"
-          cp -R .github/chatmodes "$STAGE/.github/"
           cp -R .github/hooks "$STAGE/.github/"
           cp .github/copilot-instructions.md "$STAGE/.github/"
           cp MIGRATION-START-HERE.md "$STAGE/"
           cat > "$STAGE/README.md" <<'EOF'
           # Azure Migration Agent — content pack
 
-          This ZIP contains the canonical agent definition, prompts, skills,
-          chatmodes, hooks, and welcome doc that back the Azure Migration Agent.
+          This ZIP contains the canonical agent definitions, skills,
+          hooks, and welcome doc that back the Azure Migration Agent.
 
           ## Usage (without the VS Code extension)
 

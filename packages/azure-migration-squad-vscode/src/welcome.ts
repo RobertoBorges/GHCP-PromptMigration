@@ -202,7 +202,7 @@ function renderWelcomeHtml(): string {
   <div class="actions">
     <button onclick="send('initialize')">Initialize in this workspace</button>
     <button class="secondary" onclick="send('installCopilotChat')">Install GitHub Copilot Chat</button>
-    <button class="secondary" onclick="send('showCatalog')">Show prompt catalog</button>
+    <button class="secondary" onclick="send('showCatalog')">Show command catalog</button>
     <button class="secondary" onclick="send('openSettings')">Open settings</button>
   </div>
 
@@ -226,28 +226,28 @@ function renderWelcomeHtml(): string {
     </div>
   </div>
 
-  <h2>Your first migration in 7 steps</h2>
-  <p style="opacity: 0.85; margin-top: -6px;">The main path. Run these in order in Copilot Chat.</p>
+  <h2>Your first migration</h2>
+  <p style="opacity: 0.85; margin-top: -6px;">Two setup steps, then the 7-step main path. Run the slash commands in order in Copilot Chat.</p>
   <ol>
-    <li><strong>Click "Initialize in this workspace"</strong> above — drops <code>.github/agents/</code>, <code>.github/prompts/</code>, <code>.github/skills/</code>, etc. into your project.</li>
+    <li><strong>Click "Initialize in this workspace"</strong> above — drops <code>.github/agents/</code>, <code>.github/skills/</code>, and <code>.github/hooks/</code> into your project.</li>
     <li><strong>Open GitHub Copilot Chat</strong> (<kbd>Ctrl+Alt+I</kbd>). If you don't have it, click "Install GitHub Copilot Chat" above.</li>
     <li><strong><code>/assess-any-application</code></strong> — 🔍 Discovery: characterize source/stack/workload; produce Capability Matrix</li>
-    <li><strong><code>/Phase1-Plan</code></strong> — 🚀 Plan: produce Application-Assessment-Report + Migration-Plan + Decisions-Required</li>
-    <li><strong><code>/Phase2-MigrateCode</code></strong> — modernize the code to your chosen target</li>
-    <li><strong><code>/Phase3-GenerateInfra</code></strong> — Bicep or Terraform for Azure</li>
-    <li><strong><code>/Phase4-DeployToAzure</code></strong> — deploy via Azure Developer CLI (azd)</li>
-    <li><strong><code>/Phase5-SetupCICD</code></strong> — GitHub Actions or Azure DevOps</li>
-    <li><strong><code>/Phase6-PostMigrationOps</code></strong> — App Insights, alerts, runbooks</li>
+    <li><strong><code>/phase1-plan</code></strong> — 🚀 Plan: produce Application-Assessment-Report + Migration-Plan + Decisions-Required</li>
+    <li><strong><code>/phase2-migrate-code</code></strong> — modernize the code to your chosen target</li>
+    <li><strong><code>/phase3-generate-infra</code></strong> — Bicep or Terraform for Azure</li>
+    <li><strong><code>/phase4-deploy-to-azure</code></strong> — deploy via Azure Developer CLI (azd)</li>
+    <li><strong><code>/phase5-setup-cicd</code></strong> — GitHub Actions or Azure DevOps</li>
+    <li><strong><code>/phase6-post-migration-ops</code></strong> — App Insights, alerts, runbooks</li>
   </ol>
   <p style="opacity: 0.75; font-size: 0.9em;">Phases 2-6 hard-stop until each pending decision in <code>reports/Decisions-Required.md</code> is answered. The status bar shows a count.</p>
 
   <h2>Optional add-ons</h2>
   <p style="opacity: 0.85; margin-top: -6px;">Not part of the default flow — surface only when you need one.</p>
   <ul>
-    <li><strong>Alternative intakes:</strong> <code>/build-migration-plan</code>, <code>/QuickAssessment</code>, <code>/QuickTriage</code>, <code>/InteractiveMigrationInterview</code>, <code>/TeamSkillAssessment</code></li>
-    <li><strong>Portfolio / multi-app:</strong> <code>/PortfolioStrategy</code>, <code>/Phase0-Multi-repo-assessment</code></li>
-    <li><strong>Specialized deep-dives:</strong> <code>/DatabaseMigration</code>, <code>/SecurityHardening</code>, <code>/CostOptimization</code></li>
-    <li><strong>Utility / recovery:</strong> <code>/Phase-Rollback</code>, <code>/GetStatus</code></li>
+    <li><strong>Alternative intakes:</strong> <code>/build-migration-plan</code>, <code>/quick-assessment</code>, <code>/quick-triage</code>, <code>/interactive-migration-interview</code>, <code>/team-skill-assessment</code></li>
+    <li><strong>Portfolio / multi-app:</strong> <code>/portfolio-strategy</code>, <code>/phase0-multi-repo-assessment</code></li>
+    <li><strong>Specialized deep-dives:</strong> <code>/database-migration</code>, <code>/security-hardening</code>, <code>/cost-optimization</code></li>
+    <li><strong>Utility / recovery:</strong> <code>/phase-rollback</code>, <code>/get-status</code></li>
   </ul>
 
   <h2>Next steps after init</h2>

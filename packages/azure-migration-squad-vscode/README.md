@@ -1,7 +1,7 @@
 # Azure Migration Agent — VS Code extension
 
 > **Migrate any application to Azure** — directly from your editor.
-> One agent definition, 19 prompts, 85 skills. Stack-agnostic. Discovery-first. Hard-stop user-decision gates.
+> One agent definition, 9 custom agents, 36 skills (19 workflow slash commands + knowledge skills). Stack-agnostic. Discovery-first. Hard-stop user-decision gates.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
@@ -9,7 +9,7 @@
 
 ## What it does
 
-Drops a `.github/agents/Code-Migration-Modernization.agent.md` and the full prompt+skill+chatmode catalog into any VS Code workspace. The agent walks you through:
+Drops a `.github/agents/Code-Migration-Modernization.agent.md` and the full agent + skill + hook catalog into any VS Code workspace. The agent walks you through:
 
 1. **Discovery** — what is this app? (source, stack, workload, data, integrations)
 2. **Plan** — a migration plan + 18 major decisions you need to answer
@@ -88,7 +88,7 @@ The **status bar** (bottom-left) shows your current migration phase, or **"⚠ A
 - **🎯 Decision Hardstop Protocol** — Phases 2-6 hard-stop until you answer 18 canonical architecture decisions. No silent defaults, no expert-mode bypass. Stay-as-is is always option 1.
 - **🧠 On-the-fly skill authoring** — `skill-creator` writes new stack/source/workload skills mid-migration when it hits an unknown, inspired by [Anthropic's skill-creator](https://github.com/anthropics/skills/tree/main/skills/skill-creator).
 - **📜 Action Log (trace memory)** — every meaningful action logs one line to `reports/Report-Status.md` in a canonical format. New sessions recover from the last 5 log entries. Includes per-action turn count + best-effort token estimate.
-- **✅ Universal, stack-agnostic wording** — every prompt was swept to remove ".NET or Java only" phrasing. Default goal is minimum viable Azure compatibility, NOT rewriting to microservices.
+- **✅ Universal, stack-agnostic wording** — every workflow skill was swept to remove ".NET or Java only" phrasing. Default goal is minimum viable Azure compatibility, NOT rewriting to microservices.
 
 ## Requirements
 
@@ -113,7 +113,7 @@ The extension is **self-contained**:
 
 - Bundles all migration content under `templates/` (built from the canonical `.github/*` at the repo root via `scripts/sync-templates.mjs`)
 - On Initialize, copies `templates/` into the user's workspace under `.github/`
-- All Copilot Chat slash commands work via the bundled `.github/prompts/*.prompt.md` files
+- All Copilot Chat slash commands are backed by the bundled `.github/skills/<skill-name>/SKILL.md` files
 - The agent definition at `.github/agents/Code-Migration-Modernization.agent.md` orchestrates everything
 - Session-lifecycle hooks read/write `reports/Report-Status.md` so recovery works across sessions
 

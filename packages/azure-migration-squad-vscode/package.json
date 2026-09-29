@@ -95,7 +95,7 @@
           {
             "id": "install",
             "title": "Initialize the migration agent in your workspace",
-            "description": "Drops the agent definition, prompts, skills, and a 60-second quickstart into your project.\n[Initialize now](command:azureMigrationSquad.initialize)",
+            "description": "Drops the agent definitions, skills, hooks, and a 60-second quickstart into your project.\n[Initialize now](command:azureMigrationSquad.initialize)",
             "media": {
               "image": "media/walkthroughs/step-1-init.png",
               "altText": "Initialize Azure Migration Agent screenshot"
@@ -119,7 +119,7 @@
           {
             "id": "discovery",
             "title": "Start the main path — /assess-any-application",
-            "description": "Step 1 of the main path is Discovery. Interviews you about source, stack, workload, data, and integrations; produces the Capability Matrix that /Phase1-Plan and every subsequent phase consumes.\n[Start main path](command:azureMigrationSquad.openMainPath)",
+            "description": "Step 1 of the main path is Discovery. Interviews you about source, stack, workload, data, and integrations; produces the Capability Matrix that /phase1-plan and every subsequent phase consumes.\n[Start main path](command:azureMigrationSquad.openMainPath)",
             "media": {
               "image": "media/walkthroughs/step-3-discovery.png",
               "altText": "Run /assess-any-application in Copilot Chat"
@@ -200,7 +200,7 @@
       },
       {
         "command": "azureMigrationSquad.showCatalog",
-        "title": "Show prompt catalog (MIGRATION-START-HERE.md)",
+        "title": "Show command catalog (MIGRATION-START-HERE.md)",
         "category": "Azure Migration",
         "icon": "$(book)"
       },

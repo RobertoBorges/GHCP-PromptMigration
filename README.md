@@ -1,11 +1,11 @@
-# Azure Migration Agent — GitHub Copilot prompts for Azure migration
+# Azure Migration Agent — GitHub Copilot agent skills for Azure migration
 
-> **Migrate any application to Azure** using a single GitHub Copilot agent definition plus 19 prompts, 85 skills, and 8 chat modes. Universal source/stack/workload coverage. Discovery-first. The agent **never decides major architecture for you** — it lays out options and waits.
+> **Migrate any application to Azure** using a single GitHub Copilot agent definition plus 36 agent skills and 9 custom agents. Universal source/stack/workload coverage. Discovery-first. The agent **never decides major architecture for you** — it lays out options and waits.
 
 [![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/robertoborges.azure-migration-squad-vscode?label=VS%20Code%20Marketplace&color=blueviolet&logo=visualstudiocode)](https://marketplace.visualstudio.com/items?itemName=robertoborges.azure-migration-squad-vscode)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-This repository is the canonical source for the **Azure Migration Agent** (`.github/agents/Code-Migration-Modernization.agent.md`) and its supporting prompts, skills, chatmodes, and hooks.
+This repository is the canonical source for the **Azure Migration Agent** (`.github/agents/Code-Migration-Modernization.agent.md`) and its supporting agent skills, custom agents, and hooks.
 
 ## Supported languages, frameworks, and platforms
 
@@ -18,7 +18,7 @@ This repository is the canonical source for the **Azure Migration Agent** (`.git
 | **Workloads (8 patterns)** | Web app, API service, batch job, event-driven, serverless (Functions), data pipeline, desktop / client-server, packaged app |
 | **Azure targets** | App Service, Container Apps, AKS, Functions, VMs, Azure VMware Solution, Azure SQL / PostgreSQL / MySQL / Cosmos / Data Factory / Databricks / Synapse, Entra ID, Key Vault, Application Insights, and more |
 
-> **Out of scope as a first-class family:** mainframe / midrange code migration (z/OS, IBM i, COBOL / RPG / Natural / PL/I on CICS / IMS / VSAM). These workloads route to `.github/skills/source-unsupported-escalation.md`, which provides a specialist-partner playbook (Micro Focus / Astadia / Kyndryl / LzLabs / TCS / NTT DATA) instead of pretending we can migrate their code.
+> **Out of scope as a first-class family:** mainframe / midrange code migration (z/OS, IBM i, COBOL / RPG / Natural / PL/I on CICS / IMS / VSAM). These workloads route to `.github/skills/source-adapters/references/source-unsupported-escalation.md`, which provides a specialist-partner playbook (Micro Focus / Astadia / Kyndryl / LzLabs / TCS / NTT DATA) instead of pretending we can migrate their code.
 
 ## Where this tool fits alongside Microsoft's other migration options
 
@@ -55,8 +55,8 @@ Great for **infrastructure discovery + lift-and-shift** of on-prem/other-cloud w
 | **Cross-session trace memory** — canonical Action Log in `Report-Status.md` for recovery + per-action token accounting | ✅ | ❌ | ❌ |
 | **Portfolio 6Rs strategy report** — CIO-ready HTML deck with Microsoft / Partner / Unknown ownership across mixed-stack portfolios | ✅ | ❌ | ✅ (business case, different format) |
 | **Cross-stack post-migration observability wiring** — App Insights + OpenTelemetry recipes for 11+ languages | ✅ | ❌ | ❌ |
-| **Universal Discovery Dossier + Capability Matrix** — a mechanical contract every downstream Phase prompt consumes | ✅ | ❌ | ⚠ separate discovery report |
-| **Never picks major architecture for you** — options + tradeoffs, waits for user pick, "stay-as-is" is always option 1 | ✅ | ⚠ some prompts | ❌ |
+| **Universal Discovery Dossier + Capability Matrix** — a mechanical contract every downstream Phase skill consumes | ✅ | ❌ | ⚠ separate discovery report |
+| **Never picks major architecture for you** — options + tradeoffs, waits for user pick, "stay-as-is" is always option 1 | ✅ | ⚠ some flows | ❌ |
 
 **How to combine them:**
 - Have a .NET app that needs an in-place code upgrade? Start with **GitHub Copilot Upgrade**.
@@ -76,12 +76,12 @@ The extension bundles a copy of the canonical content from this repo and drops i
 2. Open the folder you want to migrate.
 3. Accept the welcome notification → click **Get started** (or run "Azure Migration: Initialize in this workspace" from the Command Palette).
 4. Open GitHub Copilot Chat (`Ctrl+Alt+I`) → type `/assess-any-application`. This is step 1 of the main path — discovery.
-5. Then `/Phase1-Plan` — produces `reports/Application-Assessment-Report.md`, `reports/Migration-Plan.md`, and `reports/Decisions-Required.md`.
+5. Then `/phase1-plan` — produces `reports/Application-Assessment-Report.md`, `reports/Migration-Plan.md`, and `reports/Decisions-Required.md`.
 6. Answer each decision in `reports/Decisions-Required.md`, then run Phase 2 → Phase 3 → Phase 4 → Phase 5 → Phase 6 in order.
 
-Phases 2-6 **hard-stop** until each required decision in `reports/Decisions-Required.md` is answered. See [`.github/skills/decision-hardstop.md`](./.github/skills/decision-hardstop.md) for the protocol.
+Phases 2-6 **hard-stop** until each required decision in `reports/Decisions-Required.md` is answered. See [`.github/skills/migration-decisions/references/decision-hardstop.md`](./.github/skills/migration-decisions/references/decision-hardstop.md) for the protocol.
 
-> **Optional add-ons** — `/Build-Migration-Plan`, `/PortfolioStrategy`, `/DatabaseMigration`, `/SecurityHardening`, `/CostOptimization`, and more are available for specialized needs. They are **not part of the default flow**. See [`MIGRATION-START-HERE.md`](./MIGRATION-START-HERE.md) for the full add-ons catalog.
+> **Optional add-ons** — `/build-migration-plan`, `/portfolio-strategy`, `/database-migration`, `/security-hardening`, `/cost-optimization`, and more are available for specialized needs. They are **not part of the default flow**. See [`MIGRATION-START-HERE.md`](./MIGRATION-START-HERE.md) for the full add-ons catalog.
 
 Full walkthrough: [docs/vscode-quickstart.md](./docs/vscode-quickstart.md).
 
@@ -89,12 +89,9 @@ Full walkthrough: [docs/vscode-quickstart.md](./docs/vscode-quickstart.md).
 
 | Path | Content |
 |------|---------|
-| `.github/agents/Code-Migration-Modernization.agent.md` | The one agent definition |
-| `.github/prompts/` | 19 prompt files (Assess + Phase 1-6 main path, plus Portfolio, Database, Security, Cost, Interview, Rollback add-ons) |
-| `.github/skills/` | 85 skill files — 15 stack adapters, 10 source adapters, 8 workload patterns, plus universal Azure / security / decision / logging / meta skills |
-| `.github/skills/references/` | On-demand references consumed by `skill-creator` when authoring new skills |
-| `.github/chatmodes/` | 8 specialized chat modes (Discovery-Intake, Migration-Orchestrator, Code-Migration, Cost-Optimization, Debug-Migration, Quick-Assessment, Security-Review, Azure-Infrastructure) |
-| `.github/hooks/` | 11 orchestration files: `session-lifecycle.json`, `validation.json`, `phase-gates.md`, `decision-gates.md`, `quality-checklist.md`, and helper scripts (SessionStart context loader, Stop hook Action-Log writer, etc.) |
+| `.github/agents/` | 9 custom agents — the main migration agent (`Code-Migration-Modernization.agent.md`) plus 8 specialists (Discovery-Intake, Migration-Orchestrator, Code-Modernization-Specialist, Cost-Optimization, Debug-Migration, Quick-Assessment, Security-Review, Azure-Infrastructure) |
+| `.github/skills/` | 36 agent skills — 20 user-invocable workflow skills (`/assess-any-application`, Phase 1-6, Portfolio, Database, Security, Cost, Interview, Rollback…) and 16 auto-loaded knowledge skills bundling 64 reference files (15 stack adapters, 10 source adapters, 8 workload patterns, plus Azure / security / decision / artifact skills) |
+| `.github/hooks/` | Orchestration files: `session-lifecycle.json`, `validation.json`, `phase-gates.md`, `decision-gates.md`, `quality-checklist.md`, and helper scripts (SessionStart context loader, Stop hook Action-Log writer, etc.) |
 | `.github/copilot-instructions.md` | Top-level rules for Copilot |
 | `MIGRATION-START-HERE.md` | 60-second quickstart |
 
@@ -110,13 +107,13 @@ The agent **does not decide major architecture on your behalf**. It surfaces opt
 | Database engine unclear | Posts options (Azure SQL, PostgreSQL, Cosmos, etc.), waits |
 | Hosting platform unclear | Posts options (App Service, Container Apps, AKS, Functions), waits |
 | IaC tool unclear | Posts options (Bicep, Terraform, ARM, Pulumi), waits |
-| ...and 14 more major decisions | Same pattern. See [`.github/skills/decision-catalog.md`](./.github/skills/decision-catalog.md) |
+| ...and 14 more major decisions | Same pattern. See [`.github/skills/migration-decisions/references/decision-catalog.md`](./.github/skills/migration-decisions/references/decision-catalog.md) |
 
 **Stay-as-is** is always option 1 in every option block, forcing an active choice. No silent defaults. No expert-mode bypass.
 
 ### 🧠 On-the-fly skill authoring (skill-creator)
 
-If Discovery finds a stack / source / workload / integration the agent's 85 skills don't cover, the **skill-creator** meta-skill offers to author a new one on the spot — research 3-5 authoritative sources, draft the skill file, save it, and continue the migration using the fresh knowledge. Inspired by [Anthropic's skill-creator](https://github.com/anthropics/skills/tree/main/skills/skill-creator). See [`.github/skills/skill-creator.md`](./.github/skills/skill-creator.md).
+If Discovery finds a stack / source / workload / integration the agent's 36 skills don't cover, the **skill-creator** meta-skill offers to author a new one on the spot — research 3-5 authoritative sources, draft the skill file, save it, and continue the migration using the fresh knowledge. Inspired by [Anthropic's skill-creator](https://github.com/anthropics/skills/tree/main/skills/skill-creator). See [`.github/skills/skill-creator/SKILL.md`](./.github/skills/skill-creator/SKILL.md).
 
 ### 📜 Action Log (trace memory + token accounting)
 
@@ -125,21 +122,19 @@ Every meaningful action (phase transitions, artifact production, decisions, gate
 - **Trace memory** — a new session can recover where the last one left off via the SessionStart hook that reads the last 5 log entries
 - **Token accounting** — each entry carries a per-action `turn=<n>` counter plus a best-effort `tokens=~<bucket>` estimate. Users get authoritative counts from the Copilot Dashboard; the log provides live in-context signal
 
-Full spec: [`.github/skills/action-log-format.md`](./.github/skills/action-log-format.md).
+Full spec: [`.github/skills/migration-artifacts/references/action-log-format.md`](./.github/skills/migration-artifacts/references/action-log-format.md).
 
 ### ✅ Universal, stack-agnostic wording
 
-Every prompt, skill, and hook was swept to remove ".NET or Java only" phrasing. The agent explicitly avoids rewriting to microservices / event-driven architectures unless the user picks a `rearchitect` or `rebuild` strategy — the default goal is **minimum viable Azure compatibility**, not architectural modernization.
+Every skill, agent, and hook was swept to remove ".NET or Java only" phrasing. The agent explicitly avoids rewriting to microservices / event-driven architectures unless the user picks a `rearchitect` or `rebuild` strategy — the default goal is **minimum viable Azure compatibility**, not architectural modernization.
 
 ## Repository structure (for contributors)
 
 ```
 .github/
-├── agents/                                       (✏️ EDIT — the one agent file)
-├── prompts/                                      (✏️ EDIT — slash commands)
-├── skills/                                       (✏️ EDIT — adapters & patterns)
-│   └── references/                               (✏️ EDIT — on-demand refs for skill-creator)
-├── chatmodes/                                    (✏️ EDIT — Copilot Chat modes)
+├── agents/                                       (✏️ EDIT — 9 custom agents, *.agent.md)
+├── skills/                                       (✏️ EDIT — 36 skills, each <name>/SKILL.md)
+│   └── <skill>/references/                       (✏️ EDIT — on-demand detail files)
 ├── hooks/                                        (✏️ EDIT — orchestration rules + scripts)
 ├── copilot-instructions.md                       (✏️ EDIT — top-level rules)
 └── workflows/                                    (✏️ EDIT — CI + release-please)
@@ -152,11 +147,21 @@ packages/azure-migration-squad-vscode/
 scripts/
 ├── inject-capability-matrix-gates.mjs            (gate injector — Phase 1-6 + DB/Sec/Cost)
 ├── inject-decision-gates.mjs                     (gate injector — decision-catalog coverage)
-├── inject-action-log-contract.mjs                (gate injector — Action Log contract per prompt)
+├── inject-action-log-contract.mjs                (gate injector — Action Log contract per skill)
 ├── validate-decision-coverage.mjs                (CI guard)
 └── validate-description-lengths.mjs              (CI guard)
 MIGRATION-START-HERE.md                           (✏️ EDIT — user welcome doc)
 ```
+
+> **Why skills, not prompt files?** VS Code has
+> [deprecated prompt files](https://code.visualstudio.com/docs/agent-customization/prompt-files)
+> ("not loaded by Agent Host… the Local agent will be removed in a future release") and replaced chat
+> modes with [custom agents](https://code.visualstudio.com/docs/agent-customization/custom-agents).
+> Everything here follows the current
+> [Agent Skills spec](https://code.visualstudio.com/docs/agent-customization/agent-skills): a skill is
+> a **folder** containing `SKILL.md` with `name:` + `description:` frontmatter, and detail files in
+> `references/` that load on demand. Skills are an [open standard](https://agentskills.io), so the same
+> content works in VS Code Copilot Chat, the GitHub Copilot CLI, and the Copilot coding agent.
 
 > **Important:** `packages/azure-migration-squad-vscode/templates/` is regenerated on every build by `scripts/sync-templates.mjs` (inside the extension package). Edit canonical files at `.github/*` and `MIGRATION-START-HERE.md`, then `npm run sync` to refresh.
 
@@ -184,7 +189,7 @@ npm run release:local -- --dry-run
 `.github/workflows/ci.yml` runs on every push/PR:
 
 - ✅ Description lengths ≤1024 chars (Copilot listing constraint)
-- ✅ Decision-catalog coverage (every catalog ID referenced by ≥1 phase prompt)
+- ✅ Decision-catalog coverage (every catalog ID referenced by ≥1 phase skill)
 - ✅ Templates sync from `.github/*` into the extension package
 - ✅ Extension build via esbuild
 - ✅ `.vsix` packaging via `vsce`

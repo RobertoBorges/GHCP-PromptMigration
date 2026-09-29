@@ -2,6 +2,7 @@
 
 > **Codename:** The Wire | **Source:** WCF .NET 3.5 (SOAP, ServiceContract) | **Target:** REST API + Azure Container Apps
 > **Crew on point:** Danny Ocean, Rusty Ryan, Basher Tarr, Virgil Malloy, Frank Catton, Linus Caldwell
+> ⚠ **The target runtime shown above is an example, not a default.** `/phase1-plan` presents supported LTS options with tradeoffs and records your answer in `reports/Decisions-Required.md`. Later steps hard-stop until that decision is `✅ DECIDED`.
 
 ## How This Works
 
@@ -36,9 +37,9 @@ flowchart LR
 **What happens:** Danny scopes the redesign, Rusty rebuilds the API, Basher prepares Azure, and Virgil keeps an eye on scale and fit.
 **You'll get:** Assessment reports, REST design guidance, modernized API code, container-ready infrastructure, deployment output, and release guidance.
 
-## Phase by Phase
+## Step by Step
 
-### Phase 0: Triage
+### Step 1: Discovery — triage (`/assess-any-application`)
 
 ```text
 @agent Give me a fast triage for Use-cases/03-WCFNet35. Review WCFDemo.Service, WCFDemo.Host, and WCFDemo.Client separately, identify the hardest SOAP contracts, note binding or hosting blockers, and tell me what will break for clients when we move to REST.
@@ -52,10 +53,10 @@ flowchart LR
 @agent Explain which ServiceContract or client dependency creates the most migration risk and why it cannot stay exactly as-is.
 ```
 
-### Phase 1: Assessment
+### Step 2: Plan — assessment (`/phase1-plan`)
 
 ```text
-/run the full assessment for Use-cases/03-WCFNet35. Map ServiceContract and OperationContract usage, binding assumptions, config dependencies, host behavior, client proxy impact, auth expectations, and Azure Container Apps fit. Fan out architecture, security, and performance review.
+/assess-any-application Use-cases/03-WCFNet35. Map ServiceContract and OperationContract usage, binding assumptions, config dependencies, host behavior, client proxy impact, auth expectations, and Azure Container Apps fit. Fan out architecture, security, and performance review.
 ```
 
 **What happens:** Danny runs the table while Frank checks exposure and Virgil looks for API shape or scaling traps.
@@ -66,7 +67,7 @@ flowchart LR
 @agent Show me the top three service redesign risks and tell me which contract should become the first REST endpoint.
 ```
 
-### Phase 2: Code Migration
+### Step 3: Migrate code (`/phase2-migrate-code`)
 
 ```text
 @agent Start the migration for Use-cases/03-WCFNet35. Convert the WCF service to a .NET 8 REST API, map contracts to endpoints and DTOs, replace SOAP-specific assumptions, modernize configuration, and define how WCFDemo.Client should transition to HttpClient or an OpenAPI-based client.
@@ -80,7 +81,7 @@ flowchart LR
 @agent Walk me through how the SOAP operations were mapped to HTTP verbs, status codes, and DTOs, and tell me where parity is intentionally different.
 ```
 
-### Phase 3: Infrastructure
+### Step 4: Generate infrastructure (`/phase3-generate-infra`)
 
 ```text
 @agent Generate the Azure platform for the new REST API. Use Azure Container Apps, container registry, Key Vault, managed identity, and Application Insights. Keep the output ready for azd and show me any assumptions about ingress, secrets, and revisions.
@@ -94,7 +95,7 @@ flowchart LR
 @agent Explain why Container Apps is the right landing zone and show me how ingress, identity, and telemetry are wired.
 ```
 
-### Phase 4: Deploy
+### Step 5: Deploy to Azure (`/phase4-deploy-to-azure`)
 
 ```text
 @agent Deploy the migrated REST API for Use-cases/03-WCFNet35 to Azure Container Apps when the platform is ready. Confirm endpoint reachability, summarize smoke tests, and document rollback points before sign-off.
@@ -108,7 +109,7 @@ flowchart LR
 @agent If deployment fails, tell me whether the problem is image build, container config, ingress, secrets, or code, and give me the fastest recovery path.
 ```
 
-### Phase 5: CI/CD
+### Step 6: Set up CI/CD (`/phase5-setup-cicd`)
 
 ```text
 @agent Set up CI/CD for Use-cases/03-WCFNet35. Include build, container image creation, API tests, security checks, Azure deployment, and release gates that protect contract changes and endpoint health.
@@ -122,10 +123,10 @@ flowchart LR
 @agent Show me how the pipeline proves the REST API is healthy before production and where contract-breaking changes should be caught.
 ```
 
-## Final Validation and Ops Hand-Off
+## Step 7: Post-migration ops and final validation (`/phase6-post-migration-ops`)
 
 ```text
-/run final validation for Use-cases/03-WCFNet35. Confirm the build passes, SOAP contracts are mapped, the REST API is deployable, Container Apps health is clean, CI/CD is wired, the client transition is documented, and the first-day monitoring and rollback checklist is ready.
+/get-status Use-cases/03-WCFNet35. Confirm the build passes, SOAP contracts are mapped, the REST API is deployable, Container Apps health is clean, CI/CD is wired, the client transition is documented, and the first-day monitoring and rollback checklist is ready.
 ```
 
 **What happens:** Linus closes the loop while Virgil and Frank keep an eye on performance and exposure.
@@ -152,6 +153,6 @@ flowchart LR
 ## 💡 Power-User Shortcut
 
 > CLI-first follow-through commands:
-> Assessment → `/run Phase 1 plan and assess` | Code → `/run Phase 2 code migration` | Infra → `/run Phase 3 infrastructure generation`
-> Deploy → `/run Phase 4 deploy to Azure` | CI/CD → `/run Phase 5 CI/CD setup`
-> Optional hardening → `/run security hardening review` | Optional cost review → `/run cost optimization review`
+> Assessment → `/phase1-plan` | Code → `/phase2-migrate-code` | Infra → `/phase3-generate-infra`
+> Deploy → `/phase4-deploy-to-azure` | CI/CD → `/phase5-setup-cicd`
+> Optional hardening → `/security-hardening` | Optional cost review → `/cost-optimization`

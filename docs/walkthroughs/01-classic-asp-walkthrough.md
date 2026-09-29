@@ -2,6 +2,7 @@
 
 > **Codename:** The Antique | **Source:** Classic ASP (VBScript, ADODB, COM) | **Target:** .NET 8 + Azure App Service
 > **Crew on point:** Danny Ocean, Rusty Ryan, The Amazing Yen, Basher Tarr, Frank Catton, Linus Caldwell
+> ⚠ **The target runtime shown above is an example, not a default.** `/phase1-plan` presents supported LTS options with tradeoffs and records your answer in `reports/Decisions-Required.md`. Later steps hard-stop until that decision is `✅ DECIDED`.
 
 ## How This Works
 
@@ -37,9 +38,9 @@ flowchart LR
 **What happens:** Danny Ocean routes the rewrite, Rusty Ryan drives the code move, The Amazing Yen handles data risk, and Basher Tarr lines up Azure.
 **You'll get:** Assessment reports, migration plans, modernized app code, `infra/`, `azure.yaml`, deployment output, CI/CD guidance, and ops handoff notes.
 
-## Phase by Phase
+## Step by Step
 
-### Phase 0: Triage
+### Step 1: Discovery — triage (`/assess-any-application`)
 
 ```text
 @agent Take point on Use-cases/01-ASPClassicApp and give me a fast triage for a move to .NET 8 on Azure App Service. Call out COM components, ADODB usage, include-file sprawl, Session/Application usage, and anything in global.asa that makes this a rewrite.
@@ -53,10 +54,10 @@ flowchart LR
 @agent Explain why global.asa, Session state, and COM usage change the migration shape, and tell me which page group should move first.
 ```
 
-### Phase 1: Assessment
+### Step 2: Plan — assessment (`/phase1-plan`)
 
 ```text
-/run the full assessment for Use-cases/01-ASPClassicApp. Build a risk matrix for VBScript-to-C#, ADODB-to-EF Core, include files, Session state, global.asa startup logic, authentication, and Azure landing-zone fit. Fan out architecture, data, and security review.
+/assess-any-application Use-cases/01-ASPClassicApp. Build a risk matrix for VBScript-to-C#, ADODB-to-EF Core, include files, Session state, global.asa startup logic, authentication, and Azure landing-zone fit. Fan out architecture, data, and security review.
 ```
 
 **What happens:** Danny leads the assessment while Basher, Yen, and Frank pressure-test the risky edges.
@@ -67,7 +68,7 @@ flowchart LR
 @agent Show me the top three rewrite risks in plain English and tell me what would delay the first production-ready cut.
 ```
 
-### Phase 2: Database
+### Add-on: Database migration (`/database-migration`)
 
 ```text
 @agent Build the database migration plan for Use-cases/01-ASPClassicApp. Map ADODB access in database.asp to EF Core, define the Azure SQL target, identify schema or stored-procedure risks, and tell me how cart and session-backed data should persist after the rewrite.
@@ -81,7 +82,7 @@ flowchart LR
 @agent Tell me what has to be rewritten first on the data side: connection handling, repositories, schema changes, or cart persistence.
 ```
 
-### Phase 3: Code Migration
+### Step 3: Migrate code (`/phase2-migrate-code`)
 
 ```text
 @agent Start the code migration for Use-cases/01-ASPClassicApp. Rewrite the app to .NET 8 with C#, move global.asa behavior into modern startup patterns, replace includes with shared components, remove COM and ADODB dependencies, and prioritize catalog, product detail, cart, about, and contact flows. Fan out shared foundation work where it helps.
@@ -95,7 +96,7 @@ flowchart LR
 @agent Walk me through how Session state, cart behavior, and shared includes were remapped in the .NET 8 version.
 ```
 
-### Phase 4: Infrastructure
+### Step 4: Generate infrastructure (`/phase3-generate-infra`)
 
 ```text
 @agent Generate the Azure platform for the migrated Classic ASP app. Use Azure App Service, Azure SQL, Key Vault, managed identity, and Application Insights. Keep the infrastructure ready for azd deployment and show me any production assumptions.
@@ -109,7 +110,7 @@ flowchart LR
 @agent Explain why App Service is the right landing zone here and show me how secrets, identity, and monitoring are wired.
 ```
 
-### Phase 5: Deploy
+### Step 5: Deploy to Azure (`/phase4-deploy-to-azure`)
 
 ```text
 @agent Deploy the migrated Use-cases/01-ASPClassicApp solution to Azure when the infrastructure is ready. Use the generated deployment assets, summarize smoke-test results, and document rollback points before you call it good.
@@ -123,7 +124,7 @@ flowchart LR
 @agent If deployment fails, tell me whether the blocker is code, infrastructure, configuration, or data, and give me the next recovery move.
 ```
 
-### Phase 6: CI/CD
+### Step 6: Set up CI/CD (`/phase5-setup-cicd`)
 
 ```text
 @agent Set up CI/CD for the migrated Classic ASP replacement. Include build, test, infrastructure validation, App Service deployment, security checks, and release gates that are safe for a rewrite cutover.
@@ -137,7 +138,7 @@ flowchart LR
 @agent Show me the release path from pull request to production and call out the manual approvals I should keep.
 ```
 
-### Phase 7: Post-Migration Ops
+### Step 7: Post-migration operations (`/phase6-post-migration-ops`)
 
 ```text
 @agent Operationalize the migrated Classic ASP app. Set up monitoring, alerts, dashboards, runbooks, Azure SQL health checks, checkout diagnostics, and session or cart telemetry. Fan out observability, security hardening, and cost review.
@@ -154,7 +155,7 @@ flowchart LR
 ## Final Validation
 
 ```text
-/run final validation for Use-cases/01-ASPClassicApp. Confirm the build passes, the ADODB replacement is complete, the Azure SQL plan is sound, App Service deployment is healthy, CI/CD is wired, monitoring is live, rollback is documented, and the remaining risks are explicit.
+/get-status Use-cases/01-ASPClassicApp. Confirm the build passes, the ADODB replacement is complete, the Azure SQL plan is sound, App Service deployment is healthy, CI/CD is wired, monitoring is live, rollback is documented, and the remaining risks are explicit.
 ```
 
 **You'll get:** A ship/no-ship summary, open risks, and the exact next action.
@@ -175,6 +176,6 @@ flowchart LR
 
 ## 💡 Power-User Shortcut
 > CLI-first follow-through commands:
-> Assessment → `/run Phase 1 plan and assess` | Database → `/run database migration review` | Code → `/run Phase 2 code migration`
-> Infra → `/run Phase 3 infrastructure generation` | Deploy → `/run Phase 4 deploy to Azure` | CI/CD → `/run Phase 5 CI/CD setup`
-> Ops → `/run Phase 6 post-migration ops` | Security → `/run security hardening review` | Cost → `/run cost optimization review`
+> Assessment → `/phase1-plan` | Database → `/database-migration` | Code → `/phase2-migrate-code`
+> Infra → `/phase3-generate-infra` | Deploy → `/phase4-deploy-to-azure` | CI/CD → `/phase5-setup-cicd`
+> Ops → `/phase6-post-migration-ops` | Security → `/security-hardening` | Cost → `/cost-optimization`

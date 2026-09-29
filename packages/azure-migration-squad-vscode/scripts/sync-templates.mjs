@@ -19,9 +19,7 @@ const templatesDir = path.join(pkgRoot, 'templates');
 
 const COPY_MAP = [
   { src: '.github/agents', dest: 'github/agents' },
-  { src: '.github/prompts', dest: 'github/prompts' },
   { src: '.github/skills', dest: 'github/skills' },
-  { src: '.github/chatmodes', dest: 'github/chatmodes' },
   { src: '.github/hooks', dest: 'github/hooks' },
   { src: '.github/copilot-instructions.md', dest: 'github/copilot-instructions.md' },
   { src: 'MIGRATION-START-HERE.md', dest: 'MIGRATION-START-HERE.md' },

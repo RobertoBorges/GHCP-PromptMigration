@@ -2,6 +2,7 @@
 
 > **Codename:** The Fossil | **Source:** .NET 3.0 WebForms | **Target:** .NET 8 + Azure App Service
 > **Crew on point:** Danny Ocean, Rusty Ryan, Basher Tarr, Frank Catton, Linus Caldwell
+> ⚠ **The target runtime shown above is an example, not a default.** `/phase1-plan` presents supported LTS options with tradeoffs and records your answer in `reports/Decisions-Required.md`. Later steps hard-stop until that decision is `✅ DECIDED`.
 
 ## How This Works
 
@@ -35,9 +36,9 @@ flowchart LR
 **What happens:** Danny defines the play, Rusty rebuilds the app model, and Basher makes sure Azure fits the target shape.
 **You'll get:** Assessment output, modernized .NET 8 code, Azure infrastructure assets, deployment results, and release guidance.
 
-## Phase by Phase
+## Step by Step
 
-### Phase 0: Triage
+### Step 1: Discovery — triage (`/assess-any-application`)
 
 ```text
 @agent Give me a fast triage for Use-cases/02-NetFramework30-ASPNET-WEB. Call out the hardest WebForms issues, especially ViewState, postback handlers, code-behind coupling, Secure.aspx behavior, and Web.config dependencies. Tell me if this should land as Razor Pages or MVC.
@@ -51,10 +52,10 @@ flowchart LR
 @agent Explain which page or feature will make the move hardest and why it matters before we touch the rest of the app.
 ```
 
-### Phase 1: Assessment
+### Step 2: Plan — assessment (`/phase1-plan`)
 
 ```text
-/run the full assessment for Use-cases/02-NetFramework30-ASPNET-WEB. Inventory Default.aspx, About.aspx, Secure.aspx, code-behind flows, ViewState usage, postback event patterns, auth rules, and Web.config dependencies. Fan out architecture, security, and hosting fit.
+/assess-any-application Use-cases/02-NetFramework30-ASPNET-WEB. Inventory Default.aspx, About.aspx, Secure.aspx, code-behind flows, ViewState usage, postback event patterns, auth rules, and Web.config dependencies. Fan out architecture, security, and hosting fit.
 ```
 
 **What happens:** Danny leads the readout while Frank pressure-tests auth and Basher checks the Azure fit.
@@ -65,7 +66,7 @@ flowchart LR
 @agent Show me the three biggest WebForms blockers and tell me how each one changes the migration plan.
 ```
 
-### Phase 2: Code Migration
+### Step 3: Migrate code (`/phase2-migrate-code`)
 
 ```text
 @agent Start the migration for Use-cases/02-NetFramework30-ASPNET-WEB. Convert the WebForms UI to .NET 8 using the recommended page model, remove ViewState, replace postback-driven handlers with request-response actions, move Web.config settings into modern configuration, and preserve Secure.aspx behavior.
@@ -79,7 +80,7 @@ flowchart LR
 @agent Walk me through how ViewState, postback events, and Secure.aspx behavior were translated in the new app.
 ```
 
-### Phase 3: Infrastructure
+### Step 4: Generate infrastructure (`/phase3-generate-infra`)
 
 ```text
 @agent Generate the Azure platform for the migrated WebForms app. Use Azure App Service, Key Vault, managed identity, and Application Insights, keep the output ready for azd, and flag anything that depends on app configuration or protected routes.
@@ -93,7 +94,7 @@ flowchart LR
 @agent Show me how configuration, secrets, and auth-sensitive settings flow from the app into Azure safely.
 ```
 
-### Phase 4: Deploy
+### Step 5: Deploy to Azure (`/phase4-deploy-to-azure`)
 
 ```text
 @agent Deploy the migrated Use-cases/02-NetFramework30-ASPNET-WEB solution to Azure when the platform is ready. Summarize smoke-test results, confirm protected routes behave correctly, and document rollback points.
@@ -107,7 +108,7 @@ flowchart LR
 @agent If deployment or smoke tests fail, tell me whether the issue is routing, config, auth, or infrastructure and what to fix first.
 ```
 
-### Phase 5: CI/CD
+### Step 6: Set up CI/CD (`/phase5-setup-cicd`)
 
 ```text
 @agent Set up CI/CD for the migrated WebForms replacement. Include build, test, configuration validation, security checks, App Service deployment, and release gates that are safe for the cutover.
@@ -121,10 +122,10 @@ flowchart LR
 @agent Show me the release flow from commit to production and point out the checks that protect Secure.aspx and the main form flows.
 ```
 
-## Final Validation and Ops Hand-Off
+## Step 7: Post-migration ops and final validation (`/phase6-post-migration-ops`)
 
 ```text
-/run final validation for Use-cases/02-NetFramework30-ASPNET-WEB. Confirm the build passes, ViewState is gone, postback flows are replaced, Secure.aspx parity is acceptable, App Service deployment is healthy, CI/CD is wired, and the first-day monitoring checklist is ready.
+/get-status Use-cases/02-NetFramework30-ASPNET-WEB. Confirm the build passes, ViewState is gone, postback flows are replaced, Secure.aspx parity is acceptable, App Service deployment is healthy, CI/CD is wired, and the first-day monitoring checklist is ready.
 ```
 
 **What happens:** Linus gives the final once-over so the team knows what is done and what still needs eyes on it.
@@ -151,6 +152,6 @@ flowchart LR
 ## 💡 Power-User Shortcut
 
 > CLI-first follow-through commands:
-> Assessment → `/run Phase 1 plan and assess` | Code → `/run Phase 2 code migration` | Infra → `/run Phase 3 infrastructure generation`
-> Deploy → `/run Phase 4 deploy to Azure` | CI/CD → `/run Phase 5 CI/CD setup`
-> Optional hardening → `/run security hardening review` | Optional cost review → `/run cost optimization review`
+> Assessment → `/phase1-plan` | Code → `/phase2-migrate-code` | Infra → `/phase3-generate-infra`
+> Deploy → `/phase4-deploy-to-azure` | CI/CD → `/phase5-setup-cicd`
+> Optional hardening → `/security-hardening` | Optional cost review → `/cost-optimization`
