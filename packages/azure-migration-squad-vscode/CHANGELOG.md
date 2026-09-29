@@ -4,6 +4,37 @@ All notable changes to the Azure Migration Agent VS Code extension are documente
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.0](https://github.com/RobertoBorges/GHCP-PromptMigration/compare/vscode-v0.5.0...vscode-v0.6.0) (2026-09-29)
+
+
+### ⚠ BREAKING CHANGES
+
+* **skills:** every slash command is now lowercase-hyphen, because the skills spec requires name to match ^[a-z0-9-]+$ and to equal its directory name. /Phase1-Plan becomes /phase1-plan, /PortfolioStrategy becomes /portfolio-strategy, and so on for all 19. Invalid characters cause a silent load failure rather than an error, so the old names simply stop resolving.
+
+### Features
+
+* **aws:** add AWS assessment and AWS-to-Azure migration tracks ([82cd160](https://github.com/RobertoBorges/GHCP-PromptMigration/commit/82cd1607217e4f3512f2065a1985323be6736ab7))
+* **aws:** add AWS assessment and AWS-to-Azure migration tracks ([784049b](https://github.com/RobertoBorges/GHCP-PromptMigration/commit/784049b49e2bad5299d5675ab70a87938b804f66))
+* **skills:** migrate .github to the VS Code agent skills spec ([e4586ed](https://github.com/RobertoBorges/GHCP-PromptMigration/commit/e4586ed190ba9e09cded7999beda281d730b431f))
+
+
+### Bug Fixes
+
+* **agents:** repair dangling file refs, stale commands and Phase 2 routing ([b5791e1](https://github.com/RobertoBorges/GHCP-PromptMigration/commit/b5791e1eca2e2b4ede24cf3d8f834da85eeece6f))
+* **hooks:** make AWS read-only gates fire on every agent surface ([#39](https://github.com/RobertoBorges/GHCP-PromptMigration/issues/39)) ([75c5400](https://github.com/RobertoBorges/GHCP-PromptMigration/commit/75c5400cdb1fde9a472f5269dda3ad13ef575331))
+
+
+### Documentation
+
+* correct both READMEs against the actual repo, and remove the last "Factory / ISD" leaks ([aad51ec](https://github.com/RobertoBorges/GHCP-PromptMigration/commit/aad51ec55e9aa7e8bcdc1037cd60ac52bcee2904))
+* **skills:** replace stale prompt-era wording across skills, agents and hooks ([bc3d21b](https://github.com/RobertoBorges/GHCP-PromptMigration/commit/bc3d21bff95ae41489b77a03798642bfe6c0f818))
+
+
+### Code Refactoring
+
+* **agents:** collapse the agent picker to three front doors ([011e007](https://github.com/RobertoBorges/GHCP-PromptMigration/commit/011e007c3af80797401b0f362481b2025e5e0825))
+* **agents:** merge the Phase 2 specialist away and drop heist theming ([68baf11](https://github.com/RobertoBorges/GHCP-PromptMigration/commit/68baf11d2f5e4191a920687b1de041edc5a0ced8))
+
 ## [0.5.0](https://github.com/RobertoBorges/GHCP-PromptMigration/compare/vscode-v0.4.0...vscode-v0.5.0) (2026-07-28)
 
 
