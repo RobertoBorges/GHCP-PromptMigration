@@ -11,7 +11,15 @@ try {
 }
 
 $toolName = $hookInput.tool_name
-if ($toolName -notin @("createFile", "editFiles", "applyPatch", "insertEdit", "replaceString", "multiReplaceString")) {
+# File-edit tools are named differently per surface: VS Code uses createFile /
+# editFiles, Copilot CLI uses create / edit / write, and toolset-qualified forms
+# appear as edit/<tool>. Mirrors the list in customer-data-isolation.ps1.
+$editTools = @(
+    "createFile", "editFiles", "applyPatch", "insertEdit", "replaceString", "multiReplaceString",
+    "edit", "edit/createFile", "edit/editFiles", "edit/applyPatch",
+    "create", "write", "str_replace", "str_replace_editor"
+)
+if ($toolName -notin $editTools) {
     Write-Output '{"continue":true}'
     exit 0
 }

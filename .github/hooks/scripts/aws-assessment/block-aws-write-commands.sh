@@ -21,8 +21,14 @@ deny() {
 command -v jq >/dev/null 2>&1 || allow
 
 TOOL_NAME="$(jq -r '.tool_name // empty' <<<"$INPUT" 2>/dev/null)" || allow
+# Terminal tools are named differently per surface: VS Code uses runInTerminal /
+# awaitTerminal, Copilot CLI uses bash / powershell / shell, and toolset-qualified
+# forms appear as execute/<tool>. A name this list misses means the read-only
+# guarantee silently does not hold on that surface.
 case "$TOOL_NAME" in
-  runInTerminal|runTerminalCommand|terminal|awaitTerminal) ;;
+  runInTerminal|runTerminalCommand|terminal|awaitTerminal|runCommands) ;;
+  execute|execute/runInTerminal|execute/awaitTerminal|execute/runCommands) ;;
+  bash|shell|powershell|pwsh|cmd) ;;
   *) allow ;;
 esac
 
