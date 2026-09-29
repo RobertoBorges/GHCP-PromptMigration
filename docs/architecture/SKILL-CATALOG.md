@@ -24,7 +24,7 @@ Everything the agent knows now lives in `.github/skills/`. There is no `.github/
 | `disable-model-invocation` | `true` on 19 of the 20 workflow skills so the model cannot silently start a phase the user did not ask for. |
 | `argument-hint` | Optional placeholder text shown next to the slash command. |
 
-`SKILL.md` stays small and routes to `references/` files only when they are needed. That progressive-disclosure pattern is why 36 skills and 71 reference files fit in a normal context window. (Three skills also ship a non-`references/` companion: an `examples/` template, a `templates/` guide, and a skill-level `README.md`.)
+`SKILL.md` stays small and routes to `references/` files only when they are needed. That progressive-disclosure pattern is why 65 skills and 121 supporting files fit in a normal context window. (Three skills also ship a non-`references/` companion: an `examples/` template, a `templates/` guide, and a skill-level `README.md`.)
 
 ## Two skill classes
 

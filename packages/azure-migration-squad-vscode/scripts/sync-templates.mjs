@@ -31,6 +31,28 @@ function shouldExclude(p) {
   return EXCLUDE_PATTERNS.some((re) => re.test(p));
 }
 
+// `.gitattributes` normalizes line endings in the *repo*, but this script copies
+// from the *working tree*. A contributor whose checkout produced CRLF would ship a
+// CRLF `.sh` into the .vsix, and a CRLF shell script fails to execute on macOS and
+// Linux (`$'\r': command not found`); a CRLF Dockerfile breaks `RUN` continuations.
+// Mirror `.gitattributes` here so the packed content always matches the committed
+// content, whatever the contributor's checkout looks like.
+const CRLF_EXT = new Set(['.ps1', '.bat', '.cmd']);
+const BINARY_EXT = new Set([
+  '.png', '.jpg', '.jpeg', '.gif', '.ico', '.svg', '.pdf',
+  '.pptx', '.docx', '.xlsx', '.zip', '.tgz', '.vsix', '.dll', '.exe',
+]);
+
+async function copyNormalized(src, dest) {
+  const ext = path.extname(src).toLowerCase();
+  if (BINARY_EXT.has(ext)) {
+    await fs.copyFile(src, dest);
+    return;
+  }
+  const lf = (await fs.readFile(src, 'utf8')).replace(/\r\n/g, '\n');
+  await fs.writeFile(dest, CRLF_EXT.has(ext) ? lf.replace(/\n/g, '\r\n') : lf, 'utf8');
+}
+
 async function copyRecursive(src, dest) {
   const stat = await fs.stat(src);
   if (stat.isDirectory()) {
@@ -44,7 +66,7 @@ async function copyRecursive(src, dest) {
     }
   } else {
     await fs.mkdir(path.dirname(dest), { recursive: true });
-    await fs.copyFile(src, dest);
+    await copyNormalized(src, dest);
   }
 }
 

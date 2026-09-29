@@ -38,8 +38,8 @@ Click **Get started**.
 
 The extension copies bundled templates into your project. After a few seconds you'll have:
 
-- `.github/agents/` — **9 custom agents**, including `Code-Migration-Modernization.agent.md` (the top-level agent definition)
-- `.github/skills/` — **36 skills**, each a folder with a `SKILL.md`, plus **71 supporting reference files** under `references/`
+- `.github/agents/` — **10 custom agents**, including `Code-Migration-Modernization.agent.md` (the top-level agent definition)
+- `.github/skills/` — **65 skills**, each a folder with a `SKILL.md`, plus **121 supporting files**, 71 of them under `references/`
   - 20 are **workflow skills** — user-invocable as slash commands (`/assess-any-application`, `/phase1-plan`, …)
   - 16 are **knowledge skills** — loaded automatically by the agent, hidden from the `/` menu
 - `.github/hooks/` — orchestration rules, phase gates, and the decision hard-stop protocol
@@ -150,7 +150,7 @@ These are **not part of the default flow**. Use them when you need a specific sp
 - Read `.github/agents/Code-Migration-Modernization.agent.md` to understand the agent's responsibilities
 - Read `.github/skills/migration-decisions/references/decision-hardstop.md` to understand why the agent never decides for you
 - Read `.github/skills/migration-decisions/references/decision-catalog.md` to see all 18 major decisions
-- Browse the [skill catalog](./architecture/SKILL-CATALOG.md) for all 36 skills and 9 custom agents
+- Browse the [skill catalog](./architecture/SKILL-CATALOG.md) for all 65 skills and 10 custom agents
 - Read the [architecture overview](./architecture/ARCHITECTURE.md) to see how skills, agents, and hooks fit together
 - Star the [GitHub repo](https://github.com/RobertoBorges/GHCP-PromptMigration) for updates
 

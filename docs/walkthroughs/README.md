@@ -89,7 +89,7 @@ If you want clarity, keep asking follow-up questions in the same thread.
 
 ## See also
 
-- [Skill catalog](../architecture/SKILL-CATALOG.md) — all 36 skills and 9 custom agents
+- [Skill catalog](../architecture/SKILL-CATALOG.md) — all 65 skills and 10 custom agents
 - [Skills map](../guides/skills-map.md) — which skills load at which step
 - [Handoff protocol](../guides/handoff-protocol.md) — what each step must produce before the next one starts
 - [VS Code quickstart](../vscode-quickstart.md) — install and run in under two minutes

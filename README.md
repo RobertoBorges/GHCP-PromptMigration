@@ -1,6 +1,6 @@
 # Azure Migration Agent — GitHub Copilot agent skills for Azure migration
 
-> **Migrate any application to Azure** using 36 agent skills and 8 custom agents — of which you only ever pick from **three**: migrate, assess, or debug. Universal source/stack/workload coverage. Discovery-first. The agent **never decides major architecture for you** — it lays out options and waits.
+> **Migrate any application to Azure** using 36 agent skills and 10 custom agents — of which you only ever pick from **three**: migrate, assess, or debug. Universal source/stack/workload coverage. Discovery-first. The agent **never decides major architecture for you** — it lays out options and waits.
 
 [![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/robertoborges.azure-migration-squad-vscode?label=VS%20Code%20Marketplace&color=blueviolet&logo=visualstudiocode)](https://marketplace.visualstudio.com/items?itemName=robertoborges.azure-migration-squad-vscode)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
@@ -100,9 +100,9 @@ Full walkthrough: [docs/vscode-quickstart.md](./docs/vscode-quickstart.md).
 
 | Path | Content |
 |------|---------|
-| `.github/agents/` | 8 custom agents. 3 appear in the agent picker (see Quick start); the other 5 — Migration-Orchestrator, Azure-Infrastructure, Quick-Assessment, Security-Review, Cost-Optimization — set `user-invocable: false`, so they stay out of the dropdown while remaining dispatchable as subagents and reachable via their own slash commands |
-| `.github/skills/` | 36 agent skills — 20 user-invocable workflow skills (`/assess-any-application`, Phase 1-6, Portfolio, Database, Security, Cost, Interview, Rollback…) and 16 auto-loaded knowledge skills bundling 74 reference files (15 stack adapters, 10 source adapters, 8 workload patterns, plus Azure / security / decision / artifact references) |
-| `.github/hooks/` | Orchestration files: `session-lifecycle.json`, `validation.json`, `phase-gates.md`, `decision-gates.md`, `quality-checklist.md`, plus `scripts/` (SessionStart context loader, Stop-hook Action-Log writer, auto-validate — PowerShell and shell variants) |
+| `.github/agents/` | 10 custom agents. 3 appear in the agent picker (see Quick start); the other 7 — Migration-Orchestrator, Azure-Infrastructure, Quick-Assessment, Security-Review, Cost-Optimization, AWS-Account-Assessment, AWS-to-Azure-Migration — set `user-invocable: false`, so they stay out of the dropdown while remaining dispatchable as subagents and reachable via their own slash commands |
+| `.github/skills/` | 65 agent skills — 35 user-invocable workflow skills (`/assess-any-application`, Phase 1-6, the `/aws-assess-*` and `/aws2azure-*` tracks, Portfolio, Database, Security, Cost, Interview, Rollback…) and 30 auto-loaded knowledge skills bundling 121 supporting files (15 stack adapters, 10 source adapters, 8 workload patterns, 14 AWS assessment/migration references, plus Azure / security / decision / artifact references) |
+| `.github/hooks/` | Orchestration files: `session-lifecycle.json`, `validation.json`, `customer-data-isolation.json`, `aws-assessment-security.json`, `aws-assessment-session-lifecycle.json`, `phase-gates.md`, `decision-gates.md`, `quality-checklist.md`, plus `scripts/` (SessionStart context loader, Stop-hook Action-Log writer, auto-validate, and PreToolUse guards that keep the AWS assessment read-only — PowerShell and shell variants) |
 | `.github/copilot-instructions.md` | Top-level rules for Copilot |
 | `MIGRATION-START-HERE.md` | 60-second quickstart |
 
@@ -124,7 +124,7 @@ The agent **does not decide major architecture on your behalf**. It surfaces opt
 
 ### 🧠 On-the-fly skill authoring (skill-creator)
 
-If Discovery finds a stack / source / workload / integration the agent's 36 skills don't cover, the **skill-creator** meta-skill offers to author a new one on the spot — research 3-5 authoritative sources, draft the skill file, save it, and continue the migration using the fresh knowledge. Inspired by [Anthropic's skill-creator](https://github.com/anthropics/skills/tree/main/skills/skill-creator). See [`.github/skills/skill-creator/SKILL.md`](./.github/skills/skill-creator/SKILL.md).
+If Discovery finds a stack / source / workload / integration the agent's 65 skills don't cover, the **skill-creator** meta-skill offers to author a new one on the spot — research 3-5 authoritative sources, draft the skill file, save it, and continue the migration using the fresh knowledge. Inspired by [Anthropic's skill-creator](https://github.com/anthropics/skills/tree/main/skills/skill-creator). See [`.github/skills/skill-creator/SKILL.md`](./.github/skills/skill-creator/SKILL.md).
 
 ### 📜 Action Log (trace memory + token accounting)
 
@@ -143,8 +143,8 @@ Every skill, agent, and hook was swept to remove ".NET or Java only" phrasing. T
 
 ```
 .github/
-├── agents/                                       (✏️ EDIT — 8 custom agents, *.agent.md — 3 user-invocable)
-├── skills/                                       (✏️ EDIT — 36 skills, each <name>/SKILL.md)
+├── agents/                                       (✏️ EDIT — 10 custom agents, *.agent.md — 3 user-invocable)
+├── skills/                                       (✏️ EDIT — 65 skills, each <name>/SKILL.md)
 │   └── <skill>/references/                       (✏️ EDIT — 74 on-demand detail files)
 ├── hooks/                                        (✏️ EDIT — orchestration rules)
 │   └── scripts/                                  (✏️ EDIT — .ps1 + .sh hook implementations)

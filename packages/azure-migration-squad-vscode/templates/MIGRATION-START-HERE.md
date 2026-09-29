@@ -6,8 +6,8 @@
 
 ```
 .github/
-├── agents/                                           ← 9 custom agents (pick from the agent picker)
-├── skills/                                           ← 36 skills: 20 slash commands + 16 knowledge skills
+├── agents/                                           ← 10 custom agents (pick from the agent picker)
+├── skills/                                           ← 65 skills: 35 slash commands + 30 knowledge skills
 ├── hooks/                                            ← Phase gates + decision protocol
 └── copilot-instructions.md                           ← Top-level rules
 ```

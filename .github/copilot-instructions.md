@@ -100,6 +100,9 @@ When the user says any of the phrases below, take the matching action. **Rows ar
 | "phase 0", "multi-repo assessment", "/phase0-multi-repo-assessment" | Read `.github/skills/phase0-multi-repo-assessment/SKILL.md` |
 | **🔵 Specialized deep-dives (add-ons)** | |
 | "database migration", "/database-migration", "migrate the database" | Read `.github/skills/database-migration/SKILL.md` |
+| **🟠 AWS source estate (specialist track)** | |
+| "assess my AWS account", "inventory my AWS estate", "scan my AWS Organization", "/aws-assess-phase0-setup-and-scope" | Read `.github/skills/aws-assess-phase0-setup-and-scope/SKILL.md`. **Strictly read-only** — a `PreToolUse` hook blocks any mutating `aws` command. Phases run `/aws-assess-phase0-setup-and-scope` → `phase1-resource-discovery` → `phase2-deep-inventory` → `phase3-enrichment` → `phase4-relationships` → `phase5-reports` → `phase6-azure-readiness`. |
+| "migrate my AWS workload to Azure", "convert my Lambda to Azure Functions", "move my ECS services to Azure", "/aws2azure-phase1-plan" | Read `.github/skills/aws2azure-phase1-plan/SKILL.md`, then `phase2-migrate-code` → `phase3-generate-infra` → `phase4-deploy-to-azure` → `phase5-setup-cicd`. Use `/aws2azure-get-status` for status and `/aws2azure-phase0-multi-repo-assessment` for multi-repo solutions. |
 | "security hardening", "/security-hardening", "harden security" | Read `.github/skills/security-hardening/SKILL.md` |
 | "cost optimization", "/cost-optimization", "optimize cost" | Read `.github/skills/cost-optimization/SKILL.md` |
 | **🔵 Utility / recovery (add-ons)** | |

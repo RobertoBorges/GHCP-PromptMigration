@@ -1,7 +1,7 @@
 # Azure Migration Agent — VS Code extension
 
 > **Migrate any application to Azure** — directly from your editor.
-> 8 custom agents (you only ever pick from **three**), 36 skills (20 workflow slash commands + 16 knowledge skills). Stack-agnostic. Discovery-first. Hard-stop user-decision gates.
+> 10 custom agents (you only ever pick from **three**), 65 skills (35 workflow slash commands + 30 knowledge skills). Stack-agnostic. Discovery-first. Hard-stop user-decision gates.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 

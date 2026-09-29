@@ -156,6 +156,8 @@ Use these mappings when deciding the next owner:
 - **unknown application or new engagement** → **Discovery Engineer (`/assess-any-application`)**
 - **migration strategy decision / 6Rs / Azure target choice** → Discovery Engineer first, then Architect
 - app modernization, runtime upgrade, code blockers → `Code-Migration-Modernization`
+- live AWS estate inventory, multi-account/multi-region discovery, AWS tagging and cost attribution → `AWS Account Assessment Agent` (read-only)
+- AWS SDK/service/config conversion, CloudFormation or CDK to Bicep/Terraform → `AWS to Azure Migration Agent`
 - Azure landing zone, service fit, identity wiring, IaC → `Azure-Infrastructure`
 - release execution, deployment safety, rollback, go-live → `Cutover Commander`
 - CI/CD pipelines, environment promotion, automation → `DevOps Engineer`
