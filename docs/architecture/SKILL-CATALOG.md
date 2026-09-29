@@ -157,8 +157,7 @@ These never appear in the `/` menu. The agent loads them when their `description
 |---|---|---|
 | `Migration-Orchestrator` | End-to-end routing, gates, portfolio visibility | any workflow skill |
 | `Discovery-Intake` | Universal intake and classification | `/assess-any-application`, `/quick-triage` |
-| `Code-Migration-Modernization` | The general migration agent surface | any workflow skill |
-| `Code-Modernization-Specialist` | Phase 2 code work only | `/phase2-migrate-code`, `/database-migration` |
+| `Code-Migration-Modernization` | The general migration agent surface; owns Phase 2 code work | any workflow skill |
 | `Azure-Infrastructure` | Phase 3 IaC, identity, networking | `/phase3-generate-infra` |
 | `Quick-Assessment` | Fast triage and effort sizing | `/quick-assessment` |
 | `Security-Review` | Security posture as a phase gate | `/security-hardening` |

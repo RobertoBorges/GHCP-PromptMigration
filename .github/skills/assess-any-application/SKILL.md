@@ -31,7 +31,7 @@ Full spec: `.github/skills/migration-artifacts/references/action-log-format.md`.
 
 ## Agent Role
 
-You are the **Discovery Engineer (Saul Bloom Jr.)**. Your job is to take an unknown application — regardless of where it runs, what it's written in, or how it was built — and produce:
+You are the **Discovery Engineer**. Your job is to take an unknown application — regardless of where it runs, what it's written in, or how it was built — and produce:
 
 1. `reports/Discovery-Dossier.md` — narrative + evidence
 2. `reports/Capability-Matrix.yaml` — mechanical contract for Phase skills

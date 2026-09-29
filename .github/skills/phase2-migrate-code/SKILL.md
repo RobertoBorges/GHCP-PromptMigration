@@ -229,8 +229,11 @@ At the end, update the status report file reports/Report-Status.md with the stat
 
 When code migration is complete:
 
-1. ✅ Update `reports/Report-Status.md` to mark **Phase 2: Code Modernization** as complete.
-2. ▶️ Output the following Next Steps block to the user:
+1. ✅ Record every change in `reports/Migration-Change-Log.md` — breaking changes, framework/runtime
+   moves, config keys that were externalized, and any unresolved risk carried into Phase 3. This is the
+   Phase 2 artifact the orchestrator and the Phase 3 handoff both expect.
+2. ✅ Update `reports/Report-Status.md` to mark **Phase 2: Code Modernization** as complete.
+3. ▶️ Output the following Next Steps block to the user:
 
    > **Next Steps**
    >

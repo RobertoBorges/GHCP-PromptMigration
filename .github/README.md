@@ -8,7 +8,6 @@ This folder contains VS Code GitHub Copilot customization files for the **Code M
 .github/
 ├── agents/                              # Custom agent definitions (.agent.md)
 │   ├── Code-Migration-Modernization.agent.md   # Main universal migration agent
-│   ├── Code-Modernization-Specialist.agent.md
 │   ├── Migration-Orchestrator.agent.md
 │   ├── Discovery-Intake.agent.md
 │   ├── Azure-Infrastructure.agent.md

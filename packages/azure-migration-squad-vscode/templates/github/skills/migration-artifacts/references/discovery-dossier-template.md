@@ -17,7 +17,7 @@
 ````markdown
 # Discovery Dossier — <Application Name>
 
-> Produced by: Discovery Engineer (Saul Bloom Jr.)
+> Produced by: Discovery Engineer
 > Date: <YYYY-MM-DD>
 > Status: <Draft | Approved by Architect | Refined>
 

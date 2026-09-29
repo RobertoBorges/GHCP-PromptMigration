@@ -25,13 +25,13 @@ Anything else — `/database-migration`, `/security-hardening`, `/cost-optimizat
 ```mermaid
 flowchart TD
     A[Pick your legacy app]
-    A --> U1[1. The Antique]
-    A --> U2[2. The Fossil]
-    A --> U3[3. The Wire]
-    A --> U4[4. The Campus]
-    A --> U5[5. The Bestseller]
-    A --> U6[6. The Duke]
-    A --> U7[7. The Warehouse]
+    A --> U1[1. Classic ASP]
+    A --> U2[2. WebForms]
+    A --> U3[3. WCF SOAP]
+    A --> U4[4. Contoso University]
+    A --> U5[5. SAP CAP Bookshop]
+    A --> U6[6. Java Spring Boot]
+    A --> U7[7. Parts Unlimited]
     U1 --> B[@agent migrate]
     U2 --> B
     U3 --> B
@@ -67,13 +67,13 @@ flowchart TD
 
 | # | Walkthrough | Cheat sheet | Source → Target used in the example | Difficulty |
 |---|---|---|---|---|
-| 1 | [The Antique 🏺](01-classic-asp-walkthrough.md) | [01](../use-case-cheatsheets/01-asp-classic.md) | Classic ASP → .NET + App Service | ⭐⭐⭐⭐⭐ |
-| 2 | [The Fossil 🦴](02-dotnet30-webforms-walkthrough.md) | [02](../use-case-cheatsheets/02-dotnet30-webforms.md) | .NET 3.0 WebForms → .NET + App Service | ⭐⭐⭐⭐ |
-| 3 | [The Wire 🔌](03-wcf-to-rest-walkthrough.md) | [03](../use-case-cheatsheets/03-wcf-net35.md) | WCF .NET 3.5 → REST + Container Apps | ⭐⭐⭐⭐ |
-| 4 | [The Campus 🎓](04-contoso-university-walkthrough.md) | [04](../use-case-cheatsheets/04-contoso-university.md) | ASP.NET MVC multi-project → .NET + App Service | ⭐⭐⭐⭐⭐ |
-| 5 | [The Bestseller 📚](05-bookshop-reference-walkthrough.md) | [05](../use-case-cheatsheets/05-bookshop-reference.md) | SAP CAP Java → Container Apps + PostgreSQL | ⭐⭐⭐⭐ |
-| 6 | [The Duke 👑](06-java-api-walkthrough.md) | [06](../use-case-cheatsheets/06-java-api.md) | Java Spring Boot → Container Apps + PostgreSQL | ⭐⭐⭐ |
-| 7 | [The Warehouse 🏭](07-parts-unlimited-walkthrough.md) | [07](../use-case-cheatsheets/07-parts-unlimited.md) | ASP.NET MVC 5 + EF6 → .NET + App Service + SQL | ⭐⭐⭐⭐ |
+| 1 | [Classic ASP 🏺](01-classic-asp-walkthrough.md) | [01](../use-case-cheatsheets/01-asp-classic.md) | Classic ASP → .NET + App Service | ⭐⭐⭐⭐⭐ |
+| 2 | [WebForms 🦴](02-dotnet30-webforms-walkthrough.md) | [02](../use-case-cheatsheets/02-dotnet30-webforms.md) | .NET 3.0 WebForms → .NET + App Service | ⭐⭐⭐⭐ |
+| 3 | [WCF SOAP 🔌](03-wcf-to-rest-walkthrough.md) | [03](../use-case-cheatsheets/03-wcf-net35.md) | WCF .NET 3.5 → REST + Container Apps | ⭐⭐⭐⭐ |
+| 4 | [Contoso University 🎓](04-contoso-university-walkthrough.md) | [04](../use-case-cheatsheets/04-contoso-university.md) | ASP.NET MVC multi-project → .NET + App Service | ⭐⭐⭐⭐⭐ |
+| 5 | [SAP CAP Bookshop 📚](05-bookshop-reference-walkthrough.md) | [05](../use-case-cheatsheets/05-bookshop-reference.md) | SAP CAP Java → Container Apps + PostgreSQL | ⭐⭐⭐⭐ |
+| 6 | [Java Spring Boot 👑](06-java-api-walkthrough.md) | [06](../use-case-cheatsheets/06-java-api.md) | Java Spring Boot → Container Apps + PostgreSQL | ⭐⭐⭐ |
+| 7 | [Parts Unlimited 🏭](07-parts-unlimited-walkthrough.md) | [07](../use-case-cheatsheets/07-parts-unlimited.md) | ASP.NET MVC 5 + EF6 → .NET + App Service + SQL | ⭐⭐⭐⭐ |
 
 ## What These Guides Give You
 

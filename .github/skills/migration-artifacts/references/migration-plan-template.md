@@ -17,7 +17,7 @@
 ````markdown
 # Migration Plan — <Application Name>
 
-> Produced by: Architect (Danny Ocean)
+> Produced by: Architect
 > Date: <YYYY-MM-DD>
 > Status: <Draft | Approved | In Execution | Complete>
 > Discovery Dossier: [reports/Discovery-Dossier.md](Discovery-Dossier.md)

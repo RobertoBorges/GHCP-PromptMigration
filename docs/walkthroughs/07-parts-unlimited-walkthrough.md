@@ -1,16 +1,16 @@
 # 🎯 Parts Unlimited Migration — CLI Walkthrough
-> **Codename:** The Warehouse | **Source:** ASP.NET MVC 5 + Entity Framework 6 (eCommerce) | **Target:** .NET 8 + Azure App Service + Azure SQL
+> **Source:** ASP.NET MVC 5 + Entity Framework 6 (eCommerce) | **Target:** .NET 8 + Azure App Service + Azure SQL
 > ⚠ **The target runtime shown above is an example, not a default.** `/phase1-plan` presents supported LTS options with tradeoffs and records your answer in `reports/Decisions-Required.md`. Later steps hard-stop until that decision is `✅ DECIDED`.
 
 ## How This Works
 ```mermaid
 flowchart LR
-    A[MVC 5 plus EF6] --> B[Assess - Danny Ocean]
-    B --> C[.NET 8 plus EF Core - Rusty Ryan]
-    C --> D[Azure App Service plus Azure SQL - Basher Tarr]
-    D --> E[Deploy - Turk Malloy]
-    E --> F[CI/CD - Turk Malloy]
-    F --> G[Monitor - Livingston Dell]
+    A[MVC 5 plus EF6] --> B[Assess - The Architect]
+    B --> C[.NET 8 plus EF Core - The Coder]
+    C --> D[Azure App Service plus Azure SQL - The Azure Specialist]
+    D --> E[Deploy - The DevOps Engineer]
+    E --> F[CI/CD - The DevOps Engineer]
+    F --> G[Monitor - The Observability Engineer]
 ```
 This is a pure Copilot CLI flow.
 You drive the migration by typing natural-language `@agent` prompts.

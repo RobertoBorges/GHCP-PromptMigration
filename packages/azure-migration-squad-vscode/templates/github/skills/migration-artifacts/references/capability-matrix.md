@@ -18,8 +18,8 @@
 ```yaml
 # reports/Capability-Matrix.yaml
 # Schema version: 1.0
-# Authored: <YYYY-MM-DD> by Discovery Engineer (Saul Bloom Jr.)
-# Approved: <YYYY-MM-DD or "pending"> by Architect (Danny Ocean)
+# Authored: <YYYY-MM-DD> by Discovery Engineer
+# Approved: <YYYY-MM-DD or "pending"> by Architect
 
 schema_version: 1.0
 authored_date: <YYYY-MM-DD>
@@ -132,7 +132,7 @@ assumptions:
 
 handoff:
   next_command: /build-migration-plan
-  next_lead: Architect (Danny Ocean)
+  next_lead: Architect
   notes: <optional 3-5 lines>
 ```
 

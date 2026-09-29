@@ -89,7 +89,7 @@ Full walkthrough: [docs/vscode-quickstart.md](./docs/vscode-quickstart.md).
 
 | Path | Content |
 |------|---------|
-| `.github/agents/` | 9 custom agents — the main migration agent (`Code-Migration-Modernization.agent.md`) plus 8 specialists (Discovery-Intake, Migration-Orchestrator, Code-Modernization-Specialist, Cost-Optimization, Debug-Migration, Quick-Assessment, Security-Review, Azure-Infrastructure) |
+| `.github/agents/` | 8 custom agents — the main migration agent (`Code-Migration-Modernization.agent.md`) plus 7 specialists (Discovery-Intake, Migration-Orchestrator, Cost-Optimization, Debug-Migration, Quick-Assessment, Security-Review, Azure-Infrastructure) |
 | `.github/skills/` | 36 agent skills — 20 user-invocable workflow skills (`/assess-any-application`, Phase 1-6, Portfolio, Database, Security, Cost, Interview, Rollback…) and 16 auto-loaded knowledge skills bundling 64 reference files (15 stack adapters, 10 source adapters, 8 workload patterns, plus Azure / security / decision / artifact skills) |
 | `.github/hooks/` | Orchestration files: `session-lifecycle.json`, `validation.json`, `phase-gates.md`, `decision-gates.md`, `quality-checklist.md`, and helper scripts (SessionStart context loader, Stop hook Action-Log writer, etc.) |
 | `.github/copilot-instructions.md` | Top-level rules for Copilot |

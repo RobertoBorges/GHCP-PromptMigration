@@ -21,10 +21,9 @@ Make a migration reproducible for **any application** — any source environment
 
 ```text
 .github/
-├─ agents/                                  # 9 custom agents — persona, tools, routing posture
+├─ agents/                                  # 8 custom agents — persona, tools, routing posture
 │  ├─ Migration-Orchestrator.agent.md
 │  ├─ Code-Migration-Modernization.agent.md
-│  ├─ Code-Modernization-Specialist.agent.md   # Phase 2 specialist
 │  ├─ Discovery-Intake.agent.md
 │  ├─ Azure-Infrastructure.agent.md
 │  ├─ Quick-Assessment.agent.md
@@ -323,8 +322,7 @@ model: Claude Sonnet 5
 |---|---|---|
 | `Migration-Orchestrator` | End-to-end routing, gates, portfolio visibility | any workflow skill |
 | `Discovery-Intake` | Universal intake and classification only | `/assess-any-application`, `/quick-triage` |
-| `Code-Migration-Modernization` | General migration surface — the default agent | any workflow skill |
-| `Code-Modernization-Specialist` | Phase 2 code work only; hands validation to Tester before Phase 3 | `/phase2-migrate-code`, `/database-migration` |
+| `Code-Migration-Modernization` | General migration surface — the default agent; owns Phase 2 code work | any workflow skill |
 | `Azure-Infrastructure` | Phase 3 hosting selection, IaC, identity, networking | `/phase3-generate-infra` |
 | `Quick-Assessment` | Fast triage, effort sizing, go/no-go | `/quick-assessment` |
 | `Security-Review` | Security posture as a phase gate | `/security-hardening`, `/phase-rollback` |
@@ -436,7 +434,7 @@ graph LR
     CM0[Migration-Orchestrator] --> P0["/assess-any-application"]
     CM0 --> P1["/phase1-plan"]
     CMD[Discovery-Intake] --> P0
-    CM1[Code-Modernization-Specialist] --> P2["/phase2-migrate-code"]
+    CM1[Code-Migration-Modernization] --> P2["/phase2-migrate-code"]
     CM2[Azure-Infrastructure] --> P3["/phase3-generate-infra"]
     CM0 --> P4["/phase4-deploy-to-azure"]
     CM0 --> P5["/phase5-setup-cicd"]

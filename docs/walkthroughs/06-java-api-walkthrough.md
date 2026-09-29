@@ -1,15 +1,15 @@
 # 🎯 Java API Migration — CLI Walkthrough
-> **Codename:** The Duke | **Source:** Java Spring Boot API (REST, JPA, Maven) | **Target:** Azure Container Apps + Azure PostgreSQL
+> **Source:** Java Spring Boot API (REST, JPA, Maven) | **Target:** Azure Container Apps + Azure PostgreSQL
 > ⚠ **The target runtime shown above is an example, not a default.** `/phase1-plan` presents supported LTS options with tradeoffs and records your answer in `reports/Decisions-Required.md`. Later steps hard-stop until that decision is `✅ DECIDED`.
 
 ## How This Works
 ```mermaid
 flowchart LR
-    A[Java Spring Boot API] --> B[Assess - Danny Ocean]
-    B --> C[Modernize Spring Boot 3 - Rusty Ryan]
-    C --> D[Container Apps plus PostgreSQL - Basher Tarr and The Amazing Yen]
-    D --> E[Deploy - Turk Malloy]
-    E --> F[CI/CD and Ops - Turk Malloy and Livingston Dell]
+    A[Java Spring Boot API] --> B[Assess - The Architect]
+    B --> C[Modernize Spring Boot 3 - The Coder]
+    C --> D[Container Apps plus PostgreSQL - The Azure Specialist and The Database Specialist]
+    D --> E[Deploy - The DevOps Engineer]
+    E --> F[CI/CD and Ops - The DevOps Engineer and The Observability Engineer]
 ```
 This walkthrough stays on one surface: Copilot CLI.
 Every step is a natural-language `@agent` prompt.

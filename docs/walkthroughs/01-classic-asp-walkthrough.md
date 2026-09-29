@@ -1,21 +1,21 @@
 # 🎯 Classic ASP Migration — CLI Walkthrough
 
-> **Codename:** The Antique | **Source:** Classic ASP (VBScript, ADODB, COM) | **Target:** .NET 8 + Azure App Service
-> **Crew on point:** Danny Ocean, Rusty Ryan, The Amazing Yen, Basher Tarr, Frank Catton, Linus Caldwell
+> **Source:** Classic ASP (VBScript, ADODB, COM) | **Target:** .NET 8 + Azure App Service
+> **Roles involved:** The Architect, The Coder, The Database Specialist, The Azure Specialist, The Security Auditor, The Tester
 > ⚠ **The target runtime shown above is an example, not a default.** `/phase1-plan` presents supported LTS options with tradeoffs and records your answer in `reports/Decisions-Required.md`. Later steps hard-stop until that decision is `✅ DECIDED`.
 
 ## How This Works
 
 ```mermaid
 flowchart LR
-    A[Classic ASP app<br/>The Antique] --> B{Danny Ocean<br/>Assesses risk}
-    B --> C[Rusty Ryan<br/>Rewrites to .NET 8]
-    B --> D[The Amazing Yen<br/>Plans data move]
-    C --> E[Basher Tarr<br/>Builds Azure landing zone]
+    A[Classic ASP app] --> B{The Architect<br/>Assesses risk}
+    B --> C[The Coder<br/>Rewrites to .NET 8]
+    B --> D[The Database Specialist<br/>Plans data move]
+    C --> E[The Azure Specialist<br/>Builds Azure landing zone]
     D --> E
     E --> F[Deploy to App Service]
-    F --> G[Turk + Linus<br/>CI/CD and validation]
-    G --> H[Livingston + Frank<br/>Monitor and harden]
+    F --> G[DevOps Engineer + Tester<br/>CI/CD and validation]
+    G --> H[Observability + Security<br/>Monitor and harden]
 ```
 
 ## Prerequisites
@@ -35,7 +35,7 @@ flowchart LR
 @agent Migrate Use-cases/01-ASPClassicApp to .NET 8 on Azure App Service. Assess the app, map COM and ADODB dependencies, plan the Azure SQL move, rewrite the VBScript app in C#, generate Azure infrastructure, deploy it, set up CI/CD, and operationalize it. Fan out all phases and keep me posted at each gate.
 ```
 
-**What happens:** Danny Ocean routes the rewrite, Rusty Ryan drives the code move, The Amazing Yen handles data risk, and Basher Tarr lines up Azure.
+**What happens:** The Architect routes the rewrite, The Coder drives the code move, The Database Specialist handles data risk, and The Azure Specialist lines up Azure.
 **You'll get:** Assessment reports, migration plans, modernized app code, `infra/`, `azure.yaml`, deployment output, CI/CD guidance, and ops handoff notes.
 
 ## Step by Step
@@ -46,7 +46,7 @@ flowchart LR
 @agent Take point on Use-cases/01-ASPClassicApp and give me a fast triage for a move to .NET 8 on Azure App Service. Call out COM components, ADODB usage, include-file sprawl, Session/Application usage, and anything in global.asa that makes this a rewrite.
 ```
 
-**What happens:** Danny Ocean sizes the heist and flags the rewrite-only traps early.
+**What happens:** The Architect sizes the effort and flags the rewrite-only traps early.
 **You'll get:** A go/no-go summary, top blockers, and the safest next phase.
 **Follow-up if needed:**
 
@@ -60,7 +60,7 @@ flowchart LR
 /assess-any-application Use-cases/01-ASPClassicApp. Build a risk matrix for VBScript-to-C#, ADODB-to-EF Core, include files, Session state, global.asa startup logic, authentication, and Azure landing-zone fit. Fan out architecture, data, and security review.
 ```
 
-**What happens:** Danny leads the assessment while Basher, Yen, and Frank pressure-test the risky edges.
+**What happens:** The Architect leads the assessment while the Azure Specialist, Database Specialist, and Security Auditor pressure-test the risky edges.
 **You'll get:** `reports/Quick-Assessment-Report.md`, `reports/ClassicASP-Migration-Report.md`, `reports/Application-Assessment-Report.md`, and `reports/Report-Status.md`.
 **Follow-up if needed:**
 
@@ -74,7 +74,7 @@ flowchart LR
 @agent Build the database migration plan for Use-cases/01-ASPClassicApp. Map ADODB access in database.asp to EF Core, define the Azure SQL target, identify schema or stored-procedure risks, and tell me how cart and session-backed data should persist after the rewrite.
 ```
 
-**What happens:** The Amazing Yen maps the data path while Rusty keeps the application seams honest.
+**What happens:** The Database Specialist maps the data path while Rusty keeps the application seams honest.
 **You'll get:** `reports/Database-Migration-Plan.md` and `reports/Database-Validation-Report.md`.
 **Follow-up if needed:**
 
@@ -88,7 +88,7 @@ flowchart LR
 @agent Start the code migration for Use-cases/01-ASPClassicApp. Rewrite the app to .NET 8 with C#, move global.asa behavior into modern startup patterns, replace includes with shared components, remove COM and ADODB dependencies, and prioritize catalog, product detail, cart, about, and contact flows. Fan out shared foundation work where it helps.
 ```
 
-**What happens:** Rusty Ryan turns the storefront into a modern .NET 8 app while keeping the page flow recognizable.
+**What happens:** The Coder turns the storefront into a modern .NET 8 app while keeping the page flow recognizable.
 **You'll get:** Modernized application code, updated configuration, dependency notes, and build-readiness feedback.
 **Follow-up if needed:**
 
@@ -102,7 +102,7 @@ flowchart LR
 @agent Generate the Azure platform for the migrated Classic ASP app. Use Azure App Service, Azure SQL, Key Vault, managed identity, and Application Insights. Keep the infrastructure ready for azd deployment and show me any production assumptions.
 ```
 
-**What happens:** Basher Tarr sets the charges in the right places and gives the rewrite a clean Azure runway.
+**What happens:** The Azure Specialist sets the charges in the right places and gives the rewrite a clean Azure runway.
 **You'll get:** `infra/`, `azure.yaml`, platform configuration, and updated status tracking.
 **Follow-up if needed:**
 
@@ -130,7 +130,7 @@ flowchart LR
 @agent Set up CI/CD for the migrated Classic ASP replacement. Include build, test, infrastructure validation, App Service deployment, security checks, and release gates that are safe for a rewrite cutover.
 ```
 
-**What happens:** Turk Malloy lays out the getaway route and Linus checks that it is safe to drive.
+**What happens:** The DevOps Engineer lays out the getaway route and Linus checks that it is safe to drive.
 **You'll get:** `reports/cicd_setup_report.md`, pipeline guidance, environment flow, and release controls.
 **Follow-up if needed:**
 
@@ -144,7 +144,7 @@ flowchart LR
 @agent Operationalize the migrated Classic ASP app. Set up monitoring, alerts, dashboards, runbooks, Azure SQL health checks, checkout diagnostics, and session or cart telemetry. Fan out observability, security hardening, and cost review.
 ```
 
-**What happens:** Livingston Dell watches the floor, Frank Catton checks the locks, and the crew makes sure the new storefront is supportable.
+**What happens:** The Observability Engineer watches the telemetry, The Security Auditor checks the security posture, and the team makes sure the new storefront is supportable.
 **You'll get:** Ops guidance, alerting recommendations, runbook notes, cost considerations, and production-readiness feedback.
 **Follow-up if needed:**
 

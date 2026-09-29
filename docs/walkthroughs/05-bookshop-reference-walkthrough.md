@@ -1,22 +1,22 @@
 # 🎯 Bookshop Reference Migration — CLI Walkthrough
 
-> **Codename:** The Bestseller | **Source:** SAP CAP Java bookshop (CDS + OData + SAP HANA) | **Target:** Azure Container Apps + Azure PostgreSQL
+> **Source:** SAP CAP Java bookshop (CDS + OData + SAP HANA) | **Target:** Azure Container Apps + Azure PostgreSQL
 > ⚠ **The target runtime shown above is an example, not a default.** `/phase1-plan` presents supported LTS options with tradeoffs and records your answer in `reports/Decisions-Required.md`. Later steps hard-stop until that decision is `✅ DECIDED`.
 
 ## How This Works
 
 ```mermaid
 flowchart LR
-    A[You type one @agent prompt] --> B{Danny Ocean routes the crew}
+    A[You type one @agent prompt] --> B{The Architect routes the work}
     B --> C[Architect assesses CDS models and OData services]
-    B --> D[Rusty Ryan maps CAP Java to Spring Boot patterns]
-    B --> E[Basher Tarr designs Container Apps and PostgreSQL]
+    B --> D[The Coder maps CAP Java to Spring Boot patterns]
+    B --> E[The Azure Specialist designs Container Apps and PostgreSQL]
     C --> F[Assessment and risk report]
     D --> G[Modernized Java service]
     E --> H[Azure landing zone]
-    G --> I[Turk Malloy deploys to Container Apps]
+    G --> I[The DevOps Engineer deploys to Container Apps]
     H --> I
-    I --> J[Frank Catton and the crew finish CI/CD and ops]
+    I --> J[The Security Auditor and the team finish CI/CD and ops]
 ```
 
 ## Prerequisites
@@ -33,7 +33,7 @@ flowchart LR
 @agent migrate Use-cases/05-BookShop from SAP CAP Java to Azure Container Apps with Azure PostgreSQL — full pipeline. Assess CDS models, OData services, SAP HANA dependencies, Spring Boot migration patterns, containerization, Azure infrastructure, deployment, CI/CD, and operations. Fan out.
 ```
 
-**What happens:** Danny Ocean frames the whole bookshop as one coordinated job, then fans the work out across architecture, code, data, platform, and release tracks.
+**What happens:** The Architect frames the whole bookshop as one coordinated job, then fans the work out across architecture, code, data, platform, and release tracks.
 **You'll get:** A migration plan, target architecture, cross-cutting risks, and the next command to run.
 
 ## Step by Step
@@ -44,7 +44,7 @@ flowchart LR
 /assess Use-cases/05-BookShop as a SAP CAP Java migration. Tell me what CDS models, OData services, HANA assumptions, and deployment dependencies matter most before we touch code.
 ```
 
-**What happens:** Danny Ocean and Rusty Ryan inventory the app and identify what makes this CAP workload different from a generic Java service.
+**What happens:** The Architect and The Coder inventory the app and identify what makes this CAP workload different from a generic Java service.
 **You'll get:** A fast feasibility view, first blockers, and a recommendation for the first deep dive.
 
 **Follow-up prompt**
@@ -58,7 +58,7 @@ flowchart LR
 @agent map the CDS domain model and OData surface for Use-cases/05-BookShop. Tell me which entities, service contracts, auth assumptions, and extension points must survive the move to Azure. Fan out.
 ```
 
-**What happens:** The Architect breaks down the CAP model while Frank Catton flags security and contract risks early.
+**What happens:** The Architect breaks down the CAP model while The Security Auditor flags security and contract risks early.
 **You'll get:** A dependency map, service inventory, auth notes, and a migration-risk matrix.
 
 **Follow-up prompt**
@@ -72,7 +72,7 @@ flowchart LR
 @agent create the data migration plan for Use-cases/05-BookShop. Map SAP HANA schemas, CDS persistence assumptions, data-access patterns, and the target PostgreSQL design. Call out what can be translated directly, what needs redesign, and fan out.
 ```
 
-**What happens:** The Amazing Yen turns the data layer into a real migration plan instead of a hopeful ORM swap.
+**What happens:** The Database Specialist turns the data layer into a real migration plan instead of a hopeful ORM swap.
 **You'll get:** Schema-mapping guidance, cutover concerns, validation checks, and a PostgreSQL readiness plan.
 
 **Follow-up prompt**
@@ -86,7 +86,7 @@ flowchart LR
 @agent migrate Use-cases/05-BookShop from SAP CAP Java patterns to a Spring Boot implementation that fits Azure. Preserve the business behavior, map OData responsibilities, modernize configuration, and keep the service boundaries clear. Fan out.
 ```
 
-**What happens:** Rusty Ryan leads the code migration while the agent keeps contracts, config, and runtime behavior aligned to the new target.
+**What happens:** The Coder leads the code migration while the agent keeps contracts, config, and runtime behavior aligned to the new target.
 **You'll get:** Modernized Java code, framework updates, service-boundary decisions, and a clear list of remaining blockers.
 
 **Follow-up prompt**
@@ -100,7 +100,7 @@ flowchart LR
 @agent generate Azure infrastructure for Use-cases/05-BookShop. Use Azure Container Apps, Azure PostgreSQL, Key Vault, managed identity, Application Insights, and container-friendly configuration. Explain how the services, secrets, and data tier fit together.
 ```
 
-**What happens:** Basher Tarr converts the app plan into an Azure platform design that matches the Java and PostgreSQL target.
+**What happens:** The Azure Specialist converts the app plan into an Azure platform design that matches the Java and PostgreSQL target.
 **You'll get:** Infrastructure definitions, environment wiring, secret strategy, and a deployable hosting topology.
 
 **Follow-up prompt**
@@ -114,7 +114,7 @@ flowchart LR
 @agent deploy Use-cases/05-BookShop to Azure Container Apps, validate the PostgreSQL cutover path, smoke-test the migrated services, and create the CI/CD plan. Include rollback points, release gates, operations checks, and security hardening.
 ```
 
-**What happens:** Turk Malloy drives the release, Frank Catton checks the exposed edges, and the crew turns the run into a repeatable pipeline.
+**What happens:** The DevOps Engineer drives the release, The Security Auditor checks the exposed edges, and the team turns the run into a repeatable pipeline.
 **You'll get:** Deployment status, validation results, pipeline stages, rollback notes, and operator-ready next steps.
 
 **Follow-up prompt**
