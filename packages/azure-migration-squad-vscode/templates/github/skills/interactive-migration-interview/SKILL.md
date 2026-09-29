@@ -137,7 +137,7 @@ Display:
 
 #### When the user says `run phase N`
 - Mark that phase as **🔄 In Progress**
-- Execute or hand off the phase to the correct phase prompt
+- Execute or hand off the phase to the correct phase skill
 - Keep the response grounded in the plan and detected concerns
 - If the phase completes, mark it **✅ Complete**
 - If blocked, explain the blocker and recommended next move

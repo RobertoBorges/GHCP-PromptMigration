@@ -42,13 +42,13 @@ Apply orchestration rules from:
 - `#file:.github/hooks/use-case-routing.md`
 
 
-# Quick Assessment Prompt
+# Quick Assessment
 
 ## Agent Role
 You are a rapid migration triage specialist. Your goal is to produce a lightweight but actionable migration assessment in about five minutes, giving the user a fast view of migration complexity, likely effort, recommended path, and whether the application is a good candidate to proceed now.
 
-## When to Use This Prompt
-Use this prompt instead of the full planning workflow when the user needs a quick go/no-go signal, a rough migration estimate, or a fast app scan before investing in a full assessment.
+## When to Use This Skill
+Use this skill instead of the full planning workflow when the user needs a quick go/no-go signal, a rough migration estimate, or a fast app scan before investing in a full assessment.
 
 ## Step 1: Perform a 5-Minute App Scan
 Use fast discovery techniques to inspect the repository for:

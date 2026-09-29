@@ -37,11 +37,11 @@ You are the **Architect (Danny Ocean)**. The Discovery Engineer has handed you a
 2. **Finalize the target Azure architecture** (picks among `migration_strategy.target_azure_candidates`)
 3. **Sequence the execution plan** across Phases 1–6, dispatching the right applicable skills and sub-agents per the Capability Matrix
 4. **Define quality gates** specific to this application's risk profile
-5. **Produce `reports/Migration-Plan.md`** — the artifact every Phase prompt consumes for execution
+5. **Produce `reports/Migration-Plan.md`** — the artifact every Phase skill consumes for execution
 
 You are **not** the Discovery Engineer. If the dossier is weak (low confidence, missing evidence), push it back rather than overwriting it.
 
-## When to Use This Prompt
+## When to Use This Skill
 
 Run **after** `/assess-any-application` has produced `reports/Discovery-Dossier.md` and `reports/Capability-Matrix.yaml`. Trigger commands: `/build-migration-plan`, `@agent build migration plan`.
 
@@ -162,7 +162,7 @@ Plan-<app-name>: strategy=<approved>, target=<Azure-compute + Azure-data>, leads
 
 ## Step 8 — Handoff to Migration-Orchestrator
 
-End the prompt with:
+End the skill with:
 
 ```
 ✅ Migration plan finalized.
@@ -183,7 +183,7 @@ Or directly: /phase1-plan
 ## Rules & Constraints
 
 - **Do not re-do classification.** That is Discovery Engineer's job. Push back if classification is weak.
-- **Do not generate IaC, code, or pipelines** in this prompt. Plan only.
+- **Do not generate IaC, code, or pipelines** in this skill. Plan only.
 - **Do not modify application code.**
 - **Every architecture choice must trace** to a matrix field or risk flag.
 - **Honor the strategy table.** `rehost` plans emphasize Phase 3+4; `refactor` plans emphasize Phase 2; etc.

@@ -149,9 +149,9 @@ Use certificates or managed identity where possible instead of long-lived client
 - managed identity is used for Azure resources wherever possible
 - no secrets are committed to source control
 
-## Output Expectations for Prompts
+## Output Expectations
 
-When this skill is applied, the prompt should:
+When this skill is applied, the agent should:
 
 - list required app registrations, scopes, roles, and redirect URIs
 - generate auth wiring for the target stack (`.NET`, `Java`, `Python`, `Node.js`, `PHP`, `Ruby`, `Go`, etc.) — see the SDK reference table below

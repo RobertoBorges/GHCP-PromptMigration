@@ -92,7 +92,7 @@ This guided migration helps you:
 - ✅ **Set up CI/CD** for automated deployment
 
 This migration does **NOT** include:
-- ❌ **Data Migration tooling** — Use Azure Database Migration Service (DMS), Data Migration Assistant, or Azure Database Migration Service Extension. This prompt orchestrates but doesn't replace them.
+- ❌ **Data Migration tooling** — Use Azure Database Migration Service (DMS), Data Migration Assistant, or Azure Database Migration Service Extension. This skill orchestrates but doesn't replace them.
 - ❌ **Binary/Dependency Scanning** — Use stack-appropriate external tools (`.NET Upgrade Assistant`, `Spring Boot Migrator`, `Python 2to3`, `Node.js n`, etc.)
 - ❌ **Wholesale rewrite to microservices / event-driven / cloud-native patterns** — that's an explicit `rearchitect` or `rebuild` migration strategy. The default is `replatform` or `refactor` — **minimum viable Azure compatibility**, not a re-architecture. Only run architecture rewrites when the user explicitly picks that strategy in Discovery.
 

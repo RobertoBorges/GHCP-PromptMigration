@@ -153,9 +153,9 @@ resource app 'Microsoft.Web/sites@2023-12-01' = {
 - externalize session state if scale-out is required
 - validate slot swap, restart, and scale behaviors before go-live
 
-## Output Expectations for Prompts
+## Output Expectations
 
-When this skill is applied, the prompt should:
+When this skill is applied, the agent should:
 
 - justify App Service plan sizing
 - include slots, managed identity, health checks, and scaling guidance

@@ -27,7 +27,7 @@ Every phase handoff must include:
 | Performance Engineer | baseline, load, and scale review |
 | Security Auditor | auth, secrets, RBAC, compliance, and exposure review |
 | Cost Engineer | cost posture, savings estimates, and budget guardrails review |
-| Evaluator | prompt, hook, and orchestration quality review |
+| Evaluator | skill, hook, and orchestration quality review |
 | Cutover Commander | rollout, rollback, and production sign-off |
 | Scribe | milestone and decision capture |
 | Presentation Specialist | stakeholder-ready reporting, executive summaries, and visual deliverables |

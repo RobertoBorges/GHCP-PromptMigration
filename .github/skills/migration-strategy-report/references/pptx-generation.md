@@ -297,9 +297,9 @@ add_text(
 )
 ```
 
-## Output Expectations for Prompts
+## Output Expectations
 
-When this skill is applied, the prompt should:
+When this skill is applied, the agent should:
 
 - name the target generator file and output deck explicitly
 - reuse `latam_gcs_template.py` instead of duplicating helper logic

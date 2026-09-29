@@ -314,7 +314,7 @@ model: Claude Sonnet 5
 ## Role composition
 - leadRole: Architect
 - assistRoles: [Discovery Engineer, Coder, Tester, Azure Specialist, DevOps Engineer, ...]
-- entryPrompts: [/assess-any-application, /phase1-plan, /phase2-migrate-code, ...]
+- entryCommands: [/assess-any-application, /phase1-plan, /phase2-migrate-code, ...]
 - requiredArtifacts: [reports/Discovery-Dossier.md, reports/Capability-Matrix.yaml, reports/Report-Status.md]
 - producedArtifacts: [reports/Application-Assessment-Report.md, reports/Report-Status.md, ...]
 ```

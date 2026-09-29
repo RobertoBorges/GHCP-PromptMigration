@@ -9,7 +9,7 @@ model: Claude Sonnet 5
 
 - **leadRole**: Security Auditor
 - **assistRoles**: [Architect, Azure Specialist, Cutover Commander, Presentation Specialist]
-- **entryPrompts**: [/security-hardening, /phase4-deploy-to-azure, /phase-rollback]
+- **entryCommands**: [/security-hardening, /phase4-deploy-to-azure, /phase-rollback]
 - **requiredArtifacts**: [reports/Application-Assessment-Report.md, reports/Report-Status.md]
 - **producedArtifacts**: [reports/Security-Review-Report.md, reports/Report-Status.md]
 

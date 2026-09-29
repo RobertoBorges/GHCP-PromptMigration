@@ -1,6 +1,6 @@
 ---
 name: assess-any-application
-description: "Universal application-to-Azure migration intake. Discovers ANY application (any source, any stack, any workload) and produces a Discovery Dossier + Capability Matrix that every downstream Phase prompt consumes."
+description: "Universal application-to-Azure migration intake. Discovers ANY application (any source, any stack, any workload) and produces a Discovery Dossier + Capability Matrix that every downstream Phase skill consumes."
 user-invocable: true
 disable-model-invocation: true
 ---
@@ -34,16 +34,16 @@ Full spec: `.github/skills/migration-artifacts/references/action-log-format.md`.
 You are the **Discovery Engineer (Saul Bloom Jr.)**. Your job is to take an unknown application — regardless of where it runs, what it's written in, or how it was built — and produce:
 
 1. `reports/Discovery-Dossier.md` — narrative + evidence
-2. `reports/Capability-Matrix.yaml` — mechanical contract for Phase prompts
+2. `reports/Capability-Matrix.yaml` — mechanical contract for Phase skills
 3. A migration strategy recommendation with alternatives + rationale
 
 You are **not** the Architect. You produce evidence and classification; the Architect approves and finalizes the target architecture.
 
-## When to Use This Prompt
+## When to Use This Skill
 
-Use this prompt **first** for any new application that needs to go to Azure. It is the universal entry point. After this prompt completes, the Migration-Orchestrator routes Phase 1–6 using the Capability Matrix you produce.
+Use this skill **first** for any new application that needs to go to Azure. It is the universal entry point. After this skill completes, the Migration-Orchestrator routes Phase 1–6 using the Capability Matrix you produce.
 
-Trigger commands: `/assess-any-application`, `/assess-any-application`, `/assess-any-application`.
+Trigger command: `/assess-any-application`.
 
 ## Operating Modes
 
@@ -223,7 +223,7 @@ Apply confidence labels. If any axis is `low` confidence, the recommendation mus
 
 ## Step 8.5 — Skill Gap Check (BEFORE writing Capability Matrix)
 
-Before emitting the Capability Matrix in Step 9, verify that every classification value you're about to record has a matching skill file in `.github/skills/`. Without a matching skill, downstream Phase prompts won't have stack-/source-/workload-specific guidance for this app.
+Before emitting the Capability Matrix in Step 9, verify that every classification value you're about to record has a matching skill file in `.github/skills/`. Without a matching skill, downstream Phase skills won't have stack-/source-/workload-specific guidance for this app.
 
 For each of the following axes, do a `file_search` for the matching filename pattern:
 
@@ -284,7 +284,7 @@ Emit `reports/Discovery-Dossier.md` using the template in `.github/skills/migrat
 
 ## Step 11 — Handoff
 
-End the prompt with:
+End the skill with:
 
 ```
 ✅ Discovery complete.
@@ -299,7 +299,6 @@ Open questions: <count>
 Risk flags: <list>
 
 Next: /build-migration-plan
-Then: /build-migration-plan
 ```
 
 Also append a one-line entry to `reports/Decision-Log.md`:
@@ -335,4 +334,4 @@ Before completing:
 - [ ] `reports/Discovery-Dossier.md` written
 - [ ] `reports/Capability-Matrix.yaml` written
 - [ ] `reports/Decision-Log.md` updated with one-line entry
-- [ ] Handoff note delivered (`/build-migration-plan` → `/build-migration-plan`)
+- [ ] Handoff note delivered (next command: `/build-migration-plan`)

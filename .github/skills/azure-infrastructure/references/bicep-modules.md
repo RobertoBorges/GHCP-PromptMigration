@@ -159,9 +159,9 @@ az deployment group validate --resource-group <rg> --template-file infra/main.bi
 az deployment group what-if --resource-group <rg> --template-file infra/main.bicep --parameters @infra/main.parameters.json
 ```
 
-## Output Expectations for Prompts
+## Output Expectations
 
-When this skill is applied, the prompt should:
+When this skill is applied, the agent should:
 
 - generate `main.bicep`, parameter files, and focused modules
 - show how AVM modules are composed

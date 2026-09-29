@@ -271,9 +271,9 @@ dotnet test
 dotnet list package --outdated
 ```
 
-## Output Expectations for Prompts
+## Output Expectations
 
-When this skill is applied, the prompt should:
+When this skill is applied, the agent should:
 
 - Produce before/after mappings for every unsupported framework pattern
 - Generate SDK-style project files and modern `Program.cs` wiring

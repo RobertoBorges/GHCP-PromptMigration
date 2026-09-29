@@ -134,9 +134,9 @@ Treat these as findings:
 - broad inherited permissions were reviewed and documented
 - exceptions and custom roles include rationale and owner
 
-## Output Expectations for Prompts
+## Output Expectations
 
-When this skill is applied, the prompt should:
+When this skill is applied, the agent should:
 
 - name the identity that needs access and what it must do
 - recommend exact Azure roles, not generic admin language

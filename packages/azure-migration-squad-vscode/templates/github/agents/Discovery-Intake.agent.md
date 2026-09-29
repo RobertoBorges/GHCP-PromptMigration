@@ -9,7 +9,7 @@ model: Claude Sonnet 5
 
 - **leadRole**: Discovery Engineer
 - **assistRoles**: [Architect, Azure Specialist, Database Specialist]
-- **entryPrompts**: [/assess-any-application]
+- **entryCommands**: [/assess-any-application]
 - **requiredArtifacts**: []
 - **producedArtifacts**: [reports/Discovery-Dossier.md, reports/Capability-Matrix.yaml]
 
@@ -27,7 +27,7 @@ This agent is **conversational** — small, focused turns. The `/assess-any-appl
 - The user says "I want to migrate an app" without specifying which one
 - The user gives a partial answer ("we have a PHP app on AWS" — needs follow-up)
 - The user wants to be walked through the process step-by-step
-- A Phase prompt was attempted without a Capability Matrix and needs intake first
+- A Phase skill was invoked without a Capability Matrix and needs intake first
 
 ## Mandatory Flow
 
@@ -177,7 +177,6 @@ Recommended strategy: <X>
 Confidence: source=H, stack=H, workload=M, data=H
 
 Next: /build-migration-plan
-Then:  /build-migration-plan
 Or switch to the Migration-Orchestrator agent and it'll take it from here.
 ```
 

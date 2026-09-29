@@ -172,9 +172,9 @@ Call seeding from a controlled startup or deployment step, not from random reque
 - Managed identity or secret handling is documented and validated.
 - Seed data is idempotent.
 
-## Output Expectations for Prompts
+## Output Expectations
 
-When this skill is applied, the prompt should:
+When this skill is applied, the agent should:
 
 - Identify whether ADO.NET, EF6, or hybrid access is in use
 - Generate `DbContext`, DI registration, connection updates, and migration commands

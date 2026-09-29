@@ -171,7 +171,7 @@ To use this agent, the user can either:
 
 ## The Migration Workflow: AI-Assisted Code Migration & Modernization
 
-This workflow leverages AI assistance to streamline the migration and modernization process for legacy applications. **The main path is 6 phases run in order (Phase 1 → Phase 6).** The Portfolio and Multi-Repo prompts below are optional add-ons for special situations.
+This workflow leverages AI assistance to streamline the migration and modernization process for legacy applications. **The main path is 6 phases run in order (Phase 1 → Phase 6).** The Portfolio and Multi-Repo skills below are optional add-ons for special situations.
 
 **🔵 Portfolio Planning (optional add-on)** - `/portfolio-strategy`
    - For multi-app customer engagements (10+ apps from CMDB, RVTools, DMA)

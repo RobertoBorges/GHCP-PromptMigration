@@ -227,9 +227,9 @@ Treat these as hardening findings:
 - App Service or Container Apps ingress restrictions match the intended audience
 - management access uses Bastion, JIT, or equivalent controlled paths
 
-## Output Expectations for Prompts
+## Output Expectations
 
-When this skill is applied, the prompt should:
+When this skill is applied, the agent should:
 
 - describe the expected network boundary for edge, app, data, and management tiers
 - choose between private endpoints and service endpoints with explicit reasoning

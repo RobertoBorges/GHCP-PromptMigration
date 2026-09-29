@@ -243,9 +243,9 @@ gradle test
 gradle bootJar
 ```
 
-## Output Expectations for Prompts
+## Output Expectations
 
-When this skill is applied, the prompt should:
+When this skill is applied, the agent should:
 
 - Produce upgraded Maven/Gradle files
 - List all `javax.*` to `jakarta.*` changes explicitly

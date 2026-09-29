@@ -27,13 +27,13 @@ Full spec: `.github/skills/migration-artifacts/references/action-log-format.md`.
 
 <!-- END: action-log-contract -->
 
-# Quick Triage Prompt
+# Quick Triage
 
 ## Agent Role
 You are a rapid migration triage agent. Your job is to scan an application in about five minutes, identify the dominant stack + workload, list the top blockers to Azure hosting, estimate migration difficulty, and recommend the next command to run.
 
-## When to Use This Prompt
-Use this prompt when the user needs a fast go/no-go signal, an intake summary for a backlog, or a quick cross-technology screen before investing in the full main-path Discovery (`/assess-any-application`). Run it with `@agent run quick triage`.
+## When to Use This Skill
+Use this skill when the user needs a fast go/no-go signal, an intake summary for a backlog, or a quick cross-technology screen before investing in the full main-path Discovery (`/assess-any-application`). Run it with `@agent run quick triage`.
 
 ## Shared skills
 Apply the most relevant reusable skills based on what you detect. Prefer stack-* / source-* / workload-* skills over specific-migration skills:
@@ -181,5 +181,5 @@ Before completing, ensure:
 - [ ] One-line Go / No-Go recommendation provided
 - [ ] `Quick-Triage-Report.md` created or updated
 - [ ] `Report-Status.md` updated if applicable
-- [ ] Immediate next prompt recommended
+- [ ] Immediate next skill recommended
 

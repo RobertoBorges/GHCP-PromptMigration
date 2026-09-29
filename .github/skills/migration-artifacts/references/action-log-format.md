@@ -1,6 +1,6 @@
 # Action Log Format — canonical spec
 
-This is the **single source of truth** for how prompts, hooks, and the agent write entries to `reports/Report-Status.md`. Every meaningful action taken during a migration must produce one log entry so the file becomes a **trace memory** — enough context to recover the migration if a session is lost.
+This is the **single source of truth** for how skills, hooks, and the agent write entries to `reports/Report-Status.md`. Every meaningful action taken during a migration must produce one log entry so the file becomes a **trace memory** — enough context to recover the migration if a session is lost.
 
 ## Where entries live
 
@@ -54,8 +54,8 @@ Use one of these action names (kebab-case, verb-phrase). Extend only when necess
 - `session-resumed` — SessionStart hook detected prior state and recovered
 
 **Phase lifecycle:**
-- `phase-started` — a phase prompt begins execution
-- `phase-completed` — a phase prompt marks itself done in the status table
+- `phase-started` — a phase skill begins execution
+- `phase-completed` — a phase skill marks itself done in the status table
 - `phase-blocked` — a phase can't proceed (gate failure); use with `reason=`
 
 **Artifacts:**
@@ -118,7 +118,7 @@ Use one of these action names (kebab-case, verb-phrase). Extend only when necess
 
 The agent inside Copilot Chat **cannot directly observe its own token usage** — that data lives in the Copilot backend. Do your best-effort estimate based on:
 
-- Input context loaded (skills, prompts, files read)
+- Input context loaded (skills, agent instructions, files read)
 - Output produced (report files written, decisions produced)
 - Number of tool calls in the turn
 
@@ -198,9 +198,9 @@ At migration end (Phase 6 complete), a **migration total** is added:
 - Check Copilot Dashboard for authoritative token counts.
 ```
 
-## Rules for prompts + agent + hooks
+## Rules for skills + agent + hooks
 
-Every prompt file that produces an artifact or transitions a phase MUST include this contract (see `inject-action-log-contract.mjs` for the boilerplate):
+Every workflow skill that produces an artifact or transitions a phase MUST include this contract (see `inject-action-log-contract.mjs` for the boilerplate):
 
 > **Action Log contract**: After each meaningful action (see `action-log-format.md`), append one line to `## 📜 Action Log` in `reports/Report-Status.md` using the canonical format.
 

@@ -111,9 +111,9 @@ If traffic was moved through DNS, Front Door, Traffic Manager, or reverse proxy 
 - database recovery path is documented separately from app rollback
 - communications and post-mortem artifacts are part of the plan
 
-## Output Expectations for Prompts
+## Output Expectations for Skills
 
-When this skill is applied, the prompt should:
+When this skill is applied, the invoking skill should:
 
 - pick a rollback pattern based on evidence, not guesswork
 - separate app, infra, data, and DNS rollback workstreams

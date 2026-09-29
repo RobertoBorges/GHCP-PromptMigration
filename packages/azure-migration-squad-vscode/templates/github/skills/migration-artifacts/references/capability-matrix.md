@@ -1,6 +1,6 @@
 # Skill: Capability Matrix
 
-> The machine-readable contract between Discovery Engineer and every downstream Phase prompt. The Discovery Dossier is for humans; the Capability Matrix is for the agent.
+> The machine-readable contract between Discovery Engineer and every downstream Phase skill. The Discovery Dossier is for humans; the Capability Matrix is for the agent.
 
 ## Output File
 
@@ -9,7 +9,7 @@
 ## When to Use
 
 - Produced by Discovery Engineer at the end of `/assess-any-application`
-- Consumed by every Phase prompt (Phase 1–6) to know which source/stack/workload skills to load and which specialists to dispatch
+- Consumed by every Phase skill (Phase 1–6) to know which source/stack/workload skills to load and which specialists to dispatch
 - Updated by Architect when strategy is refined
 - Re-emitted by Discovery Engineer when re-discovery is triggered
 
@@ -172,13 +172,13 @@ Use only the canonical values (in `.github/copilot-instructions.md`). Each flag 
 
 ## Consumer Contract
 
-Every Phase prompt (`/phase1-plan` through `/phase6-post-migration-ops`) reads this matrix at startup. If the matrix is missing or `schema_version` doesn't match, the Phase prompt **must**:
+Every Phase skill (`/phase1-plan` through `/phase6-post-migration-ops`) reads this matrix at startup. If the matrix is missing or `schema_version` doesn't match, the Phase skill **must**:
 
 1. Refuse to proceed
 2. Print a clear error pointing to `/assess-any-application`
 3. Suggest the user run the Discovery Engineer first
 
-Phase prompts use these fields:
+Phase skills use these fields:
 
 | Field | Used by |
 |-------|---------|

@@ -14,7 +14,7 @@ argument-hint: "Describe the missing stack, source, workload, integration, patte
 
 - The Capability Matrix would classify `stack.primary_stack` as a value with **no matching `.github/skills/stack-*.md`** — e.g., discovered app is Elixir/Phoenix but only `stack-elixir.md` is missing
 - Similar for `source.primary_adapter` (no `source-*.md`), `workload.primary_pattern` (no `workload-*.md`), any integration in `integrations` (no `integration-*.md`), or a risk with no `risk-*.md`
-- A phase prompt encounters a **recurring migration pattern** that would help future migrations (e.g., "COM+ interop replacement", "custom RMI-over-SSL transport") — create a `pattern-*.md`
+- A phase skill encounters a **recurring migration pattern** that would help future migrations (e.g., "COM+ interop replacement", "custom RMI-over-SSL transport") — create a `pattern-*.md`
 - The user explicitly says "create a skill for X", "add a skill", "we need a skill for this", "research this and create a skill", or types `/skill-creator`
 
 **Default behavior:** ALWAYS ask a short Y/n confirmation before writing (see Step 2 below). Default is Yes. Never silently create files.
@@ -52,7 +52,7 @@ If unsure which family, ask the user. Do not create a skill in the wrong family 
 
 ## Step 1: Detect the gap
 
-Detection is automatic and happens during Discovery (`/assess-any-application`) or `/phase1-plan`. The Skill Gap Check step in those prompts:
+Detection is automatic and happens during Discovery (`/assess-any-application`) or `/phase1-plan`. The Skill Gap Check step in those skills:
 
 1. Reads the `Capability-Matrix.yaml` values (or the in-progress classification if not yet written)
 2. For each axis, does a `file_search` in `.github/skills/` for a matching filename:
@@ -62,7 +62,7 @@ Detection is automatic and happens during Discovery (`/assess-any-application`) 
    - each entry in `integrations[]` → look for `integration-<name>.md`
 3. **Any miss → gap detected. Invoke this skill.**
 
-For pattern and risk families, detection is opportunistic — a phase prompt may notice a recurring pattern and hand it off to this skill.
+For pattern and risk families, detection is opportunistic — a phase skill may notice a recurring pattern and hand it off to this skill.
 
 **Announce the gap plainly** before Step 2:
 

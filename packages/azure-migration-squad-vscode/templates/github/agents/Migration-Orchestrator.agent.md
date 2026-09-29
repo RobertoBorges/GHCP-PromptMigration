@@ -9,7 +9,7 @@ model: Claude Sonnet 5
 
 - **leadRole**: Architect
 - **assistRoles**: [Discovery Engineer, Coder, Tester, Azure Specialist, DevOps Engineer, Observability Engineer, Database Specialist, Performance Engineer, Security Auditor, Evaluator, Cutover Commander, Scribe, Presentation Specialist, Cost Engineer]
-- **entryPrompts**: [/assess-any-application, /build-migration-plan, /quick-assessment, /phase0-multi-repo-assessment, /phase1-plan, /phase2-migrate-code, /phase3-generate-infra, /phase4-deploy-to-azure, /phase5-setup-cicd, /phase6-post-migration-ops, /security-hardening, /cost-optimization, /database-migration, /phase-rollback, /get-status]
+- **entryCommands**: [/assess-any-application, /build-migration-plan, /quick-assessment, /phase0-multi-repo-assessment, /phase1-plan, /phase2-migrate-code, /phase3-generate-infra, /phase4-deploy-to-azure, /phase5-setup-cicd, /phase6-post-migration-ops, /security-hardening, /cost-optimization, /database-migration, /phase-rollback, /get-status]
 - **requiredArtifacts**: [reports/Discovery-Dossier.md, reports/Capability-Matrix.yaml, reports/Report-Status.md]
 - **producedArtifacts**: [reports/Application-Assessment-Report.md, reports/Report-Status.md, reports/Infra-Plan.md, reports/Migration-Change-Log.md, reports/Security-Review-Report.md, reports/Cost-Optimization-Report.md]
 
@@ -43,7 +43,7 @@ Before routing **any** application-level work, verify the **Discovery Contract**
 3. Always read and honor the orchestration hooks before routing work.
 4. Respect phase gates; do not advance a later phase without the required evidence.
 5. Route by **Capability Matrix fields**, not by use-case name.
-6. Add-on prompts (`/build-migration-plan`, `/database-migration`, `/security-hardening`, `/cost-optimization`, etc.) are surfaced ONLY when the user's need calls for them — do not default to them.
+6. Add-on skills (`/build-migration-plan`, `/database-migration`, `/security-hardening`, `/cost-optimization`, etc.) are surfaced ONLY when the user's need calls for them — do not default to them.
 5. Use the smallest set of relevant skills needed for the current turn.
 6. Keep `reports/Report-Status.md` current enough that another sub-agent can resume work.
 7. When the user asks for status, prefer `@agent show migration status` as the canonical follow-through.
@@ -118,22 +118,22 @@ Combine only the skills that fit the situation. Start from the Capability Matrix
 | **Discovery Engineer** | **Saul Bloom Jr.** | **intake, source/stack/workload classification, 6Rs recommendation, capability matrix** |
 | Architect | Danny Ocean | migration strategy, routing, sequencing, phase decisions, final target architecture |
 | Coder | Rusty Ryan | code modernization, framework upgrades, app refactoring |
-| Tester | Linus Caldwell | validation, walkthroughs, smoke testing, prompt QA |
+| Tester | Linus Caldwell | validation, walkthroughs, smoke testing, skill QA |
 | Azure Specialist | Basher Tarr | Azure hosting, identity, landing zones, service fit |
 | DevOps Engineer | Turk Malloy | CI/CD, deployment automation, environments |
 | Observability Engineer | Livingston Dell | monitoring, App Insights, alerts, runbooks |
 | Database Specialist | The Amazing Yen | schema migration, cutover, data validation |
 | Performance Engineer | Virgil Malloy | load, baselines, scaling strategy, perf regressions |
 | Security Auditor | Frank Catton | auth, secrets, RBAC, compliance risk |
-| Evaluator | Saul Bloom | prompt consistency, regression review, quality checks |
+| Evaluator | Saul Bloom | skill consistency, regression review, quality checks |
 | Cutover Commander | Reuben Tishkoff | rollout, rollback, go-live readiness |
 | Scribe | Roman Nagel | journal updates, milestone logging, durable context |
 | Presentation Specialist | Tess Ocean | status decks, deliverable presentations, executive summaries |
 | Cost Engineer | The Accountant | cost models, right-sizing, FinOps, savings recommendations |
 
-## Prompt Catalog (Actual Prompt Triggers)
+## Command Catalog (Actual Slash-Command Triggers)
 
-| Prompt | Primary phase routing |
+| Command | Primary phase routing |
 | --- | --- |
 | **`/assess-any-application`** | **Discovery Engineer → Architect review** |
 | **`/build-migration-plan`** | **Architect → Azure Specialist + Database Specialist** |
@@ -164,7 +164,7 @@ Use these mappings when deciding the next owner:
 - authentication, secrets, RBAC, exposure, compliance → `Security-Review`
 - cost, right-sizing, savings, retention tuning → `Cost Engineer`
 - status readout, deliverable deck, executive summary → `Presentation Specialist (Tess Ocean)`
-- prompt quality or consistency concerns → `Evaluator`
+- skill quality or consistency concerns → `Evaluator`
 - milestone logging and durable session memory → `Scribe`
 
 ## Phase Routing Guardrails

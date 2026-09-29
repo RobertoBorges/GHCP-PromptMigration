@@ -9,7 +9,7 @@ model: Claude Sonnet 5
 
 - **leadRole**: Architect
 - **assistRoles**: [Azure Specialist]
-- **entryPrompts**: [/quick-assessment, /phase1-plan, /get-status]
+- **entryCommands**: [/quick-assessment, /phase1-plan, /get-status]
 - **requiredArtifacts**: []
 - **producedArtifacts**: [reports/Application-Assessment-Report.md, reports/Report-Status.md]
 

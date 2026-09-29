@@ -1,10 +1,10 @@
 # Migration Handoff and Orchestration
 
-Use this skill whenever a prompt transitions work from one phase, prompt, or sub-agent to another.
+Use this skill whenever the agent transitions work from one phase, skill, or sub-agent to another.
 
 ## Purpose
 
-This skill turns isolated phase prompts into a coordinated workflow by enforcing:
+This skill turns isolated phase skills into a coordinated workflow by enforcing:
 
 - explicit phase entry and exit criteria
 - required artifacts before handoff
@@ -52,7 +52,7 @@ Trigger specialist agents when any of the following is true:
 - authentication or permissions change -> Security Auditor
 - data access or schema migration changes -> Database Specialist
 - scaling, latency, or sizing concerns appear -> Performance Engineer
-- prompt behavior changes -> Evaluator
+- skill or agent behavior changes -> Evaluator
 - a meaningful milestone is reached -> Scribe
 - validation is required -> Tester
 
@@ -87,7 +87,7 @@ Run `/phase4-deploy-to-azure` after Phase 3 gates pass.
 
 ## Handoff Template
 
-Use this structure at the end of a phase report or prompt response:
+Use this structure at the end of a phase report or agent response:
 
 ```markdown
 ## Handoff Summary
@@ -99,9 +99,9 @@ Use this structure at the end of a phase report or prompt response:
 - **Gate Status:** [pass / conditional / blocked]
 ```
 
-## Output Expectations for Prompts
+## Output Expectations
 
-When this skill is applied, the prompt should:
+When this skill is applied, the agent should:
 
 - refuse to hand off without required artifacts or documented exceptions
 - name the next phase command explicitly

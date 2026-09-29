@@ -57,7 +57,7 @@ jobs:
       # ────────────────────────────────────────────────────────────────────
       # DECISION HARDSTOP COVERAGE
       # Fails the build if any catalog item in decision-catalog.md is not
-      # referenced by at least one phase prompt. See
+      # referenced by at least one phase skill. See
       # .github/skills/migration-decisions/references/decision-hardstop.md for the full protocol.
       # ────────────────────────────────────────────────────────────────────
       - name: Validate decision-catalog coverage

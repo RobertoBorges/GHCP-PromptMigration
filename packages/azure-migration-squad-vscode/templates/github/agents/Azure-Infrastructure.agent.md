@@ -9,7 +9,7 @@ model: Claude Sonnet 5
 
 - **leadRole**: Azure Specialist
 - **assistRoles**: [DevOps Engineer, Security Auditor, Observability Engineer]
-- **entryPrompts**: [/phase3-generate-infra]
+- **entryCommands**: [/phase3-generate-infra]
 - **requiredArtifacts**: [reports/Application-Assessment-Report.md, reports/Report-Status.md]
 - **producedArtifacts**: [infra/, azure.yaml, reports/Infra-Plan.md, reports/Report-Status.md]
 

@@ -187,9 +187,9 @@ Treat these as findings:
 - networking constraints were checked for every downstream resource
 - exceptions are documented with a removal plan
 
-## Output Expectations for Prompts
+## Output Expectations
 
-When this skill is applied, the prompt should:
+When this skill is applied, the agent should:
 
 - recommend system-assigned or user-assigned identity explicitly and explain why
 - name the exact Azure resources that should trust the identity

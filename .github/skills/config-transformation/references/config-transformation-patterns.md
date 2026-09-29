@@ -196,9 +196,9 @@ spring:
 - Production settings can be provided without code changes.
 - Legacy transform files are either retired or explicitly documented as transitional.
 
-## Output Expectations for Prompts
+## Output Expectations
 
-When this skill is applied, the prompt should:
+When this skill is applied, the agent should:
 
 - Produce a setting inventory table
 - Show exact target JSON/YAML and option classes

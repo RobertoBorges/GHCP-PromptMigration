@@ -9,7 +9,7 @@ user-invocable: false
 
 ## When to use
 
-Use this router when a migration prompt produces, updates, validates, or hands off named artifacts. It covers the documents and machine-readable files that connect the universal Assess + Phase 1-6 flow across stacks and source environments.
+Use this router when a migration skill produces, updates, validates, or hands off named artifacts. It covers the documents and machine-readable files that connect the universal Assess + Phase 1-6 flow across stacks and source environments.
 
 Project boundary: artifacts must stay stack-agnostic across supported application families. For mainframe/midrange evidence such as z/OS, IBM i, COBOL, RPG, Natural, PL/I, CICS, IMS, or VSAM, document unsupported-source escalation rather than implying code-level migration.
 
@@ -33,7 +33,7 @@ The Action Log in `reports/Report-Status.md` is the migration's trace memory. Ap
 | Creating or validating `reports/Discovery-Dossier.md`; writing human-readable discovery findings, evidence, risks, strategy, candidates, and unresolved questions | [Discovery Dossier template](./references/discovery-dossier-template.md) | Fourteen-section discovery narrative paired with the Capability Matrix and evidence-confidence requirements. |
 | Creating or updating `reports/Migration-Plan.md`; finalizing execution sequencing, target architecture, per-phase work, gates, rollback shape, and assumptions | [Migration Plan template](./references/migration-plan-template.md) | Architect-led plan structure for one application and the dispatch contract consumed by phases. |
 | Creating or updating `reports/Report-Status.md`, `reports/Application-Assessment-Report.md`, or phase-specific Markdown reports | [Migration Report template](./references/migration-report-template.md) | Standard report set, assessment report layout, status report skeleton, report writing checklist, and next-step conventions. |
-| Transitioning between prompts, phases, or agents; validating phase deliverables; writing handoff summaries; identifying next command or specialist follow-up | [Migration Handoff and Orchestration](./references/migration-handoff.md) | Phase transition checklist, required artifacts by phase, quality gates, dispatch triggers, status update protocol, and handoff template. |
+| Transitioning between skills, phases, or agents; validating phase deliverables; writing handoff summaries; identifying next command or specialist follow-up | [Migration Handoff and Orchestration](./references/migration-handoff.md) | Phase transition checklist, required artifacts by phase, quality gates, dispatch triggers, status update protocol, and handoff template. |
 
 ## How to use
 

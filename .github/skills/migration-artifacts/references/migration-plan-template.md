@@ -9,7 +9,7 @@
 ## When to Use
 
 - Produced by `/build-migration-plan` (Architect-led)
-- Consumed by Phase 1–6 prompts for execution sequencing
+- Consumed by Phase 1–6 skills for execution sequencing
 - Updated when the strategy is refined or a phase reveals new constraints
 
 ## Template
@@ -142,9 +142,9 @@ See `.github/skills/rollback-strategy/SKILL.md` + per-phase rollback notes:
 
 ## Authoring Rules
 
-1. **The plan is the contract.** Phase prompts read it; don't keep critical decisions out-of-band in chat.
+1. **The plan is the contract.** Phase skills read it; don't keep critical decisions out-of-band in chat.
 2. **Effort labels (S/M/L/XL) are mandatory.** Set them per the per-stack adapter guidance and adjusted by risk flags.
-3. **Don't generate code or IaC here.** The plan is a plan. Phase 2/3 prompts generate.
+3. **Don't generate code or IaC here.** The plan is a plan. Phase 2/3 skills generate.
 4. **App-specific extra gates must trace to risk flags.** No extra gate without a matrix justification.
 5. **Update on refinement.** If the Architect changes the target compute or strategy mid-flight, update this file and append a decisions log entry.
 

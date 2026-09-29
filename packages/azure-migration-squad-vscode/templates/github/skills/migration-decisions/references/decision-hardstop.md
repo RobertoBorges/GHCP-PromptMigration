@@ -2,7 +2,7 @@
 
 > **the agent does NOT decide major architecture for the user. It presents alternatives and asks.**
 
-This skill is the binding contract for every agent in the Code Migration Modernization Agent. It applies to every chat mode, every phase prompt, and every specialist agent.
+This skill is the binding contract for every agent in the Code Migration Modernization Agent. It applies to every custom agent, every phase skill, and every specialist sub-agent.
 
 ## Core principles
 
@@ -168,7 +168,7 @@ A recommendation IS allowed, but it must:
 - **Phase 2 (Migrate Code)** — gates on framework + UI + API style decisions
 - **Phase 3 (Generate Infra)** — gates on IaC tool + hosting + region + database engine
 - **Phase 4 (Deploy to Azure)** — gates on cutover + downtime + region
-- **DatabaseMigration** — gates on database engine + migration tool
+- **Database Migration (`/database-migration`)** — gates on database engine + migration tool
 - **All other phases** — gate on any catalog item required by their work
 
-The injector script `scripts/inject-decision-gates.mjs` ensures each phase prompt opens with the right gate.
+The injector script `scripts/inject-decision-gates.mjs` ensures each phase skill opens with the right gate.

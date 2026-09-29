@@ -40,7 +40,7 @@ if (Test-Path $statusPath) {
     } catch { }
 
     # Ensure the file has an Action Log section — append one if missing so subsequent
-    # session-start hooks + prompts can find it deterministically.
+    # session-start hooks + skills can find it deterministically.
     $hasSection = $false
     try {
         $lookup = Get-Content $statusPath -Raw -ErrorAction SilentlyContinue

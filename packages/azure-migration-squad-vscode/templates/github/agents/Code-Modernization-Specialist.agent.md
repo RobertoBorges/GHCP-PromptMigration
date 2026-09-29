@@ -9,7 +9,7 @@ model: Claude Sonnet 5
 
 - **leadRole**: Coder
 - **assistRoles**: [Tester, Database Specialist, Performance Engineer, Security Auditor]
-- **entryPrompts**: [/phase2-migrate-code, /database-migration]
+- **entryCommands**: [/phase2-migrate-code, /database-migration]
 - **requiredArtifacts**: [reports/Application-Assessment-Report.md, reports/Report-Status.md]
 - **producedArtifacts**: [reports/Migration-Change-Log.md, reports/Report-Status.md]
 

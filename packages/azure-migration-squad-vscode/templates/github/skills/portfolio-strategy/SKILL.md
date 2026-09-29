@@ -30,7 +30,7 @@ Full spec: `.github/skills/migration-artifacts/references/action-log-format.md`.
 
 # Portfolio Migration Strategy Report
 
-## What This Prompt Does
+## What This Skill Does
 
 Invokes the `migration-strategy-report` skill to analyze a customer portfolio and produce a CIO-ready HTML migration deck. This is the **Portfolio Planning flow** — produces an executive plan that informs which apps to modernize via the per-app flow (`/phase1-plan`).
 

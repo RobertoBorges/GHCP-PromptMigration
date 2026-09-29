@@ -141,9 +141,9 @@ Treat these as findings:
 - rotation owner, cadence, and validation steps are documented
 - logging and diagnostics paths were reviewed for secret leakage
 
-## Output Expectations for Prompts
+## Output Expectations
 
-When this skill is applied, the prompt should:
+When this skill is applied, the agent should:
 
 - identify every secret source that must be removed, externalized, or eliminated
 - recommend Key Vault, managed identity, or local secret-store patterns explicitly

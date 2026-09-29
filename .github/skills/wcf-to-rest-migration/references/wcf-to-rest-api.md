@@ -207,9 +207,9 @@ dotnet build
 dotnet test
 ```
 
-## Output Expectations for Prompts
+## Output Expectations
 
-When this skill is applied, the prompt should:
+When this skill is applied, the agent should:
 
 - Produce an operation-by-operation WCF-to-REST mapping table
 - Generate controllers, DTOs, service abstractions, and `Program.cs` wiring

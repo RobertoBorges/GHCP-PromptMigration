@@ -9,7 +9,7 @@ model: Claude Sonnet 5
 
 - **leadRole**: Cost Engineer
 - **assistRoles**: [Azure Specialist, Architect, DevOps Engineer, Presentation Specialist]
-- **entryPrompts**: [/cost-optimization, /phase6-post-migration-ops, /get-status]
+- **entryCommands**: [/cost-optimization, /phase6-post-migration-ops, /get-status]
 - **requiredArtifacts**: [reports/Report-Status.md]
 - **producedArtifacts**: [reports/Cost-Optimization-Report.md, reports/Report-Status.md]
 

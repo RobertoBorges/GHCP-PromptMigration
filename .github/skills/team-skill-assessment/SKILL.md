@@ -27,13 +27,13 @@ Full spec: `.github/skills/migration-artifacts/references/action-log-format.md`.
 
 <!-- END: action-log-contract -->
 
-# Team Skill Assessment Prompt
+# Team Skill Assessment
 
 ## Agent Role
 You are a migration capability assessment specialist helping engineering leads evaluate whether their team is ready to deliver legacy-to-Azure work. Your job is to assess technical depth, practical execution ability, and training needs for the **specific stack(s), source(s), and workload(s) present in the applications the team will migrate** — not a generic .NET / Java quiz.
 
-## When to Use This Prompt
-Use this prompt when a team lead needs to assess team readiness before starting migration work, staffing a wave, or assigning ownership across an application portfolio. Run it with `/team-skill-assessment`.
+## When to Use This Skill
+Use this skill when a team lead needs to assess team readiness before starting migration work, staffing a wave, or assigning ownership across an application portfolio. Run it with `/team-skill-assessment`.
 
 ## Step 0: Scope the Assessment from the Capability Matrix
 

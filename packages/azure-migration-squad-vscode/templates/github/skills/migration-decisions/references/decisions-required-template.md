@@ -46,7 +46,7 @@ Repeat this block once per decision from the catalog. Pull the actual options + 
 ## Decision <N>: <Decision Name>
 
 **Status:** ⏸ PENDING
-**Required for:** <Phase / prompt that gates on this>
+**Required for:** <Phase / skill that gates on this>
 **Catalog reference:** [`decision-catalog.md#D-<NN>-<slug>`](./decision-catalog.md)
 
 ### Why we're asking

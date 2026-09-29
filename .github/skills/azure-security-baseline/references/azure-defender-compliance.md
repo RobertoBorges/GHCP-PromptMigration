@@ -199,9 +199,9 @@ Treat these as quality gaps:
 - Azure Policy enforces core security controls where possible
 - continuous export or workflow automation exists for incident handling
 
-## Output Expectations for Prompts
+## Output Expectations
 
-When this skill is applied, the prompt should:
+When this skill is applied, the agent should:
 
 - explain what Defender for Cloud covers for the workload in scope
 - identify which Defender plans to enable and why

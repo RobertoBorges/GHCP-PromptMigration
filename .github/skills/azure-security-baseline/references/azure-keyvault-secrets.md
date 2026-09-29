@@ -223,9 +223,9 @@ Treat these as security findings:
 - diagnostic settings and audit log retention are configured
 - secret rotation and certificate renewal ownership are documented
 
-## Output Expectations for Prompts
+## Output Expectations
 
-When this skill is applied, the prompt should:
+When this skill is applied, the agent should:
 
 - externalize every credential, certificate, and key to Key Vault or remove it through managed identity
 - specify whether system-assigned or user-assigned identity is required and why

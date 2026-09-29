@@ -1,13 +1,13 @@
 # Migration Report Template
 
-Use this skill whenever a prompt must create or update migration reports in the `reports/` folder.
+Use this skill whenever the agent must create or update migration reports in the `reports/` folder.
 
 ## Goals
 
 - Keep every phase report consistent and comparable.
 - Separate factual findings from recommendations.
 - Make next steps explicit.
-- Provide enough structure for humans and later prompts to reuse the report.
+- Provide enough structure for humans and later skills to reuse the report.
 
 ## Standard report set
 
@@ -133,7 +133,7 @@ graph TD
 ## 📜 Action Log
 
 <!--
-Every prompt, hook, and agent appends one line per meaningful action.
+Every skill, hook, and agent appends one line per meaningful action.
 Format: - <ISO-8601-UTC> | actor=<name> | action=<verb-phrase> | files=<+~-> | tokens=~<bucket> | turn=<n> | notes="<free text>"
 See .github/skills/migration-artifacts/references/action-log-format.md for the full spec.
 -->
@@ -151,7 +151,7 @@ Every generated report should answer these questions:
 - What concrete files, resources, or code changes must happen next?
 - How will success be validated?
 
-## Output expectations for prompts that use this skill
+## Output expectations for skills that use this reference
 
 - Create missing report files when absent.
 - Preserve prior useful sections when updating existing reports.

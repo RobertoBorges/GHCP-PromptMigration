@@ -1,6 +1,6 @@
 # Skill: Decision Catalog
 
-> The canonical list of major architecture decisions the Code Migration Modernization Agent asks the user about. Used by Phase 1 to generate `reports/Decisions-Required.md`, and referenced by every Phase prompt for hard-gate enforcement.
+> The canonical list of major architecture decisions the Code Migration Modernization Agent asks the user about. Used by Phase 1 to generate `reports/Decisions-Required.md`, and referenced by every Phase skill for hard-gate enforcement.
 
 **This catalog is closed. Adding or removing entries requires a PR review** — the catalog protects the user's autonomy, so changes need explicit approval.
 

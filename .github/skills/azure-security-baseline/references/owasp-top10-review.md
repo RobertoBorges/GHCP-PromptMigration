@@ -116,9 +116,9 @@ Collect evidence from:
 - detection tooling covers code, dependencies, platform, and runtime signals
 - critical and high findings have clear owners and validation steps
 
-## Output Expectations for Prompts
+## Output Expectations
 
-When this skill is applied, the prompt should:
+When this skill is applied, the agent should:
 
 - produce a full 10-category OWASP review table with evidence, severity, and remediation
 - connect findings to Azure controls such as Entra ID, Key Vault, RBAC, WAF, NSG, private endpoints, and App Insights

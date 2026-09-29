@@ -230,9 +230,9 @@ protected void SaveButton_Click(object sender, EventArgs e)
 - Session-dependent behaviors are intentionally preserved or removed.
 - File uploads, paging, sorting, and partial updates have a modern equivalent.
 
-## Output Expectations for Prompts
+## Output Expectations
 
-When this skill is applied, the prompt should:
+When this skill is applied, the agent should:
 
 - Map each major `.aspx` page to a Razor target
 - Convert code-behind patterns into `PageModel` or controller actions

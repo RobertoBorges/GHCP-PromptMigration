@@ -31,8 +31,8 @@ Full spec: `.github/skills/migration-artifacts/references/action-log-format.md`.
 Retrieve status of the modernization process
 
 # Rules for Status Tracking
-- When this prompt is called, summarize the current migration status and direct the user to the status file for details. The status file is located at 'reports/Report-Status.md'.
-- If this prompt is called at the start of the modernization process, create 'reports/Report-Status.md' with content indicating the modernization has not started yet.
+- When this skill is called, summarize the current migration status and direct the user to the status file for details. The status file is located at 'reports/Report-Status.md'.
+- If this skill is called at the start of the modernization process, create 'reports/Report-Status.md' with content indicating the modernization has not started yet.
 - If the modernization process has started, ensure the status file contains the current status, including:
   - Project stack (from `reports/Capability-Matrix.yaml` — `stack.primary_stack` and `stack.secondary_stacks`)
   - Current framework version

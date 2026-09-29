@@ -96,13 +96,13 @@ Apply orchestration rules from:
 - `#file:.github/hooks/use-case-routing.md`
 
 
-# Post-Migration Operations Prompt
+# Post-Migration Operations
 
 ## Agent Role
 You are a post-migration operations specialist responsible for stabilizing, monitoring, securing, and optimizing a migrated application running on Azure. Use the outputs from the earlier migration phases to establish operational excellence, validate production readiness, and create durable operational artifacts.
 
-## When to Use This Prompt
-Use this prompt after the application has been deployed to Azure and basic deployment validation is complete. This prompt is optimized for Phase 6 activities such as monitoring setup, performance validation, cost controls, security verification, runbook creation, and health automation.
+## When to Use This Skill
+Use this skill after the application has been deployed to Azure and basic deployment validation is complete. This skill is optimized for Phase 6 activities such as monitoring setup, performance validation, cost controls, security verification, runbook creation, and health automation.
 
 ## Preconditions
 Before starting, confirm or infer the following from the repository and `reports/` folder:
