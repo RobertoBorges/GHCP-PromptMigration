@@ -307,7 +307,7 @@ Agent frontmatter and role composition:
 ---
 name: Migration Orchestrator
 description: Master agent-aware migration orchestrator for Azure modernization.
-tools: ['search/codebase', 'search', 'edit/editFiles']
+tools: [vscode, execute, read, agent, edit, search, web, azure-mcp/search, azure/search, browser, todo]
 model: Claude Sonnet 5
 ---
 

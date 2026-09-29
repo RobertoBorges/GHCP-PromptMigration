@@ -1,7 +1,7 @@
 ---
 name: Discovery Intake
 description: Interactive discovery & intake conversation for any application. Walks the user through six fast triage questions, runs adaptive follow-ups based on detected risk, probes source/stack/workload, and produces the Discovery Dossier + Capability Matrix.
-tools: ['search/codebase', 'usages', 'vscodeAPI', 'changes', 'runCommands/terminalLastCommand', 'openSimpleBrowser', 'fetch', 'search/searchResults', 'githubRepo', 'extensions', 'edit/editFiles', 'search', 'runCommands', 'Azure MCP/*', 'Microsoft Docs/*']
+tools: [vscode, execute, read, agent, edit, search, web, azure-mcp/search, azure/search, browser, todo]
 model: Claude Sonnet 5
 ---
 

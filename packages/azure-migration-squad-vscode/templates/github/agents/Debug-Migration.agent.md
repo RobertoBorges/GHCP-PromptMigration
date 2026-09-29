@@ -1,7 +1,7 @@
 ---
 name: Debug Migration
 description: Migration debugging mode for diagnosing failures during or after Azure migration work. Focuses on root-cause analysis, evidence capture, orchestration-hook compliance, and routed recovery actions.
-tools: ['search/codebase', 'search', 'read/problems', 'execute/testFailure', 'vscode/runCommand', 'web/fetch', 'github/*', 'vscode/extensions', 'execute/runTests', 'edit/editFiles']
+tools: [vscode, execute, read, agent, edit, search, web, azure-mcp/search, azure/search, browser, todo]
 model: Claude Sonnet 5
 ---
 

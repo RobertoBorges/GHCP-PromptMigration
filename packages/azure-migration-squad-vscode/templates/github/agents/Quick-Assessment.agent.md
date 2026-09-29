@@ -1,7 +1,7 @@
 ---
 name: Quick Assessment
 description: Rapid migration triage mode for any legacy application (stack-agnostic). Produces a concise Azure migration assessment, routes to the right specialists, and preserves hook-aware handoff guidance.
-tools: ['search/codebase', 'github/*', 'web/fetch']
+tools: [vscode, execute, read, agent, edit, search, web, azure-mcp/search, azure/search, browser, todo]
 model: Claude Sonnet 5
 ---
 

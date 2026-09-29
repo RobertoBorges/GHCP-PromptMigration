@@ -1,7 +1,7 @@
 ---
 name: Azure Infrastructure
 description: Infrastructure generation mode for Azure-targeted migrations. Routes Phase 3 work to Basher Tarr and Turk Malloy to produce validated Bicep or Terraform, azd configuration, identity wiring, deployment-ready platform assets, and hook-aligned handoffs.
-tools: ['search/codebase', 'edit/editFiles']
+tools: [vscode, execute, read, agent, edit, search, web, azure-mcp/search, azure/search, browser, todo]
 model: Claude Sonnet 5
 ---
 

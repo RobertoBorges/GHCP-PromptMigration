@@ -1,7 +1,7 @@
 ---
 name: Migration Orchestrator
 description: Master agent-aware migration orchestrator for Azure modernization. Routes work across all 15 applicable sub-agents (incl. Discovery Engineer), enforces hook-driven coordination, opens with discovery for any unknown application, and recommends current `@agent` CLI follow-through.
-tools: ['search/codebase', 'search', 'edit/editFiles']
+tools: [vscode, execute, read, agent, edit, search, web, azure-mcp/search, azure/search, browser, todo]
 model: Claude Sonnet 5
 ---
 

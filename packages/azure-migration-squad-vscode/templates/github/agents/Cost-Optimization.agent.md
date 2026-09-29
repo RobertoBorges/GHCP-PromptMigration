@@ -1,7 +1,7 @@
 ---
 name: Cost Optimization
 description: Azure cost analysis mode for migration programs. Routes spend and right-sizing work to The Accountant, using deployment context to recommend savings, scaling changes, budget guardrails, and presentation-ready outputs when needed.
-tools: ['search/codebase', 'edit/editFiles']
+tools: [vscode, execute, read, agent, edit, search, web, azure-mcp/search, azure/search, browser, todo]
 model: Claude Sonnet 5
 ---
 
