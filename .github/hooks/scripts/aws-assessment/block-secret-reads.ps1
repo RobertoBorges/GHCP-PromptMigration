@@ -13,7 +13,7 @@ try {
 $toolName = $hookInput.tool_name
 # File-edit tools are named differently per surface: VS Code uses createFile /
 # editFiles, Copilot CLI uses create / edit / write, and toolset-qualified forms
-# appear as edit/<tool>. Mirrors the list in customer-data-isolation.ps1.
+# appear as edit/<tool>.
 $editTools = @(
     "createFile", "editFiles", "applyPatch", "insertEdit", "replaceString", "multiReplaceString",
     "edit", "edit/createFile", "edit/editFiles", "edit/applyPatch",
