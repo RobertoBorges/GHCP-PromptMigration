@@ -231,4 +231,8 @@ This project ships as a **VS Code extension** at `packages/azure-migration-squad
 - Auto-prompts to install GitHub Copilot Chat (with user consent)
 - Reads `reports/Decisions-Required.md` to surface pending architecture decisions
 
-There is no separate npm CLI — the extension is the only distribution path.
+There is no separate npm CLI. The repository also ships a native Copilot-format
+agent plugin: root `plugin.json` references `.github/skills/` and `.github/agents/`,
+and `.github/plugin/marketplace.json` provides marketplace discovery. Plugin mode
+does not register workspace hooks, copy `copilot-instructions.md`, or provide the
+extension sidebar/status bar. See `docs/agent-plugin.md`.

@@ -17,7 +17,23 @@
       "tag-separator": "-v",
       "include-component-in-tag": true,
       "include-v-in-tag": false,
-      "extra-files": []
+      "extra-files": [
+        {
+          "type": "json",
+          "path": "/plugin.json",
+          "jsonpath": "$.version"
+        },
+        {
+          "type": "json",
+          "path": "/.github/plugin/marketplace.json",
+          "jsonpath": "$.plugins[0].version"
+        },
+        {
+          "type": "json",
+          "path": "/package-lock.json",
+          "jsonpath": "$.packages['packages/azure-migration-squad-vscode'].version"
+        }
+      ]
     }
   },
   "changelog-sections": [

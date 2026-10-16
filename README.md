@@ -1,6 +1,6 @@
 # Azure Migration Agent — GitHub Copilot agent skills for Azure migration
 
-> **Migrate any application to Azure** using 36 agent skills and 10 custom agents — of which you only ever pick from **three**: migrate, assess, or debug. Universal source/stack/workload coverage. Discovery-first. The agent **never decides major architecture for you** — it lays out options and waits.
+> **Migrate any application to Azure** using 65 agent skills and 10 custom agents — of which you only ever pick from **three**: migrate, assess, or debug. Universal source/stack/workload coverage. Discovery-first. The agent **never decides major architecture for you** — it lays out options and waits.
 
 [![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/robertoborges.azure-migration-squad-vscode?label=VS%20Code%20Marketplace&color=blueviolet&logo=visualstudiocode)](https://marketplace.visualstudio.com/items?itemName=robertoborges.azure-migration-squad-vscode)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
@@ -67,9 +67,9 @@ Great for **infrastructure discovery + lift-and-shift** of on-prem/other-cloud w
 
 ## How it's distributed
 
-**One channel:** the [Azure Migration Agent VS Code extension](https://marketplace.visualstudio.com/items?itemName=robertoborges.azure-migration-squad-vscode). No npm CLI. Just install the extension, open a folder, click **Initialize**.
+**Two options:** the [Azure Migration Agent VS Code extension](https://marketplace.visualstudio.com/items?itemName=robertoborges.azure-migration-squad-vscode) for workspace initialization and UI, or the **native agent plugin** for skills and agents without copying them into each project.
 
-The extension bundles a copy of the canonical content from this repo and drops it into your workspace under `.github/`.
+The extension bundles a copy of the canonical content from this repo and drops it into your workspace under `.github/`. The root `plugin.json` instead loads `.github/skills/` and `.github/agents/` from the plugin installation. It does not automatically register hooks or workspace instructions. See [native plugin installation](./docs/agent-plugin.md) for local testing, Git-source installation and marketplace discovery.
 
 ## Quick start
 
@@ -84,7 +84,7 @@ The extension bundles a copy of the canonical content from this repo and drops i
    | **Discovery Intake** | You are not yet sure what the app even is |
    | **Debug Migration** | A migration already in flight has broken |
 
-   The five specialists (orchestrator, infrastructure, triage, security, cost) are dispatched for you automatically — you never have to pick the right one.
+   The seven specialists (orchestrator, infrastructure, triage, security, cost, AWS assessment and AWS-to-Azure migration) are dispatched for you automatically — you never have to pick the right one.
 
 5. Type `/assess-any-application`. This is step 1 of the main path — discovery.
 6. Then `/phase1-plan` — produces `reports/Application-Assessment-Report.md`, `reports/Migration-Plan.md`, and `reports/Decisions-Required.md`.
@@ -107,6 +107,13 @@ Full walkthrough: [docs/vscode-quickstart.md](./docs/vscode-quickstart.md).
 | `MIGRATION-START-HERE.md` | 60-second quickstart |
 
 ## Standout features
+
+### AWS specialist tracks
+
+- **Account assessment:** `/aws-assess-phase0-setup-and-scope` starts read-only multi-account, multi-region discovery, deep inventory, enrichment, relationships, reports and Azure readiness.
+- **AWS-to-Azure migration:** `/aws2azure-phase1-plan` starts service mapping and compatibility planning, followed by code, infrastructure, deployment and CI/CD migration. Multi-repo assessment is optional.
+
+Both tracks appear in the extension's **Optional add-ons** sidebar and are included in the native plugin catalog.
 
 ### 🎯 The Decision Hardstop Protocol
 
@@ -156,6 +163,8 @@ packages/azure-migration-squad-vscode/
 ├── templates/                                    (❌ DO NOT EDIT — auto-synced)
 ├── package.json
 └── ...
+plugin.json                                      (native Copilot plugin; canonical skills + agents)
+.github/plugin/marketplace.json                  (repository plugin marketplace)
 scripts/
 ├── inject-capability-matrix-gates.mjs            (gate injector — Phase 1-6 + DB/Sec/Cost)
 ├── inject-decision-gates.mjs                     (gate injector — decision-catalog coverage)
@@ -190,7 +199,7 @@ npm run sync
 cd packages/azure-migration-squad-vscode
 npm run build
 npm run package          # produces .vsix
-npm test                 # 13 headless tests
+npm test                 # 14 headless tests
 
 # Preview the next release locally (no push, no tag)
 npm run release:local -- --dry-run
@@ -202,6 +211,7 @@ npm run release:local -- --dry-run
 
 - ✅ Description lengths ≤1024 chars (Copilot listing constraint)
 - ✅ Decision-catalog coverage (every catalog ID referenced by ≥1 phase skill)
+- ✅ Native plugin paths, skill names, release-version alignment and local-release regression tests
 - ✅ Templates sync from `.github/*` into the extension package
 - ✅ Extension build via esbuild
 - ✅ `.vsix` packaging via `vsce`

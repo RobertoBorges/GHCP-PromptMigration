@@ -1,8 +1,8 @@
 {
   "name": "azure-migration-squad-vscode",
   "displayName": "Azure Migration Agent",
-  "description": "Migrate any application to Azure with GitHub Copilot. Universal source/stack/workload coverage (15 source adapters, 15 stack adapters, 9 workload patterns). Discovery-first workflow. Hard-stop user-decision gates so the agent never picks framework/database/hosting on your behalf.",
-  "version": "0.6.0",
+  "description": "Migrate to Azure with 65 Copilot skills and 10 agents: discovery, modernization, portfolio planning, AWS assessment and AWS-to-Azure migration. 15 stack references, 10 source adapters, 8 workload patterns and user-owned architecture decisions.",
+  "version": "0.7.0",
   "publisher": "robertoborges",
   "private": false,
   "license": "MIT",
@@ -90,7 +90,7 @@
       {
         "id": "azureMigrationSquadGettingStarted",
         "title": "Migrate to Azure with the Azure Migration Agent",
-        "description": "Set up the agent, then run the main path (Phase 1 → Phase 6) to migrate your application.",
+        "description": "Set up 65 skills and 10 agents, then run Discovery and Phase 1-6. Explore portfolio planning, AWS assessment and AWS-to-Azure migration as optional tracks.",
         "steps": [
           {
             "id": "install",
@@ -131,7 +131,7 @@
           {
             "id": "explore",
             "title": "Explore the sidebar — Agent, Main path, Add-ons, Decisions",
-            "description": "Look for the rocket icon 🚀 in the Activity Bar. Browse the agent, the 6 main-path phases, optional add-ons grouped by purpose, and pending architecture decisions. Click any item to open its source file.",
+            "description": "Look for the rocket icon 🚀 in the Activity Bar. Browse 10 agents, the 7-step main path, portfolio and specialist add-ons, AWS assessment, AWS-to-Azure migration, and pending architecture decisions. Click any item to open its source file.",
             "media": {
               "image": "media/walkthroughs/step-4-sidebar.png",
               "altText": "Azure Migration Agent sidebar"
@@ -254,7 +254,7 @@
     ]
   },
   "scripts": {
-    "vscode:prepublish": "npm run sync && npm run build",
+    "vscode:prepublish": "npm run validate:plugin --prefix ../.. && npm run sync && npm run build",
     "sync": "node scripts/sync-templates.mjs",
     "build": "node esbuild.config.mjs",
     "watch": "node esbuild.config.mjs --watch",
@@ -262,7 +262,7 @@
     "pretest": "npm run sync && npm run build && npm run build:tests",
     "build:tests": "tsc -p tsconfig.test.json",
     "test": "node ./out/test/runTest.js",
-    "prepackage": "npm run sync",
+    "prepackage": "npm run validate:plugin --prefix ../.. && npm run sync",
     "package": "vsce package --no-dependencies",
     "publish": "vsce publish --no-dependencies",
     "release:local": "node scripts/local-release.mjs",

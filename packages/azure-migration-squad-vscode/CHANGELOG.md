@@ -4,6 +4,23 @@ All notable changes to the Azure Migration Agent VS Code extension are documente
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.0] - 2026-10-16
+
+### Added
+
+- Native agent plugin distribution through a root Copilot-format `plugin.json`, reusing the 65 skills and 10 agents in `.github/`.
+- A repository plugin marketplace manifest and installation guide. Plugin installation exposes skills and agents without automatically registering hooks or MCP servers.
+- Sidebar groups for the AWS account-assessment and AWS-to-Azure migration tracks, plus the skill-authoring command.
+- Plugin and release-version validation to keep the extension, plugin and marketplace metadata aligned.
+- Portfolio-report validation audits, source/worksheet manifests, computed per-pillar reconciliation, financial provenance, dependency/SME evidence guidance, and resumable generation.
+- Optional locale-aware bilingual reports and a bundled, validated four-slide execution package with an XLSX action workbook and JSON traceability.
+
+### Changed
+
+- Refreshed the Marketplace listing, walkthrough and welcome page to describe the complete capability catalog.
+- Corrected extension metadata to 15 stack references, 10 source adapters and 8 workload patterns.
+- Completed infrastructure ownership classification and removed misleading application/database/VM grand totals. Consolidated reporting improvements into the canonical skill and removed the comparison copy.
+
 ## [0.6.0](https://github.com/RobertoBorges/GHCP-PromptMigration/compare/vscode-v0.5.0...vscode-v0.6.0) (2026-10-16)
 
 

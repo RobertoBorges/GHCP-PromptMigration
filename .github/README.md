@@ -6,18 +6,20 @@ This folder contains VS Code GitHub Copilot customization files for the **Code M
 
 ```
 .github/
-├── agents/                              # 8 custom agent definitions (.agent.md)
+├── agents/                              # 10 custom agent definitions (.agent.md)
 │   │   ── 3 front doors (shown in the agent picker) ──
 │   ├── Code-Migration-Modernization.agent.md   # migrate — START HERE
 │   ├── Discovery-Intake.agent.md               # assess — before you migrate
 │   ├── Debug-Migration.agent.md                # debug — when a migration breaks
-│   │   ── 5 specialists (user-invocable: false, dispatched as subagents) ──
+│   │   ── 7 specialists (user-invocable: false, dispatched as subagents) ──
 │   ├── Migration-Orchestrator.agent.md
 │   ├── Azure-Infrastructure.agent.md
 │   ├── Security-Review.agent.md
 │   ├── Cost-Optimization.agent.md
-│   └── Quick-Assessment.agent.md
-├── skills/                              # 36 agent skills (each a folder with SKILL.md)
+│   ├── Quick-Assessment.agent.md
+│   ├── AWS-Account-Assessment.agent.md
+│   └── AWS-to-Azure-Migration.agent.md
+├── skills/                              # 65 agent skills (35 workflows + 30 knowledge)
 │   │
 │   │   ── Workflow skills (user-invocable via `/`) ──
 │   ├── assess-any-application/         # Step 1 — universal discovery
@@ -28,6 +30,8 @@ This folder contains VS Code GitHub Copilot customization files for the **Code M
 │   ├── interactive-migration-interview/  team-skill-assessment/
 │   ├── database-migration/  security-hardening/  cost-optimization/
 │   ├── phase-rollback/  get-status/  skill-creator/
+│   ├── aws-assess-*/                   # 8 read-only account-assessment workflows
+│   ├── aws2azure-*/                    # 7 AWS-to-Azure migration workflows
 │   │
 │   │   ── Knowledge skills (auto-loaded by the agent) ──
 │   ├── stack-adapters/                 # 15 refs — .NET, Java, Python, Node, PHP, Go, …
@@ -39,16 +43,17 @@ This folder contains VS Code GitHub Copilot customization files for the **Code M
 │   ├── dotnet-modernization/  java-modernization/  wcf-to-rest-migration/
 │   ├── azure-infrastructure/  azure-containerization/  config-transformation/
 │   ├── business-logic-mapping/  migration-unit-testing/  migration-strategy-report/
-│   └── rollback-strategy/
+│   ├── rollback-strategy/
+│   └── aws-*/  azure-compatibility-assessment/  # 14 AWS assessment/migration knowledge skills
 ├── hooks/                               # Agent lifecycle hooks
 │   ├── validation.json                 # PostToolUse: auto-validate after edits
 │   ├── session-lifecycle.json          # SessionStart + Stop hooks
 │   └── scripts/                        # Hook scripts (PowerShell + Bash)
-│       ├── block-secrets.ps1/.sh       # Detect hardcoded credentials
-│       ├── block-dangerous-commands.ps1/.sh  # Block destructive operations
+│       ├── aws-assessment/            # Read-only AWS guards and assessment state
 │       ├── auto-validate.ps1/.sh       # Validation reminders after edits
 │       ├── load-migration-state.ps1/.sh     # Inject migration + portfolio context
 │       └── update-status-report.ps1/.sh     # Append session timestamps
+├── plugin/marketplace.json              # Native plugin discovery (root plugin.json)
 ├── copilot-instructions.md              # Repo-wide agent rules
 └── README.md                            # This file
 ```
@@ -130,9 +135,13 @@ Skills are auto-loaded based on context. Each skill is a folder containing:
 
 ### Workflow skills (user-invocable via `/`)
 
-The 20 workflow skills listed under [Using skills directly](#using-skills-directly) above.
-They set `disable-model-invocation: true` so they only run when *you* ask — the agent never
-fires a migration phase mid-conversation on its own.
+There are 35 workflow skills: 20 general workflows, 8 AWS account-assessment workflows
+and 7 AWS-to-Azure migration workflows. The general phase skills set
+`disable-model-invocation: true`; `skill-creator` is intentionally auto-invocable.
+
+The root `plugin.json` exposes the same skills and agents as a native Copilot-format
+plugin. It does not enable hooks or copy workspace instructions. See
+[native plugin installation](../docs/agent-plugin.md).
 
 ## 🎯 Supported Migration Paths
 

@@ -61,7 +61,7 @@ This slide adapts its KPI cards and charts based on the detected workload pillar
 | **Apps only** | Single donut — APP ownership (Microsoft/Partner/No Migration Needed/Unknown). Verification: counts sum to total in-scope apps. |
 | **DB only** | Single donut — DB ownership (Microsoft/Partner/Unknown). Verification: counts sum to total DB instances. |
 | **Infra only** | Single donut — INFRA ownership (Microsoft/Partner/Unknown). Verification: counts sum to total VMs/servers. |
-| **Mixed (2+ pillars)** | **Combined estate donut** showing TOTAL Microsoft/Partner/No Migration Needed/Unknown across ALL detected pillars, PLUS a **per-pillar breakdown table** showing each pillar's split independently. Verification: each pillar sums correctly AND combined total = sum of all pillar totals. |
+| **Mixed (2+ pillars)** | Separate per-pillar ownership charts and a per-pillar breakdown table. Each pillar reconciles independently. Do not combine applications, DB instances, and VMs into a grand total or donut. |
 
 For mixed scenarios, the per-pillar breakdown table format:
 | Pillar | Total In-Scope | Microsoft | Partner | No Migration Needed | Unknown | Verification |
@@ -69,7 +69,10 @@ For mixed scenarios, the per-pillar breakdown table format:
 | Applications | N | n | n | n | n | n+n+n+n = N ✓ |
 | Databases | N | n | n | 0 | n | n+n+0+n = N ✓ |
 | Infrastructure | N | n | n | 0 | n | n+n+0+n = N ✓ |
-| **Combined Estate** | **N** | **n** | **n** | **n** | **n+n+n = N ✓** |
+
+Every breakdown includes confidence, rationale, governing scope citation, and source evidence. Preserve Partner (COTS Vendor) detail without creating a new ownership bucket.
+
+When modernization/PaaS candidates are evidenced, compare like-for-like and modernization options with per-pillar deltas, prerequisites, approval status, and pre/post VM footprint. Keep stay-as-is first when requesting an architecture choice. Use a single migration option when no distinct modernization path is supported. Unknown host mappings remain a footprint gap; do not subtract all PaaS apps/DBs from VM count.
 
 ## Slide 6: Phased Migration Roadmap
 
@@ -94,7 +97,7 @@ This slide provides a **unified full-estate dependency view** — mapping depend
 - Database dependency data (linked servers, replication chains, cross-database queries, ETL pipelines between instances, Always On AG, log shipping)
 
 **Content structure:**
-- **KPI cards (top):** Total Dependency Points (sum across portfolio — integrations + DB dependencies + infra dependencies), High-Fan-Out Apps (apps with 10+ dependencies), Dependency Hubs/Middleware Platforms count, External/Third-Party Dependencies count
+- **KPI cards (top):** Distinct evidence-backed dependency edges (deduplicated source/target/type/environment), High-Fan-Out Apps (apps with 10+ identified dependencies), Dependency Hubs/Middleware Platforms count, External/Third-Party Dependencies count. Do not add CMDB integration counts to the same edges rediscovered in telemetry/source. Aggregate counts without endpoints cannot substantiate a topology.
 - **Dependency Topology Map:** Visual representation (table or grouped layout) showing:
   - **Hub applications** — apps that many others depend on (highest inbound connection count)
   - **High-fan-out applications** — apps that connect to many downstream systems (highest outbound count)
@@ -184,7 +187,7 @@ A **Move Group** is a cluster of applications that should migrate together in th
   - Groups with Mission Critical anchors need extended testing windows
   - Groups spanning multiple vendors require coordinated change windows
   - Groups with shared databases need data migration strategy decided upfront (lift-and-shift DB first, or replicate?)
-  - Undiscovered dependencies (from the 39.9% with no integration data) may merge or split groups during execution — build 20% buffer in wave capacity
+  - Undiscovered dependencies may merge or split groups during execution. Compute the actual missing-data coverage and justify any capacity contingency from this engagement; do not reuse example percentages as facts.
 
 **Key Principle:** This slide answers the leadership question: *"Which apps move together, in what order, and why?"* — it converts raw dependency analysis into a concrete migration execution plan that program managers can schedule against.
 
@@ -212,3 +215,4 @@ A **Move Group** is a cluster of applications that should migrate together in th
 ## Slide 12: Appendix — Portfolio Summary Statistics
 
 - Three columns: by phase, by complexity + containerization, by regulatory + server footprint
+- End with Data Sources and Data Quality, including every input file/sheet, row counts, exclusions, and analytical impact. Evaluate the dimensions and final assurance checks in [reporting-quality.md](reporting-quality.md).
