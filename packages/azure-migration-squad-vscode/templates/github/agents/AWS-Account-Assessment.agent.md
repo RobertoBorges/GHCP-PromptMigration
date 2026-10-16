@@ -147,8 +147,6 @@ Detailed assessment patterns are available in the skills:
 These skills are automatically loaded based on the assessment context.
 
 ## Agent Guardrails
-- **READ-ONLY IS ABSOLUTE.** Only `describe-*`, `list-*`, `get-*`, `lookup-*`, `search-*`, `select-*` and `batch-get-*` AWS CLI verbs are permitted. Any create/update/delete/put/start/stop/terminate/attach/detach/modify/tag/untag command must be refused.
-- Never call `secretsmanager get-secret-value`, `ssm get-parameter --with-decryption`, `ssm get-parameters-by-path --with-decryption`, or any API that returns secret material.
 - Never print, log or write AWS access keys, secret keys, session tokens, passwords, connection strings or certificate private keys into any report.
 - Ask for explicit user consent before starting a sweep — describe expected duration, API call volume and any billable API (Cost Explorer charges per request).
 - Do not query or modify Azure resources without explicit user consent.

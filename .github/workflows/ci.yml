@@ -21,6 +21,7 @@ on:
       - 'MIGRATION-START-HERE.md'
       - 'package.json'
       - 'package-lock.json'
+      - 'plugin.json'
       - 'scripts/**'
       - '.github/workflows/ci.yml'
   pull_request:
@@ -30,6 +31,7 @@ on:
       - 'MIGRATION-START-HERE.md'
       - 'package.json'
       - 'package-lock.json'
+      - 'plugin.json'
       - 'scripts/**'
 
 jobs:
@@ -63,10 +65,23 @@ jobs:
       - name: Validate decision-catalog coverage
         run: npm run validate:decision-coverage
 
+      - name: Validate native plugin and release-version synchronization
+        run: npm run validate:plugin && npm run test:release
+
+      - name: Set up Python for portfolio reporting tests
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Test evidence reconciliation and Office delivery
+        run: |
+          python -m pip install -r .github/skills/migration-strategy-report/scripts/requirements-delivery.txt
+          npm run test:reporting
+
       # ────────────────────────────────────────────────────────────────────
       # VS CODE EXTENSION
-      # The only distribution path. Bundles content from .github/* and
-      # ships a Marketplace-ready .vsix.
+      # Bundles content from .github/* and ships a Marketplace-ready
+      # .vsix alongside the native plugin distribution.
       # ────────────────────────────────────────────────────────────────────
       - name: Sync templates from root to extension
         working-directory: packages/azure-migration-squad-vscode
@@ -109,7 +124,7 @@ jobs:
         run: |
           set -euo pipefail
           STAGE="$RUNNER_TEMP/agent-content-pack"
-          mkdir -p "$STAGE/.github" "$STAGE"
+          mkdir -p "$STAGE/.github/plugin" "$STAGE"
           # Canonical .github subfolders the extension bundles
           cp -R .github/agents "$STAGE/.github/"
           cp -R .github/skills "$STAGE/.github/"
@@ -117,12 +132,14 @@ jobs:
           cp .github/copilot-instructions.md "$STAGE/.github/"
           # Top-level welcome doc
           cp MIGRATION-START-HERE.md "$STAGE/"
+          cp plugin.json "$STAGE/"
+          cp .github/plugin/marketplace.json "$STAGE/.github/plugin/"
           # Small README explaining how to use the pack
           cat > "$STAGE/README.md" <<'EOF'
           # Azure Migration Agent — content pack
 
           This ZIP contains the canonical agent definitions, skills,
-          hooks, and welcome doc that back the Azure Migration Agent.
+          hooks, welcome doc, and native plugin manifests that back the Azure Migration Agent.
 
           ## Usage (without the VS Code extension)
 
@@ -130,6 +147,10 @@ jobs:
           2. Files land under `.github/` and at the repo root (`MIGRATION-START-HERE.md`).
           3. Open the folder in a Copilot-Chat-capable client (VS Code + Copilot Chat, GitHub Copilot CLI, etc.).
           4. Type `/assess-any-application` in Copilot Chat, or the natural-language equivalent.
+
+          Alternatively, register the extracted folder as a local agent plugin
+          with VS Code's chat.pluginLocations setting. Plugin mode exposes
+          skills and agents only; workspace hooks are not automatically registered.
 
           For the guided experience (sidebar, decisions panel, status bar,
           session-lifecycle hooks), install the VS Code extension instead:

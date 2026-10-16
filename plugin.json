@@ -1,0 +1,20 @@
+{
+  "name": "azure-migration-agent",
+  "description": "Azure migration discovery, planning, modernization, infrastructure, deployment, CI/CD and operations, with portfolio planning and AWS specialist tracks.",
+  "version": "0.7.0",
+  "author": {
+    "name": "Roberto Borges"
+  },
+  "homepage": "https://github.com/RobertoBorges/GHCP-PromptMigration",
+  "repository": "https://github.com/RobertoBorges/GHCP-PromptMigration",
+  "license": "MIT",
+  "keywords": [
+    "azure",
+    "migration",
+    "copilot",
+    "modernization",
+    "aws"
+  ],
+  "skills": "./.github/skills/",
+  "agents": "./.github/agents/"
+}

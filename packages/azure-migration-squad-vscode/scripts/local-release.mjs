@@ -7,7 +7,7 @@
  *   2. Determines semver bump (auto, or forced via --patch / --minor / --major)
  *   3. Previews the change (version bump + CHANGELOG addition)
  *   4. Asks confirmation (unless --yes)
- *   5. Updates package.json + CHANGELOG.md locally
+ *   5. Updates extension/plugin/marketplace versions, lockfile + CHANGELOG.md locally
  *   6. Runs `npm run build && npm run package` to produce the versioned .vsix
  *
  * What it does NOT do:
@@ -101,7 +101,8 @@ commits since the last ${DIM}vscode-v*${RESET} tag:
   Only ${DIM}chore/docs/refactor/test/build/ci${RESET} → no bump (script exits with a note)
 
 This script ${BOLD}does not${RESET} commit, tag, or push. It updates package.json,
-CHANGELOG.md, and produces a versioned .vsix. Inspect and commit yourself.
+plugin.json, marketplace.json, package-lock.json, CHANGELOG.md, and produces a
+versioned .vsix. Inspect and commit yourself.
 
 For the normal release flow (release-please on main), see
 ${BLUE}docs/publishing-vscode-extension.md${RESET}.
@@ -192,17 +193,28 @@ function readPkgVersion() {
   return pkg.version;
 }
 
-function writePkgVersion(newVersion) {
-  const raw = readFileSync(pkgJsonPath, 'utf-8');
-  // Preserve JSON formatting by regexing on the version line only.
-  const updated = raw.replace(
-    /("version"\s*:\s*")([^"]+)(")/,
-    `$1${newVersion}$3`
-  );
-  if (updated === raw) {
-    throw new Error('Could not find "version" field to update in package.json');
-  }
-  writeFileSync(pkgJsonPath, updated);
+function writeReleaseVersions(newVersion) {
+  const updates = [
+    { file: pkgJsonPath, update: (data) => { data.version = newVersion; } },
+    { file: path.join(monorepoRoot, 'plugin.json'), update: (data) => { data.version = newVersion; } },
+    {
+      file: path.join(monorepoRoot, '.github', 'plugin', 'marketplace.json'),
+      update: (data) => {
+        const plugin = data.plugins.find((entry) => entry.name === 'azure-migration-agent');
+        if (!plugin) throw new Error('Azure Migration Agent is missing from marketplace.json');
+        plugin.version = newVersion;
+      },
+    },
+    {
+      file: path.join(monorepoRoot, 'package-lock.json'),
+      update: (data) => { data.packages['packages/azure-migration-squad-vscode'].version = newVersion; },
+    },
+  ].map(({ file, update }) => {
+    const data = JSON.parse(readFileSync(file, 'utf-8'));
+    update(data);
+    return { file, content: JSON.stringify(data, null, 2) + '\n' };
+  });
+  for (const { file, content } of updates) writeFileSync(file, content);
 }
 
 function buildChangelogEntry(version, commits, bumpKind) {
@@ -357,8 +369,8 @@ async function main() {
     }
   }
 
-  writePkgVersion(newVersion);
-  console.log(`${GREEN}✓${RESET} Wrote version ${newVersion} to packages/azure-migration-squad-vscode/package.json`);
+  writeReleaseVersions(newVersion);
+  console.log(`${GREEN}✓${RESET} Wrote version ${newVersion} to extension, plugin, marketplace and lockfile`);
 
   prependToChangelog(changelogEntry);
   console.log(`${GREEN}✓${RESET} Updated CHANGELOG.md`);
@@ -375,9 +387,9 @@ async function main() {
   console.log();
   console.log(`${BOLD}Next steps (NOT automated — inspect first):${RESET}`);
   console.log(`  ${DIM}# Review the changes${RESET}`);
-  console.log(`  git diff packages/azure-migration-squad-vscode/package.json packages/azure-migration-squad-vscode/CHANGELOG.md`);
+  console.log(`  git diff plugin.json .github/plugin/marketplace.json package-lock.json packages/azure-migration-squad-vscode/package.json packages/azure-migration-squad-vscode/CHANGELOG.md`);
   console.log(`  ${DIM}# If it looks right:${RESET}`);
-  console.log(`  git add packages/azure-migration-squad-vscode/{package.json,CHANGELOG.md}`);
+  console.log(`  git add plugin.json .github/plugin/marketplace.json package-lock.json packages/azure-migration-squad-vscode/package.json packages/azure-migration-squad-vscode/CHANGELOG.md`);
   console.log(`  git commit -m "chore: release ${flags.tagPrefix}${newVersion}"`);
   console.log(`  git tag ${flags.tagPrefix}${newVersion}`);
   console.log(`  git push origin HEAD ${flags.tagPrefix}${newVersion}`);
