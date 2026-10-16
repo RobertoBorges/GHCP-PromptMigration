@@ -58,11 +58,6 @@ The skill will:
 ### Step 1: Confirm Customer Folder
 Ask the user: **"Which customer folder should I analyze?"** if not already provided.
 
-**Customer data isolation is ABSOLUTE.** Once a customer folder is set:
-- Read files ONLY from that exact folder path
-- NEVER read from any other customer's folder — even for template/style reference
-- If the customer name is ambiguous, ASK before proceeding
-
 ### Step 2: Invoke the migration-strategy-report Skill
 The `migration-strategy-report` skill will own the workflow from here:
 1. STEP -1: Artifact discovery (scan + classify every file)

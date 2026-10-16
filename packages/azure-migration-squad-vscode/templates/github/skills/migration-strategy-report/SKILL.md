@@ -19,26 +19,18 @@ Generate executive-ready Migration Strategy Reports (self-contained HTML decks) 
 
 These rules ALWAYS apply when this skill is active. They are absolute. Violating them is a serious engagement failure.
 
-### 1. Customer Data Isolation
-- When working on a specific customer, **ONLY read files from that customer's exact folder path**.
-- **NEVER** cross-reference, read, copy from, or peek at any other customer's folder — not even for "template reference", CSS examples, or report structure inspiration.
-- Each customer folder is a fully isolated engagement — treat each one as a separate NDA.
-- If a customer name is ambiguous (e.g., a prefix like `Acme/` matches both `Acme/` and `Acme Corp/`), **ASK the user** — never guess.
-- Report template, CSS, slide structure, and generation logic come ONLY from THIS SKILL — never from another customer's generated report.
-- **Cross-customer access has caused real incidents.** A single accidental read of another customer's folder constitutes a confidentiality breach and must never recur.
-
-### 2. Excel Sheet Completeness
+### 1. Excel Sheet Completeness
 - When loading Excel files, **list ALL sheet names first** and load every sheet that contains data.
 - Do NOT assume single-sheet workbooks — always check `sheetnames` programmatically before loading.
 - Empty sheets (0 data rows) or legend/reference sheets can be skipped, but must be explicitly checked and documented in console output.
 - Sheets with partial data (few non-null columns) should be examined and included if they contain any unique information not available in other sheets.
 
-### 3. Customer Folder Convention (Per-Invocation)
+### 2. Customer Folder Convention (Per-Invocation)
 - The skill does NOT hard-code a `Customers/` path. The user provides the folder path each invocation (e.g., `generate migration strategy report for /path/to/Customer/Contoso`).
 - If the user does not specify a path, **ASK** before scanning anything.
 - The customer folder must contain at least ONE meaningful artifact (CMDB CSV, RVTools XLSX, DMA JSON, meeting notes, etc.).
 
-### 4. Determinism Guarantee
+### 3. Determinism Guarantee
 - All classification algorithms (6 Rs, Microsoft / Partner / Unknown) MUST produce identical results for identical inputs. See [references/classification-algorithm.md](references/classification-algorithm.md). No subjective judgment in counts.
 - Verification is mandatory: classification counts MUST sum to the in-scope total. Show the math.
 
