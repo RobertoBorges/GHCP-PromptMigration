@@ -15,6 +15,7 @@
     "validate:decision-coverage": "node scripts/validate-decision-coverage.mjs",
     "validate:plugin": "node scripts/validate-plugin.mjs",
     "test:release": "node --test scripts/local-release.test.mjs",
+    "version:set": "node packages/azure-migration-squad-vscode/scripts/local-release.mjs --yes --no-build",
     "test:reporting": "python -B scripts/test-strategy-report.py",
     "inject:decision-gates": "node scripts/inject-decision-gates.mjs",
     "inject:capability-gates": "node scripts/inject-capability-matrix-gates.mjs",

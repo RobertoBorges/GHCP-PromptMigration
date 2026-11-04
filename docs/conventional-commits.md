@@ -88,7 +88,19 @@ BREAKING CHANGE: users on X must update their settings.json."
 
 ## Enforcement
 
-There's no lint-on-commit hook (yet). release-please will simply ignore commits that don't follow the convention, meaning **no version bump will be triggered** for those commits. If you push only `chore:` and `docs:` commits between releases, no Release PR opens. That's by design.
+There's no lint-on-commit hook. Instead, the **PR title** workflow (`.github/workflows/pr-title.yml`) checks that every PR title is a conventional commit. With squash merge, the title becomes the commit on `main`, so the title is what release-please reads. The check reports problems; it only blocks merges if you make it a required status check in branch rules.
+
+release-please ignores commits that don't follow the convention, so **no version bump is triggered** for them. If only `chore:` and `docs:` commits land between releases, no Release PR opens. That's by design.
+
+### Forcing a version
+
+To release a specific version regardless of commit types, run **Actions → Release Please → Run workflow** with `version` set (e.g. `0.7.2`). The workflow opens a PR whose commit carries this footer:
+
+```
+Release-As: 0.7.2
+```
+
+Merging it makes release-please open the `0.7.2` release PR. You can also add that footer to any commit (or squash-merge description) yourself.
 
 ## Where release-please parses these
 

@@ -14,28 +14,33 @@ Release-please and the local release script update these together;
 `npm run validate:plugin` prevents mismatched artifacts from being packaged.
 See [Agent plugin distribution](./agent-plugin.md) for plugin installation.
 
-## Prepared 0.7.1 release
+## Release a new version (cheat sheet)
 
-The source version is **0.7.1**, following Marketplace **0.6.0**. The release adds
-native plugin distribution, complete AWS-track sidebar discovery and refreshed
-capability information. This is a local release preparation, not a Marketplace
-publication. Do not run another version bump just to package this prepared version.
+You never edit version numbers by hand. Every place that carries the version is
+listed once, in `release-please-config.json` → `extra-files`, and the tools below update
+all of them together.
 
-```powershell
-npm run validate:all
-npm run test:release
-npm test
-npm run package --workspace packages/azure-migration-squad-vscode
-```
+| I want to… | Do this |
+|---|---|
+| **Ship what's on `main`** (normal) | Merge PRs whose **title** is a conventional commit (`feat: …`, `fix: …`). release-please opens a **`chore: release vscode-vX.Y.Z`** PR. Merge it. The tag, GitHub Release and Marketplace publish happen automatically. |
+| **Pick the version myself** (e.g. a patch with only `chore:`/`docs:` changes) | **Actions → Release Please → Run workflow**, enter `version` (e.g. `0.7.2`). The workflow opens a `chore: release 0.7.2` PR carrying a `Release-As` footer. Merge it, then merge the release PR it produces. |
+| **Bump the files locally** (preview / hotfix, no CI) | From the repo root: `npm run version:set -- 0.7.2` (or `--patch` / `--minor` / `--major`). Review, commit, tag yourself. |
+| **Re-publish an existing tag** | **Actions → Release VS Code extension → Run workflow**, `tag` = `vscode-v0.7.2`, `dryRun` = `false`. Publishing is skipped if that version is already on the Marketplace. |
 
-The resulting `packages/azure-migration-squad-vscode/azure-migration-squad-vscode-0.7.0.vsix`
-can be uploaded manually through the publisher's Marketplace management page.
-Publish only after review and testing. To distribute the plugin from Git, also
-commit and push `plugin.json`, `.github/plugin/marketplace.json` and their referenced
-content. Publishing the VSIX alone does not publish the plugin manifests.
+<!-- x-release-please-start-version -->
+Current source version: **0.7.1**. A local `npm run package` produces
+`packages/azure-migration-squad-vscode/azure-migration-squad-vscode-0.7.1.vsix`.
+<!-- x-release-please-end -->
 
-Keep `.release-please-manifest.json` at the last released version until the release
-is actually recorded; an unpublished local preview is not a completed release.
+**Adding a version to a new file?** Wrap it in `x-release-please-start-version` /
+`x-release-please-end` markers (or put `x-release-please-version` on the same line) and add
+the file to `extra-files` with `"type": "generic"`. `npm run validate:plugin` fails if any
+listed file has a version that doesn't match the extension's `package.json`. Prefer
+version-free wording in prose ("the extension also ships…") so most docs never need markers.
+
+To distribute the plugin from Git, also commit and push `plugin.json`,
+`.github/plugin/marketplace.json` and their referenced content. Publishing the VSIX alone
+does not publish the plugin manifests.
 
 ---
 
@@ -94,7 +99,7 @@ Go to https://github.com/RobertoBorges/GHCP-PromptMigration/settings/secrets/act
 | `VSCE_PAT` | The Azure DevOps PAT from Step 2 | **Required** |
 | `RELEASE_PLEASE_TOKEN` | A GitHub Fine-Grained PAT with `contents:write` + `pull-requests:write` | Optional but recommended (see note below) |
 
-**About `RELEASE_PLEASE_TOKEN`:** When release-please creates the tag using the default `GITHUB_TOKEN`, GitHub does NOT trigger downstream workflows (a security feature). So `release-vscode-extension.yml` won't fire, and nothing publishes. If you provide `RELEASE_PLEASE_TOKEN`, the tag fires downstream workflows normally. Without it, you'll need to push the tag manually.
+**About `RELEASE_PLEASE_TOKEN`:** Publishing no longer depends on it. When release-please creates a release, `release-please.yml` calls `release-vscode-extension.yml` directly (a reusable-workflow call), so the Marketplace publish runs even with the default `GITHUB_TOKEN`. The PAT is still useful because PRs opened with `GITHUB_TOKEN` (the release PR and the "Pick the version myself" PR) **do not trigger CI checks**. If your branch rules require checks, set the PAT, or close and reopen the PR to start them.
 
 Create the PAT at https://github.com/settings/personal-access-tokens/new. Scope it to this single repo with `contents:write` + `pull-requests:write`.
 
@@ -107,6 +112,8 @@ Create the PAT at https://github.com/settings/personal-access-tokens/new. Scope 
 ### Step 1 — Write conventional commits
 
 Use `feat:` / `fix:` / `perf:` / `feat!:` prefixes so release-please can categorize them. See [`docs/conventional-commits.md`](./conventional-commits.md).
+
+> **The PR title is what counts.** With squash merge, GitHub turns the PR title into the commit on `main`. The **PR title** check (`.github/workflows/pr-title.yml`) flags titles that release-please can't read. A title like "Add Migration Complexity Model" produces no release PR.
 
 Example:
 
@@ -128,9 +135,9 @@ On the merge to `main`, the `.github/workflows/release-please.yml` workflow runs
 - Opens (or updates) a PR titled **`chore(main): release vscode-v0.2.1`** with coordinated changes:
   1. `packages/azure-migration-squad-vscode/package.json` — version bumped
   2. `packages/azure-migration-squad-vscode/CHANGELOG.md` — new entry with the commits
-  3. `plugin.json`, `.github/plugin/marketplace.json` and the workspace lockfile — matching versions
+  3. `plugin.json`, `.github/plugin/marketplace.json`, the workspace lockfile and version-marked docs — matching versions (everything in `extra-files`)
 
-If there are no `feat:` / `fix:` / `perf:` / breaking commits since the last release, **no Release PR opens.** That's by design — chore/docs/refactor changes shouldn't trigger a release.
+If there are no `feat:` / `fix:` / `perf:` / breaking commits since the last release, **no Release PR opens.** That's by design. To release anyway, use **Run workflow → version** (see the cheat sheet above).
 
 ### Step 4 — Review + merge the Release PR
 
@@ -143,12 +150,12 @@ The moment the Release PR merges, release-please:
 - Creates a git tag `vscode-v0.2.1`
 - Creates a GitHub Release with the changelog content
 
-The tag push triggers `.github/workflows/release-vscode-extension.yml`, which:
+In the same workflow run, the `publish` job calls `.github/workflows/release-vscode-extension.yml` with the new tag. A manually pushed `vscode-v*` tag triggers it too. It:
 
-- Runs the tag-vs-package.json version guard (fail-fast on mismatch)
+- Checks out the tag and runs the tag-vs-package.json version guard (fail-fast on mismatch)
 - Builds the extension (`npm run sync && npm run build`)
 - Packages the `.vsix` (`vsce package`)
-- Publishes to VS Code Marketplace (`vsce publish` with `VSCE_PAT`)
+- Publishes to VS Code Marketplace (`vsce publish` with `VSCE_PAT`), unless that version is already listed, so re-runs are safe
 - Uploads two workflow artifacts (90-day retention):
   - **`vscode-extension-<run>`** — the `.vsix` itself
   - **`agent-content-pack-<run>`** — the raw `.github/{agents,skills,hooks}` tree plus `copilot-instructions.md` and `MIGRATION-START-HERE.md`, for users who want the agent content without installing the extension
@@ -188,6 +195,9 @@ npm run release:local -- --patch
 npm run release:local -- --minor
 npm run release:local -- --major
 
+# Set an exact version (from the repo root: no prompt, no build)
+npm run version:set -- 0.7.2
+
 # Skip the confirmation prompt (CI-friendly)
 npm run release:local -- --patch --yes
 
@@ -206,7 +216,7 @@ npm run release:local -- --patch --tag-prefix=my-prefix-v
 4. Decides the semver bump (or uses the flag you passed)
 5. Shows you the plan (version + CHANGELOG entry)
 6. Asks confirmation (unless `--yes` or `--dry-run`)
-7. Updates the extension, plugin, marketplace and workspace lockfile versions
+7. Updates the extension version plus every `extra-files` entry in `release-please-config.json` (plugin, marketplace, workspace lockfile, version-marked docs)
 8. Prepends a new entry to `CHANGELOG.md`
 9. Runs `npm run build && npm run package` to produce the versioned `.vsix`
 
@@ -238,10 +248,11 @@ git push origin HEAD vscode-v0.2.1
 | `Version X.Y.Z already published` | You retagged the same version | Bump the version (via release-please or `--patch`), commit, retag |
 | `Missing required field 'icon'` | `media/icon.png` is missing | `git status` and confirm it's committed |
 | `License field is required` | LICENSE file not in `.vsix` | Verify `.vscodeignore` doesn't exclude `LICENSE` |
-| **release-please doesn't open a PR** | No `feat:` / `fix:` / `perf:` commits since last release | That's by design — only `feat/fix/perf` + breaking changes trigger releases. Add a `feat:` commit if you want to force one, or use the local flow. |
-| **Tag pushed but marketplace didn't publish** | The tag was created by the default `GITHUB_TOKEN` (release-please), which doesn't trigger downstream workflows | Set `RELEASE_PLEASE_TOKEN` (see Step 3 above), OR push the tag manually |
+| **release-please doesn't open a PR** | No `feat:` / `fix:` / `perf:` commits since last release. Often a PR was squash-merged with a non-conventional title. | Run **Actions → Release Please → Run workflow** with `version` set. Going forward, keep the PR-title check green. |
+| **Release created but Marketplace didn't publish** | The `publish` job failed (usually `VSCE_PAT`) | Fix the secret, then **Actions → Release VS Code extension → Run workflow** with `tag` and `dryRun=false` |
 | **`agent-content-pack` artifact is only a few KB** | The upload step lost `include-hidden-files: true`, so `upload-artifact` skipped the `.github` dot-directory | Restore `include-hidden-files: true` on the upload step. The staged-file-count guard should fail the build first — check the "Stage agent content pack" step output |
-| `Tag $TAG does not match package.json version` | You bumped one without the other | Never edit `package.json` version by hand — use release-please or the local script |
+| `Tag $TAG does not match package.json version` | You bumped one without the other | Never edit `package.json` version by hand — use release-please or `npm run version:set` |
+| `validate:plugin` says a doc version is stale | A version-marked doc wasn't updated | `npm run version:set -- <current version>` rewrites every marked location |
 
 ---
 

@@ -24,13 +24,24 @@ function fixture(t) {
   });
   writeJson('package-lock.json', { packages: { [packagePath]: { version: '0.6.0' } } });
   writeJson('.release-please-manifest.json', { [packagePath]: '0.6.0' });
+  copyFileSync(path.join(repo, 'release-please-config.json'), path.join(root, 'release-please-config.json'));
+  const doc = path.join(root, 'docs', 'publishing-vscode-extension.md');
+  mkdirSync(path.dirname(doc), { recursive: true });
+  writeFileSync(doc, [
+    'Example tag vscode-v0.2.1 stays untouched.',
+    '<!-- x-release-please-start-version -->',
+    'Current source version: **0.6.0** → azure-migration-squad-vscode-0.6.0.vsix',
+    '<!-- x-release-please-end -->',
+    '',
+  ].join('\n'));
   const script = path.join(root, packagePath, 'scripts', 'local-release.mjs');
   mkdirSync(path.dirname(script), { recursive: true });
   copyFileSync(path.join(repo, packagePath, 'scripts', 'local-release.mjs'), script);
   execFileSync('git', ['init', '--quiet', root]);
   return {
     read: (file) => JSON.parse(readFileSync(path.join(root, file), 'utf8')),
-    run: (...args) => execFileSync(process.execPath, [script, '--minor', ...args], {
+    readText: (file) => readFileSync(path.join(root, file), 'utf8'),
+    run: (...args) => execFileSync(process.execPath, [script, ...args], {
       cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'],
     }),
   };
@@ -38,7 +49,7 @@ function fixture(t) {
 
 test('Local release updates every distributed version without marking it published', (t) => {
   const { read, run } = fixture(t);
-  run('--yes', '--no-build');
+  run('--minor', '--yes', '--no-build');
   assert.equal(read(`${packagePath}/package.json`).version, '0.7.0');
   assert.equal(read('plugin.json').version, '0.7.0');
   assert.equal(read('.github/plugin/marketplace.json').plugins[0].version, '0.7.0');
@@ -46,9 +57,19 @@ test('Local release updates every distributed version without marking it publish
   assert.equal(read('.release-please-manifest.json')[packagePath], '0.6.0');
 });
 
+test('Explicit version updates JSON files and only marked doc versions', (t) => {
+  const { read, readText, run } = fixture(t);
+  run('0.6.3', '--yes', '--no-build');
+  assert.equal(read(`${packagePath}/package.json`).version, '0.6.3');
+  assert.equal(read('plugin.json').version, '0.6.3');
+  const doc = readText('docs/publishing-vscode-extension.md');
+  assert.match(doc, /\*\*0\.6\.3\*\* → azure-migration-squad-vscode-0\.6\.3\.vsix/);
+  assert.match(doc, /vscode-v0\.2\.1 stays untouched/);
+});
+
 test('Local release dry-run leaves extension, plugin, marketplace and lockfile unchanged', (t) => {
   const { read, run } = fixture(t);
-  run('--dry-run');
+  run('--minor', '--dry-run');
   assert.equal(read(`${packagePath}/package.json`).version, '0.6.0');
   assert.equal(read('plugin.json').version, '0.6.0');
   assert.equal(read('.github/plugin/marketplace.json').plugins[0].version, '0.6.0');
