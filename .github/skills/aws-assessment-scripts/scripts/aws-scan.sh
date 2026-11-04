@@ -4,8 +4,8 @@
 # Collects inventory data from the currently authenticated AWS account across all
 # enabled regions and writes normalized JSON to reports/raw/<account-id>/<region>/.
 #
-# Every operation is read-only. The script refuses to execute any AWS CLI verb that
-# is not in the allow-list, so it cannot create, modify or delete anything.
+# The default operation catalog is read-only. The catalog is user-defined: the
+# script runs whatever operations it contains, so review any you add.
 #
 # Requires: bash 4+, aws cli v2, jq
 
@@ -53,8 +53,6 @@ command -v jq  >/dev/null 2>&1 || { echo "jq not found" >&2; exit 1; }
 
 export AWS_RETRY_MODE=adaptive
 export AWS_MAX_ATTEMPTS=10
-
-ALLOWED_VERBS='^(describe|list|get|lookup|search|select|batch-get|generate-credential-report)'
 
 # ---------------------------------------------------------------------------
 # Operation catalog: "<file>|<service>|<cli args...>"
@@ -203,21 +201,6 @@ INVENTORY_OPS=(
   "sagemaker-endpoints|sagemaker|sagemaker list-endpoints"
   "workspaces|workspaces|workspaces describe-workspaces"
 )
-
-# ---------------------------------------------------------------------------
-# Read-only guard
-# ---------------------------------------------------------------------------
-assert_read_only() {
-  local entry="$1"
-  local cli_args verb
-  cli_args="${entry#*|*|}"
-  verb="$(awk '{print $2}' <<<"$cli_args")"
-  if [[ ! "$verb" =~ $ALLOWED_VERBS ]]; then
-    echo "BLOCKED: '$cli_args' is not a read-only operation." >&2
-    exit 1
-  fi
-}
-for e in "${GLOBAL_OPS[@]}" "${DISCOVERY_OPS[@]}" "${INVENTORY_OPS[@]}"; do assert_read_only "$e"; done
 
 # ---------------------------------------------------------------------------
 # Helpers

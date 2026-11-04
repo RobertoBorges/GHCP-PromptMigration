@@ -377,7 +377,18 @@ Create comprehensive `reports/Application-Assessment-Report.md` with:
 ### Step 5: Cutover & Validation
 
 ## Effort Estimation
-[Timeline and resource estimates per phase]
+
+Source: `complexity` block in `reports/Capability-Matrix.yaml` (method: `.github/skills/migration-artifacts/references/complexity-model.md`, numbers: `complexity-model.yaml`). If the block is missing, rate it now with the same model. Do not invent a separate scale.
+
+| Item | Value |
+|------|-------|
+| Lines of code | [complexity.loc.total] ([complexity.loc.method]) |
+| Complexity level | [Low / Medium / High / Very High] (score [NN]/100; floor rules: [ids or none]) |
+| Total effort | [min]–[max] weeks ([strategy] × [factor]) [provisional?] |
+| Baseline team | [baseline_team] |
+| Top drivers | [2–3 drivers] |
+
+[Per-phase breakdown table: phase, weeks, lead role. Phase weeks must sum to the total range. List effort_scope includes/excludes as assumptions.]
 
 ## Cost Estimation (T-Shirt Sizing)
 

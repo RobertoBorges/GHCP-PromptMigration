@@ -1,0 +1,149 @@
+# Migration Complexity Model — calibration file
+#
+# SINGLE SOURCE OF TRUTH for every number used to rate migration complexity and
+# estimate effort. The method is described in complexity-model.md (same folder).
+#
+# Edit this file to tune the model to your team. After each completed migration,
+# append an entry to `calibration_log` (estimated vs. actual weeks) and adjust
+# weights / thresholds / weeks when the estimates drift. Bump `model_version`
+# whenever you change a number so reports can show which version produced them.
+
+model_version: "1.0"
+
+# ---------------------------------------------------------------------------
+# Dimensions — each rated 1 (simple) … 5 (very hard). Weights must sum to 1.0.
+# ---------------------------------------------------------------------------
+dimensions:
+  code_size:
+    weight: 0.20
+    label: Code size
+    # Lines of code, excluding vendored / generated / third-party / minified files.
+    loc_bands:            # rating: upper bound (exclusive) of LOC
+      1: 10000
+      2: 50000
+      3: 200000
+      4: 1000000
+      5: null             # >= 1,000,000
+  stack_gap:
+    weight: 0.15
+    label: Stack & runtime modernization gap
+  integrations:
+    weight: 0.15
+    label: Integrations
+    count_bands:          # rating: max integration count (inclusive)
+      1: 2
+      2: 5
+      3: 10
+      4: 20
+      5: null             # > 20
+    legacy_protocol_bump: 1   # +1 (capped at 5) if any SOAP/WCF, JMS, MSMQ, SMB/FTP, COM/DCOM, mainframe link
+  data:
+    weight: 0.15
+    label: Data
+  architecture:
+    weight: 0.10
+    label: Architecture, state & jobs
+  azure_blockers:
+    weight: 0.10
+    label: Azure compatibility blockers
+  identity_compliance:
+    weight: 0.10
+    label: Identity, security & compliance
+  delivery_readiness:
+    weight: 0.05
+    label: Delivery readiness & cutover
+
+# ---------------------------------------------------------------------------
+# Score → level. score = round((weighted_rating - 1) / 4 * 100), range 0–100.
+# ---------------------------------------------------------------------------
+levels:
+  - name: Low
+    min_score: 0
+    weeks: { min: 1, max: 2 }
+  - name: Medium
+    min_score: 30
+    weeks: { min: 3, max: 5 }
+  - name: High
+    min_score: 55
+    weeks: { min: 6, max: 10 }
+  - name: Very High
+    min_score: 75
+    weeks: { min: 10, max: 16 }
+
+# ---------------------------------------------------------------------------
+# Floor rules — the level is raised to at least `min_level` when a rule fires.
+# Floors never lower a level. Report every rule that fired.
+# ---------------------------------------------------------------------------
+floor_rules:
+  - id: loc-1m
+    when: "loc >= 1000000"
+    min_level: High
+  - id: loc-5m
+    when: "loc >= 5000000"
+    min_level: Very High
+  - id: legacy-4gl
+    when: "stack.primary_stack in [oracle-forms, powerbuilder, delphi-vb6]"
+    min_level: High
+  - id: integration-fanout
+    when: "integration_count > 20"
+    min_level: High
+  - id: db-engine-change-heavy-logic
+    when: "database engine changes AND stored procedures + triggers + packages > 100"
+    min_level: High
+  - id: very-large-data
+    when: "data.data_gravity == very-large"
+    min_level: High
+
+# Sources where no estimate is produced — escalate instead.
+no_estimate_when:
+  - "source.primary_adapter == source-unsupported-escalation"
+  - "risk_flags contains saas-embedded"
+
+# ---------------------------------------------------------------------------
+# Effort — weeks = level weeks × strategy factor (rounded: min down, max up).
+# Baseline weeks assume a refactor-style migration by the baseline team below.
+# ---------------------------------------------------------------------------
+strategy_factors:
+  rehost: 0.5
+  replatform: 0.8
+  refactor: 1.0
+  rearchitect: 1.5
+  rebuild: 2.0
+  retire: 0.0       # no migration effort; report decommission effort separately
+  retain: 0.0
+
+baseline_team: "2 engineers + 1 part-time architect"
+
+# If any dimension with weight >= this value has evidence_confidence: low,
+# extend `max` to the next level's max and mark the estimate provisional.
+low_confidence:
+  weight_threshold: 0.15
+  provisional_label: provisional
+
+# What the estimate covers / excludes. Shown verbatim in reports.
+effort_scope:
+  includes:
+    - Code and configuration changes
+    - Infrastructure as code and pipelines
+    - Deployment to Azure and technical validation
+    - Cutover rehearsal and go-live support
+  excludes:
+    - Business user acceptance testing (UAT) and sign-off cycles
+    - Organizational change, training and procurement / licensing lead time
+    - Long-running bulk data copy windows for very large datasets
+    - Waiting time on external teams (network, security approvals)
+
+# ---------------------------------------------------------------------------
+# Calibration log — append one entry per completed migration.
+# ---------------------------------------------------------------------------
+calibration_log: []
+#  - app: <name>
+#    date: <YYYY-MM-DD>
+#    model_version: "1.0"
+#    score: 62
+#    level: High
+#    strategy: refactor
+#    estimated_weeks: { min: 6, max: 10 }
+#    actual_weeks: 9
+#    team: "2 engineers + 1 part-time architect"
+#    notes: <what drove the variance>

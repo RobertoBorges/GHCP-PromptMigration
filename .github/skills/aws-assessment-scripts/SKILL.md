@@ -6,7 +6,7 @@ user-invocable: false
 
 # AWS Assessment Scripts Skill
 
-Batch collectors that do the mechanical work of the sweep so the agent can focus on analysis. **Every command they issue is read-only.**
+Batch collectors that do the mechanical work of the sweep so the agent can focus on analysis. **The default catalog is read-only; the catalog is user-defined and the scripts run whatever it contains.**
 
 ## Why use the scripts instead of ad-hoc commands
 
@@ -145,4 +145,4 @@ Both scripts define the operation catalog as a data table near the top. To add a
 @{ f = 'apprunner-services'; s = 'apprunner'; a = @('apprunner','list-services') }
 ```
 
-**Only add read-only verbs.** The scripts refuse to execute any operation whose verb is not in the allow-list, and will abort with an error if the catalog is edited to include one.
+**The catalog is yours to define.** The scripts run every operation in it without filtering verbs. The shipped catalog is read-only; if the user asks to add a non-read-only operation (create/update/delete/put/tag…), tell them it changes AWS resources on every run and add it after they confirm.

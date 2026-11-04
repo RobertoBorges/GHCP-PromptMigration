@@ -1,6 +1,6 @@
 ---
 name: assess-any-application
-description: "Universal application-to-Azure migration intake. Discovers ANY application (any source, any stack, any workload) and produces a Discovery Dossier + Capability Matrix that every downstream Phase skill consumes."
+description: "Universal application-to-Azure migration intake. Discovers ANY application (any source, any stack, any workload), measures lines of code, rates migration complexity (Low/Medium/High/Very High) with an effort estimate in weeks, and produces a Discovery Dossier + Capability Matrix that every downstream Phase skill consumes, plus an HTML Discovery Report."
 user-invocable: true
 disable-model-invocation: true
 ---
@@ -35,7 +35,9 @@ You are the **Discovery Engineer**. Your job is to take an unknown application �
 
 1. `reports/Discovery-Dossier.md` — narrative + evidence
 2. `reports/Capability-Matrix.yaml` — mechanical contract for Phase skills
-3. A migration strategy recommendation with alternatives + rationale
+3. `reports/Discovery-Report.html` — self-contained HTML version of the dossier for stakeholders
+4. A migration strategy recommendation with alternatives + rationale
+5. Lines of code, a migration complexity level (Low / Medium / High / Very High) and an effort estimate in weeks
 
 You are **not** the Architect. You produce evidence and classification; the Architect approves and finalizes the target architecture.
 
@@ -89,6 +91,9 @@ constraints:
 - `#file:.github/skills/migration-decisions/references/migration-strategy-decision-tree.md`
 - `#file:.github/skills/stack-adapters/references/stack-detection.md`
 - `#file:.github/skills/migration-artifacts/references/migration-plan-template.md`
+- `#file:.github/skills/migration-artifacts/references/complexity-model.md`
+- `#file:.github/skills/migration-artifacts/references/complexity-model.yaml`
+- `#file:.github/skills/migration-artifacts/references/discovery-report-template.html`
 
 ## Source Adapter Skills (pick one)
 
@@ -143,6 +148,7 @@ Document choice in dossier:
 Run the active source adapter to extract:
 
 - **Inventory:** files, sizes, languages, frameworks detected, manifests (`*.csproj`, `pom.xml`, `package.json`, `requirements.txt`, `composer.json`, `Cargo.toml`, `go.mod`, `Gemfile`, `setup.py`, `Makefile`, etc.)
+- **Lines of code (mandatory):** count non-blank lines per language, excluding vendored, generated, minified and dependency folders (`node_modules`, `bin`, `obj`, `dist`, `build`, `out`, `target`, `vendor`, `packages`, `.git`, virtualenvs). Use `scc` or `cloc` if installed, otherwise the PowerShell/Bash fallback in `complexity-model.md` → *Measuring lines of code*. Count test code separately. Record total, per-language breakdown and the method used. For binary-source 4GLs (Oracle Forms, PowerBuilder), count forms/windows/reports instead. For `describe-only` sources, ask the user for an order-of-magnitude figure (confidence `low`).
 - **Runtime fingerprint:** target framework version, app server, container base image (if any)
 - **Build system:** msbuild / maven / gradle / npm / pip / composer / make / cmake / bundler / cargo / etc.
 - **Configuration:** env vars, config files, secret references, connection strings (redact values)
@@ -253,32 +259,61 @@ For **each miss** (file not found):
    - <UTC> | actor=Assess-Any-Application | action=gap-skipped-session-wide | tokens=~0 | turn=<n> | notes="user declined skill-creator for the session"
    ```
 
-After processing all gaps (or if there are none), proceed to Step 9.
+After processing all gaps (or if there are none), proceed to Step 8.6.
+
+## Step 8.6 — Migration Complexity & Effort
+
+Rate how hard this migration is and convert it to an effort range. Follow `.github/skills/migration-artifacts/references/complexity-model.md`; **read every weight, band, threshold, floor rule, week range and strategy factor from `complexity-model.yaml`** (never hard-code them).
+
+1. **Rate the 8 dimensions 1–5** using the rubric and the evidence from Steps 3–7: code size (lines of code from Step 3), stack & runtime gap, integrations, data, architecture/state/jobs, Azure compatibility blockers, identity/security/compliance, delivery readiness & cutover. Each rating cites evidence and carries its `evidence_confidence`. No evidence → rate 3 with confidence `low`.
+2. **Score:** `weighted = Σ weight × rating`; `score = round((weighted − 1) / 4 × 100)` (0–100). Map to a level (default: Low < 30, Medium 30–54, High 55–74, Very High ≥ 75).
+3. **Floor rules:** apply `floor_rules` (e.g., ≥ 1M lines of code → at least High; legacy 4GL → at least High). Floors only raise the level. Record which fired.
+4. **Effort:** level weeks (default Low 1–2, Medium 3–5, High 6–10, Very High 10–16) × strategy factor for the Step 8 recommendation (rehost 0.5, replatform 0.8, refactor 1.0, rearchitect 1.5, rebuild 2.0). If a dimension weighted ≥ 0.15 has `low` confidence, widen the max to the next level and mark the estimate **provisional**.
+5. **Unsupported sources** (`source-unsupported-escalation`, `saas-embedded`): set `level: not-estimated` and point to the escalation playbook.
+6. Pick the 2–3 **top drivers** (highest weight × rating) and phrase them in plain language.
+7. Show the user a short summary before writing artifacts:
+
+   > **Complexity: <Level> (score <NN>/100)** · <N> lines of code · **Effort: <min>–<max> weeks** (<strategy>, <baseline team><, provisional>) · Drivers: <top drivers>
+
+The user may override any rating with a reason. Record the override in the dimension's `evidence` (`user override: <reason>`), and log it in `reports/Decision-Log.md`.
+
+Proceed to Step 9.
 
 ## Step 9 — Capability Matrix
 
 Emit `reports/Capability-Matrix.yaml` using the schema in `.github/skills/migration-artifacts/references/capability-matrix.md`.
 
-Every field must be populated (use `unknown` if truly unknown, with confidence `low` and a corresponding `unresolved_question`).
+Every field must be populated (use `unknown` if truly unknown, with confidence `low` and a corresponding `unresolved_question`). Include the `complexity:` block from Step 8.6 (lines of code, 8 rated dimensions, score, level, floor rules applied, effort weeks).
 
 ## Step 10 — Discovery Dossier
 
 Emit `reports/Discovery-Dossier.md` using the template in `.github/skills/migration-artifacts/references/discovery-dossier-template.md`. Structure:
 
-1. Executive summary (5 lines)
+1. Executive summary (5 lines + size / complexity / effort line)
 2. Application identity (name, owner, purpose)
 3. Source profile (with evidence + confidence)
-4. Stack profile (with evidence + confidence)
+4. Stack profile (with evidence + confidence, **including the lines-of-code table per language**)
 5. Workload profile (with evidence + confidence)
 6. Data profile (with evidence + confidence)
 7. Integration map
 8. Risks & compliance flags
 9. Migration strategy recommendation (with alternatives + rationale + decision tree path)
-10. Target Azure candidates
-11. Required specialists
-12. Unresolved questions + recommended next probes
-13. Assumptions
-14. Handoff note for the Architect
+10. Migration complexity & effort (score, level, 8-dimension table, floor rules, effort weeks + assumptions)
+11. Target Azure candidates
+12. Required specialists
+13. Unresolved questions + recommended next probes
+14. Assumptions
+15. Handoff note for the Architect
+
+## Step 10.5 — HTML Discovery Report
+
+Render `reports/Discovery-Report.html` from `.github/skills/migration-artifacts/references/discovery-report-template.html`, following the filling rules in the template's header comment:
+
+- Fill every `{{TOKEN}}` from the Capability Matrix and Dossier you just wrote. **Do not add facts that are not in those files.**
+- Show lines of code as a headline tile and in the Code size section (per-language table with share bars).
+- Show complexity as the gauge, level badge, 8 dimension bars and the effort box (with strategy factor, baseline team, includes/excludes and the provisional note when applicable).
+- Keep it a single self-contained file: inline CSS only, no external scripts, fonts or CDNs. Print-friendly.
+- The Markdown dossier and YAML matrix remain the source of truth for Phase skills; the HTML is the stakeholder view.
 
 ## Step 11 — Handoff
 
@@ -290,8 +325,12 @@ End the skill with:
 Artifacts:
 - reports/Discovery-Dossier.md
 - reports/Capability-Matrix.yaml
+- reports/Discovery-Report.html
 
 Recommended strategy: <X>
+Size: <N> lines of code (<method>)
+Complexity: <Low/Medium/High/Very High> (score <NN>/100)
+Estimated effort: <min>–<max> weeks (<strategy> × <factor>, <baseline team><, provisional>)
 Confidence: source=<H/M/L>, stack=<H/M/L>, workload=<H/M/L>, data=<H/M/L>
 Open questions: <count>
 Risk flags: <list>
@@ -302,7 +341,7 @@ Next: /build-migration-plan
 Also append a one-line entry to `reports/Decision-Log.md`:
 
 ```
-Discovery-<app-name>: strategy=<X>, source=<adapter>, stack=<primary>, confidence=<H/M/L>, flags=<list>
+Discovery-<app-name>: strategy=<X>, source=<adapter>, stack=<primary>, loc=<N>, complexity=<level>(<score>), effort=<min>-<max>w, confidence=<H/M/L>, flags=<list>
 ```
 
 ---
@@ -326,10 +365,13 @@ Before completing:
 - [ ] One or more stack adapters selected and applied
 - [ ] One or more workload patterns selected and applied
 - [ ] Data + integration map populated
+- [ ] Lines of code measured (total + per language + method), test code counted separately
 - [ ] Adaptive follow-ups triggered only where relevant
 - [ ] Migration strategy decision tree applied (with alternatives + rationale)
+- [ ] Complexity rated: 8 dimensions with evidence, score, level, floor rules, effort weeks (values read from `complexity-model.yaml`)
 - [ ] Risk flags populated
-- [ ] `reports/Discovery-Dossier.md` written
-- [ ] `reports/Capability-Matrix.yaml` written
+- [ ] `reports/Discovery-Dossier.md` written (15 sections)
+- [ ] `reports/Capability-Matrix.yaml` written (including `complexity:`)
+- [ ] `reports/Discovery-Report.html` written from the template (self-contained, no external assets)
 - [ ] `reports/Decision-Log.md` updated with one-line entry
 - [ ] Handoff note delivered (next command: `/build-migration-plan`)

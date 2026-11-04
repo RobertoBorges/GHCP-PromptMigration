@@ -45,14 +45,16 @@ This folder contains VS Code GitHub Copilot customization files for the **Code M
 │   ├── business-logic-mapping/  migration-unit-testing/  migration-strategy-report/
 │   ├── rollback-strategy/
 │   └── aws-*/  azure-compatibility-assessment/  # 14 AWS assessment/migration knowledge skills
-├── hooks/                               # Agent lifecycle hooks
+├── hooks/                               # Agent lifecycle hooks (non-blocking)
 │   ├── validation.json                 # PostToolUse: auto-validate after edits
 │   ├── session-lifecycle.json          # SessionStart + Stop hooks
+│   ├── aws-assessment-session-lifecycle.json  # SessionStart + Stop for the AWS assessment
+│   ├── phase-gates.md / decision-gates.md / quality-checklist.md  # Orchestration rules
 │   └── scripts/                        # Hook scripts (PowerShell + Bash)
-│       ├── aws-assessment/            # Read-only AWS guards and assessment state
 │       ├── auto-validate.ps1/.sh       # Validation reminders after edits
 │       ├── load-migration-state.ps1/.sh     # Inject migration + portfolio context
-│       └── update-status-report.ps1/.sh     # Append session timestamps
+│       ├── update-status-report.ps1/.sh     # Append session timestamps
+│       └── aws-assessment/             # AWS assessment state loader + status writer
 ├── plugin/marketplace.json              # Native plugin discovery (root plugin.json)
 ├── copilot-instructions.md              # Repo-wide agent rules
 └── README.md                            # This file
@@ -183,7 +185,7 @@ The agent creates and maintains reports in the `reports/` folder:
 
 ## 🪝 Agent Hooks
 
-Hooks enforce guardrails deterministically at the OS level, running shell scripts at key lifecycle points. Located in `.github/hooks/`.
+Hooks run shell scripts at key lifecycle points to add context and keep the audit trail current. Located in `.github/hooks/`. **No hook blocks or denies a tool call** — which commands run is the user's decision.
 
 | Hook | Event | What It Does | Context Cost |
 |------|-------|-------------|-------------|

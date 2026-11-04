@@ -109,6 +109,9 @@ async function cmdInitialize(
         });
         out.appendLine(`  Copied: ${result.copied} file(s)`);
         out.appendLine(`  Skipped (already present): ${result.skipped} file(s)`);
+        for (const rel of result.removedFiles) {
+          out.appendLine(`  Removed obsolete: ${rel}`);
+        }
         out.appendLine('◀ done');
         vscode.window.showInformationMessage(
           `Azure Migration Agent: ${result.copied} file(s) installed${

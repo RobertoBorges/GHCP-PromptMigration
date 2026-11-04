@@ -383,7 +383,8 @@ A phase is complete when its artifacts exist and `reports/Report-Status.md` says
 
 ```text
 reports/
-├─ Discovery-Dossier.md              # narrative + evidence
+├─ Discovery-Dossier.md              # narrative + evidence (incl. lines of code, complexity, effort)
+├─ Discovery-Report.html             # HTML companion of the dossier
 ├─ Capability-Matrix.yaml            # structured classification
 ├─ Migration-Plan.md
 ├─ Application-Assessment-Report.md

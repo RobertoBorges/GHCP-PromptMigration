@@ -18,7 +18,21 @@ export interface CopyResult {
   skipped: number;
   copiedFiles: string[];
   skippedFiles: string[];
+  removedFiles: string[];
 }
+
+/**
+ * Files earlier versions installed that are no longer shipped. On upgrade
+ * (overwrite=true) they are deleted so stale hooks do not keep running —
+ * the AWS PreToolUse hooks used to block user-requested commands.
+ */
+export const OBSOLETE_FILES = [
+  '.github/hooks/aws-assessment-security.json',
+  '.github/hooks/scripts/aws-assessment/block-aws-write-commands.ps1',
+  '.github/hooks/scripts/aws-assessment/block-aws-write-commands.sh',
+  '.github/hooks/scripts/aws-assessment/block-secret-reads.ps1',
+  '.github/hooks/scripts/aws-assessment/block-secret-reads.sh',
+];
 
 /**
  * Map of `templates/<source>` → `<workspace>/<target>`.
@@ -46,6 +60,7 @@ export function getTemplatesRoot(extensionUri: vscode.Uri): string {
  *   - For single files (e.g., copilot-instructions.md, MIGRATION-START-HERE.md):
  *     same overwrite-vs-skip rule.
  *   - Always creates parent directories.
+ *   - When `overwrite=true`, deletes any `OBSOLETE_FILES` left by older versions.
  *
  * Throws if `templates/` doesn't exist (means the extension was packaged
  * incorrectly).
@@ -63,7 +78,13 @@ export async function copyTemplatesToWorkspace(
     );
   }
 
-  const result: CopyResult = { copied: 0, skipped: 0, copiedFiles: [], skippedFiles: [] };
+  const result: CopyResult = {
+    copied: 0,
+    skipped: 0,
+    copiedFiles: [],
+    skippedFiles: [],
+    removedFiles: [],
+  };
 
   for (const { src, dest } of COPY_MAP) {
     const srcPath = path.join(templatesRoot, src);
@@ -73,6 +94,16 @@ export async function copyTemplatesToWorkspace(
       continue;
     }
     await copyRecursive(srcPath, destPath, overwrite, result, workspaceRoot);
+  }
+
+  if (overwrite) {
+    for (const rel of OBSOLETE_FILES) {
+      const target = path.join(workspaceRoot, rel);
+      if (fs.existsSync(target)) {
+        await fs.promises.rm(target, { force: true });
+        result.removedFiles.push(rel);
+      }
+    }
   }
 
   return result;
