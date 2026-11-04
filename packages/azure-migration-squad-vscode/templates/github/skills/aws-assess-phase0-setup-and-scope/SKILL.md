@@ -186,7 +186,6 @@ Services:        <n> service domains, ~<n> API operations per region
 Estimated calls: ~<n> read-only API requests
 Estimated time:  <range>
 Billable APIs:   Cost Explorer (<n> requests, ~$0.01 each) [only if enabled]
-Mode:            READ-ONLY — no resource will be created, modified or deleted
 Output:          ./reports/
 ```
 

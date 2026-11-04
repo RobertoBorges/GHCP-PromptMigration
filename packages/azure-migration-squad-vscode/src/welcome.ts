@@ -209,8 +209,12 @@ function renderWelcomeHtml(): string {
   <h2>What you get</h2>
   <div class="feature-grid">
     <div class="feature-card">
-      <strong>One migration agent</strong>
-      The Code Migration Modernization Agent reads .github/agents/Code-Migration-Modernization.agent.md and orchestrates the main path (Phase 1 → Phase 6) plus optional add-ons.
+      <strong>65 skills and 10 agents</strong>
+      Three entry agents cover migration, discovery and debugging. Seven specialists support the 7-step main path (Discovery + Phase 1-6) and optional tracks.
+    </div>
+    <div class="feature-card">
+      <strong>AWS specialist tracks</strong>
+      Read-only account and region inventory, dependency maps and readiness reports; AWS-to-Azure service, SDK, infrastructure and deployment migration.
     </div>
     <div class="feature-card">
       <strong>Universal source adapters</strong>
@@ -247,7 +251,9 @@ function renderWelcomeHtml(): string {
     <li><strong>Alternative intakes:</strong> <code>/build-migration-plan</code>, <code>/quick-assessment</code>, <code>/quick-triage</code>, <code>/interactive-migration-interview</code>, <code>/team-skill-assessment</code></li>
     <li><strong>Portfolio / multi-app:</strong> <code>/portfolio-strategy</code>, <code>/phase0-multi-repo-assessment</code></li>
     <li><strong>Specialized deep-dives:</strong> <code>/database-migration</code>, <code>/security-hardening</code>, <code>/cost-optimization</code></li>
-    <li><strong>Utility / recovery:</strong> <code>/phase-rollback</code>, <code>/get-status</code></li>
+    <li><strong>AWS assessment:</strong> start with <code>/aws-assess-phase0-setup-and-scope</code>; continue through discovery, inventory, enrichment, relationships, reports and Azure readiness.</li>
+    <li><strong>AWS-to-Azure migration:</strong> start with <code>/aws2azure-phase1-plan</code>; optional multi-repo assessment, code migration, infrastructure, deployment and CI/CD.</li>
+    <li><strong>Utility / recovery:</strong> <code>/phase-rollback</code>, <code>/get-status</code>, <code>/skill-creator</code></li>
   </ul>
 
   <h2>Next steps after init</h2>

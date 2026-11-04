@@ -4,7 +4,7 @@ description: |
   Generate an executive-ready Migration Strategy Report (HTML deck) from a customer portfolio — CMDB exports, RVTools/Azure Migrate inventories, DMA outputs, vendor proposals, architecture diagrams.
   **Use when:** producing a CIO-ready migration plan for a customer portfolio (apps, databases, infra, or any mix). Starts the Portfolio Planning flow for multi-app engagements.
   **Triggers:** "generate migration report", "analyze CMDB", "portfolio analysis", "migration strategy report for X", "RVTools export analysis", "Azure Migrate analysis", "portfolio assessment", "build a deck from these artifacts".
-  **Covers:** auto-detected workload pillars (Apps/DB/Infra), CAF-aligned 6 Rs classification, deterministic Microsoft / Partner / Unknown ownership, phased roadmap, dependency mapping, move groups, risks, executive HTML output.
+  **Covers:** workload detection, evidence-backed 6 Rs and ownership, per-pillar reconciliation, validation audits, financial provenance, dependency evidence, resumable HTML generation, optional bilingual reports and execution packages.
 argument-hint: "Path to the customer folder (e.g., 'generate migration strategy report for Customers/Contoso')"
 user-invocable: false
 ---
@@ -34,6 +34,13 @@ These rules ALWAYS apply when this skill is active. They are absolute. Violating
 - All classification algorithms (6 Rs, Microsoft / Partner / Unknown) MUST produce identical results for identical inputs. See [references/classification-algorithm.md](references/classification-algorithm.md). No subjective judgment in counts.
 - Verification is mandatory: classification counts MUST sum to the in-scope total. Show the math.
 
+### 4. Evidence and Delivery Gates
+- Always load [references/reporting-quality.md](references/reporting-quality.md). Complete preflight before analysis; append the real validation evidence to the run audit at every stage.
+- Compute counts from classified source records and explicit joins, never plausible percentages or subtraction-derived residuals.
+- Keep applications, database instances, databases, and VMs as separate units. Never add unlike units into a migration count.
+- Recommendations are not architecture decisions. Keep unapproved targets provisional; user-owned decision gates still apply before execution.
+- Do not declare success when required evidence or output validation failed. Report `READY`, `CONDITIONAL`, `BLOCKED`, or `FAILED` with the reason.
+
 ---
 
 ## When to Use This Skill
@@ -48,21 +55,22 @@ Use this skill when:
 Do NOT use this skill for:
 - Per-application code modernization → use the Modernize an App flow (`/phase1-plan` for single apps, `/phase0-multi-repo-assessment` for multi-repo business solutions).
 - Data migration execution → refer to Azure Database Migration Service.
-- Dependency / binary scanning → refer to AppCAT, .NET Upgrade Assistant.
+- Binary scanning → refer to stack-appropriate external assessment tools. Supplied source/configuration and dependency telemetry can be analyzed using [references/dependency-evidence.md](references/dependency-evidence.md); static findings are not proof of runtime connectivity.
 
 ---
 
 ## Workflow Overview
 
 ```
-STEP -1  Artifact Discovery       → scan customer folder, classify every file
+STEP -1  Preflight & Discovery    → validate path, snapshot inputs, manifest all files/sheets
 STEP -0.5 Workload Detection      → auto-detect Apps / DB / Infra pillars
 STEP 0   Scope Identification     → split Total Portfolio vs. In-Scope
 STEP 1   Optional WorkIQ Query    → enrich with meeting context
-STEP 2   Apply Classification     → 6 Rs + Microsoft/Partner/Unknown (see references)
+STEP 2   Apply Classification     → computed record model, 6 Rs + ownership, confidence
 STEP 3   Select Slides            → evidence-driven, per detected pillar
-STEP 4   Generate HTML Deck       → self-contained, styled per references/style-guide.md
-STEP 5   Verify & Cite            → math checks, source citations, disclaimers
+STEP 4   Generate Incrementally   → runnable skeleton, small batches, optional translations
+STEP 5   Verify & Cite            → per-pillar reconciliation, citations, final audit verdict
+OPTIONAL Execution Package       → validated JSON, PPTX and blocker/action workbook
 ```
 
 ---
@@ -71,7 +79,7 @@ STEP 5   Verify & Cite            → math checks, source citations, disclaimers
 
 Before generating ANY report:
 
-1. **List all files** in the customer folder recursively.
+1. **Validate the path and snapshot inputs** before writing outputs. Follow the accessibility, workbook-manifest, exclusion, and conflicting-source gates in [reporting-quality.md](references/reporting-quality.md). Create the audit with preflight results; a failed preflight is `BLOCKED`, not a completed report.
 2. **Classify each artifact** by type (data export, narrative, visual, assessment, vendor doc, etc.).
 3. **Read and analyze** each relevant file to extract:
    - Quantitative data (counts, scores, percentages, sizes)
@@ -81,6 +89,8 @@ Before generating ANY report:
 4. **Detect workload types** (see STEP -0.5).
 5. **Identify data density** — which slides have strong evidence vs. which would be speculative.
 6. **Determine the optimal slide set** — see [references/slides-common.md](references/slides-common.md) for the cross-pillar slide catalog.
+7. **Detect dependency evidence** from schemas and supplied first-party source/configuration, not filenames alone. If present, load [dependency-evidence.md](references/dependency-evidence.md) and record external/source/hybrid coverage.
+8. **Append discovery validation** to the audit: input and sheet manifests, detected pillars, source language, and every candidate slide's inclusion/exclusion reason.
 
 ### Supported Artifact Types
 The skill works with **any** of these — none are required:
@@ -128,12 +138,14 @@ Load reference files based on detected pillars:
 
 | Detected | Load These References |
 |---|---|
-| **Always** | [classification-algorithm.md](references/classification-algorithm.md), [slides-common.md](references/slides-common.md) |
+| **Always** | [classification-algorithm.md](references/classification-algorithm.md), [slides-common.md](references/slides-common.md), [reporting-quality.md](references/reporting-quality.md) |
 | Applications | [slides-application-pillar.md](references/slides-application-pillar.md) |
 | Databases | [slides-database-pillar.md](references/slides-database-pillar.md) |
 | Infrastructure | [slides-infrastructure-pillar.md](references/slides-infrastructure-pillar.md) |
 | Mixed | Load all relevant pillar files + run classification independently per pillar, then combine |
 | **At generation time** | [style-guide.md](references/style-guide.md) |
+| Dependency evidence or supplied customer source | [dependency-evidence.md](references/dependency-evidence.md) |
+| Optional bilingual output or execution package | [delivery-options.md](references/delivery-options.md) |
 
 ---
 
@@ -163,6 +175,8 @@ If portfolio data is available, ALWAYS split:
 **Reporting rule:** Always report BOTH numbers prominently. The Microsoft/Partner/Unknown split and 6 Rs distribution apply ONLY to In-Scope.
 
 **Never conflate total portfolio with in-scope. Always show both.**
+
+State the execution unit beside every KPI: applications, VMs/servers, DB instances, or individual databases. A DB-hosting VM is a subset of the VM inventory, not an additional VM. Count a host as removed for a PaaS option only when every hosted workload is accounted for and the host-retirement decision is evidenced; otherwise its future is unresolved.
 
 ---
 
@@ -196,9 +210,11 @@ All classification logic lives in [references/classification-algorithm.md](refer
 
 - **6 Rs (Strategy)**: Retire → Retain → Replace → Refactor → Replatform → Rehost
 - **Execution Ownership (per pillar)**: Microsoft / Partner / Unknown / (Apps only) No Migration Needed
-- **Mixed scenarios**: Run each detected pillar's algorithm independently, then combine. No double-counting.
+- **Mixed portfolios**: Run each pillar independently and show separate reconciled totals. Do not combine unlike units into a donut or migration grand total.
 
-**Source document:** Migration Service Descriptions, May 2026 (place the PDF at your workspace root locally; it is gitignored).
+**Source document:** the references use Migration Service Descriptions, May 2026 as their baseline. Verify the applicable service-description version and scope before confirming commercial eligibility. Record title, version/date, section, and any override in the audit; absent proof means provisional/Unknown, not confirmed Microsoft scope. Never silently rewrite packaged rules from a customer attachment.
+
+Create `_work/Report_Data.json` using the contract in [reporting-quality.md](references/reporting-quality.md), then run the bundled `scripts/report_data.py` validator. Use its computed per-pillar summary in every output. Preserve classified IDs, source row references, rule, rationale, confidence, and unresolved joins; the validator checks the model, not the truth of the source assessment.
 
 ---
 
@@ -230,7 +246,7 @@ All classification logic lives in [references/classification-algorithm.md](refer
 
 **Synthesis approach:**
 - When multiple artifacts overlap, cross-reference and reconcile.
-- When artifacts conflict, note the discrepancy and use the most recent/authoritative source.
+- When artifacts conflict, establish precedence from verified content/version dates or an explicit user choice. If authority is unresolved, record the blocker and ask; do not silently pick a file by its filename or filesystem modification time.
 - When data is thin for a slide, either skip it OR explicitly flag gaps as findings (gaps ARE findings).
 
 ---
@@ -243,6 +259,15 @@ Output format and styling rules are in [references/style-guide.md](references/st
 - Default: `{CustomerName}_Migration_Strategy_Report.html`
 - Save into the customer folder (same place the inputs live)
 - For iterations, append timestamp: `{CustomerName}_Migration_Strategy_Report_{YYYYMMDD}.html`
+
+### Checkpoint-First Generation
+1. Write a runnable generator into the customer folder's `_work/` directory. Load the bundled scaffold CSS, emit the cover with an **INCOMPLETE** indicator, and run it immediately.
+2. Add at most three slides per batch, rerun after each batch, and report the slide count and on-disk path. Keep classification in `Report_Data.json`, not duplicated constants in slide code.
+3. Checkpoint the completed slide IDs, input snapshot, language options, and outstanding checks in the audit. Resume from that state after interruption; do not start over or treat a partial deck as delivered.
+4. Complete the required slides and checks before removing the incomplete indicator. Always put Data Sources and Data Quality last.
+
+### Optional Delivery Modes
+Use [delivery-options.md](references/delivery-options.md) for bilingual/localized output and the execution package. Default is one HTML deck in the agreed report language. Do not silently add mandatory translations or Office dependencies.
 
 ### CRITICAL: Never Use PowerShell to Write the HTML
 PowerShell heredocs (`@"..."@`) treat `$` as variable references and silently strip all dollar signs (e.g., `$702K/mo` becomes `/mo`). This corrupts cost figures.
@@ -272,15 +297,22 @@ Before declaring the report complete:
 - App ownership sum: `Microsoft + Partner + No Migration Needed + Unknown = In-Scope total` (per pillar)
 - DB ownership sum: `Microsoft + Partner + Unknown = DB In-Scope total`
 - Infra ownership sum: `Microsoft + Partner + Unknown = Infra In-Scope total`
-- Combined-estate verification (mixed scenarios): sum of pillar totals = grand total
+- Mixed portfolios: each pillar reconciles independently; show no combined migration grand total
 - **If the math doesn't add up, recount. Do NOT adjust numbers to force a total.**
+
+### Evidence and Output Checks
+- Re-run `scripts/report_data.py`; compare every repeated KPI to the same computed summary.
+- Verify each ownership row has evidence, confidence, rationale, and a rule reference. Keep COTS vendors distinguishable inside Partner.
+- Every cost/savings figure needs a source, calculation, assumptions, currency, pricing date/region/term; use `TBD - financial model pending` when inputs are absent.
+- Verify source-file/sheet coverage, dependency limitations, all applicable slides, last-slide data quality, offline HTML, locale formatting, and interrupted-run status using [reporting-quality.md](references/reporting-quality.md).
+- Append actual validation results and the final verdict to the audit. Log meaningful stage transitions and artifact production to `reports/Report-Status.md` using the [Action Log contract](../migration-artifacts/references/action-log-format.md).
 
 ### Required Disclaimers (ALWAYS include)
 1. **Execution Ownership slide:** *"This classification is based on currently available CMDB data. Workloads may move between buckets (Microsoft, Partner, or Unknown) as further discovery and assessment activities provide additional clarity."*
-2. **Assessment Tooling Gap:** Flag that Python, Node.js, Angular, React, PHP, Ruby have NO automated pre-migration blocker detection (unlike .NET/Java). Add 20-30% buffer for these stacks.
+2. **Assessment Tooling Gap:** State which compatibility tools were actually run, their scope and date, and which readiness claims remain inferred. Do not infer that a language has no tooling or add an unexplained fixed effort buffer.
 
 ### Citation
-Cite the source document ONCE (e.g., *"Migration Service Descriptions, May 2026"*) without explaining what changed between versions. The report is a deliverable, not a changelog.
+Cite the governing scope document concisely on the ownership slide and cite quantitative claims where they appear. Keep version comparisons, row-level calculations, and detailed execution traces in the audit. The report is a deliverable, not a changelog.
 
 ---
 
@@ -290,7 +322,7 @@ When the data is primarily infrastructure-focused, always evaluate and present t
 
 | Option | When to Recommend | Key Value |
 |---|---|---|
-| **Azure IaaS VMs (Lift & Shift)** | Default for all infra workloads | Granular control, Azure-native monitoring, path to PaaS modernization |
+| **Azure IaaS VMs (Lift & Shift)** | Evidence supports like-for-like migration and the customer chooses it | Granular control, Azure-native monitoring, path to PaaS modernization |
 | **Azure VMware Solution (AVS)** | VMware estates; large VM counts; operational continuity priority | vMotion-native migration, minimal change, fastest time-to-cloud |
 | **Azure Arc (Hybrid Management)** | VMs that CANNOT move (regulatory, latency, data sovereignty, vendor lock-in); phased migrations where some stay on-prem | Unified management plane, Azure Policy from on-prem, bridge to full migration |
 
@@ -314,6 +346,7 @@ When a user asks to update an existing report:
 2. Identify what's new (new artifacts, updated counts, new decisions).
 3. Re-run only the affected slides (preserve deterministic counts if input data didn't change).
 4. Save as `{CustomerName}_Migration_Strategy_Report_{YYYYMMDD}.html` and keep the prior version.
+5. Use a unique run timestamp when an output name already exists. Compare the new input manifest to the prior run; exclude prior generated outputs from raw input analytics, retaining them only as explicitly marked historical context.
 
 ---
 
@@ -405,7 +438,10 @@ If the user wants to pick MULTIPLE apps for a multi-app modernization wave, writ
 - Database slides → [references/slides-database-pillar.md](references/slides-database-pillar.md)
 - Infrastructure slides → [references/slides-infrastructure-pillar.md](references/slides-infrastructure-pillar.md)
 - HTML/CSS/output rules → [references/style-guide.md](references/style-guide.md)
-- PowerPoint generation → [references/pptx-generation.md](./references/pptx-generation.md) — Read when the portfolio strategy deliverable must also be produced or exported as a PowerPoint deck.
+- Validation, evidence model and audit → [references/reporting-quality.md](references/reporting-quality.md)
+- Source/runtime dependency evidence → [references/dependency-evidence.md](references/dependency-evidence.md)
+- Language and optional execution package → [references/delivery-options.md](references/delivery-options.md)
+- PowerPoint generation → [references/pptx-generation.md](references/pptx-generation.md) — Uses the bundled package renderer; no external corporate template is required.
 - Scripts → [scripts/export_to_pdf.py](scripts/export_to_pdf.py)
 
 ## HTML report scaffold

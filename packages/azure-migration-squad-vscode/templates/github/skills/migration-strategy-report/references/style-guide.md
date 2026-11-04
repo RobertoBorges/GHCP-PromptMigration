@@ -223,7 +223,7 @@ Used on risk slides, decision-required banners, and scope summary callouts.
 
 These rules apply to every word of generated HTML report content. Violations require regeneration.
 
-- **No internal/meta language** — never use phrases like "New Formula", "Updated Algorithm", "Step-by-Step formula trace", "Pillar Scenario", "Impact Analysis (New Formula)", "algorithm", "formula", "scenario", or "step-by-step trace" anywhere in the output HTML. These are internal implementation terms, not executive language.
+- **No internal/meta language** — omit implementation chatter such as "Updated Algorithm" or "Step-by-Step formula trace". Clear option comparisons and concise financial calculations are allowed and required where applicable; detailed algorithm traces belong in the audit.
 - **No algorithm documentation in the report** — classification logic lives in SKILL.md. The report shows only the *result* (counts, criteria summary, verification totals), never the internal execution trace.
 - **Never show zero-count platforms** — if no apps use Sybase, Teradata, Informix, etc., do NOT list them with "0 apps". Only show platforms/technologies/categories that actually appear in the data.
 - **No zero-count chart segments** — omit legend entries and donut segments for any bucket with count = 0.
@@ -232,11 +232,15 @@ These rules apply to every word of generated HTML report content. Violations req
   - Use **"Microsoft Scope Opportunity"** — not "Impact Analysis"
   - Use **"Recommendation"** — not "Action"
   - Write for a **CIO / leadership audience** — no jargon, no internal tool names, no engineering-level trace output
-- **Single source citation** — cite the reference document once (e.g., *"Migration Service Descriptions, May 2026"*) without explaining version differences or changelogs.
+- **Concise source citations** — cite the governing scope document on ownership slides and the relevant file/sheet/row or external reference beside quantitative claims. Put version comparisons and long calculations in the audit; an appendix alone is insufficient attribution for a circulating slide.
 - **Deterministic verification totals** — always show the math: e.g., "Microsoft 1,200 + Partner 180 + Unknown 45 = 1,425 ✓". Totals must reconcile.
 - **Scope fluidity disclaimer** — on Microsoft/Partner ownership slides, include a standard note that Partner workloads can shift to Microsoft eligibility after OS upgrade, PCI clearance, or cluster decomposition.
 - **Every claim traces to an artifact** — each major data point must be attributable to a specific source file listed in the Source Artifacts appendix slide.
 - **Gap = finding, not blank** — missing data is surfaced as a leadership finding (e.g., "Discovery workshop needed for 40% of apps with no complexity rating"), never left as an empty cell or omitted section.
+- **Financial provenance** — apply [reporting-quality.md](reporting-quality.md#financial-evidence): source, calculation, currency/period, price date, region, licensing and term assumptions. Missing financial inputs render as TBD, never invented savings.
+- **Locale-aware values** — format every number, currency and date for the agreed report locale. Optional translated decks share the same model/IDs/counts; never convert identifiers or use global punctuation replacement.
+- **Separate units** — never render an app + DB instance + VM grand total. DB-hosting servers are a subset of the server pillar. Confidence, decision rationale, and proposed/approved status must remain visible.
+- **Incomplete output** — keep an INCOMPLETE indicator until the required checks pass; report CONDITIONAL qualifications explicitly rather than disguising them with polished layout.
 
 ---
 

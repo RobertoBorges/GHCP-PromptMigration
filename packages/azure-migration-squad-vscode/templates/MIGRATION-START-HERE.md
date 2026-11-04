@@ -78,6 +78,17 @@ Use during or between phases when a specific concern needs focused work:
 |--------|----------|
 | `/phase-rollback` | You need to **rollback an in-flight migration** to a safe state. |
 | `/get-status` | You want to see the **current migration progress** at a glance. |
+| `/skill-creator` | Discovery found an uncovered technology and you need a new migration skill. |
+
+### AWS specialist tracks
+
+| Prompt | Use when |
+|--------|----------|
+| `/aws-assess-phase0-setup-and-scope` | You need a read-only AWS estate assessment: account/region scope, discovery, inventory, enrichment, dependencies, reports and Azure readiness. |
+| `/aws2azure-phase1-plan` | You want to migrate AWS workloads to Azure through service mapping, compatibility checks, code migration, infrastructure, deployment and CI/CD. |
+| `/aws2azure-phase0-multi-repo-assessment` | An AWS workload spans multiple repositories and needs dependency and sequencing analysis first. |
+
+The extension's **Optional add-ons** view lists each step in both AWS tracks, including their status commands.
 
 ---
 

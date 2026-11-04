@@ -2,7 +2,7 @@
   "name": "ghcp-prompt-migration-monorepo",
   "version": "0.0.0",
   "private": true,
-  "description": "Monorepo root for the Azure Migration Agent VS Code extension. The canonical .github/{agents,prompts,skills,chatmodes,hooks} content is shipped to users through the VS Code extension at packages/azure-migration-squad-vscode/.",
+  "description": "Canonical Azure migration skills and agents, distributed through the VS Code extension and a native Copilot agent plugin.",
   "type": "module",
   "workspaces": [
     "packages/azure-migration-squad-vscode"
@@ -13,9 +13,12 @@
     "sync": "npm run sync --workspaces --if-present",
     "validate:descriptions": "node scripts/validate-description-lengths.mjs",
     "validate:decision-coverage": "node scripts/validate-decision-coverage.mjs",
+    "validate:plugin": "node scripts/validate-plugin.mjs",
+    "test:release": "node --test scripts/local-release.test.mjs",
+    "test:reporting": "python -B scripts/test-strategy-report.py",
     "inject:decision-gates": "node scripts/inject-decision-gates.mjs",
     "inject:capability-gates": "node scripts/inject-capability-matrix-gates.mjs",
-    "validate:all": "npm run validate:descriptions && npm run validate:decision-coverage"
+    "validate:all": "npm run validate:descriptions && npm run validate:decision-coverage && npm run validate:plugin"
   },
   "engines": {
     "node": ">=20.0.0"

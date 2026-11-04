@@ -1,0 +1,14 @@
+{
+  "name": "azure-migration-agent",
+  "owner": {
+    "name": "Roberto Borges"
+  },
+  "plugins": [
+    {
+      "name": "azure-migration-agent",
+      "description": "Universal Azure migration skills and agents, including portfolio planning, AWS estate assessment and AWS-to-Azure migration.",
+      "version": "0.7.0",
+      "source": "./"
+    }
+  ]
+}

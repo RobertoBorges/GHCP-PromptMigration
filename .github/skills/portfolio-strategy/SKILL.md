@@ -51,7 +51,8 @@ The skill will:
 1. Recursively scan the customer folder
 2. Auto-detect workload pillars (Apps / DB / Infra)
 3. Apply CAF-aligned deterministic classification (6 Rs + Microsoft/Partner/Unknown)
-4. Generate a self-contained HTML deck named `{CustomerName}_Migration_Strategy_Report.html` saved into the same customer folder
+4. Generate a self-contained HTML deck named `{CustomerName}_Migration_Strategy_Report.html` and a timestamped validation audit in the customer folder
+5. Optionally produce agreed language variants and an execution summary/workbook from the same validated record model
 
 ## Workflow
 
@@ -60,21 +61,24 @@ Ask the user: **"Which customer folder should I analyze?"** if not already provi
 
 ### Step 2: Invoke the migration-strategy-report Skill
 The `migration-strategy-report` skill will own the workflow from here:
-1. STEP -1: Artifact discovery (scan + classify every file)
+1. STEP -1: Preflight, fixed input snapshot, accessibility and all-sheet manifests
 2. STEP -0.5: Workload type auto-detection (Apps / DB / Infra)
 3. STEP 0: Scope identification (Total Portfolio vs. In-Scope split)
 4. STEP 1: Optional WorkIQ enrichment (if configured)
 5. STEP 2: Apply deterministic classification (6 Rs + ownership)
 6. STEP 3: Select slides driven by available evidence
-7. STEP 4: Generate the HTML deck
-8. STEP 5: Verify math, cite sources, attach disclaimers
+7. STEP 4: Generate the HTML deck incrementally, preserving runnable checkpoints
+8. STEP 5: Verify per-pillar math, citations, financial provenance, quality gaps, and append the final audit verdict
 
 ### Step 3: Verify Output
 After the skill completes, confirm:
 - The HTML file was saved into the customer folder
-- All classification sums match the in-scope total (math verification)
+- Each pillar's classification sums match its own in-scope total; applications, DB instances, and VMs are never summed into a migration grand total
 - Required disclaimers are present on the Execution Ownership slide
-- No internal/meta language ("algorithm", "formula", "scenario") leaked into the output
+- Financial figures have source/calculation/assumptions; missing inputs remain TBD
+- No implementation chatter leaked into the output; concise calculations and clear option comparisons remain understandable
+- The validation audit contains actual stage results, source coverage, qualifications, and a READY/CONDITIONAL/BLOCKED/FAILED verdict
+- Optional output variants reconcile to the same computed summary and saved Office packages were reopened and verified
 
 ### Step 4: Offer Follow-Up Actions
 After the deck is generated, ask the user: **"Which application from the portfolio should I modernize first?"**
@@ -86,13 +90,14 @@ List the candidate applications from the deck, showing for each:
 - 6 Rs strategy
 - Execution ownership (Microsoft / Partner / Unknown)
 
-Once the user picks an app, write `reports/portfolio-handoff.json` per the schema defined in [## Handoff File: portfolio-handoff.json](#handoff-file-portfolio-handoffjson) below, then confirm:
+Once the user picks an app, write `reports/portfolio-handoff.json` per the schema defined in [## Handoff File: portfolio-handoff.json](#handoff-file-portfolio-handoffjson) below. Carry only user-confirmed architecture choices; keep unresolved values explicitly pending in notes and do not treat a portfolio recommendation as approval. Then confirm:
 
 > ✅ Handoff file written. Click **🚀 Modernize a single application** to start on `[App-Name]`.
 
 Also offer:
 - **Export to PDF:** `python .github/skills/migration-strategy-report/scripts/export_to_pdf.py "<path-to-html>"`
 - **Iterate:** Re-run with additional artifacts or refined scope
+- **Execution package:** Use the bundled renderer documented in `migration-strategy-report/references/delivery-options.md` for a four-slide summary, blocker/action workbook, and traceability JSON
 
 ## Prerequisites (Local Setup)
 

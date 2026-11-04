@@ -68,7 +68,7 @@ Microsoft ships two first-party migration tools that are excellent when they cov
 3. Accept the welcome notification → click **Get started**
 4. The extension copies content into `.github/` and `MIGRATION-START-HERE.md`
 5. In Copilot Chat (`Ctrl+Alt+I`), pick an agent — there are only three:
-   **Code Migration Modernization** (start here — migrate an app), **Discovery Intake** (not sure what the app is yet), or **Debug Migration** (a migration broke). The five specialists are dispatched for you automatically.
+   **Code Migration Modernization** (start here — migrate an app), **Discovery Intake** (not sure what the app is yet), or **Debug Migration** (a migration broke). The seven specialists, including AWS account assessment and AWS-to-Azure migration, are dispatched for you automatically.
 6. Type `/assess-any-application`
 
 Full walkthrough: [docs/vscode-quickstart.md](https://github.com/RobertoBorges/GHCP-PromptMigration/blob/main/docs/vscode-quickstart.md)
@@ -79,15 +79,18 @@ Open the **rocket icon 🚀** in the Activity Bar:
 
 ```
 🛑 DECISIONS REQUIRED           ← pending architecture decisions (from reports/Decisions-Required.md)
-AGENT                            ← the 8 agent definitions (3 of them selectable in the chat agent picker)
+AGENT                            ← the 10 agent definitions (3 selectable in the chat agent picker)
 🟢 MAIN PATH (Assess + Phase 1-6) ← the 7-step migration flow
-🔵 OPTIONAL ADD-ONS              ← Alternative intakes · Portfolio · Specialized deep-dives · Utility
+🔵 OPTIONAL ADD-ONS              ← Intakes · Portfolio · Specialists · AWS assessment · AWS migration · Utility
 ```
 
 The **status bar** (bottom-left) shows your current migration phase, or **"⚠ AMA: N/M decisions pending"** with a warning background when you have unanswered architecture decisions.
 
 ## Standout features
 
+- **📊 Evidence-backed portfolio reporting** — source/worksheet manifests, persistent validation audits, per-pillar reconciliation, financial provenance, and resumable HTML generation. Optional bilingual decks and a bundled four-slide PPTX/XLSX execution package reuse the same classified data; Office files are reopened and verified.
+- **☁ AWS account assessment** — read-only multi-account/multi-region inventory, metadata and cost enrichment, dependency maps, findings and Azure readiness. Start with `/aws-assess-phase0-setup-and-scope`.
+- **🔀 AWS-to-Azure migration** — service mapping, compatibility checks, SDK/config conversion, identity/network/observability migration, infrastructure, deployment and CI/CD. Start with `/aws2azure-phase1-plan`.
 - **🎯 Decision Hardstop Protocol** — Phases 2-6 hard-stop until you answer 18 canonical architecture decisions. No silent defaults, no expert-mode bypass. Stay-as-is is always option 1.
 - **🧠 On-the-fly skill authoring** — `skill-creator` writes new stack/source/workload skills mid-migration when it hits an unknown, inspired by [Anthropic's skill-creator](https://github.com/anthropics/skills/tree/main/skills/skill-creator).
 - **📜 Action Log (trace memory)** — every meaningful action logs one line to `reports/Report-Status.md` in a canonical format. New sessions recover from the last 5 log entries. Includes per-action turn count + best-effort token estimate.
@@ -98,6 +101,7 @@ The **status bar** (bottom-left) shows your current migration phase, or **"⚠ A
 - **VS Code** ≥ 1.85 (Visual Studio Code, VS Code Insiders, VS Code Exploration, or Microsoft-signed Code - OSS builds)
 - **GitHub Copilot Chat** extension — the extension offers to install it for you on first use
 - **Node.js** is NOT required to run the extension (it bundles all content)
+- **Optional portfolio tools:** Python 3.8+ for classified-data validation; `python-pptx` and `openpyxl` only for the execution package, or Playwright only for PDF export. These are not required to activate the extension.
 
 > ⚠ **VS Code only.** This extension is intentionally **not supported on VS Code forks** — VSCodium, Cursor, Windsurf, Positron, and Eclipse Theia-based IDEs. If you install the `.vsix` on one of those hosts, the extension will refuse to activate and show a message pointing you at the VS Code Marketplace listing. The extension is not published to the Open VSX Registry either.
 
@@ -120,7 +124,15 @@ The extension is **self-contained**:
 - The agent definition at `.github/agents/Code-Migration-Modernization.agent.md` orchestrates everything
 - Session-lifecycle hooks read/write `reports/Report-Status.md` so recovery works across sessions
 
-No npm CLI. No external Squad framework. Just the extension and Copilot Chat.
+No npm CLI or external Squad framework is required.
+
+## Native agent plugin alternative
+
+Version 0.7.0 also introduces a **native Copilot-format agent plugin** in the source repository. Its root `plugin.json` reuses the same 65 skills and 10 agents, and `.github/plugin/marketplace.json` enables repository marketplace discovery. Use the extension for workspace initialization, executable workspace hooks, sidebar and status-bar UI; use the plugin for agent/skill discovery without copying the catalog into each project.
+
+The plugin does not register hooks or MCP servers and does not install workspace-wide instructions. It is installed from the Git repository or a local clone, **not from the VSIX**. Avoid loading both copies of the catalog in the same workspace.
+
+See the [native plugin installation guide](https://github.com/RobertoBorges/GHCP-PromptMigration/blob/main/docs/agent-plugin.md). Git-source installation requires the new manifests to be committed and pushed first.
 
 ## Links
 

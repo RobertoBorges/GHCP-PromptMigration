@@ -1,6 +1,8 @@
 # Classification Algorithms — Reference
 
-This reference is loaded by the `migration-strategy-report` skill whenever classification work occurs (which is almost always). Contains the deterministic 6 Rs strategy classification and execution ownership classification (Microsoft / Partner / Unknown) for Apps, Databases, and Infrastructure pillars.
+Always load with [reporting-quality.md](reporting-quality.md). The rules below are repeatable planning recommendations, not architecture approval or proof of commercial eligibility. Record the source snapshot, rule version, evidence, confidence, and rationale for each classified record.
+
+This reference defines priority-ordered 6 Rs strategy recommendations and execution ownership classification (Microsoft / Partner / Unknown) for Applications, Databases, and Infrastructure.
 
 ## Why These Algorithms Are Deterministic
 
@@ -40,7 +42,7 @@ Each workload's migration strategy is determined by its **business driver** — 
 3. **Determine the business driver** — the specific, actionable reason for change
 4. **Map business driver → strategy** — use the table above
 
-When explicit business-driver data is unavailable (common with raw CMDB exports), **infer the business driver from technical and operational indicators** in the CMDB using the rules below.
+When explicit business-driver data is unavailable, use the indicators below to propose a strategy and mark the inferred driver and confidence. Confirm business intent before execution; missing facts must not become approved decisions.
 
 ### Classification Rules (Priority Order — First Match Wins)
 
@@ -152,11 +154,7 @@ Expected ranges based on typical enterprise portfolios (per CAF patterns). These
 | Replatform | 20–35% | Largest modernization opportunity — PaaS with minimal code changes |
 | Rehost | 25–40% | Stable workloads suitable for lift-and-shift |
 
-If the distribution falls significantly outside these ranges, review borderline cases:
-- **Rehost > 40%:** Check if EOS DB/OS/framework apps were missed for Replatform
-- **Replatform < 20%:** Pull EOS database/OS apps from Rehost into Replatform
-- **Retire > 15%:** Verify each Retire app truly has no business value or dependencies
-- **Replace < 5% but vendor apps exist:** Check for vendor-owned apps that landed in Rehost
+Use these historical ranges only as a review prompt, never a quota. Do not move workloads between categories to make a distribution look typical. Every assignment must remain supported by that workload's evidence and rule.
 
 ### Verification (MANDATORY)
 - Sum of all strategy counts MUST = In-Scope total
@@ -184,14 +182,15 @@ Given the same CMDB export with the same field values, this algorithm produces t
 | **1. Apps only** | CMDB/app portfolio (Application Name, Complexity, Tech Stack, etc.) — no VM inventory, no DB inventory | Run **APP Execution Ownership** algorithm only | Single ownership donut for apps |
 | **2. DB only** | DB instance inventory (Engine, Version, Size, etc.) — no app portfolio, no VM data | Run **DATABASE Execution Ownership** algorithm only | Single ownership donut for DB instances |
 | **3. Infra only** | VM/server inventory (Hostname, OS, vCPU, RAM, etc.) — no app portfolio, no DB inventory | Run **INFRASTRUCTURE Execution Ownership** algorithm only | Single ownership donut for VMs/servers |
-| **4. Mixed (any combination)** | Two or more of the above data types present | Run **each detected pillar's algorithm independently**, then combine | Combined estate donut + per-pillar breakdown table |
+| **4. Mixed (any combination)** | Two or more of the above data types present | Run **each detected pillar's algorithm independently** | Separate per-pillar charts and reconciled breakdown table |
 
 **Key rules for mixed scenarios (Scenario 4):**
 1. **Each pillar classified independently** — an app's ownership is determined ONLY by the APP algorithm; a DB instance ONLY by the DB algorithm; a VM ONLY by the INFRA algorithm. No cross-contamination.
 2. **App-level DB Platform field ≠ separate DB pillar data** — If the app CMDB has a "Database Platform" column (e.g., "Oracle", "SQL Server"), that field is used within the APP algorithm to evaluate app-level Partner triggers. This is separate from a dedicated DB instance inventory. Both can coexist.
 3. **No double-counting** — If a DB instance appears in BOTH an app-level "Database Platform" field AND a standalone DB inventory, classify it once under the DB pillar algorithm only. The app-level reference informs the app's classification but does not create a second DB workload entry.
-4. **Combined totals** — The combined estate donut sums all three pillar totals: Total = (Apps in-scope) + (DB instances in-scope) + (VMs in-scope). Microsoft/Partner/Unknown are summed across pillars.
-5. **Verification** — Each pillar MUST independently verify (M+P+U = pillar total), AND the combined estate MUST verify (sum of all pillar Factories + sum of all pillar Partners + sum of all pillar Unknowns = grand total).
+4. **Distinct units** — Do not sum applications, DB instances, and VMs into a migration total or combined ownership donut. The same application may span several VMs and databases; show its relationships instead of adding them.
+5. **Verification** — Each pillar independently verifies ownership counts against its own in-scope denominator. Application ownership also includes No Migration Needed when those records are explicitly in scope. Show out-of-scope counts separately.
+6. **Footprint** — DB-role servers are a subset of infrastructure. PaaS app/DB counts are separate units. Reduce the proposed VM footprint only for mapped hosts whose other workloads and approved retirement/replacement are accounted for; unresolved mappings stay a gap.
 
 **What if a field is ambiguous between pillars?**
 - A CMDB row with Application Name + Database Platform + Host Server = **one app workload** (classify under APP algorithm; the DB Platform and Host Server fields are inputs to the app formula, not separate DB/Infra workloads)
@@ -268,14 +267,14 @@ An app is **Microsoft** if:
 - If the sum doesn't match, recount. Do NOT adjust numbers to force a total.
 - Show your math: "132 + 366 + 227 + 128 = 853 ✓" (or whatever the actual counts are)
 
-**Repeatability guarantee:** Given the same CMDB export with the same field values, this algorithm produces the same 3 numbers every time. If a re-run produces different numbers, the algorithm was not followed.
+**Repeatability guarantee:** Given the same snapshot and rule version, the script produces the same ownership counts. Keep source rows and rule evidence; changed sources or policies require a new auditable run.
 
 **Report presentation rules (customer/LT-ready output):**
 - **Never mention zero-count platforms** — if no apps use Sybase, Teradata, Informix, etc., do NOT list them with "0 apps". Only mention platforms that actually appear in the data.
 - **No internal/meta language** — never use phrases like "New Formula", "Updated Algorithm", "Step-by-Step formula trace", "Pillar Scenario", or "Impact Analysis (New Formula)" in the report. The report is the final deliverable, not a changelog.
 - **No algorithm documentation in the report** — the step-by-step classification logic lives in SKILL.md. The report shows the RESULT (counts, criteria summary, verification) but not the internal execution trace.
 - **Executive tone** — use "Classification Note" not "Disclaimer"; use "Microsoft Scope Opportunity" not "Impact Analysis"; use "Recommendation" not "Action". Write for a CIO audience.
-- **Cite the source document** once (e.g., "Migration Service Descriptions, May 2026") without explaining what changed between versions.
+- **Cite the governing scope document** on the ownership slide, and source records beside quantitative claims. Record policy versions/differences in the audit, not the executive narrative.
 
 ---
 
@@ -339,3 +338,22 @@ A DB instance is **Microsoft** if it was NOT classified as Unknown or Partner. T
   - Online (hybrid cluster/dual-write proxy) and Offline (Apache Spark) supported
   - HA/DR configuration and setup included
 - **Oracle 12c R2+** → Azure SQL DB/MI/VM OR Azure Database for PostgreSQL Flexible Server (AI-assisted, via SSMA/Ora2Pg/Striim)
+  - Apply the source/target, workload exclusions, and customer participation conditions in [slides-database-pillar.md](slides-database-pillar.md#database-target-service-matrix).
+  - Keep heterogeneous migration distinct from Oracle Database@Azure. Do not infer a target or funding approval from the engine alone.
+
+**Scope verification:** The engine/version mappings are a baseline, not a substitute for the applicable service description. Confirm the explicit migration path, exclusions, and required assessments. If commercial scope or compatibility cannot be evidenced, keep it Unknown/provisional with the missing proof, even when a generic default above would otherwise say Microsoft.
+
+---
+
+### Infrastructure Pillar — Microsoft / Partner / Unknown
+
+Classify unique VM/server IDs independently from hosted applications and DB instances. Apply first-match rules to the fixed snapshot:
+
+1. **Explicit specialist/vendor handling -> Partner:** Evidence identifies a non-standard architecture, proprietary appliance/vendor-owned migration, required business-logic redesign, or a governing scope exclusion. Cite the exact platform, requirement, and policy section; a runtime name alone is insufficient.
+2. **Insufficient proof -> Unknown:** The actual OS/version/architecture, migration pattern, or applicable scope approval is missing or conflicting. Generic guest labels such as "Other Linux" are not confirmed endorsed distributions. Mark target compatibility and commercial eligibility separately.
+3. **Verified supported pattern -> Microsoft:** The source architecture/OS, target compatibility, migration method, and applicable Microsoft-led scope are explicitly evidenced, with no exclusion from step 1. App-stack data is not required merely to establish a VM rehost path, but do not claim application compatibility or vendor certification from OS compatibility.
+4. **Unresolved remainder -> Unknown:** There is no implicit Microsoft fallback for an unverified platform or migration pattern.
+
+Powered-off, template, duplicate, and management-appliance records are not automatically safe to retire. Preserve inventory context and require evidenced scope/disposition decisions before excluding or scheduling them. Treat domain controllers, failover clusters, shared storage, and HA topology as explicit sequencing/design constraints; do not assume a like-for-like move.
+
+For each row retain rule, rationale, confidence, source row, and governing scope version/section. Technical compatibility is not contractual ownership or funding eligibility. Verify `Microsoft + Partner + Unknown = Infrastructure In-Scope`; count each ownership bucket directly from records.

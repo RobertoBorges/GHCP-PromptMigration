@@ -8,6 +8,35 @@ The extension is published to **one registry only**:
 
 Versioning is fully automated via [release-please](https://github.com/googleapis/release-please). You **never edit `package.json` version by hand** for a normal release.
 
+The repository also has a native agent plugin. Its `plugin.json`, marketplace
+entry, workspace lockfile and extension `package.json` share one version.
+Release-please and the local release script update these together;
+`npm run validate:plugin` prevents mismatched artifacts from being packaged.
+See [Agent plugin distribution](./agent-plugin.md) for plugin installation.
+
+## Prepared 0.7.0 release
+
+The source version is **0.7.0**, following Marketplace **0.6.0**. The release adds
+native plugin distribution, complete AWS-track sidebar discovery and refreshed
+capability information. This is a local release preparation, not a Marketplace
+publication. Do not run another version bump just to package this prepared version.
+
+```powershell
+npm run validate:all
+npm run test:release
+npm test
+npm run package --workspace packages/azure-migration-squad-vscode
+```
+
+The resulting `packages/azure-migration-squad-vscode/azure-migration-squad-vscode-0.7.0.vsix`
+can be uploaded manually through the publisher's Marketplace management page.
+Publish only after review and testing. To distribute the plugin from Git, also
+commit and push `plugin.json`, `.github/plugin/marketplace.json` and their referenced
+content. Publishing the VSIX alone does not publish the plugin manifests.
+
+Keep `.release-please-manifest.json` at the last released version until the release
+is actually recorded; an unpublished local preview is not a completed release.
+
 ---
 
 ## The two flows
@@ -96,9 +125,10 @@ On the merge to `main`, the `.github/workflows/release-please.yml` workflow runs
 
 - Parses conventional commits since the last release tag
 - Decides the semver bump (patch/minor/major)
-- Opens (or updates) a PR titled **`chore(main): release vscode-v0.2.1`** with two changes:
+- Opens (or updates) a PR titled **`chore(main): release vscode-v0.2.1`** with coordinated changes:
   1. `packages/azure-migration-squad-vscode/package.json` — version bumped
   2. `packages/azure-migration-squad-vscode/CHANGELOG.md` — new entry with the commits
+  3. `plugin.json`, `.github/plugin/marketplace.json` and the workspace lockfile — matching versions
 
 If there are no `feat:` / `fix:` / `perf:` / breaking commits since the last release, **no Release PR opens.** That's by design — chore/docs/refactor changes shouldn't trigger a release.
 
@@ -176,7 +206,7 @@ npm run release:local -- --patch --tag-prefix=my-prefix-v
 4. Decides the semver bump (or uses the flag you passed)
 5. Shows you the plan (version + CHANGELOG entry)
 6. Asks confirmation (unless `--yes` or `--dry-run`)
-7. Updates `package.json` version
+7. Updates the extension, plugin, marketplace and workspace lockfile versions
 8. Prepends a new entry to `CHANGELOG.md`
 9. Runs `npm run build && npm run package` to produce the versioned `.vsix`
 
@@ -190,8 +220,8 @@ npm run release:local -- --patch --tag-prefix=my-prefix-v
 **You inspect and commit yourself.** The script prints the exact git commands to run:
 
 ```bash
-git diff packages/azure-migration-squad-vscode/package.json packages/azure-migration-squad-vscode/CHANGELOG.md
-git add packages/azure-migration-squad-vscode/{package.json,CHANGELOG.md}
+git diff plugin.json .github/plugin/marketplace.json package-lock.json packages/azure-migration-squad-vscode/package.json packages/azure-migration-squad-vscode/CHANGELOG.md
+git add plugin.json .github/plugin/marketplace.json package-lock.json packages/azure-migration-squad-vscode/package.json packages/azure-migration-squad-vscode/CHANGELOG.md
 git commit -m "chore: release vscode-v0.2.1"
 git tag vscode-v0.2.1
 git push origin HEAD vscode-v0.2.1

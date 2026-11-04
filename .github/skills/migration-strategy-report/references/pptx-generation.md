@@ -1,6 +1,8 @@
 # PPTX Generation Skill
 
-Use this skill when creating, extending, or regenerating PowerPoint decks that should follow the agent's shared LATAM GCS presentation pattern.
+Use the bundled `scripts/delivery_package.py` for the optional four-slide execution package. Its contract, dependencies, workbook, JSON traceability, and validation are defined in [delivery-options.md](delivery-options.md). It runs without an external presentation template.
+
+The remainder of this reference is an **optional custom-template pattern**, not the default implementation. Use it only when the customer supplies and approves the template and helper module described below. Those external assets are not bundled in this repository; if unavailable, use the bundled renderer or report the requested branded output as blocked. Never invent a helper API or claim this pattern is an existing executable generator.
 
 ## Overview
 
@@ -8,7 +10,7 @@ This skill teaches agents how to create professional PowerPoint presentations us
 
 ## Architecture
 
-All PPTX generators follow a shared module pattern:
+Optional custom-template PPTX generators can follow this shared module pattern:
 
 - **Shared module:** `docs/pptx/generators/latam_gcs_template.py` — colors, helpers, template loading
 - **Generators:** `docs/pptx/generators/generate_*.py` — deck-specific slide content
@@ -16,7 +18,7 @@ All PPTX generators follow a shared module pattern:
 
 ## Guardrails
 
-- Reuse `latam_gcs_template.py` instead of re-implementing colors or helper functions.
+- In the optional custom-template mode only, reuse the supplied `latam_gcs_template.py` instead of re-implementing its colors or helpers.
 - Keep new generators under `docs/pptx/generators/` and outputs under `docs/pptx/decks/`.
 - Do not invent helper APIs that are not exported by `latam_gcs_template.py`.
 - The current template is loaded from the external path stored in `TEMPLATE_PATH`; verify that dependency before regenerating decks.

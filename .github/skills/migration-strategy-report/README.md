@@ -21,8 +21,9 @@ Customers/Contoso/
 # 2. In VS Code Chat:
 /portfolio-strategy Generate a migration strategy report for Customers/Contoso
 
-# 3. Output saved to the customer folder:
+# 3. Outputs saved to the customer folder:
 Customers/Contoso/Contoso_Migration_Strategy_Report.html
+Customers/Contoso/Validation_Audit_<run-id>.md
 
 # 4. (Optional) Export to PDF:
 pip install playwright; playwright install chromium
@@ -41,9 +42,15 @@ python .github/skills/migration-strategy-report/scripts/export_to_pdf.py "Custom
 │   ├── slides-application-pillar.md          # Apps slides (3, 4, 5, 7, 8, 9) — loads if apps detected
 │   ├── slides-database-pillar.md             # DB slides (4b DB portion, 4e) + target matrix — loads if DB detected
 │   ├── slides-infrastructure-pillar.md       # Infra slides (4b infra, 4c, 4d) — loads if infra detected
+│   ├── reporting-quality.md                 # Preflight, stage gates, evidence contract, financial safeguards
+│   ├── dependency-evidence.md               # Source/runtime evidence, coverage and SME disposition
+│   ├── delivery-options.md                  # Optional locales, execution summary and action workbook
 │   └── style-guide.md                        # HTML/CSS/branding rules (loads at generation time)
 └── scripts/
-    └── export_to_pdf.py                      # HTML → PDF via Playwright/Chromium (auto-repairs missing $ signs)
+    ├── export_to_pdf.py                      # HTML → PDF via Playwright/Chromium
+    ├── report_data.py                        # Standard-library model validator and per-pillar summaries
+    ├── delivery_package.py                   # Optional PPTX/XLSX/JSON renderer with saved-file checks
+    └── requirements-delivery.txt             # Optional Office rendering dependencies
 ```
 
 ## Prerequisites
@@ -67,16 +74,35 @@ python .github/skills/migration-strategy-report/scripts/export_to_pdf.py "Custom
    - Execution Ownership per pillar (Microsoft / Partner / Unknown; Apps also has "No Migration Needed")
 6. **Slide Selection** — evidence-driven; skips slides without strong data support
 7. **HTML Generation** — produces a self-contained HTML deck with inline CSS, KPI cards, charts, callouts
-8. **Verification** — math checks (sums equal in-scope total), disclaimers attached, single source citation
+8. **Verification** — separate per-pillar reconciliation, inline citations, financial provenance, output checks and a persistent audit with READY/CONDITIONAL/BLOCKED/FAILED verdict
+
+Preflight inventories all inputs and workbook sheets before analysis. Unreadable files need repair or explicit exclusion; conflicting source authority is a blocker. Counts are computed from classified records and explicit joins, not estimates. A runnable partial deck is saved early and regenerated in small batches; it remains marked incomplete until required checks pass.
+
+## Optional Execution Package
+
+Use the same classified `Report_Data.json` for the report and execution package:
+
+```powershell
+python .github/skills/migration-strategy-report/scripts/report_data.py "<customer>\_work\<run-id>\Report_Data.json"
+# Install optional dependencies only when enabling Office output:
+python -m pip install -r .github/skills/migration-strategy-report/scripts/requirements-delivery.txt
+python .github/skills/migration-strategy-report/scripts/delivery_package.py "<customer>\_work\<run-id>\Report_Data.json" --output "<customer>\DeliveryPackage\<run-id>"
+```
+
+The package includes a four-slide execution summary, an XLSX workbook containing open questions/blockers/full scoped inventory, and JSON traceability/validation results. Saved Office artifacts are reopened and checked. Output directories must be new; unresolved scope, questions, blockers, or unassigned migrations remain CONDITIONAL. No corporate presentation template is needed.
+
+The record contract and limitations are in [reporting-quality.md](references/reporting-quality.md); optional bilingual generation and locale formatting are in [delivery-options.md](references/delivery-options.md). The validator checks the normalized model, not source truth or HTML layout. Source-code analysis records coverage, occurrence-level evidence, and technical/functional SME needs without claiming static references prove runtime traffic.
 
 ## Output Quality Rules (Executive Presentation)
 
 Generated reports follow strict executive rules:
-- **No internal/meta language** — no "algorithm", "formula", "scenario", "step-by-step trace" in the output
+- **No implementation chatter** — keep detailed execution traces in the audit; show concise financial calculations and understandable migration options in the deck
 - **No zero-count items** — platforms/categories with 0 occurrences are omitted
 - **Executive tone** — "Classification Note" not "Disclaimer", "Microsoft Scope Opportunity" not "Impact Analysis"
 - **Deterministic** — same inputs produce identical classification numbers every time
-- **Single source citation** — *"Migration Service Descriptions, May 2026"* (no version-diff explanation)
+- **Inline evidence** — governing scope reference on ownership slides and source/derivation beside quantitative claims
+- **Distinct units** — no applications + DB instances + VMs migration grand total
+- **Honest qualifications** — technical compatibility is not commercial scope or architecture approval; missing financial inputs stay TBD
 
 ## Critical Rules
 
@@ -92,10 +118,12 @@ The skill is designed for progressive loading. Reference files are organized so 
 
 | Detected Pillar | Reference Files Loaded |
 |---|---|
-| Always | `migration-strategy-report/references/classification-algorithm.md`, `migration-strategy-report/references/slides-common.md`, `migration-strategy-report/references/style-guide.md` (at gen time) |
+| Always | `references/classification-algorithm.md`, `references/slides-common.md`, `references/reporting-quality.md`, `references/style-guide.md` (at generation time) |
 | Applications | + `migration-strategy-report/references/slides-application-pillar.md` |
 | Databases | + `migration-strategy-report/references/slides-database-pillar.md` |
 | Infrastructure | + `migration-strategy-report/references/slides-infrastructure-pillar.md` |
+| Source/runtime dependency evidence | + `references/dependency-evidence.md` |
+| Optional languages or execution package | + `references/delivery-options.md` |
 
 This keeps the active context window lean even though the full skill has substantial domain content.
 
