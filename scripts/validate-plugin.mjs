@@ -20,6 +20,45 @@ assert.ok(entry, 'Plugin must be listed in the repository marketplace');
 assert.equal(entry.source, './', 'Marketplace source must resolve to the repository root');
 assert.equal(entry.version, plugin.version, 'Marketplace and plugin versions must match');
 
+// Every location release-please bumps (release-please-config.json extra-files)
+// must already carry the extension version, so docs can't silently go stale.
+const releaseConfig = readJson('release-please-config.json');
+const extensionPath = 'packages/azure-migration-squad-vscode';
+const extraFiles = releaseConfig.packages?.[extensionPath]?.['extra-files'] ?? [];
+assert.ok(extraFiles.length, `release-please-config.json must list extra-files for ${extensionPath}`);
+const jsonPathGet = (data, expr) => {
+  const segments = [...expr.slice(1).matchAll(/\.([A-Za-z_$][\w$-]*)|\[(\d+)\]|\['([^']+)'\]/g)]
+    .map((m) => m[1] ?? (m[2] !== undefined ? Number(m[2]) : m[3]));
+  return segments.reduce((node, key) => node?.[key], data);
+};
+const markedVersions = (text) => {
+  const found = [];
+  let inBlock = false;
+  for (const line of text.split('\n')) {
+    if (line.includes('x-release-please-start-version')) { inBlock = true; continue; }
+    if (line.includes('x-release-please-end')) { inBlock = false; continue; }
+    if (inBlock || line.includes('x-release-please-version')) {
+      found.push(...(line.match(/\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?/g) ?? []));
+    }
+  }
+  return found;
+};
+for (const spec of extraFiles.map((e) => (typeof e === 'string' ? { type: 'generic', path: e } : e))) {
+  const relative = spec.path.startsWith('/') ? spec.path.slice(1) : `${extensionPath}/${spec.path}`;
+  const text = readFileSync(path.join(root, relative), 'utf8');
+  if (spec.type === 'json') {
+    assert.equal(jsonPathGet(JSON.parse(text), spec.jsonpath), extension.version,
+      `${relative} ${spec.jsonpath} must match the extension version ${extension.version}`);
+  } else if (spec.type === 'generic') {
+    const versions = markedVersions(text);
+    assert.ok(versions.length, `${relative} is listed in extra-files but has no x-release-please version markers`);
+    for (const version of versions) {
+      assert.equal(version, extension.version,
+        `${relative} has stale marked version ${version}; run "npm run version:set -- ${extension.version}"`);
+    }
+  }
+}
+
 for (const field of ['hooks', 'mcpServers', 'lspServers']) {
   assert.equal(plugin[field], undefined, `This plugin must not automatically register ${field}`);
 }

@@ -128,7 +128,7 @@ No npm CLI or external Squad framework is required.
 
 ## Native agent plugin alternative
 
-Version 0.7.0 also introduces a **native Copilot-format agent plugin** in the source repository. Its root `plugin.json` reuses the same 65 skills and 10 agents, and `.github/plugin/marketplace.json` enables repository marketplace discovery. Use the extension for workspace initialization, executable workspace hooks, sidebar and status-bar UI; use the plugin for agent/skill discovery without copying the catalog into each project.
+The source repository also ships a **native Copilot-format agent plugin**. Its root `plugin.json` reuses the same 65 skills and 10 agents, and `.github/plugin/marketplace.json` enables repository marketplace discovery. Use the extension for workspace initialization, executable workspace hooks, sidebar and status-bar UI; use the plugin for agent/skill discovery without copying the catalog into each project.
 
 The plugin does not register hooks or MCP servers and does not install workspace-wide instructions. It is installed from the Git repository or a local clone, **not from the VSIX**. Avoid loading both copies of the catalog in the same workspace.
 

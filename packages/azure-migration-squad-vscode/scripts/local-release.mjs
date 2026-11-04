@@ -4,10 +4,12 @@
  *
  * What it does:
  *   1. Parses conventional commits since the last vscode-v* tag
- *   2. Determines semver bump (auto, or forced via --patch / --minor / --major)
+ *   2. Determines semver bump (auto, forced via --patch / --minor / --major,
+ *      or an explicit version: `node scripts/local-release.mjs 0.7.2`)
  *   3. Previews the change (version bump + CHANGELOG addition)
  *   4. Asks confirmation (unless --yes)
- *   5. Updates extension/plugin/marketplace versions, lockfile + CHANGELOG.md locally
+ *   5. Updates package.json + every extra-file in release-please-config.json
+ *      (plugin/marketplace/lockfile + version-marked docs) and CHANGELOG.md
  *   6. Runs `npm run build && npm run package` to produce the versioned .vsix
  *
  * What it does NOT do:
@@ -58,6 +60,7 @@ function parseArgs() {
   const args = process.argv.slice(2);
   const flags = {
     bump: null,
+    setVersion: null,
     dryRun: false,
     yes: false,
     build: true,
@@ -72,7 +75,13 @@ function parseArgs() {
     else if (arg === '--yes' || arg === '-y') flags.yes = true;
     else if (arg === '--no-build') flags.build = false;
     else if (arg.startsWith('--tag-prefix=')) flags.tagPrefix = arg.slice('--tag-prefix='.length);
+    else if (arg.startsWith('--set=')) flags.setVersion = arg.slice('--set='.length);
+    else if (/^v?\d+\.\d+\.\d+/.test(arg)) flags.setVersion = arg.replace(/^v/, '');
     else if (arg === '-h' || arg === '--help') flags.help = true;
+    else throw new Error(`Unknown argument "${arg}" (see --help)`);
+  }
+  if (flags.setVersion && !/^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/.test(flags.setVersion)) {
+    throw new Error(`"${flags.setVersion}" is not a valid X.Y.Z version`);
   }
   return flags;
 }
@@ -81,9 +90,10 @@ function printHelp() {
   console.log(`
 ${BOLD}local-release${RESET} — preview the next VS Code extension release locally
 
-Usage: node scripts/local-release.mjs [flags]
+Usage: node scripts/local-release.mjs [X.Y.Z] [flags]
 
 Flags:
+  ${GREEN}X.Y.Z${RESET} | ${GREEN}--set=X.Y.Z${RESET}    Set this exact version (from the repo root: npm run version:set -- X.Y.Z)
   ${GREEN}--patch${RESET}                Force patch bump
   ${GREEN}--minor${RESET}                Force minor bump
   ${GREEN}--major${RESET}                Force major bump
@@ -100,9 +110,10 @@ commits since the last ${DIM}vscode-v*${RESET} tag:
   ${DIM}fix:${RESET} / ${DIM}perf:${RESET} / ${DIM}revert:${RESET}    → patch
   Only ${DIM}chore/docs/refactor/test/build/ci${RESET} → no bump (script exits with a note)
 
-This script ${BOLD}does not${RESET} commit, tag, or push. It updates package.json,
-plugin.json, marketplace.json, package-lock.json, CHANGELOG.md, and produces a
-versioned .vsix. Inspect and commit yourself.
+This script ${BOLD}does not${RESET} commit, tag, or push. It updates package.json, every
+extra-file listed in release-please-config.json (plugin.json, marketplace.json,
+package-lock.json, version-marked docs), CHANGELOG.md, and produces a versioned
+.vsix. Inspect and commit yourself.
 
 For the normal release flow (release-please on main), see
 ${BLUE}docs/publishing-vscode-extension.md${RESET}.
@@ -193,28 +204,81 @@ function readPkgVersion() {
   return pkg.version;
 }
 
+// Minimal JSONPath subset used by release-please-config.json extra-files:
+// $.a.b, $.a[0].b, $.a['key/with/slashes'].b
+function parseJsonPath(expr) {
+  if (!expr.startsWith('$')) throw new Error(`Unsupported jsonpath "${expr}"`);
+  const segments = [];
+  const re = /\.([A-Za-z_$][\w$-]*)|\[(\d+)\]|\['([^']+)'\]/g;
+  let consumed = 1;
+  for (const m of expr.slice(1).matchAll(re)) {
+    if (m.index + 1 !== consumed) break;
+    segments.push(m[1] ?? (m[2] !== undefined ? Number(m[2]) : m[3]));
+    consumed += m[0].length;
+  }
+  if (consumed !== expr.length) throw new Error(`Unsupported jsonpath "${expr}"`);
+  return segments;
+}
+
+function setJsonPath(data, expr, value) {
+  const segments = parseJsonPath(expr);
+  const last = segments.pop();
+  const parent = segments.reduce((node, key) => node?.[key], data);
+  if (parent === undefined || parent === null || !(last in parent)) {
+    throw new Error(`jsonpath ${expr} does not resolve to an existing value`);
+  }
+  parent[last] = value;
+}
+
+const SEMVER_RE = /\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?/g;
+
+// Same markers release-please's "generic" updater understands.
+function replaceMarkedVersions(text, version) {
+  let inBlock = false;
+  return text
+    .split('\n')
+    .map((line) => {
+      if (line.includes('x-release-please-start-version')) { inBlock = true; return line; }
+      if (line.includes('x-release-please-end')) { inBlock = false; return line; }
+      if (inBlock || line.includes('x-release-please-version')) return line.replace(SEMVER_RE, version);
+      return line;
+    })
+    .join('\n');
+}
+
+// Every distributed version location comes from release-please-config.json,
+// so the CI release flow and this script can never drift apart.
+function versionTargets() {
+  const configPath = path.join(monorepoRoot, 'release-please-config.json');
+  const config = JSON.parse(readFileSync(configPath, 'utf-8'));
+  const pkgKey = path.relative(monorepoRoot, pkgRoot).split(path.sep).join('/');
+  const pkgConfig = config.packages?.[pkgKey];
+  if (!pkgConfig) throw new Error(`release-please-config.json has no entry for ${pkgKey}`);
+  return (pkgConfig['extra-files'] ?? []).map((entry) => {
+    const spec = typeof entry === 'string' ? { type: 'generic', path: entry } : entry;
+    const file = spec.path.startsWith('/')
+      ? path.join(monorepoRoot, spec.path.slice(1))
+      : path.join(pkgRoot, spec.path);
+    return { ...spec, file };
+  });
+}
+
 function writeReleaseVersions(newVersion) {
-  const updates = [
-    { file: pkgJsonPath, update: (data) => { data.version = newVersion; } },
-    { file: path.join(monorepoRoot, 'plugin.json'), update: (data) => { data.version = newVersion; } },
-    {
-      file: path.join(monorepoRoot, '.github', 'plugin', 'marketplace.json'),
-      update: (data) => {
-        const plugin = data.plugins.find((entry) => entry.name === 'azure-migration-agent');
-        if (!plugin) throw new Error('Azure Migration Agent is missing from marketplace.json');
-        plugin.version = newVersion;
-      },
-    },
-    {
-      file: path.join(monorepoRoot, 'package-lock.json'),
-      update: (data) => { data.packages['packages/azure-migration-squad-vscode'].version = newVersion; },
-    },
-  ].map(({ file, update }) => {
-    const data = JSON.parse(readFileSync(file, 'utf-8'));
-    update(data);
-    return { file, content: JSON.stringify(data, null, 2) + '\n' };
+  const targets = [{ type: 'json', file: pkgJsonPath, jsonpath: '$.version' }, ...versionTargets()];
+  const updates = targets.map((target) => {
+    const original = readFileSync(target.file, 'utf-8');
+    if (target.type === 'json') {
+      const data = JSON.parse(original);
+      setJsonPath(data, target.jsonpath, newVersion);
+      return { file: target.file, content: JSON.stringify(data, null, 2) + '\n' };
+    }
+    if (target.type === 'generic') {
+      return { file: target.file, content: replaceMarkedVersions(original, newVersion) };
+    }
+    throw new Error(`Unsupported extra-files type "${target.type}" for ${target.file}`);
   });
   for (const { file, content } of updates) writeFileSync(file, content);
+  return updates.map(({ file }) => path.relative(monorepoRoot, file).split(path.sep).join('/'));
 }
 
 function buildChangelogEntry(version, commits, bumpKind) {
@@ -255,7 +319,9 @@ function buildChangelogEntry(version, commits, bumpKind) {
   }
   if (!sections.feat.length && !sections.fix.length && !sections.perf.length && !sections.revert.length && !sections.breaking.length) {
     // Forced-bump path — no conventional commits detected.
-    lines.push(`### ${bumpKind[0].toUpperCase()}${bumpKind.slice(1)} release (forced)`);
+    lines.push(bumpKind === 'explicit'
+      ? '### Release (version set explicitly)'
+      : `### ${bumpKind[0].toUpperCase()}${bumpKind.slice(1)} release (forced)`);
     lines.push(`- No conventional-commit-tagged changes detected; version bumped manually.`);
     lines.push('');
   }
@@ -318,11 +384,17 @@ async function main() {
   const commits = getCommitsSince(lastTag);
   const { bump: detectedBump, relevant } = decideBumpFromCommits(commits);
 
-  const bumpKind = flags.bump ?? detectedBump;
+  const bumpKind = flags.setVersion ? 'explicit' : flags.bump ?? detectedBump;
   console.log(`  commits since tag:    ${commits.length}`);
   console.log(`  relevant commits:     ${relevant.length}`);
-  console.log(`  detected bump:        ${detectedBump}${flags.bump ? ` (overridden with --${flags.bump})` : ''}`);
+  const override = flags.setVersion ? ` (overridden with ${flags.setVersion})` : flags.bump ? ` (overridden with --${flags.bump})` : '';
+  console.log(`  detected bump:        ${detectedBump}${override}`);
   console.log();
+
+  if (flags.setVersion === currentVersion) {
+    console.log(`${YELLOW}⚠ Version is already ${currentVersion}; nothing to change.${RESET}`);
+    process.exit(0);
+  }
 
   if (bumpKind === 'none') {
     console.log(`${YELLOW}⚠ No version bump needed.${RESET}`);
@@ -331,7 +403,7 @@ async function main() {
     process.exit(0);
   }
 
-  const newVersion = bumpVersion(currentVersion, bumpKind);
+  const newVersion = flags.setVersion ?? bumpVersion(currentVersion, bumpKind);
   console.log(`${BOLD}Planned change:${RESET}`);
   console.log(`  ${currentVersion}  →  ${GREEN}${newVersion}${RESET}  (${bumpKind})`);
   console.log();
@@ -369,8 +441,9 @@ async function main() {
     }
   }
 
-  writeReleaseVersions(newVersion);
-  console.log(`${GREEN}✓${RESET} Wrote version ${newVersion} to extension, plugin, marketplace and lockfile`);
+  const touched = writeReleaseVersions(newVersion);
+  console.log(`${GREEN}✓${RESET} Wrote version ${newVersion} to:`);
+  for (const file of touched) console.log(`    ${file}`);
 
   prependToChangelog(changelogEntry);
   console.log(`${GREEN}✓${RESET} Updated CHANGELOG.md`);
@@ -386,10 +459,11 @@ async function main() {
   console.log(`${GREEN}✓ Done.${RESET}`);
   console.log();
   console.log(`${BOLD}Next steps (NOT automated — inspect first):${RESET}`);
+  const changedFiles = [...touched, 'packages/azure-migration-squad-vscode/CHANGELOG.md'].join(' ');
   console.log(`  ${DIM}# Review the changes${RESET}`);
-  console.log(`  git diff plugin.json .github/plugin/marketplace.json package-lock.json packages/azure-migration-squad-vscode/package.json packages/azure-migration-squad-vscode/CHANGELOG.md`);
+  console.log(`  git diff ${changedFiles}`);
   console.log(`  ${DIM}# If it looks right:${RESET}`);
-  console.log(`  git add plugin.json .github/plugin/marketplace.json package-lock.json packages/azure-migration-squad-vscode/package.json packages/azure-migration-squad-vscode/CHANGELOG.md`);
+  console.log(`  git add ${changedFiles}`);
   console.log(`  git commit -m "chore: release ${flags.tagPrefix}${newVersion}"`);
   console.log(`  git tag ${flags.tagPrefix}${newVersion}`);
   console.log(`  git push origin HEAD ${flags.tagPrefix}${newVersion}`);

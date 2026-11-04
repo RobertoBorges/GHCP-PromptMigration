@@ -7,8 +7,13 @@ name: Release VS Code extension
 # ║  and Open VSX Registry publication is disabled.                         ║
 # ║                                                                          ║
 # ║  Triggered by:                                                           ║
-# ║    1. Push of a tag matching `vscode-vX.Y.Z` (manual release)          ║
-# ║    2. Manual workflow_dispatch (for testing)                             ║
+# ║    1. release-please.yml (workflow_call) right after it creates a       ║
+# ║       release — the normal path, works with plain GITHUB_TOKEN          ║
+# ║    2. Push of a tag matching `vscode-vX.Y.Z` (manual tag)               ║
+# ║    3. Manual workflow_dispatch — dry-run build, or (re)publish a tag    ║
+# ║                                                                          ║
+# ║  Publishing is idempotent: if the version is already on the            ║
+# ║  Marketplace, the publish step is skipped instead of failing.          ║
 # ║                                                                          ║
 # ║  Required secrets:                                                       ║
 # ║    VSCE_PAT       — Personal Access Token for Visual Studio Marketplace ║
@@ -21,8 +26,24 @@ on:
   push:
     tags:
       - 'vscode-v*'
+  workflow_call:
+    inputs:
+      tag:
+        description: 'Release tag to build and publish (e.g. vscode-v0.7.2)'
+        required: true
+        type: string
+      dryRun:
+        description: "'true' to build without publishing"
+        required: false
+        default: 'false'
+        type: string
   workflow_dispatch:
     inputs:
+      tag:
+        description: 'Existing tag to build/publish (e.g. vscode-v0.7.2). Leave empty to build the selected branch.'
+        required: false
+        default: ''
+        type: string
       dryRun:
         description: 'Dry-run only (build .vsix, no publish)'
         required: false
@@ -39,9 +60,18 @@ jobs:
   release:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    # A release-please call and a manual tag push for the same tag must not
+    # publish concurrently; the second run sees the version and skips.
+    concurrency:
+      group: vscode-release-${{ inputs.tag || github.ref_name }}
+      cancel-in-progress: false
+    env:
+      RELEASE_TAG: ${{ inputs.tag || (github.ref_type == 'tag' && github.ref_name) || '' }}
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag || github.ref }}
 
       - name: Set up Node.js 20
         uses: actions/setup-node@v4
@@ -54,25 +84,24 @@ jobs:
       # ────────────────────────────────────────────────────────────────────
       # TAG vs PACKAGE.JSON version guard
       #
-      # The tag that fired this workflow (e.g., vscode-v0.2.1) MUST match
-      # the version in packages/azure-migration-squad-vscode/package.json.
+      # The release tag (e.g., vscode-v0.7.2) MUST match the version in
+      # packages/azure-migration-squad-vscode/package.json.
       # A mismatch means:
       #   - Someone manually tagged without bumping package.json, OR
       #   - Someone bumped package.json without pushing the matching tag
       # Either way, we do NOT want to publish — fail fast and loud.
       #
-      # This step is skipped for workflow_dispatch (manual runs) because
-      # those don't have a tag to compare against.
+      # Skipped only for branch builds (workflow_dispatch without a tag).
       # ────────────────────────────────────────────────────────────────────
       - name: Verify tag matches package.json version
-        if: github.event_name == 'push'
+        if: env.RELEASE_TAG != ''
         run: |
-          TAG_VER="${GITHUB_REF_NAME#vscode-v}"
+          TAG_VER="${RELEASE_TAG#vscode-v}"
           PKG_VER=$(node -p "require('./packages/azure-migration-squad-vscode/package.json').version")
           echo "Tag version:         $TAG_VER"
           echo "package.json version: $PKG_VER"
           if [ "$TAG_VER" != "$PKG_VER" ]; then
-            echo "::error::Tag $GITHUB_REF_NAME (${TAG_VER}) does not match package.json version ${PKG_VER}. Bump the version + retag, or use release-please to keep them in sync."
+            echo "::error::Tag $RELEASE_TAG (${TAG_VER}) does not match package.json version ${PKG_VER}. Use release-please or 'npm run version:set' so every version file moves together."
             exit 1
           fi
           echo "✓ Tag matches package.json version"
@@ -176,7 +205,7 @@ jobs:
           retention-days: 90
 
       - name: Publish to VS Code Marketplace (vsce)
-        if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.dryRun == 'false')
+        if: inputs.dryRun == 'false' || (github.event_name == 'push' && github.ref_type == 'tag')
         working-directory: packages/azure-migration-squad-vscode
         env:
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
@@ -184,6 +213,13 @@ jobs:
           if [ -z "$VSCE_PAT" ]; then
             echo "::error::VSCE_PAT secret is not set. Configure it in repo settings → Secrets and variables → Actions. See docs/publishing-vscode-extension.md."
             exit 1
+          fi
+          PKG_ID=$(node -p "const p=require('./package.json'); p.publisher + '.' + p.name")
+          PKG_VER=$(node -p "require('./package.json').version")
+          if npx --no-install vsce show "$PKG_ID" --json > "$RUNNER_TEMP/marketplace.json" 2>/dev/null \
+            && node -e "const j=require(process.argv[1]); process.exit((j.versions||[]).some(v => v.version === process.argv[2]) ? 0 : 1)" "$RUNNER_TEMP/marketplace.json" "$PKG_VER"; then
+            echo "::notice::$PKG_ID@$PKG_VER is already on the Marketplace; skipping publish."
+            exit 0
           fi
           npm run publish
 
