@@ -2,7 +2,7 @@
   "name": "azure-migration-squad-vscode",
   "displayName": "Azure Migration Agent",
   "description": "Migrate to Azure with 65 Copilot skills and 10 agents: discovery, modernization, portfolio planning, AWS assessment and AWS-to-Azure migration. 15 stack references, 10 source adapters, 8 workload patterns and user-owned architecture decisions.",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "publisher": "robertoborges",
   "private": false,
   "license": "MIT",

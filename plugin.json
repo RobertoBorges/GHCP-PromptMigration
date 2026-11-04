@@ -1,7 +1,7 @@
 {
   "name": "azure-migration-agent",
   "description": "Azure migration discovery, planning, modernization, infrastructure, deployment, CI/CD and operations, with portfolio planning and AWS specialist tracks.",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "author": {
     "name": "Roberto Borges"
   },

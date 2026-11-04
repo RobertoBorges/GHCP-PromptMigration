@@ -14,9 +14,9 @@ Release-please and the local release script update these together;
 `npm run validate:plugin` prevents mismatched artifacts from being packaged.
 See [Agent plugin distribution](./agent-plugin.md) for plugin installation.
 
-## Prepared 0.7.0 release
+## Prepared 0.7.1 release
 
-The source version is **0.7.0**, following Marketplace **0.6.0**. The release adds
+The source version is **0.7.1**, following Marketplace **0.6.0**. The release adds
 native plugin distribution, complete AWS-track sidebar discovery and refreshed
 capability information. This is a local release preparation, not a Marketplace
 publication. Do not run another version bump just to package this prepared version.
