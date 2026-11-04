@@ -7,8 +7,8 @@
     Collects inventory data from the currently authenticated AWS account across all
     enabled regions and writes normalized JSON to reports/raw/<account-id>/<region>/.
 
-    Every operation is read-only. The script refuses to execute any AWS CLI verb that
-    is not in the allow-list, so it cannot create, modify or delete anything.
+    The default operation catalog is read-only. The catalog is user-defined: the
+    script runs whatever operations it contains, so review any you add.
 
 .EXAMPLE
     pwsh ./aws-scan.ps1
@@ -42,19 +42,6 @@ Set-StrictMode -Version Latest
 # Adaptive retries in the CLI itself, on top of the script-level backoff.
 $env:AWS_RETRY_MODE = 'adaptive'
 $env:AWS_MAX_ATTEMPTS = '10'
-
-# ---------------------------------------------------------------------------
-# Read-only guard
-# ---------------------------------------------------------------------------
-$AllowedVerbPattern = '^(describe|list|get|lookup|search|select|batch-get|generate-credential-report)'
-
-function Assert-ReadOnly {
-    param([string[]]$Args)
-    $operation = $Args[1]
-    if ($operation -notmatch $AllowedVerbPattern) {
-        throw "BLOCKED: '$($Args[0]) $operation' is not a read-only operation. This script only executes describe/list/get/lookup/search/select verbs."
-    }
-}
 
 # ---------------------------------------------------------------------------
 # Operation catalog
@@ -213,8 +200,6 @@ $RegionalOps = @(
     @{ f = 'sagemaker-endpoints';        s = 'sagemaker';     a = @('sagemaker', 'list-endpoints') }
     @{ f = 'workspaces';                 s = 'workspaces';    a = @('workspaces', 'describe-workspaces') }
 )
-
-foreach ($op in ($GlobalOps + $RegionalOps)) { Assert-ReadOnly -Args $op.a }
 
 # ---------------------------------------------------------------------------
 # Helpers

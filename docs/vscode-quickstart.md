@@ -62,8 +62,9 @@ In **Copilot Chat** (open with `Ctrl+Alt+I`):
 
 The agent interviews you about source, stack, workload, data, and integrations. It produces:
 
-- `reports/Discovery-Dossier.md` — narrative + evidence
+- `reports/Discovery-Dossier.md` — narrative + evidence, including lines of code and migration complexity (Low / Medium / High / Very High) with an effort estimate in weeks
 - `reports/Capability-Matrix.yaml` — structured classification
+- `reports/Discovery-Report.html` — the same findings as a self-contained HTML report you can share
 
 ## Step 5 — Run the main path — Step 2: Plan
 

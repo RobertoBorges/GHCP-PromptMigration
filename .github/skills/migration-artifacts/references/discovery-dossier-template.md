@@ -25,6 +25,8 @@
 
 <5 lines covering: what the app does, where it runs today, what stack, primary risk, recommended strategy>
 
+**Size:** <total LOC> lines of code (<method>) · **Migration complexity:** <Low | Medium | High | Very High> (score <NN>/100) · **Estimated effort:** <min>–<max> weeks<, provisional>
+
 ## 2. Application Identity
 
 | Field | Value |
@@ -59,6 +61,15 @@
 **Build system:** `<msbuild | maven | gradle | npm | pip | composer | cargo | go-modules | ...>`
 **Runtime version detected:** `<e.g., dotnet8.0, java-17, python-3.11>`
 **Evidence confidence:** `<high | medium | low>`
+
+### Code Size (Lines of Code)
+
+**Total:** <N> non-blank lines (excluding vendored, generated and minified files) · **Test code:** <N | unknown> · **Method:** `<scc | cloc | pwsh-fallback | bash-fallback | object-count | user-estimate>`
+
+| Language | Files | Lines of code | Share |
+|----------|-------|---------------|-------|
+| <e.g., C#> | <n> | <n> | <%> |
+| <e.g., JavaScript> | <n> | <n> | <%> |
 
 ### Secondary Stacks
 
@@ -143,7 +154,31 @@
 
 <the human-readable summary of why this strategy beats the alternatives for THIS application>
 
-## 10. Target Azure Candidates
+## 10. Migration Complexity & Effort
+
+> Method: `.github/skills/migration-artifacts/references/complexity-model.md` · Model version: `<model_version>`
+
+**Complexity level:** `<Low | Medium | High | Very High | not-estimated>` · **Score:** <NN>/100 (score alone → <score_level>)
+**Floor rules applied:** <rule ids, or "none">
+**Estimated effort:** **<min>–<max> weeks** (<strategy> × <factor>)<, provisional — see low-confidence dimensions> for <baseline_team>
+
+| Dimension | Rating (1–5) | Weight | Evidence | Confidence |
+|-----------|--------------|--------|----------|------------|
+| Code size | <n> | 0.20 | <N lines of code via <method>> | <h/m/l> |
+| Stack & runtime gap | <n> | 0.15 | <evidence> | <h/m/l> |
+| Integrations | <n> | 0.15 | <count, legacy protocols> | <h/m/l> |
+| Data | <n> | 0.15 | <evidence> | <h/m/l> |
+| Architecture, state & jobs | <n> | 0.10 | <evidence> | <h/m/l> |
+| Azure compatibility blockers | <n> | 0.10 | <evidence> | <h/m/l> |
+| Identity, security & compliance | <n> | 0.10 | <evidence> | <h/m/l> |
+| Delivery readiness & cutover | <n> | 0.05 | <evidence> | <h/m/l> |
+| **Weighted rating** | **<x.xx>** | | | |
+
+**Top drivers:** <2–3 plain-language drivers>
+
+**Effort covers:** <effort_scope.includes> · **Excludes:** <effort_scope.excludes>
+
+## 11. Target Azure Candidates
 
 | Order | Service | Fit | Notes |
 |-------|---------|-----|-------|
@@ -153,7 +188,7 @@
 
 > The Architect picks the final target and SKU. Discovery Engineer only proposes candidates.
 
-## 11. Required Specialists (for execution)
+## 12. Required Specialists (for execution)
 
 | Specialist | Why required |
 |------------|--------------|
@@ -165,19 +200,19 @@
 | Cutover Commander | <if production-only or tight cutover> |
 | ... | ... |
 
-## 12. Unresolved Questions
+## 13. Unresolved Questions
 
 | # | Question | Why it matters | Recommended next probe |
 |---|----------|----------------|------------------------|
 | Q1 | <question> | <impact> | <action> |
 | Q2 | ... | ... | ... |
 
-## 13. Assumptions
+## 14. Assumptions
 
 - <assumption 1 — if wrong, this is the impact>
 - <assumption 2>
 
-## 14. Handoff Note for the Architect
+## 15. Handoff Note for the Architect
 
 > <3–5 lines summarizing what the Architect needs to do next: approve strategy, pick from candidates, sequence phases, flag any escalations>
 
@@ -198,12 +233,17 @@
 5. **No Azure SKU details.** Only services. Architect picks SKUs.
 6. **Unresolved questions must include a recommended next probe.** Questions without next steps are dead-ends.
 7. **Assumptions must be impact-labeled.** Each assumption says "if wrong, this is the impact."
+8. **Lines of code are always reported** (§1 summary line, §4 Code Size table, §10 Code size row) with the counting method. If code is not accessible, record a user estimate with `low` confidence.
+9. **Complexity must be explainable.** Every dimension rating cites evidence; any floor rule that raised the level is named; effort always shows its strategy factor, baseline team and scope.
+10. **HTML companion.** `reports/Discovery-Report.html` is rendered from the same content using `discovery-report-template.html`. It must not contain facts that are absent from this dossier.
 
 ## Quality Gate
 
 A dossier is **complete** when:
 
-- [ ] All 14 sections present
+- [ ] All 15 sections present
+- [ ] Lines of code reported with counting method (§1, §4, §10)
+- [ ] §10 complexity table has all 8 dimensions with evidence, plus level and effort weeks
 - [ ] All confidence labels filled
 - [ ] All evidence cells point to specific files or quotes
 - [ ] At least 2 alternatives in §9

@@ -83,7 +83,7 @@ When the user says any of the phrases below, take the matching action. **Rows ar
 | User says (any of) | Action |
 |---|---|
 | **🟢 Main path — Assess + 6 phases (Phase 1-6)** | |
-| "assess this application", "assess any application", "discover this app", "characterize this application", "scan this repo", "/assess-any-application", "run discovery", "start migration" | Read `.github/skills/assess-any-application/SKILL.md` and follow it. Produce `reports/Discovery-Dossier.md` + `reports/Capability-Matrix.yaml`. This is **step 1** of the main path. |
+| "assess this application", "assess any application", "discover this app", "characterize this application", "scan this repo", "/assess-any-application", "run discovery", "start migration" | Read `.github/skills/assess-any-application/SKILL.md` and follow it. Produce `reports/Discovery-Dossier.md` + `reports/Capability-Matrix.yaml` + `reports/Discovery-Report.html` (lines of code, complexity level and effort weeks included). This is **step 1** of the main path. |
 | "phase 1", "plan", "make the plan", "plan this migration", "/phase1-plan" | Read `.github/skills/phase1-plan/SKILL.md`. Requires Discovery Dossier + Capability Matrix. |
 | "phase 2", "migrate code", "/phase2-migrate-code" | Read `.github/skills/phase2-migrate-code/SKILL.md` |
 | "phase 3", "generate infra", "/phase3-generate-infra" | Read `.github/skills/phase3-generate-infra/SKILL.md` |
@@ -101,7 +101,7 @@ When the user says any of the phrases below, take the matching action. **Rows ar
 | **🔵 Specialized deep-dives (add-ons)** | |
 | "database migration", "/database-migration", "migrate the database" | Read `.github/skills/database-migration/SKILL.md` |
 | **🟠 AWS source estate (specialist track)** | |
-| "assess my AWS account", "inventory my AWS estate", "scan my AWS Organization", "/aws-assess-phase0-setup-and-scope" | Read `.github/skills/aws-assess-phase0-setup-and-scope/SKILL.md`. **Strictly read-only** — a `PreToolUse` hook blocks any mutating `aws` command. Phases run `/aws-assess-phase0-setup-and-scope` → `phase1-resource-discovery` → `phase2-deep-inventory` → `phase3-enrichment` → `phase4-relationships` → `phase5-reports` → `phase6-azure-readiness`. |
+| "assess my AWS account", "inventory my AWS estate", "scan my AWS Organization", "/aws-assess-phase0-setup-and-scope" | Read `.github/skills/aws-assess-phase0-setup-and-scope/SKILL.md`. **Read-only by default** — the agent only proposes a mutating `aws` command when the user explicitly asks for it, and runs it after the user confirms. Phases run `/aws-assess-phase0-setup-and-scope` → `phase1-resource-discovery` → `phase2-deep-inventory` → `phase3-enrichment` → `phase4-relationships` → `phase5-reports` → `phase6-azure-readiness`. |
 | "migrate my AWS workload to Azure", "convert my Lambda to Azure Functions", "move my ECS services to Azure", "/aws2azure-phase1-plan" | Read `.github/skills/aws2azure-phase1-plan/SKILL.md`, then `phase2-migrate-code` → `phase3-generate-infra` → `phase4-deploy-to-azure` → `phase5-setup-cicd`. Use `/aws2azure-get-status` for status and `/aws2azure-phase0-multi-repo-assessment` for multi-repo solutions. |
 | "security hardening", "/security-hardening", "harden security" | Read `.github/skills/security-hardening/SKILL.md` |
 | "cost optimization", "/cost-optimization", "optimize cost" | Read `.github/skills/cost-optimization/SKILL.md` |

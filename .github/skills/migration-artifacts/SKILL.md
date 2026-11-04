@@ -16,6 +16,7 @@ Project boundary: artifacts must stay stack-agnostic across supported applicatio
 Canonical files covered here:
 
 - `reports/Discovery-Dossier.md`
+- `reports/Discovery-Report.html` (HTML companion of the dossier)
 - `reports/Capability-Matrix.yaml`
 - `reports/Migration-Plan.md`
 - `reports/Application-Assessment-Report.md`
@@ -30,7 +31,9 @@ The Action Log in `reports/Report-Status.md` is the migration's trace memory. Ap
 |---|---|---|
 | Appending to `reports/Report-Status.md`, recording phase events, artifacts, gates, user decisions, Azure changes, rollback, recovery history, or session trace | [Action Log format](./references/action-log-format.md) | Canonical single-line Action Log entry format, vocabulary, required fields, turn/tokens guidance, and recovery semantics. |
 | Creating, validating, or consuming `reports/Capability-Matrix.yaml`; routing stack/source/workload/data/integration skills; carrying evidence confidence | [Capability Matrix](./references/capability-matrix.md) | Machine-readable discovery contract, schema, field conventions, consumer contract, update discipline, and quality gate. |
-| Creating or validating `reports/Discovery-Dossier.md`; writing human-readable discovery findings, evidence, risks, strategy, candidates, and unresolved questions | [Discovery Dossier template](./references/discovery-dossier-template.md) | Fourteen-section discovery narrative paired with the Capability Matrix and evidence-confidence requirements. |
+| Creating or validating `reports/Discovery-Dossier.md`; writing human-readable discovery findings, evidence, risks, strategy, candidates, and unresolved questions | [Discovery Dossier template](./references/discovery-dossier-template.md) | Fifteen-section discovery narrative (including lines of code and migration complexity & effort) paired with the Capability Matrix and evidence-confidence requirements. |
+| Rendering `reports/Discovery-Report.html`; presenting discovery results to stakeholders as a self-contained HTML page | [Discovery Report HTML template](./references/discovery-report-template.html) | Single-file HTML layout with KPI tiles, lines-of-code breakdown, complexity gauge, dimension bars, effort box and dossier sections; filling rules in its header comment. |
+| Measuring lines of code; rating migration complexity (Low / Medium / High / Very High); estimating effort in weeks; filling `complexity:` in the matrix; calibrating estimates against actuals | [Complexity model](./references/complexity-model.md) + [calibration file](./references/complexity-model.yaml) | 8-dimension rating rubric, LOC counting commands, score → level → weeks method, floor rules, strategy factors, low-confidence widening. All numbers live in the YAML. |
 | Creating or updating `reports/Migration-Plan.md`; finalizing execution sequencing, target architecture, per-phase work, gates, rollback shape, and assumptions | [Migration Plan template](./references/migration-plan-template.md) | Architect-led plan structure for one application and the dispatch contract consumed by phases. |
 | Creating or updating `reports/Report-Status.md`, `reports/Application-Assessment-Report.md`, or phase-specific Markdown reports | [Migration Report template](./references/migration-report-template.md) | Standard report set, assessment report layout, status report skeleton, report writing checklist, and next-step conventions. |
 | Transitioning between skills, phases, or agents; validating phase deliverables; writing handoff summaries; identifying next command or specialist follow-up | [Migration Handoff and Orchestration](./references/migration-handoff.md) | Phase transition checklist, required artifacts by phase, quality gates, dispatch triggers, status update protocol, and handoff template. |

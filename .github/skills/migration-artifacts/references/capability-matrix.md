@@ -116,6 +116,36 @@ migration_strategy:
       fit: <...>
       fit_notes: <...>
 
+complexity:                                 # see references/complexity-model.md + complexity-model.yaml
+  model_version: <e.g., "1.0" — copied from complexity-model.yaml>
+  loc:
+    total: <integer, non-blank, excluding vendored/generated/test>
+    test_loc: <integer | unknown>
+    method: <scc | cloc | pwsh-fallback | bash-fallback | object-count | user-estimate>
+    by_language:
+      - language: <e.g., C#>
+        loc: <integer>
+  dimensions:                               # exactly 8 entries, ratings 1-5
+    - id: <code_size | stack_gap | integrations | data | architecture | azure_blockers | identity_compliance | delivery_readiness>
+      rating: <1-5>
+      weight: <from complexity-model.yaml>
+      evidence: <file path, command output, or user statement>
+      evidence_confidence: <high | medium | low>
+  weighted_rating: <1.00-5.00>
+  score: <0-100>
+  score_level: <Low | Medium | High | Very High>      # level from score alone
+  floor_rules_applied: [<rule id>, ...]               # [] if none
+  level: <Low | Medium | High | Very High | not-estimated>   # final level after floors
+  effort_weeks:
+    min: <integer>
+    max: <integer>
+    strategy: <migration_strategy.recommendation>
+    strategy_factor: <from complexity-model.yaml>
+    provisional: <true | false>                        # true when a weight>=0.15 dimension is low confidence
+    baseline_team: <from complexity-model.yaml>
+  top_drivers:                                         # 2-3 highest weighted contributors, plain language
+    - <e.g., "320k lines of .NET Framework WebForms code">
+
 required_specialists:
   - <agent name>
   - ...
@@ -190,6 +220,8 @@ Phase skills use these fields:
 | `risk_flags` | All phases (auto-dispatch specialists) |
 | `migration_strategy.recommendation` | All phases (which phases are emphasized) |
 | `migration_strategy.target_azure_candidates` | Phase 1 (Architect picks), Phase 3 (IaC generation) |
+| `complexity.level` + `complexity.effort_weeks` | `/build-migration-plan`, Phase 1 (effort estimation), `/quick-assessment` (same model) |
+| `complexity.loc` | Phase 1 (effort breakdown), Phase 2 (sizing code-migration batches) |
 
 ## Update Discipline
 
@@ -213,5 +245,7 @@ A matrix is **valid** when:
 - [ ] Every `low`-confidence axis has at least one `unresolved_questions` entry
 - [ ] `migration_strategy.recommendation` set with rationale + ≥2 alternatives
 - [ ] `target_azure_candidates` has at least 1 entry (or "none" if retire/retain)
+- [ ] `complexity.loc.total` and `complexity.loc.method` set (lines of code measured, or `user-estimate` with low confidence)
+- [ ] `complexity` has 8 rated dimensions, `score`, final `level`, and `effort_weeks` (or `level: not-estimated` for unsupported sources)
 - [ ] `required_specialists` includes at least Architect + Azure Specialist + Tester + Scribe
 - [ ] `handoff.next_command` set

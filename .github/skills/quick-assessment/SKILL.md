@@ -57,16 +57,14 @@ Use fast discovery techniques to inspect the repository for:
 
 Prefer high-signal files such as solution files, project manifests, config files, Dockerfiles, and infrastructure folders.
 
-## Step 2: Score Migration Complexity (1-10)
-Assign a complexity score using the following guidance:
-| Score | Meaning |
-|-------|---------|
-| 1-3 | Straightforward upgrade or minor cloud remediation |
-| 4-6 | Moderate migration with some code/config changes |
-| 7-8 | Major refactoring, service or data changes required |
-| 9-10 | High-risk modernization with architectural redesign likely |
+## Step 2: Rate Migration Complexity
+Use the shared complexity model so quick and full assessments are comparable: `.github/skills/migration-artifacts/references/complexity-model.md` (method) and `complexity-model.yaml` (all weights, thresholds, weeks). Read the numbers from the YAML; do not hard-code them.
 
-Base the score on evidence such as:
+1. Count lines of code (use `scc`/`cloc` if installed, otherwise the fallback command in the model). Report the total and the top languages.
+2. Rate the 8 dimensions 1–5 from what the 5-minute scan found: code size, stack & runtime gap, integrations, data, architecture/state/jobs, Azure compatibility blockers, identity/security/compliance, delivery readiness.
+3. Compute the 0–100 score, map it to **Low / Medium / High / Very High**, and apply the floor rules (for example, ≥ 1M lines of code → at least High).
+
+Typical evidence that raises ratings:
 - Unsupported framework age
 - WCF, SOAP, WebForms, or legacy Java EE usage
 - Monolithic architecture or tight coupling
@@ -74,15 +72,12 @@ Base the score on evidence such as:
 - Database portability challenges
 - Missing tests, CI/CD, or environment parity
 
-## Step 3: Estimate Effort
-Provide a rough effort estimate using a practical band:
-- **XS** - Hours to 2 days
-- **S** - Several days to 2 weeks
-- **M** - 2 to 6 weeks
-- **L** - 6 to 12 weeks
-- **XL** - Multi-month program
+Because a quick scan has limited evidence, mark dimensions you could not verify as `low` confidence.
 
-Explain the top factors driving the estimate and note key assumptions.
+## Step 3: Estimate Effort
+Convert the level to weeks with the model: level weeks (default Low 1–2, Medium 3–5, High 6–10, Very High 10–16) × strategy factor for the likely path (rehost 0.5, replatform 0.8, refactor 1.0, rearchitect 1.5, rebuild 2.0). A quick assessment is **always labelled provisional**. Run `/assess-any-application` for a firm estimate.
+
+Explain the top factors driving the estimate, the baseline team assumption, and what the estimate excludes.
 
 ## Step 4: Recommend the Migration Path
 Recommend the most suitable path, such as:
@@ -111,8 +106,8 @@ Create or update:
 The quick assessment report must include:
 1. Executive summary
 2. Technology snapshot
-3. Complexity score with evidence
-4. Estimated effort band
+3. Lines of code, complexity level (Low / Medium / High / Very High) and score, with evidence per dimension
+4. Estimated effort in weeks (provisional)
 5. Recommended migration path
 6. Recommended Azure target platform or landing zone
 7. Recommended migration phases and next command
@@ -135,7 +130,7 @@ The quick assessment report must include:
 
 ## Completion Guidance
 At the end:
-- State the complexity score and effort band plainly
+- State the lines of code, complexity level and effort weeks plainly
 - Call out the top 3 blockers or accelerators
 - Recommend `@agent run Phase 1 plan and assess` for the full structured workflow
 - Recommend `@agent run database migration review` if the database is a primary complexity driver
@@ -146,8 +141,9 @@ At the end:
 ## Output Checklist
 Before completing, ensure:
 - [ ] 5-minute app scan completed
-- [ ] Complexity score assigned (1-10)
-- [ ] Effort estimate provided
+- [ ] Lines of code counted
+- [ ] Complexity level assigned with the shared complexity model (Low / Medium / High / Very High)
+- [ ] Effort estimate in weeks provided (marked provisional)
 - [ ] Recommended migration path documented
 - [ ] Target Azure platform or landing zone documented
 - [ ] Recommended migration phases called out
