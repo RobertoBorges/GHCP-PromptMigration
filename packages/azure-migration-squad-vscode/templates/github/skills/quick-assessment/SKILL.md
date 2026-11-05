@@ -62,7 +62,7 @@ Use the shared complexity model so quick and full assessments are comparable: `.
 
 1. Count lines of code (use `scc`/`cloc` if installed, otherwise the fallback command in the model). Report the total and the top languages.
 2. Rate the 8 dimensions 1–5 from what the 5-minute scan found: code size, stack & runtime gap, integrations, data, architecture/state/jobs, Azure compatibility blockers, identity/security/compliance, delivery readiness.
-3. Compute the 0–100 score, map it to **Low / Medium / High / Very High**, and apply the floor rules (for example, ≥ 1M lines of code → at least High).
+3. Apply the delivery model (default `ai-assisted`: code size, stack gap, architecture and Azure blockers −1, never below 1, not for ratings of 5). Compute the 0–100 score from the adjusted ratings, map it to **Low / Medium / High / Very High**, and apply the floor rules (for example, ≥ 1M lines of code → at least High).
 
 Typical evidence that raises ratings:
 - Unsupported framework age
@@ -75,7 +75,7 @@ Typical evidence that raises ratings:
 Because a quick scan has limited evidence, mark dimensions you could not verify as `low` confidence.
 
 ## Step 3: Estimate Effort
-Convert the level to weeks with the model: level weeks (default Low 1–2, Medium 3–5, High 6–10, Very High 10–16) × strategy factor for the likely path (rehost 0.5, replatform 0.8, refactor 1.0, rearchitect 1.5, rebuild 2.0). A quick assessment is **always labelled provisional**. Run `/assess-any-application` for a firm estimate.
+Convert the level to weeks with the model: level weeks (default Low 1–2, Medium 3–5, High 6–10, Very High 10–16) × strategy factor for the likely path (rehost 0.5, replatform 0.8, refactor 1.0, rearchitect 1.5, rebuild 2.0). State the delivery model. A quick assessment is **always labelled provisional** and skips the per-stream breakdown; name the 2–3 work streams likely to take most of the time instead. Run `/assess-any-application` for a firm estimate with the full breakdown.
 
 Explain the top factors driving the estimate, the baseline team assumption, and what the estimate excludes.
 

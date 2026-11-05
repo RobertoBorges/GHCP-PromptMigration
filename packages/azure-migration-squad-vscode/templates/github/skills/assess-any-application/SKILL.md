@@ -266,16 +266,19 @@ After processing all gaps (or if there are none), proceed to Step 8.6.
 Rate how hard this migration is and convert it to an effort range. Follow `.github/skills/migration-artifacts/references/complexity-model.md`; **read every weight, band, threshold, floor rule, week range and strategy factor from `complexity-model.yaml`** (never hard-code them).
 
 1. **Rate the 8 dimensions 1–5** using the rubric and the evidence from Steps 3–7: code size (lines of code from Step 3), stack & runtime gap, integrations, data, architecture/state/jobs, Azure compatibility blockers, identity/security/compliance, delivery readiness & cutover. Each rating cites evidence and carries its `evidence_confidence`. No evidence → rate 3 with confidence `low`.
-2. **Score:** `weighted = Σ weight × rating`; `score = round((weighted − 1) / 4 × 100)` (0–100). Map to a level (default: Low < 30, Medium 30–54, High 55–74, Very High ≥ 75).
-3. **Floor rules:** apply `floor_rules` (e.g., ≥ 1M lines of code → at least High; legacy 4GL → at least High). Floors only raise the level. Record which fired.
-4. **Effort:** level weeks (default Low 1–2, Medium 3–5, High 6–10, Very High 10–16) × strategy factor for the Step 8 recommendation (rehost 0.5, replatform 0.8, refactor 1.0, rearchitect 1.5, rebuild 2.0). If a dimension weighted ≥ 0.15 has `low` confidence, widen the max to the next level and mark the estimate **provisional**.
-5. **Unsupported sources** (`source-unsupported-escalation`, `saas-embedded`): set `level: not-estimated` and point to the escalation playbook.
-6. Pick the 2–3 **top drivers** (highest weight × rating) and phrase them in plain language.
-7. Show the user a short summary before writing artifacts:
+2. **Delivery model:** use `delivery_model.default` (`ai-assisted`) unless the user says the team will not use an AI coding agent. Under AI-assisted delivery, lower the code-bound dimensions (code size, stack gap, architecture, Azure blockers) by `rating_relief` (default 1, never below 1, not for ratings of 5). Human-bound dimensions keep their rating. Record the agent and model in use as `tooling` (for example "GitHub Copilot agent mode + Claude Sonnet 5.5").
+3. **Score:** `weighted = Σ weight × adjusted_rating`; `score = round((weighted − 1) / 4 × 100)` (0–100). Map to a level (default: Low < 30, Medium 30–54, High 55–74, Very High ≥ 75).
+4. **Floor rules:** apply `floor_rules` (e.g., ≥ 1M lines of code → at least High; legacy 4GL → at least High). Floors only raise the level. Record which fired.
+5. **Effort:** level weeks (default Low 1–2, Medium 3–5, High 6–10, Very High 10–16) × strategy factor for the Step 8 recommendation (rehost 0.5, replatform 0.8, refactor 1.0, rearchitect 1.5, rebuild 2.0).
+6. **Effort breakdown:** split the effort across the 9 `work_streams` (complexity-model.md Step 5): stream rating = mean of its drivers' adjusted ratings, slice = share × stream rating / 3, normalised to 100 %. For every stream with a `low`-confidence driver, double that stream's max and mark the estimate **provisional**. Totals: min rounded down, max rounded up. Report stream effort in team-days.
+7. **Traditional comparison** (AI-assisted only): repeat steps 3–5 without relief and keep the score, level and weeks for the "without AI assistance" line.
+8. **Unsupported sources** (`source-unsupported-escalation`, `saas-embedded`): set `level: not-estimated` and point to the escalation playbook.
+9. Pick the 2–3 **top drivers** (highest weight × adjusted rating) and phrase them in plain language.
+10. Show the user a short summary before writing artifacts:
 
-   > **Complexity: <Level> (score <NN>/100)** · <N> lines of code · **Effort: <min>–<max> weeks** (<strategy>, <baseline team><, provisional>) · Drivers: <top drivers>
+   > **Complexity: <Level> (score <NN>/100)** · <N> lines of code · **Effort: <min>–<max> weeks** (<strategy>, <delivery model>, <baseline team><, provisional>) · Biggest streams: <top 2 work streams> · Drivers: <top drivers>
 
-The user may override any rating with a reason. Record the override in the dimension's `evidence` (`user override: <reason>`), and log it in `reports/Decision-Log.md`.
+The user may override any rating, or the delivery model, with a reason. Record the override in the dimension's `evidence` (`user override: <reason>`), and log it in `reports/Decision-Log.md`.
 
 Proceed to Step 9.
 
@@ -283,7 +286,7 @@ Proceed to Step 9.
 
 Emit `reports/Capability-Matrix.yaml` using the schema in `.github/skills/migration-artifacts/references/capability-matrix.md`.
 
-Every field must be populated (use `unknown` if truly unknown, with confidence `low` and a corresponding `unresolved_question`). Include the `complexity:` block from Step 8.6 (lines of code, 8 rated dimensions, score, level, floor rules applied, effort weeks).
+Every field must be populated (use `unknown` if truly unknown, with confidence `low` and a corresponding `unresolved_question`). Include the `complexity:` block from Step 8.6 (lines of code, delivery model, 8 rated dimensions with adjusted ratings, score, level, floor rules applied, effort weeks, effort breakdown and the traditional comparison).
 
 ## Step 10 — Discovery Dossier
 
@@ -295,10 +298,10 @@ Emit `reports/Discovery-Dossier.md` using the template in `.github/skills/migrat
 4. Stack profile (with evidence + confidence, **including the lines-of-code table per language**)
 5. Workload profile (with evidence + confidence)
 6. Data profile (with evidence + confidence)
-7. Integration map
+7. Integration map (with the current architecture Mermaid diagram)
 8. Risks & compliance flags
 9. Migration strategy recommendation (with alternatives + rationale + decision tree path)
-10. Migration complexity & effort (score, level, 8-dimension table, floor rules, effort weeks + assumptions)
+10. Migration complexity & effort (score, level, delivery model, 8-dimension table, floor rules, effort weeks, effort breakdown by work stream + assumptions)
 11. Target Azure candidates
 12. Required specialists
 13. Unresolved questions + recommended next probes
@@ -311,8 +314,18 @@ Render `reports/Discovery-Report.html` from `.github/skills/migration-artifacts/
 
 - Fill every `{{TOKEN}}` from the Capability Matrix and Dossier you just wrote. **Do not add facts that are not in those files.**
 - Show lines of code as a headline tile and in the Code size section (per-language table with share bars).
-- Show complexity as the gauge, level badge, 8 dimension bars and the effort box (with strategy factor, baseline team, includes/excludes and the provisional note when applicable).
-- Keep it a single self-contained file: inline CSS only, no external scripts, fonts or CDNs. Print-friendly.
+- Show complexity as the gauge, level badge, 8 dimension bars (adjusted rating, with "N → M (AI)" where relief applied) and the effort box (strategy factor, delivery model, baseline team, the "without AI assistance" comparison, includes/excludes and the provisional note when applicable).
+- Show the **effort breakdown** section: stacked share bar, legend and per-stream table (phase, drivers, share, team-days, AI leverage, widened flag).
+- **Render the architecture diagram; never show only Mermaid source.**
+  1. Save the dossier §7 Mermaid source to `reports/diagrams/current-architecture.mmd`.
+  2. If `mmdc` (Mermaid CLI) is on the PATH, run:
+     ```pwsh
+     mmdc -i reports/diagrams/current-architecture.mmd -o reports/diagrams/current-architecture.svg -b transparent -t neutral -I current-architecture
+     ```
+     and paste the SVG inline in the `IF:diagram-svg` block (drop the XML prolog). The report stays fully self-contained.
+  3. If `mmdc` is missing, keep the `IF:diagram-client` block instead (pinned Mermaid script with an integrity hash; it renders when the browser is online and shows the source when offline). Do not install `mmdc` without asking: it downloads a headless Chromium.
+  4. Always keep the collapsible Mermaid source.
+- Keep it a single file: inline CSS only. The only external asset allowed is the pinned Mermaid script in the diagram fallback. Print-friendly.
 - The Markdown dossier and YAML matrix remain the source of truth for Phase skills; the HTML is the stakeholder view.
 
 ## Step 11 — Handoff
@@ -330,7 +343,8 @@ Artifacts:
 Recommended strategy: <X>
 Size: <N> lines of code (<method>)
 Complexity: <Low/Medium/High/Very High> (score <NN>/100)
-Estimated effort: <min>–<max> weeks (<strategy> × <factor>, <baseline team><, provisional>)
+Estimated effort: <min>–<max> weeks (<strategy> × <factor>, <delivery model>, <baseline team><, provisional>)
+Largest work streams: <stream> <min>–<max> days, <stream> <min>–<max> days
 Confidence: source=<H/M/L>, stack=<H/M/L>, workload=<H/M/L>, data=<H/M/L>
 Open questions: <count>
 Risk flags: <list>
@@ -341,7 +355,7 @@ Next: /build-migration-plan
 Also append a one-line entry to `reports/Decision-Log.md`:
 
 ```
-Discovery-<app-name>: strategy=<X>, source=<adapter>, stack=<primary>, loc=<N>, complexity=<level>(<score>), effort=<min>-<max>w, confidence=<H/M/L>, flags=<list>
+Discovery-<app-name>: strategy=<X>, source=<adapter>, stack=<primary>, loc=<N>, complexity=<level>(<score>), effort=<min>-<max>w, delivery=<ai-assisted|traditional>, confidence=<H/M/L>, flags=<list>
 ```
 
 ---
@@ -368,10 +382,10 @@ Before completing:
 - [ ] Lines of code measured (total + per language + method), test code counted separately
 - [ ] Adaptive follow-ups triggered only where relevant
 - [ ] Migration strategy decision tree applied (with alternatives + rationale)
-- [ ] Complexity rated: 8 dimensions with evidence, score, level, floor rules, effort weeks (values read from `complexity-model.yaml`)
+- [ ] Complexity rated: 8 dimensions with evidence, delivery-model relief, score, level, floor rules, effort weeks and effort breakdown (values read from `complexity-model.yaml`)
 - [ ] Risk flags populated
 - [ ] `reports/Discovery-Dossier.md` written (15 sections)
 - [ ] `reports/Capability-Matrix.yaml` written (including `complexity:`)
-- [ ] `reports/Discovery-Report.html` written from the template (self-contained, no external assets)
+- [ ] `reports/Discovery-Report.html` written from the template (inline CSS; architecture diagram rendered as SVG, or via the pinned Mermaid fallback)
 - [ ] `reports/Decision-Log.md` updated with one-line entry
 - [ ] Handoff note delivered (next command: `/build-migration-plan`)
