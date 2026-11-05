@@ -28,8 +28,8 @@ all of them together.
 | **Re-publish an existing tag** | **Actions → Release VS Code extension → Run workflow**, `tag` = `vscode-v0.7.2`, `dryRun` = `false`. Publishing is skipped if that version is already on the Marketplace. |
 
 <!-- x-release-please-start-version -->
-Current source version: **0.8.0**. A local `npm run package` produces
-`packages/azure-migration-squad-vscode/azure-migration-squad-vscode-0.8.0.vsix`.
+Current source version: **0.8.1**. A local `npm run package` produces
+`packages/azure-migration-squad-vscode/azure-migration-squad-vscode-0.8.1.vsix`.
 <!-- x-release-please-end -->
 
 **Adding a version to a new file?** Wrap it in `x-release-please-start-version` /
@@ -132,7 +132,7 @@ On the merge to `main`, the `.github/workflows/release-please.yml` workflow runs
 
 - Parses conventional commits since the last release tag
 - Decides the semver bump (patch/minor/major)
-- Opens (or updates) a PR titled **`chore(main): release vscode-v0.8.0`** with coordinated changes:
+- Opens (or updates) a PR titled **`chore(main): release vscode-v0.8.1`** with coordinated changes:
   1. `packages/azure-migration-squad-vscode/package.json` — version bumped
   2. `packages/azure-migration-squad-vscode/CHANGELOG.md` — new entry with the commits
   3. `plugin.json`, `.github/plugin/marketplace.json`, the workspace lockfile and version-marked docs — matching versions (everything in `extra-files`)
@@ -147,7 +147,7 @@ Merge when you're happy with the version + changelog.
 
 The moment the Release PR merges, release-please:
 
-- Creates a git tag `vscode-v0.8.0`
+- Creates a git tag `vscode-v0.8.1`
 - Creates a GitHub Release with the changelog content
 
 In the same workflow run, the `publish` job calls `.github/workflows/release-vscode-extension.yml` with the new tag. A manually pushed `vscode-v*` tag triggers it too. It:
@@ -196,7 +196,7 @@ npm run release:local -- --minor
 npm run release:local -- --major
 
 # Set an exact version (from the repo root: no prompt, no build)
-npm run version:set -- 0.8.0
+npm run version:set -- 0.8.1
 
 # Skip the confirmation prompt (CI-friendly)
 npm run release:local -- --patch --yes
@@ -232,9 +232,9 @@ npm run release:local -- --patch --tag-prefix=my-prefix-v
 ```bash
 git diff plugin.json .github/plugin/marketplace.json package-lock.json packages/azure-migration-squad-vscode/package.json packages/azure-migration-squad-vscode/CHANGELOG.md
 git add plugin.json .github/plugin/marketplace.json package-lock.json packages/azure-migration-squad-vscode/package.json packages/azure-migration-squad-vscode/CHANGELOG.md
-git commit -m "chore: release vscode-v0.8.0"
-git tag vscode-v0.8.0
-git push origin HEAD vscode-v0.8.0
+git commit -m "chore: release vscode-v0.8.1"
+git tag vscode-v0.8.1
+git push origin HEAD vscode-v0.8.1
 ```
 
 ---
