@@ -4,6 +4,14 @@ All notable changes to the Azure Migration Agent VS Code extension are documente
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.1](https://github.com/RobertoBorges/GHCP-PromptMigration/compare/vscode-v0.8.0...vscode-v0.8.1) (2026-11-05)
+
+
+### Bug Fixes
+
+* replace dangling routing.md references left over from the Squad removal ([e3739ac](https://github.com/RobertoBorges/GHCP-PromptMigration/commit/e3739ac440f3bd61bf9327597ff3c928c00b9cdf))
+* replace dangling routing.md references left over from the Squad removal ([c2bc77d](https://github.com/RobertoBorges/GHCP-PromptMigration/commit/c2bc77d0f6c2c2fdc9030d7425d74a2efa383abb))
+
 ## [0.8.0](https://github.com/RobertoBorges/GHCP-PromptMigration/compare/vscode-v0.7.1...vscode-v0.8.0) (2026-11-05)
 
 
