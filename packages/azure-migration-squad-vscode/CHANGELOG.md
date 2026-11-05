@@ -4,6 +4,14 @@ All notable changes to the Azure Migration Agent VS Code extension are documente
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.0](https://github.com/RobertoBorges/GHCP-PromptMigration/compare/vscode-v0.7.1...vscode-v0.8.0) (2026-11-05)
+
+
+### Features
+
+* AI-aware complexity model, effort breakdown and rendered archit… ([e62c6fd](https://github.com/RobertoBorges/GHCP-PromptMigration/commit/e62c6fdecfd934a0ed155f92d05b4a258deca5fe))
+* AI-aware complexity model, effort breakdown and rendered architecture diagram ([4254a3f](https://github.com/RobertoBorges/GHCP-PromptMigration/commit/4254a3fff18c9730eb7f3fd01471e4ccc37b7364))
+
 ## [0.7.0](https://github.com/RobertoBorges/GHCP-PromptMigration/compare/vscode-v0.6.0...vscode-v0.7.0) (2026-10-16)
 
 
