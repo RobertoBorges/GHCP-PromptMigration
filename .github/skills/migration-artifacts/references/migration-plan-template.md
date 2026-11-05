@@ -65,16 +65,19 @@ flowchart TB
 
 > Each row is the dispatch contract for that phase. Migration-Orchestrator uses this table to route work.
 
-| Phase | Lead | Parallel | Skills to load | Inputs | Outputs | Quality gate | Effort |
+> Quality gates are the per-phase exit gates in [migration-handoff.md](./migration-handoff.md). Effort comes from `complexity.effort_breakdown` in the Capability Matrix: group work streams by phase so the column sums to the total in `complexity.effort_weeks`.
+
+| Phase | Lead | Parallel | Skills to load | Inputs | Outputs | Quality gate | Effort (weeks) |
 |-------|------|----------|----------------|--------|---------|--------------|--------|
-| **Phase 1 — Plan & Assess** | Architect | Azure Specialist, Database Specialist | capability-matrix, migration-report-template, <source-X>, <stack-X> | Discovery Dossier, Capability Matrix | Application-Assessment-Report.md | Phase 1 gate (routing.md) | <S/M/L/XL> |
-| **Phase 2 — Migrate Code** | Coder | <per stack/workload> | <stack-X>, <workload-X>, config-transformation | Capability Matrix, Phase 1 report | Migration-Change-Log.md | Phase 2 gate | <S/M/L/XL> |
-| **DB Migration (if applicable)** | Database Specialist | Coder, Security Auditor | ef-migration or db-specific | Capability Matrix | Database-Migration-Report.md | DB gate | <S/M/L/XL> |
-| **Phase 3 — Generate Infra** | Azure Specialist | DevOps Engineer, Security Auditor | bicep-modules or terraform-azure, azure-X | Phase 1 + Phase 2 outputs | Infra-Plan.md, IaC files | Phase 3 gate | <S/M/L/XL> |
-| **Security Hardening** | Security Auditor | Azure Specialist, Observability Engineer | managed-identity, azure-keyvault-secrets, rbac-least-privilege, owasp-top10-review | Phase 3 output | Security-Review-Report.md | Security gate | <S/M/L> |
-| **Phase 4 — Deploy to Azure** | DevOps Engineer | Cutover Commander, Tester | azd-configuration, azure-X | IaC + code | Deployment evidence | Phase 4 gate | <S/M/L/XL> |
-| **Phase 5 — Setup CI/CD** | DevOps Engineer | Tester, Security Auditor | github-actions-cicd or azure-devops-pipelines | Deployment success | Pipeline files | Phase 5 gate | <S/M/L> |
-| **Phase 6 — Post-Migration Ops** | Observability Engineer | Performance Engineer, Cost Engineer | azure-monitor-appinsights, cost-optimization | Deployment + pipeline | Operational runbook | Phase 6 gate | <S/M/L> |
+| **Phase 1 — Plan & Assess** | Architect | Azure Specialist, Database Specialist | capability-matrix, migration-report-template, <source-X>, <stack-X> | Discovery Dossier, Capability Matrix | Application-Assessment-Report.md | Phase 1 gate | <min–max> |
+| **Phase 2 — Migrate Code** | Coder | <per stack/workload> | <stack-X>, <workload-X>, config-transformation | Capability Matrix, Phase 1 report | Migration-Change-Log.md | Phase 2 gate | <min–max> |
+| **DB Migration (if applicable)** | Database Specialist | Coder, Security Auditor | ef-migration or db-specific | Capability Matrix | Database-Migration-Report.md | Database migration gate | <min–max> |
+| **Phase 3 — Generate Infra** | Azure Specialist | DevOps Engineer, Security Auditor | bicep-modules or terraform-azure, azure-X | Phase 1 + Phase 2 outputs | Infra-Plan.md, IaC files | Phase 3 gate | <min–max> |
+| **Security Hardening** | Security Auditor | Azure Specialist, Observability Engineer | managed-identity, azure-keyvault-secrets, rbac-least-privilege, owasp-top10-review | Phase 3 output | Security-Review-Report.md | Security hardening gate | <min–max> |
+| **Phase 4 — Deploy to Azure** | DevOps Engineer | Cutover Commander, Tester | azd-configuration, azure-X | IaC + code | Deployment evidence | Phase 4 gate | <min–max> |
+| **Phase 5 — Setup CI/CD** | DevOps Engineer | Tester, Security Auditor | github-actions-cicd or azure-devops-pipelines | Deployment success | Pipeline files | Phase 5 gate | <min–max> |
+| **Phase 6 — Post-Migration Ops** | Observability Engineer | Performance Engineer, Cost Engineer | azure-monitor-appinsights, cost-optimization | Deployment + pipeline | Operational runbook | Phase 6 gate | <min–max> |
+| **Total** | | | | | | | `complexity.effort_weeks` |
 
 ## 5. Cross-Phase Risks & Mitigations
 
@@ -85,7 +88,7 @@ flowchart TB
 
 ## 6. Quality Gates
 
-### Standard gates (from `.github/copilot-instructions.md`)
+### Standard gates (from [migration-handoff.md](./migration-handoff.md) per-phase exit gates)
 
 These always apply. Referenced, not duplicated, here.
 

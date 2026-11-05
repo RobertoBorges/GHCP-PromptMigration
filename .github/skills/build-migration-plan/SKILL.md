@@ -115,10 +115,10 @@ Build a per-phase plan. For each of Phase 1–6:
 - **Skills to load** (only matrix-relevant)
 - **Inputs** (artifacts required to start)
 - **Outputs** (artifacts produced)
-- **Quality gate** (from `routing.md` phase gates table)
-- **Estimated effort** — start from the matrix `complexity.effort_weeks` (total for the application, from the complexity model) and split it across phases using `complexity.effort_breakdown` (work streams are already mapped to main-path phases; group them by phase). If the breakdown is missing, split in proportion to the strategy emphasis in `routing.md`. The per-phase figures must sum to the total range. If `complexity` is missing, rate it first using `.github/skills/migration-artifacts/references/complexity-model.md`.
+- **Quality gate** (from the per-phase exit gates in `.github/skills/migration-artifacts/references/migration-handoff.md`)
+- **Estimated effort** — start from the matrix `complexity.effort_weeks` (total for the application, from the complexity model) and split it across phases using `complexity.effort_breakdown` (work streams are already mapped to main-path phases; group them by phase). If the breakdown is missing, split in proportion to the Strategy → Phase Emphasis table in `migration-handoff.md`. The per-phase figures must sum to the total range. If `complexity` is missing, rate it first using `.github/skills/migration-artifacts/references/complexity-model.md`.
 
-For `migration_strategy.recommendation`, emphasize/lighten phases per the strategy table in `routing.md`.
+For `migration_strategy.recommendation`, emphasize/lighten phases per the Strategy → Phase Emphasis table in `migration-handoff.md`.
 
 ## Step 5 — Define quality gates specific to this app
 
