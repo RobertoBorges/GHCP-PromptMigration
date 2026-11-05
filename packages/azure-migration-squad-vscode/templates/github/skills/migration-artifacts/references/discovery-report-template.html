@@ -14,9 +14,24 @@
      High → lvl-high / #d83b01, Very High → lvl-veryhigh / #a80000, not-estimated → lvl-none / #a19f9d.
      {{LOC_TOTAL_SHORT}} is a compact form such as 320k or 1.2M.
   5. Gauge: {{SCORE}} is 0–100 and is used directly as the arc length (pathLength=100).
-  6. Dimension bar width: rating × 20 (%). Language bar width: share %.
-  7. Escape <, >, & in any user-supplied text. Do not add external CSS/JS/fonts/CDNs.
+  6. Dimension bar width: adjusted rating × 20 (%). Language bar width: share %.
+     {{DIM_RATING_TEXT}} is "N / 5" when no relief applied, or "N → M / 5 (AI)" when the
+     delivery model lowered the rating (N = rating, M = adjusted_rating).
+  7. Escape <, >, & in any user-supplied text. No external CSS, fonts or images. The only
+     allowed external asset is the pinned, integrity-checked Mermaid script in the
+     "IF:diagram-client" block, used only when no pre-rendered SVG is available.
   8. Missing data → write "unknown" and list it under Unresolved Questions; never invent values.
+  9. Effort breakdown: one REPEAT:segment, REPEAT:legend and REPEAT:stream item per
+     complexity.effort_breakdown entry, in YAML order. Segment width = percent. {{WS_CLASS}} is
+     "ws-" + stream id (colours are defined in the CSS). {{WS_FLAG}} is "widened" when the stream
+     was widened, else "". Team-days follow complexity-model.md Step 5 rounding; when
+     {{WS_DAYS_MIN}} equals {{WS_DAYS_MAX}}, write the value once and drop the dash.
+     Delete the whole section for retire/retain.
+ 10. Diagram: prefer "IF:diagram-svg" with the SVG produced by mmdc pasted inline (strip the XML
+     prolog). Otherwise keep "IF:diagram-client". Keep exactly one of the two. Always keep the
+     <details> block with the Mermaid source.
+ 11. Delivery model: {{DELIVERY_MODEL}} is "AI-assisted" or "Traditional". Keep "IF:ai-assisted"
+     (traditional comparison) only for AI-assisted delivery.
 -->
 <html lang="en">
 <head>
@@ -74,6 +89,20 @@
   .effort .big { font-size: 22px; font-weight: 700; color: var(--blue); }
   .callout { border-left: 4px solid var(--amber); background: rgba(255,140,0,.06); padding: 10px 14px; border-radius: 4px; margin: 10px 0; font-size: 13px; }
   .callout.risk { border-left-color: var(--red); background: rgba(168,0,0,.06); }
+  .stack { display: flex; height: 26px; border-radius: 4px; overflow: hidden; margin: 8px 0 6px; }
+  .stack > span { display: block; height: 100%; }
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 12px; color: var(--muted); margin-bottom: 10px; }
+  .legend i, td i.sw { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: middle; }
+  .ws-plan { background: #8764b8; } .ws-code { background: #0078d4; } .ws-azure_readiness { background: #00b7c3; }
+  .ws-integrations { background: #038387; } .ws-identity { background: #5c2e91; } .ws-data { background: #ca5010; }
+  .ws-infra { background: #498205; } .ws-testing { background: #c19c00; } .ws-cutover { background: #a4262c; }
+  .lev { font-size: 11px; font-weight: 600; text-transform: uppercase; color: var(--muted); }
+  .lev.high { color: var(--green); } .lev.low { color: var(--orange); }
+  .flag { font-size: 11px; font-weight: 600; color: var(--amber); }
+  figure.diagram { margin: 8px 0; padding: 12px; border: 1px solid var(--border); border-radius: 6px; background: #fff; overflow-x: auto; text-align: center; }
+  figure.diagram svg { max-width: 100%; height: auto; }
+  figure.diagram pre.mermaid { background: transparent; border: 0; text-align: left; }
+  details summary { cursor: pointer; color: var(--muted); font-size: 12px; margin-top: 6px; }
   .two { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
   ul { margin: 6px 0; padding-left: 20px; }
   pre { background: var(--bg-alt); border: 1px solid var(--border); padding: 12px; border-radius: 4px; overflow-x: auto; font-size: 12px; }
@@ -83,7 +112,8 @@
   @media print {
     body { background: #fff; } section, .kpi { box-shadow: none; border: 1px solid var(--border); }
     section { page-break-inside: avoid; } header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    th, .badge, .bar > span { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    th, .badge, .bar > span, .stack > span, .legend i, td i.sw { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    details { display: none; }
   }
 </style>
 </head>
@@ -100,7 +130,7 @@
   <div class="kpis">
     <div class="kpi"><div class="v">{{LOC_TOTAL_SHORT}}</div><div class="l">Lines of code</div><div class="s">{{LOC_TOTAL}} lines · {{LOC_METHOD}}</div></div>
     <div class="kpi {{LEVEL_CLASS}}"><div class="v">{{LEVEL}}</div><div class="l">Migration complexity</div><div class="s">Score {{SCORE}}/100</div></div>
-    <div class="kpi {{LEVEL_CLASS}}"><div class="v">{{EFFORT_MIN}}–{{EFFORT_MAX}} wks</div><div class="l">Estimated effort</div><div class="s">{{STRATEGY}} · {{PROVISIONAL_TEXT}}</div></div>
+    <div class="kpi {{LEVEL_CLASS}}"><div class="v">{{EFFORT_MIN}}–{{EFFORT_MAX}} wks</div><div class="l">Estimated effort</div><div class="s">{{STRATEGY}} · {{DELIVERY_MODEL}} · {{PROVISIONAL_TEXT}}</div></div>
     <div class="kpi"><div class="v">{{STRATEGY}}</div><div class="l">Recommended strategy</div><div class="s">{{TOP_AZURE_TARGET}}</div></div>
     <div class="kpi"><div class="v">{{PRIMARY_STACK}}</div><div class="l">Primary stack</div><div class="s">{{RUNTIME_VERSION}}</div></div>
     <div class="kpi"><div class="v">{{INTEGRATION_COUNT}}</div><div class="l">Integrations</div><div class="s">{{RISK_FLAG_COUNT}} risk flags</div></div>
@@ -134,7 +164,7 @@
             <!-- REPEAT:dimension (8 rows, in complexity-model.yaml order) -->
             <tr>
               <td>{{DIM_LABEL}}</td>
-              <td><div class="bar r{{DIM_RATING}}"><span style="width:{{DIM_RATING_X20}}%"></span></div><span class="muted">{{DIM_RATING}} / 5</span></td>
+              <td><div class="bar r{{DIM_ADJUSTED}}"><span style="width:{{DIM_ADJUSTED_X20}}%"></span></div><span class="muted">{{DIM_RATING_TEXT}}</span></td>
               <td>{{DIM_WEIGHT_PCT}}%</td>
               <td>{{DIM_EVIDENCE}}</td>
               <td><span class="conf {{DIM_CONFIDENCE}}">{{DIM_CONFIDENCE}}</span></td>
@@ -142,15 +172,18 @@
             <!-- /REPEAT:dimension -->
           </tbody>
         </table>
-        <p class="muted">Weighted rating {{WEIGHTED_RATING}} of 5. Method: complexity-model.md (model {{MODEL_VERSION}}).</p>
+        <p class="muted">Weighted rating {{WEIGHTED_RATING}} of 5 (adjusted ratings). Delivery model: {{DELIVERY_MODEL}} — {{TOOLING}}. Method: complexity-model.md (model {{MODEL_VERSION}}).</p>
       </div>
     </div>
 
     <div class="effort">
       <div class="big">{{EFFORT_MIN}}–{{EFFORT_MAX}} weeks</div>
-      <div>{{LEVEL}} baseline {{LEVEL_WEEKS_MIN}}–{{LEVEL_WEEKS_MAX}} weeks × {{STRATEGY}} factor {{STRATEGY_FACTOR}} · Team: {{BASELINE_TEAM}}</div>
+      <div>{{LEVEL}} baseline {{LEVEL_WEEKS_MIN}}–{{LEVEL_WEEKS_MAX}} weeks × {{STRATEGY}} factor {{STRATEGY_FACTOR}} · {{DELIVERY_MODEL}} delivery · Team: {{BASELINE_TEAM}}</div>
+      <!-- IF:ai-assisted -->
+      <div class="muted">Without AI assistance: score {{TRAD_SCORE}} ({{TRAD_LEVEL}}), {{TRAD_EFFORT_MIN}}–{{TRAD_EFFORT_MAX}} weeks.</div>
+      <!-- /IF:ai-assisted -->
       <!-- IF:provisional -->
-      <div class="callout">Provisional: low-confidence evidence on {{LOW_CONFIDENCE_DIMENSIONS}}. The upper bound was extended; resolve the open questions below to narrow it.</div>
+      <div class="callout">Provisional: low-confidence evidence on {{LOW_CONFIDENCE_DIMENSIONS}}. The upper bound of {{WIDENED_STREAMS}} was doubled; resolve the open questions below to narrow it.</div>
       <!-- /IF:provisional -->
     </div>
 
@@ -167,6 +200,34 @@
         <p class="muted"><strong>Excludes:</strong> {{EFFORT_EXCLUDES}}</p>
       </div>
     </div>
+  </section>
+
+  <!-- 2b. Effort breakdown (delete for retire/retain) -->
+  <section id="effort-breakdown">
+    <h2>Where the {{EFFORT_MIN}}–{{EFFORT_MAX}} weeks go</h2>
+    <p class="muted">The estimate split across work streams by share × stream rating (complexity-model.md Step 5). Team-days = weeks × 5 for {{BASELINE_TEAM}}. Streams overlap in practice; the team works several in parallel.</p>
+    <div class="stack" role="img" aria-label="Effort share by work stream">
+      <!-- REPEAT:segment --><span class="{{WS_CLASS}}" style="width:{{WS_PERCENT}}%" title="{{WS_LABEL}} {{WS_PERCENT}}%"></span><!-- /REPEAT:segment -->
+    </div>
+    <div class="legend">
+      <!-- REPEAT:legend --><span><i class="{{WS_CLASS}}"></i>{{WS_LABEL}}</span><!-- /REPEAT:legend -->
+    </div>
+    <table>
+      <thead><tr><th>Work stream</th><th>Main-path phase</th><th>Driven by</th><th>Share</th><th>Team-days</th><th>AI leverage</th></tr></thead>
+      <tbody>
+        <!-- REPEAT:stream (complexity.effort_breakdown, YAML order) -->
+        <tr>
+          <td><i class="sw {{WS_CLASS}}"></i>{{WS_LABEL}}</td>
+          <td>{{WS_PHASE}}</td>
+          <td>{{WS_DRIVERS}} <span class="muted">({{WS_RATING}})</span></td>
+          <td>{{WS_PERCENT}}%</td>
+          <td>{{WS_DAYS_MIN}}–{{WS_DAYS_MAX}} <span class="flag">{{WS_FLAG}}</span></td>
+          <td><span class="lev {{WS_AI_LEVERAGE}}">{{WS_AI_LEVERAGE}}</span></td>
+        </tr>
+        <!-- /REPEAT:stream -->
+      </tbody>
+    </table>
+    <p class="muted">"widened" = maximum doubled because a driver has low-confidence evidence. AI leverage = how much of the stream the coding agent performs (high: mostly generated and reviewed; low: mostly human-paced work such as data copy windows, approvals and cutover).</p>
   </section>
 
   <!-- 3. Code size -->
@@ -282,9 +343,17 @@
         <p class="muted">The Architect selects the final target and SKU.</p>
       </div>
     </div>
-    <!-- IF:diagram — Mermaid source shown as text (no CDN rendering) -->
-    <h3>Current architecture (Mermaid source)</h3>
-    <pre><code>{{MERMAID_SOURCE}}</code></pre>
+    <!-- IF:diagram -->
+    <h3>Current architecture</h3>
+    <!-- IF:diagram-svg — preferred: SVG pre-rendered with mmdc, pasted inline -->
+    <figure class="diagram">{{MERMAID_SVG}}</figure>
+    <!-- /IF:diagram-svg -->
+    <!-- IF:diagram-client — fallback when mmdc is unavailable: renders in the browser when online, shows the source when offline -->
+    <figure class="diagram"><pre class="mermaid">{{MERMAID_SOURCE}}</pre></figure>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@11.17.2/dist/mermaid.min.js" integrity="sha384-EOXBFmc3gx5mb+vn0vPvvGqACToJD24hhacX5Yx+8NUUQrHIle/Qi5Bg9o3zKwW2" crossorigin="anonymous"></script>
+    <script>if (window.mermaid) { mermaid.initialize({ startOnLoad: true, securityLevel: 'strict', theme: 'neutral' }); }</script>
+    <!-- /IF:diagram-client -->
+    <details><summary>Mermaid source</summary><pre><code>{{MERMAID_SOURCE}}</code></pre></details>
     <!-- /IF:diagram -->
   </section>
 

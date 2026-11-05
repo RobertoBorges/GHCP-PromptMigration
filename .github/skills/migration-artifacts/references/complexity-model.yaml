@@ -8,7 +8,7 @@
 # weights / thresholds / weeks when the estimates drift. Bump `model_version`
 # whenever you change a number so reports can show which version produced them.
 
-model_version: "1.0"
+model_version: "2.0"
 
 # ---------------------------------------------------------------------------
 # Dimensions — each rated 1 (simple) … 5 (very hard). Weights must sum to 1.0.
@@ -54,7 +54,34 @@ dimensions:
     label: Delivery readiness & cutover
 
 # ---------------------------------------------------------------------------
+# Delivery model — who does the hands-on migration work.
+# AI-assisted delivery lowers the rating of code-bound dimensions (the coding
+# agent does the mechanical conversion). Human-bound dimensions — integrations,
+# data, identity/compliance, cutover — keep their rating: they depend on other
+# teams, data volumes, approvals and downtime windows that AI does not shorten.
+# The level → weeks table below is the same for both models.
+# ---------------------------------------------------------------------------
+delivery_model:
+  default: ai-assisted
+  options:
+    ai-assisted:
+      label: AI-assisted
+      # Record the agent and model actually used, e.g. "GitHub Copilot agent mode + Claude Sonnet 5.5".
+      tooling: "GitHub Copilot agent mode + frontier model (e.g., Claude Sonnet 5.5)"
+      rating_relief:          # points subtracted from the rating; never below 1
+        code_size: 1
+        stack_gap: 1
+        architecture: 1
+        azure_blockers: 1
+      no_relief_at_rating: 5  # rating-5 cases need a rewrite or redesign; humans still drive them
+    traditional:
+      label: Traditional (no AI coding agent)
+      tooling: none
+      rating_relief: {}
+
+# ---------------------------------------------------------------------------
 # Score → level. score = round((weighted_rating - 1) / 4 * 100), range 0–100.
+# weighted_rating uses the adjusted ratings (after delivery-model relief).
 # ---------------------------------------------------------------------------
 levels:
   - name: Low
@@ -114,10 +141,74 @@ strategy_factors:
 
 baseline_team: "2 engineers + 1 part-time architect"
 
-# If any dimension with weight >= this value has evidence_confidence: low,
-# extend `max` to the next level's max and mark the estimate provisional.
+# ---------------------------------------------------------------------------
+# Effort breakdown — where the weeks go. The total effort is split across the
+# work streams below. Each stream's slice = share × stream rating / 3, then
+# normalised so slices sum to 100 %. Stream rating = mean of its drivers'
+# adjusted ratings (`overall` = weighted_rating). Shares must sum to 1.0.
+# ai_leverage is descriptive: how much of the stream the coding agent does.
+# ---------------------------------------------------------------------------
+work_streams:
+  - id: plan
+    label: Assessment, decisions & detailed plan
+    phase: Phase 1
+    share: 0.08
+    drivers: [overall]
+    ai_leverage: medium
+  - id: code
+    label: Code & configuration migration
+    phase: Phase 2
+    share: 0.30
+    drivers: [code_size, stack_gap]
+    ai_leverage: high
+  - id: azure_readiness
+    label: State, jobs & Azure-blocker remediation
+    phase: Phase 2
+    share: 0.10
+    drivers: [architecture, azure_blockers]
+    ai_leverage: high
+  - id: integrations
+    label: Integration rework & connectivity
+    phase: Phase 2
+    share: 0.08
+    drivers: [integrations]
+    ai_leverage: medium
+  - id: identity
+    label: Identity, secrets & compliance controls
+    phase: Phase 2
+    share: 0.07
+    drivers: [identity_compliance]
+    ai_leverage: medium
+  - id: data
+    label: Data migration & validation
+    phase: Phase 4 (/database-migration)
+    share: 0.10
+    drivers: [data]
+    ai_leverage: low
+  - id: infra
+    label: Infrastructure as code & CI/CD
+    phase: Phase 3 + Phase 5
+    share: 0.10
+    drivers: [architecture, delivery_readiness]
+    ai_leverage: high
+  - id: testing
+    label: Testing & validation
+    phase: Phase 2–4
+    share: 0.10
+    drivers: [code_size, delivery_readiness]
+    ai_leverage: medium
+  - id: cutover
+    label: Deployment, cutover & hypercare
+    phase: Phase 4 + Phase 6
+    share: 0.07
+    drivers: [delivery_readiness]
+    ai_leverage: low
+
+# Low-confidence evidence widens only the streams it drives: for every stream
+# with a `low`-confidence driver, multiply that stream's max by
+# `stream_max_multiplier` and mark the whole estimate provisional.
 low_confidence:
-  weight_threshold: 0.15
+  stream_max_multiplier: 2.0
   provisional_label: provisional
 
 # What the estimate covers / excludes. Shown verbatim in reports.
@@ -139,7 +230,8 @@ effort_scope:
 calibration_log: []
 #  - app: <name>
 #    date: <YYYY-MM-DD>
-#    model_version: "1.0"
+#    model_version: "2.0"
+#    delivery_model: ai-assisted
 #    score: 62
 #    level: High
 #    strategy: refactor

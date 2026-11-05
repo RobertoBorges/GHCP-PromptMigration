@@ -25,7 +25,7 @@
 
 <5 lines covering: what the app does, where it runs today, what stack, primary risk, recommended strategy>
 
-**Size:** <total LOC> lines of code (<method>) · **Migration complexity:** <Low | Medium | High | Very High> (score <NN>/100) · **Estimated effort:** <min>–<max> weeks<, provisional>
+**Size:** <total LOC> lines of code (<method>) · **Migration complexity:** <Low | Medium | High | Very High> (score <NN>/100) · **Estimated effort:** <min>–<max> weeks (<AI-assisted | traditional>)<, provisional>
 
 ## 2. Application Identity
 
@@ -118,6 +118,29 @@
 |-------------|-----------|----------|-------------|-------|
 | <name> | <in | out | both> | <REST | SOAP | SFTP | JMS | AMQP | SMB | ...> | <high | med | low> | <e.g., "external customer-facing API"> |
 
+### Current Architecture Diagram
+
+Mermaid source, also saved as `reports/diagrams/current-architecture.mmd` and rendered into the HTML report. Use `flowchart LR` with subgraphs (users, application, data, external services) so the diagram stays readable; one node per component in §3, §6 and the table above.
+
+```mermaid
+flowchart LR
+  subgraph Users
+    U[<client type>]
+  end
+  subgraph App[<app name> — <host/runtime>]
+    W[<component>]
+  end
+  subgraph Data
+    DB[(<datastore>)]
+  end
+  subgraph External
+    X[<integration>]
+  end
+  U --> W
+  W --> DB
+  W -. <protocol> .-> X
+```
+
 ### Identity Provider
 
 - Current: <AD | LDAP | SAML | OAuth | custom | hardcoded>
@@ -159,22 +182,41 @@
 > Method: `.github/skills/migration-artifacts/references/complexity-model.md` · Model version: `<model_version>`
 
 **Complexity level:** `<Low | Medium | High | Very High | not-estimated>` · **Score:** <NN>/100 (score alone → <score_level>)
+**Delivery model:** <AI-assisted (<tooling>) | Traditional> · **Without AI assistance:** <score> (<level>), <min>–<max> weeks <omit when traditional>
 **Floor rules applied:** <rule ids, or "none">
-**Estimated effort:** **<min>–<max> weeks** (<strategy> × <factor>)<, provisional — see low-confidence dimensions> for <baseline_team>
+**Estimated effort:** **<min>–<max> weeks** (<strategy> × <factor>)<, provisional — see widened streams> for <baseline_team>
 
-| Dimension | Rating (1–5) | Weight | Evidence | Confidence |
-|-----------|--------------|--------|----------|------------|
-| Code size | <n> | 0.20 | <N lines of code via <method>> | <h/m/l> |
-| Stack & runtime gap | <n> | 0.15 | <evidence> | <h/m/l> |
-| Integrations | <n> | 0.15 | <count, legacy protocols> | <h/m/l> |
-| Data | <n> | 0.15 | <evidence> | <h/m/l> |
-| Architecture, state & jobs | <n> | 0.10 | <evidence> | <h/m/l> |
-| Azure compatibility blockers | <n> | 0.10 | <evidence> | <h/m/l> |
-| Identity, security & compliance | <n> | 0.10 | <evidence> | <h/m/l> |
-| Delivery readiness & cutover | <n> | 0.05 | <evidence> | <h/m/l> |
-| **Weighted rating** | **<x.xx>** | | | |
+| Dimension | Rating (1–5) | Adjusted | Weight | Evidence | Confidence |
+|-----------|--------------|----------|--------|----------|------------|
+| Code size | <n> | <n> | 0.20 | <N lines of code via <method>> | <h/m/l> |
+| Stack & runtime gap | <n> | <n> | 0.15 | <evidence> | <h/m/l> |
+| Integrations | <n> | <n> | 0.15 | <count, legacy protocols> | <h/m/l> |
+| Data | <n> | <n> | 0.15 | <evidence> | <h/m/l> |
+| Architecture, state & jobs | <n> | <n> | 0.10 | <evidence> | <h/m/l> |
+| Azure compatibility blockers | <n> | <n> | 0.10 | <evidence> | <h/m/l> |
+| Identity, security & compliance | <n> | <n> | 0.10 | <evidence> | <h/m/l> |
+| Delivery readiness & cutover | <n> | <n> | 0.05 | <evidence> | <h/m/l> |
+| **Weighted rating** | | **<x.xx>** | | | |
 
 **Top drivers:** <2–3 plain-language drivers>
+
+### Effort Breakdown
+
+Where the <min>–<max> weeks go (method: complexity-model.md Step 5). Team-days = weeks × 5 for the baseline team.
+
+| Work stream | Main-path phase | Stream rating | Share | Team-days | AI leverage |
+|-------------|-----------------|---------------|-------|-----------|-------------|
+| Assessment, decisions & detailed plan | Phase 1 | <x.xx> | <p>% | <min>–<max> | medium |
+| Code & configuration migration | Phase 2 | <x.xx> | <p>% | <min>–<max> | high |
+| State, jobs & Azure-blocker remediation | Phase 2 | <x.xx> | <p>% | <min>–<max> | high |
+| Integration rework & connectivity | Phase 2 | <x.xx> | <p>% | <min>–<max> | medium |
+| Identity, secrets & compliance controls | Phase 2 | <x.xx> | <p>% | <min>–<max> | medium |
+| Data migration & validation | Phase 4 (/database-migration) | <x.xx> | <p>% | <min>–<max><, widened> | low |
+| Infrastructure as code & CI/CD | Phase 3 + Phase 5 | <x.xx> | <p>% | <min>–<max> | high |
+| Testing & validation | Phase 2–4 | <x.xx> | <p>% | <min>–<max> | medium |
+| Deployment, cutover & hypercare | Phase 4 + Phase 6 | <x.xx> | <p>% | <min>–<max> | low |
+
+**Widened for low confidence:** <stream names and the low-confidence dimension, or "none">
 
 **Effort covers:** <effort_scope.includes> · **Excludes:** <effort_scope.excludes>
 
@@ -243,7 +285,7 @@ A dossier is **complete** when:
 
 - [ ] All 15 sections present
 - [ ] Lines of code reported with counting method (§1, §4, §10)
-- [ ] §10 complexity table has all 8 dimensions with evidence, plus level and effort weeks
+- [ ] §10 complexity table has all 8 dimensions with evidence (rating and adjusted rating), plus level, delivery model, effort weeks and the effort breakdown
 - [ ] All confidence labels filled
 - [ ] All evidence cells point to specific files or quotes
 - [ ] At least 2 alternatives in §9

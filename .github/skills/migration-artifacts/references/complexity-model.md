@@ -7,7 +7,9 @@
 ## Overview
 
 ```
-8 dimensions ── rate each 1–5 from evidence ──► weighted rating (1.0–5.0)
+8 dimensions ── rate each 1–5 from evidence ──► delivery-model relief (AI-assisted: code-bound dimensions −1)
+                                                   │
+                                     adjusted ratings → weighted rating (1.0–5.0)
                                                    │
                          score = round((weighted − 1) / 4 × 100)   → 0–100
                                                    │
@@ -15,7 +17,10 @@
                                                    │
                          floor rules can raise the level (never lower it)
                                                    │
-       effort weeks = level weeks × strategy factor  (+ widen if low confidence)
+       effort weeks = level weeks × strategy factor
+                                                   │
+       breakdown: split the weeks across 9 work streams by share × stream rating
+                  (low-confidence evidence widens only the streams it drives)
 ```
 
 ## Step 1 — Rate each dimension (1–5)
@@ -112,20 +117,45 @@ Use the blocker list from `quick-triage` Step 3: Windows-only APIs, GAC/COM regi
 | 4 | No tests, no CI/CD, tight cutover window, or HA/DR / multi-region requirement |
 | 5 | No tests, no build reproducibility, near-zero downtime required, HA/DR across regions |
 
-## Step 2 — Score and level
+## Step 2 — Apply the delivery model
 
-1. `weighted = Σ (weight × rating)`, a value from 1.0 to 5.0.
+The delivery model says who does the hands-on work. Read it from `delivery_model` in the YAML. The default is **`ai-assisted`**: a coding agent (for example GitHub Copilot agent mode with Claude Sonnet 5.5) performs the code conversion and engineers review, test and decide. Use `traditional` only when the user says the team will not use an AI coding agent.
+
+| Dimension type | Dimensions | AI-assisted adjustment |
+|---|---|---|
+| Code-bound | code size, stack gap, architecture, Azure blockers | Rating − `rating_relief` (default 1), never below 1. Ratings of `no_relief_at_rating` (5) stay: rewrites and redesigns are still human-led. |
+| Human-bound | integrations, data, identity & compliance, delivery & cutover | No change. They depend on other teams, data volume, approvals and downtime windows. |
+
+Keep both values: `rating` (what the evidence says) and `adjusted_rating` (after relief). Scoring uses `adjusted_rating`. Record the agent and model actually used in `tooling`.
+
+Also compute the **traditional comparison**: score, level and effort with no relief. Reports show it as a one-line "without AI assistance" reference so stakeholders see the difference.
+
+## Step 3 — Score and level
+
+1. `weighted = Σ (weight × adjusted_rating)`, a value from 1.0 to 5.0.
 2. `score = round((weighted − 1) / 4 × 100)`, a value from 0 to 100.
 3. Pick the highest `levels[].name` whose `min_score ≤ score`. Defaults: Low < 30, Medium 30–54, High 55–74, Very High ≥ 75.
 4. Apply every rule in `floor_rules`. If a rule fires and its `min_level` is higher, raise the level. Record each fired rule `id`.
 5. If any `no_estimate_when` condition holds, set `level: not-estimated` and point to `source-unsupported-escalation`.
 
-## Step 3 — Effort in weeks
+## Step 4 — Effort in weeks
 
-1. Take `weeks.min` / `weeks.max` of the final level.
-2. Multiply by `strategy_factors[migration_strategy.recommendation]`. Round `min` down and `max` up. Minimum is 1 week unless the factor is 0.
-3. **Low confidence widening:** if any dimension with `weight ≥ low_confidence.weight_threshold` has confidence `low`, replace `max` with the **next** level's `weeks.max` (× strategy factor) and mark the estimate `provisional`. Very High stays at its own max but is still provisional.
-4. Always show `baseline_team` and the `effort_scope` includes/excludes next to the number. A week figure without its assumptions is misleading.
+1. Take `weeks.min` / `weeks.max` of the final level. The same table applies to both delivery models; AI changes the ratings, not the table.
+2. Multiply by `strategy_factors[migration_strategy.recommendation]`. Keep the unrounded values for Step 5.
+3. Always show `baseline_team`, the delivery model and the `effort_scope` includes/excludes next to the number. A week figure without its assumptions is misleading.
+
+## Step 5 — Effort breakdown (where the weeks go)
+
+Split the Step 4 effort across `work_streams`. Each stream maps to a main-path phase so `/phase1-plan` can reuse it.
+
+1. **Stream rating** = mean of its `drivers`' adjusted ratings (`overall` = the weighted rating).
+2. **Slice** = `share × stream rating / 3`. Normalise: `percent = slice / Σ slices`. A stream with harder drivers gets a bigger share; easy ones shrink.
+3. **Stream min / max** = unrounded total min / max × percent.
+4. **Low confidence:** for each stream with at least one driver at `evidence_confidence: low`, multiply that stream's max by `low_confidence.stream_max_multiplier` (2.0). Mark the estimate `provisional` and name the widened streams. Only the uncertain part of the plan grows.
+5. **Totals:** `min = floor(Σ stream min)` (at least 1 unless the strategy factor is 0), `max = ceil(Σ stream max)`.
+6. Present stream effort in **team-days** (weeks × 5) so small streams stay readable. Round the minimum **down** and the maximum **up** to the nearest 0.5 day (the minimum is never below 0.5), the same direction as the week totals. When both ends round to the same value, show it once (for example `0.5` rather than `0.5–0.5`). Rounded stream values may not add up exactly to the rounded totals.
+
+For `retire` / `retain` (factor 0), skip the breakdown.
 
 ## Measuring lines of code
 
@@ -167,31 +197,49 @@ Rules:
 
 ## Worked example
 
-A .NET Framework 4.7.2 WebForms line-of-business app, replatform strategy:
+A .NET Framework 4.7.2 WebForms line-of-business app, replatform strategy, AI-assisted delivery:
 
-| Dimension | Evidence | Rating | Weight | Weighted |
+| Dimension | Evidence | Rating | Adjusted (AI) | Weight | Weighted |
+|---|---|---|---|---|---|
+| Code size | `scc`: 320k LOC | 4 | 3 | 0.20 | 0.60 |
+| Stack gap | `*.csproj` TargetFrameworkVersion v4.7.2, WebForms | 4 | 3 | 0.15 | 0.45 |
+| Integrations | 8 systems, 2 SOAP | 3 + 1 = 4 | 4 | 0.15 | 0.60 |
+| Data | SQL Server 2016, 150 GB, 60 stored procs → Azure SQL MI | 3 | 3 | 0.15 | 0.45 |
+| Architecture | Monolith, InProc session, 4 scheduled tasks | 3 | 2 | 0.10 | 0.20 |
+| Azure blockers | Registry reads, local file share | 3 | 2 | 0.10 | 0.20 |
+| Identity | Windows integrated auth, no regulated data | 3 | 3 | 0.10 | 0.30 |
+| Delivery | No tests, manual deploy | 4 | 4 | 0.05 | 0.20 |
+| **Total** | | | | | **3.00** |
+
+- Score = round((3.00 − 1) / 4 × 100) = **50**, which is **Medium**. No floor rule fires.
+- Effort = 3–5 weeks × 0.8 (replatform) = **2–4 weeks** for 2 engineers + 1 part-time architect, AI-assisted.
+- Without AI assistance (no relief): weighted 3.55, score 64, **High**, 6–10 × 0.8 = **4–8 weeks**.
+
+Breakdown (unrounded total 2.4–4.0 weeks):
+
+| Work stream | Drivers (adjusted) | Stream rating | Share | Team-days |
 |---|---|---|---|---|
-| Code size | `scc`: 320k LOC | 4 | 0.20 | 0.80 |
-| Stack gap | `*.csproj` TargetFrameworkVersion v4.7.2, WebForms | 4 | 0.15 | 0.60 |
-| Integrations | 8 systems, 2 SOAP | 3 + 1 = 4 | 0.15 | 0.60 |
-| Data | SQL Server 2016, 150 GB, 60 stored procs → Azure SQL MI | 3 | 0.15 | 0.45 |
-| Architecture | Monolith, InProc session, 4 scheduled tasks | 3 | 0.10 | 0.30 |
-| Azure blockers | Registry reads, local file share | 3 | 0.10 | 0.30 |
-| Identity | Windows integrated auth, no regulated data | 3 | 0.10 | 0.30 |
-| Delivery | No tests, manual deploy | 4 | 0.05 | 0.20 |
-| **Total** | | | | **3.55** |
+| Assessment, decisions & detailed plan | overall 3.00 | 3.00 | 7.7 % | 0.5–2 |
+| Code & configuration migration | 3, 3 | 3.00 | 29.0 % | 3–6 |
+| State, jobs & Azure-blocker remediation | 2, 2 | 2.00 | 6.5 % | 0.5–1.5 |
+| Integration rework & connectivity | 4 | 4.00 | 10.3 % | 1–2.5 |
+| Identity, secrets & compliance controls | 3 | 3.00 | 6.8 % | 0.5–1.5 |
+| Data migration & validation | 3 | 3.00 | 9.7 % | 1–2 |
+| Infrastructure as code & CI/CD | 2, 4 | 3.00 | 9.7 % | 1–2 |
+| Testing & validation | 3, 4 | 3.50 | 11.3 % | 1–2.5 |
+| Deployment, cutover & hypercare | 4 | 4.00 | 9.0 % | 1–2 |
 
-- Score = round((3.55 − 1) / 4 × 100) = **64**, which is **High**. No floor rule fires.
-- Effort = 6–10 weeks × 0.8 (replatform) = **4–8 weeks** for 2 engineers + 1 part-time architect.
-- If the data rating had been `low` confidence: max = Very High max 16 × 0.8 = 13, so **4–13 weeks (provisional)**.
+If the data rating had been `low` confidence, only the data stream's max doubles (2 → 4 team-days): total **2–5 weeks (provisional)**.
 
 ## Output shape
 
-Write the result into `reports/Capability-Matrix.yaml` under `complexity:` (schema in [capability-matrix.md](./capability-matrix.md)). Then render it in the Discovery Dossier §10 (lines of code also in §1 and §4) and in the HTML report's complexity section.
+Write the result into `reports/Capability-Matrix.yaml` under `complexity:` (schema in [capability-matrix.md](./capability-matrix.md)). Then render it in the Discovery Dossier §10 (lines of code also in §1 and §4) and in the HTML report's complexity and effort-breakdown sections.
 
 ## Calibration
 
-After each migration completes, append an entry to `calibration_log` in `complexity-model.yaml`. When there are 5 or more entries, compare `actual_weeks` to the estimate range:
+After each migration completes, append an entry to `calibration_log` in `complexity-model.yaml`, including its `delivery_model`. When there are 5 or more entries, compare `actual_weeks` to the estimate range:
 - Actuals consistently above `max` → raise level weeks or the weight of the dimension that drove the overrun.
 - Actuals consistently below `min` → lower level weeks.
+- AI-assisted actuals far below the estimate → raise `rating_relief`; far above → lower it.
+- Track actual time per work stream when you can and tune `work_streams[].share`.
 - Bump `model_version` after any change.

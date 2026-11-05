@@ -384,11 +384,11 @@ Source: `complexity` block in `reports/Capability-Matrix.yaml` (method: `.github
 |------|-------|
 | Lines of code | [complexity.loc.total] ([complexity.loc.method]) |
 | Complexity level | [Low / Medium / High / Very High] (score [NN]/100; floor rules: [ids or none]) |
-| Total effort | [min]–[max] weeks ([strategy] × [factor]) [provisional?] |
+| Total effort | [min]–[max] weeks ([strategy] × [factor], [delivery model]) [provisional?] |
 | Baseline team | [baseline_team] |
 | Top drivers | [2–3 drivers] |
 
-[Per-phase breakdown table: phase, weeks, lead role. Phase weeks must sum to the total range. List effort_scope includes/excludes as assumptions.]
+[Per-phase breakdown table: phase, weeks, lead role. Start from `complexity.effort_breakdown` (work streams already mapped to main-path phases) and group streams by phase. Phase weeks must sum to the total range. List effort_scope includes/excludes as assumptions.]
 
 ## Cost Estimation (T-Shirt Sizing)
 

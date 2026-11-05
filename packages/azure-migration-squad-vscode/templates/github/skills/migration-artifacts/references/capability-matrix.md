@@ -117,7 +117,9 @@ migration_strategy:
       fit_notes: <...>
 
 complexity:                                 # see references/complexity-model.md + complexity-model.yaml
-  model_version: <e.g., "1.0" — copied from complexity-model.yaml>
+  model_version: <e.g., "2.0" — copied from complexity-model.yaml>
+  delivery_model: <ai-assisted | traditional>         # default from complexity-model.yaml
+  tooling: <e.g., "GitHub Copilot agent mode + Claude Sonnet 5.5" | none>
   loc:
     total: <integer, non-blank, excluding vendored/generated/test>
     test_loc: <integer | unknown>
@@ -127,11 +129,12 @@ complexity:                                 # see references/complexity-model.md
         loc: <integer>
   dimensions:                               # exactly 8 entries, ratings 1-5
     - id: <code_size | stack_gap | integrations | data | architecture | azure_blockers | identity_compliance | delivery_readiness>
-      rating: <1-5>
+      rating: <1-5>                         # what the evidence says
+      adjusted_rating: <1-5>                # after delivery-model relief; equals rating when no relief applies
       weight: <from complexity-model.yaml>
       evidence: <file path, command output, or user statement>
       evidence_confidence: <high | medium | low>
-  weighted_rating: <1.00-5.00>
+  weighted_rating: <1.00-5.00>                         # from adjusted ratings
   score: <0-100>
   score_level: <Low | Medium | High | Very High>      # level from score alone
   floor_rules_applied: [<rule id>, ...]               # [] if none
@@ -141,8 +144,20 @@ complexity:                                 # see references/complexity-model.md
     max: <integer>
     strategy: <migration_strategy.recommendation>
     strategy_factor: <from complexity-model.yaml>
-    provisional: <true | false>                        # true when a weight>=0.15 dimension is low confidence
+    provisional: <true | false>                        # true when any stream was widened for low confidence
     baseline_team: <from complexity-model.yaml>
+  effort_breakdown:                                    # one entry per work_streams item, YAML order; [] for retire/retain
+    - stream: <work stream id, e.g., code>
+      phase: <from complexity-model.yaml>
+      stream_rating: <1.00-5.00>
+      percent: <0-100, one decimal>
+      days_min: <team-days, 0.5 steps>
+      days_max: <team-days, 0.5 steps>
+      widened: <true | false>                          # max doubled because a driver is low confidence
+  traditional_comparison:                              # only when delivery_model is ai-assisted
+    score: <0-100>
+    level: <Low | Medium | High | Very High>
+    effort_weeks: { min: <integer>, max: <integer> }
   top_drivers:                                         # 2-3 highest weighted contributors, plain language
     - <e.g., "320k lines of .NET Framework WebForms code">
 
@@ -221,6 +236,7 @@ Phase skills use these fields:
 | `migration_strategy.recommendation` | All phases (which phases are emphasized) |
 | `migration_strategy.target_azure_candidates` | Phase 1 (Architect picks), Phase 3 (IaC generation) |
 | `complexity.level` + `complexity.effort_weeks` | `/build-migration-plan`, Phase 1 (effort estimation), `/quick-assessment` (same model) |
+| `complexity.effort_breakdown` | `/build-migration-plan` and Phase 1 (per-phase effort table) |
 | `complexity.loc` | Phase 1 (effort breakdown), Phase 2 (sizing code-migration batches) |
 
 ## Update Discipline
@@ -246,6 +262,6 @@ A matrix is **valid** when:
 - [ ] `migration_strategy.recommendation` set with rationale + ≥2 alternatives
 - [ ] `target_azure_candidates` has at least 1 entry (or "none" if retire/retain)
 - [ ] `complexity.loc.total` and `complexity.loc.method` set (lines of code measured, or `user-estimate` with low confidence)
-- [ ] `complexity` has 8 rated dimensions, `score`, final `level`, and `effort_weeks` (or `level: not-estimated` for unsupported sources)
+- [ ] `complexity` has 8 rated dimensions (with `adjusted_rating`), `delivery_model`, `score`, final `level`, `effort_weeks` and `effort_breakdown` (or `level: not-estimated` for unsupported sources)
 - [ ] `required_specialists` includes at least Architect + Azure Specialist + Tester + Scribe
 - [ ] `handoff.next_command` set
