@@ -1,7 +1,7 @@
 ---
 agent: Code Migration Modernization Agent
 model: Claude Sonnet 4.6 (copilot)
-tools: ['search/codebase', 'search/usages', 'vscode/vscodeAPI', 'read/problems', 'execute/testFailure', 'vscode/runCommand', 'web/fetch', 'search/searchResults', 'github/*', 'vscode/extensions', 'execute/runTests', 'edit/editFiles', 'search', 'execute/runTask']
+tools: ['search/codebase', 'search/usages', 'vscode/vscodeAPI', 'vscode/askQuestions', 'read/problems', 'execute/testFailure', 'vscode/runCommand', 'web/fetch', 'search/searchResults', 'github/*', 'vscode/extensions', 'execute/runTests', 'edit/editFiles', 'search', 'execute/runTask']
 description: Security hardening and Azure migration security review mode. Focuses on identity, secrets, RBAC, network exposure, compliance guardrails, and presentation-ready security posture summaries.
 leadRole: Security Auditor
 assistRoles: [Architect, Azure Specialist, Cutover Commander, Presentation Specialist]
@@ -35,7 +35,6 @@ Default dispatch for security review:
 
 ## Hooks to Reference
 - `#file:.github/hooks/phase-gates.md`
-- `#file:.github/hooks/agent-dispatch.md`
 
 ## Skills to Reference
 - `#file:.github/skills/azure-entra-id.md`

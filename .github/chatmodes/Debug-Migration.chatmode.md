@@ -1,7 +1,7 @@
 ---
 agent: Code Migration Modernization Agent
 model: Claude Sonnet 4.6 (copilot)
-tools: ['search/codebase', 'search', 'read/problems', 'execute/testFailure', 'vscode/runCommand', 'web/fetch', 'github/*', 'vscode/extensions', 'execute/runTests', 'edit/editFiles']
+tools: ['search/codebase', 'search', 'vscode/askQuestions', 'read/problems', 'execute/testFailure', 'vscode/runCommand', 'web/fetch', 'github/*', 'vscode/extensions', 'execute/runTests', 'edit/editFiles']
 description: Migration debugging mode for diagnosing failures during or after Azure migration work. Focuses on root-cause analysis, evidence capture, orchestration-hook compliance, and routed recovery actions.
 leadRole: Coder
 assistRoles: [Azure Specialist, DevOps Engineer, Database Specialist, Observability Engineer, Security Auditor, Performance Engineer, Tester]
@@ -37,7 +37,6 @@ Default dispatch for debugging:
 
 ## Hooks to Reference
 - `#file:.github/hooks/phase-gates.md`
-- `#file:.github/hooks/agent-dispatch.md`
 
 ## Skills to Reference
 Select only the skills that match the failure mode:

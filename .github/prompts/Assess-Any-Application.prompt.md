@@ -1,7 +1,7 @@
 ---
 agent: Code Migration Modernization Agent
 model: Claude Sonnet 4.6 (copilot)
-tools: ['search/codebase', 'usages', 'vscodeAPI', 'problems', 'changes', 'runCommands/terminalSelection', 'runCommands/terminalLastCommand', 'openSimpleBrowser', 'fetch', 'search/searchResults', 'githubRepo', 'extensions', 'edit/editFiles', 'search', 'runCommands', 'runTasks', 'Azure MCP/*', 'Microsoft Docs/*']
+tools: ['search/codebase', 'usages', 'vscodeAPI', 'vscode/askQuestions', 'problems', 'changes', 'runCommands/terminalSelection', 'runCommands/terminalLastCommand', 'openSimpleBrowser', 'fetch', 'search/searchResults', 'githubRepo', 'extensions', 'edit/editFiles', 'search', 'runCommands', 'runTasks', 'Azure MCP/*', 'Microsoft Docs/*']
 description: "Universal application-to-Azure migration intake. Discovers ANY application (any source, any stack, any workload) and produces a Discovery Dossier + Capability Matrix that every downstream Phase prompt consumes."
 ---
 
@@ -87,7 +87,6 @@ Load the stack skill that matches the primary language/framework. Multiple may a
 ## Orchestration Hooks
 
 - `#file:.github/hooks/phase-gates.md`
-- `#file:.github/hooks/agent-dispatch.md`
 
 ---
 

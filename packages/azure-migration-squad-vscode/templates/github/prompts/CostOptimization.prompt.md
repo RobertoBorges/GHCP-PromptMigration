@@ -1,7 +1,7 @@
 ---
 agent: Code Migration Modernization Agent
 model: Claude Sonnet 4.6 (copilot)
-tools: ['search/codebase', 'usages', 'vscodeAPI', 'problems', 'changes', 'testFailure', 'runCommands/terminalSelection', 'runCommands/terminalLastCommand', 'openSimpleBrowser', 'fetch', 'search/searchResults', 'githubRepo', 'extensions', 'runTests', 'edit/editFiles', 'runNotebooks', 'search', 'new', 'runCommands', 'runTasks', 'Azure MCP/*', 'Microsoft Docs/*']
+tools: ['search/codebase', 'usages', 'vscodeAPI', 'vscode/askQuestions', 'problems', 'changes', 'testFailure', 'runCommands/terminalSelection', 'runCommands/terminalLastCommand', 'openSimpleBrowser', 'fetch', 'search/searchResults', 'githubRepo', 'extensions', 'runTests', 'edit/editFiles', 'runNotebooks', 'search', 'new', 'runCommands', 'runTasks', 'Azure MCP/*', 'Microsoft Docs/*']
 description: "Identifies Azure cost risks and optimization opportunities after migration through the Cost Engineer role."
 ---
 
@@ -68,8 +68,6 @@ Use these optimization skills:
 ## Orchestration Hooks
 Apply orchestration rules from:
 - `#file:.github/hooks/phase-gates.md`
-- `#file:.github/hooks/agent-dispatch.md`
-- `#file:.github/hooks/use-case-routing.md`
 
 
 # Cost Optimization Prompt

@@ -1,6 +1,6 @@
 # Azure Migration Agent — GitHub Copilot prompts for Azure migration
 
-> **Migrate any application to Azure** using a single GitHub Copilot agent definition plus 26 prompts, 60+ skills, and 8 chat modes. Universal source/stack/workload coverage. Discovery-first. The agent **never decides major architecture for you** — it lays out options and waits.
+> **Migrate any application to Azure** using a single GitHub Copilot agent definition, 19 prompts, 9 discoverable Agent Skills, 72 prompt-reference guides, and 8 chat modes. Universal source/stack/workload coverage. Discovery-first. The agent **never decides major architecture for you** — it lays out options and waits.
 
 [![VS Code Marketplace](https://img.shields.io/visual-studio-marketplace/v/robertoborges.azure-migration-squad-vscode?label=VS%20Code%20Marketplace&color=blueviolet&logo=visualstudiocode)](https://marketplace.visualstudio.com/items?itemName=robertoborges.azure-migration-squad-vscode)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
@@ -32,7 +32,7 @@ Full walkthrough: [docs/vscode-quickstart.md](./docs/vscode-quickstart.md).
 |------|---------|
 | `.github/agents/Code-Migration-Modernization.agent.md` | The one agent definition |
 | `.github/prompts/` | 19 prompt files (Phase 1-6, DatabaseMigration, SecurityHardening, etc.) |
-| `.github/skills/` | 113 skill files — source/stack/workload adapters + universal patterns |
+| `.github/skills/` | 9 discoverable Agent Skills + 72 explicitly loaded reference guides |
 | `.github/chatmodes/` | 8 specialized chat modes (Discovery-Intake, Migration-Orchestrator, etc.) |
 | `.github/hooks/` | 11 orchestration files (phase-gates, decision-gates, quality-checklist) |
 | `.github/copilot-instructions.md` | Top-level rules for Copilot |

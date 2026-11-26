@@ -1,7 +1,7 @@
 ---
 agent: Code Migration Modernization Agent
 model: Claude Sonnet 4.6 (copilot)
-tools: ['search/codebase', 'search', 'edit/editFiles']
+tools: ['search/codebase', 'search', 'vscode/askQuestions', 'edit/editFiles']
 description: Master agent-aware migration orchestrator for Azure modernization. Routes work across all 15 applicable sub-agents (incl. Discovery Engineer), enforces hook-driven coordination, opens with discovery for any unknown application, and recommends current `@agent` CLI follow-through.
 leadRole: Architect
 assistRoles: [Discovery Engineer, Coder, Tester, Azure Specialist, DevOps Engineer, Observability Engineer, Database Specialist, Performance Engineer, Security Auditor, Evaluator, Cutover Commander, Scribe, Presentation Specialist, Cost Engineer]
@@ -44,69 +44,21 @@ Before routing **any** application-level work, verify the **Discovery Contract**
 
 ## Hooks to Reference
 - `#file:.github/hooks/phase-gates.md`
-- `#file:.github/hooks/agent-dispatch.md`
 
 ## Skill Composition Rules
-Combine only the skills that fit the situation. Start from the Capability Matrix.
+Treat `.github/skills/` as two kinds of content:
 
-**Always relevant (universal):**
-- `#file:.github/skills/migration-strategy-decision-tree.md`
-- `#file:.github/skills/capability-matrix.md`
-- `#file:.github/skills/discovery-dossier-template.md`
-- `#file:.github/skills/migration-plan-template.md`
-- `#file:.github/skills/stack-detection.md`
-- `#file:.github/skills/migration-report-template.md`
-- `#file:.github/skills/migration-handoff.md`
-- `#file:.github/skills/rollback-strategy.md`
+- Directories containing `SKILL.md` are discoverable Agent Skills. Keep each skill focused and load it only when its description and task match.
+- Flat Markdown files are prompt reference guides, schemas, and templates. They are not automatically discovered as individual Agent Skills; open them only when the task needs them.
 
-**Source adapters (pick one based on `source.primary_adapter`):**
-- `#file:.github/skills/source-github-repo.md`
-- `#file:.github/skills/source-on-premise.md`
-- `#file:.github/skills/source-aws.md`
-- `#file:.github/skills/source-gcp.md`
-- `#file:.github/skills/source-oracle-db.md`
-- `#file:.github/skills/source-vmware-rvtools.md`
-- `#file:.github/skills/source-mainframe.md`
-- `#file:.github/skills/source-kubernetes-cluster.md`
-- `#file:.github/skills/source-container-registry.md`
-- `#file:.github/skills/source-zip-filesystem.md`
-- `#file:.github/skills/source-unsupported-escalation.md`
+Use the Capability Matrix to select references rather than attaching every adapter to every run:
 
-**Stack adapters (pick based on `stack.primary_stack`):**
-- `#file:.github/skills/stack-dotnet.md`
-- `#file:.github/skills/stack-java.md`
-- `#file:.github/skills/stack-python.md`
-- `#file:.github/skills/stack-nodejs.md`
-- `#file:.github/skills/stack-php.md`
-- `#file:.github/skills/stack-ruby.md`
-- `#file:.github/skills/stack-go.md`
-- `#file:.github/skills/stack-perl.md`
-- `#file:.github/skills/stack-rust.md`
-- `#file:.github/skills/stack-cobol-mainframe.md`
-- `#file:.github/skills/stack-oracle-forms.md`
-- `#file:.github/skills/stack-powerbuilder.md`
-- `#file:.github/skills/stack-delphi-vb6.md`
-- `#file:.github/skills/stack-scala-kotlin.md`
-- `#file:.github/skills/stack-cpp-windows.md`
+1. Read `reports/Capability-Matrix.yaml` (or create it through Discovery when missing).
+2. Load only the source adapter named by `source.primary_adapter`, the stack adapter named by `stack.primary_stack`, and the workload guide named by `workload.primary_pattern`.
+3. Load target-specific Azure guidance only for the chosen platform and phase. Consult `azure-guidance-sources.md` before giving version-, SKU-, quota-, region-, or API-specific advice.
+4. Open templates and decision references only when producing the corresponding artifact or resolving a required user decision.
 
-**Workload pattern (pick based on `workload.primary_pattern`):**
-- `#file:.github/skills/workload-webapp.md`
-- `#file:.github/skills/workload-api-service.md`
-- `#file:.github/skills/workload-batch-job.md`
-- `#file:.github/skills/workload-event-driven.md`
-- `#file:.github/skills/workload-serverless.md`
-- `#file:.github/skills/workload-desktop-client-server.md`
-- `#file:.github/skills/workload-packaged-app.md`
-- `#file:.github/skills/workload-data-pipeline.md`
-- `#file:.github/skills/workload-mainframe-transactional.md`
-
-**Target/Azure:**
-- `#file:.github/skills/azure-app-service.md`
-- `#file:skills/azure-container-apps.md`
-- `#file:skills/azure-aks.md`
-- `#file:.github/skills/azure-network-security.md`
-- `#file:skills/cost-optimization.md`
-- `#file:.github/skills/pptx-generation.md`
+Reference paths follow `.github/skills/<adapter-or-guide>.md`; the nine directory-based skills use `.github/skills/<skill-name>/SKILL.md`.
 
 ## Sub-agents available
 

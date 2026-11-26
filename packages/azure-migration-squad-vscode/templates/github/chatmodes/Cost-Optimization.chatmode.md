@@ -1,7 +1,7 @@
 ---
 agent: Code Migration Modernization Agent
 model: Claude Sonnet 4.6 (copilot)
-tools: ['search/codebase', 'edit/editFiles']
+tools: ['search/codebase', 'vscode/askQuestions', 'edit/editFiles']
 description: Azure cost analysis mode for migration programs. Routes spend and right-sizing work to The Accountant, using deployment context to recommend savings, scaling changes, budget guardrails, and presentation-ready outputs when needed.
 leadRole: Cost Engineer
 assistRoles: [Azure Specialist, Architect, DevOps Engineer, Presentation Specialist]
@@ -29,14 +29,13 @@ When stakeholders need an executive-ready spend narrative, loop in **Presentatio
 
 ## Hooks to Reference
 - `#file:.github/hooks/phase-gates.md`
-- `#file:.github/hooks/agent-dispatch.md`
 
 ## Skills to Reference
-- `#file:skills/cost-optimization.md`
+- `#file:.github/skills/cost-optimization.md`
 - `#file:.github/skills/azure-app-service.md`
-- `#file:skills/azure-container-apps.md`
-- `#file:skills/azure-aks.md`
-- `#file:skills/azure-monitor-appinsights.md`
+- `#file:.github/skills/azure-container-apps.md`
+- `#file:.github/skills/azure-aks.md`
+- `#file:.github/skills/azure-monitor-appinsights.md`
 - `#file:.github/skills/pptx-generation.md`
 
 ## Operating Rules

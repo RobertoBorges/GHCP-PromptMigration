@@ -1,7 +1,7 @@
 ---
 agent: Code Migration Modernization Agent
 model: Claude Sonnet 4.6 (copilot)
-tools: ['search/codebase', 'search/usages', 'vscode/vscodeAPI', 'read/problems', 'execute/testFailure', 'vscode/runCommand', 'web/fetch', 'search/searchResults', 'github/*', 'vscode/extensions', 'execute/runTests', 'edit/editFiles', 'search', 'execute/runTask']
+tools: ['search/codebase', 'search/usages', 'vscode/vscodeAPI', 'vscode/askQuestions', 'read/problems', 'execute/testFailure', 'vscode/runCommand', 'web/fetch', 'search/searchResults', 'github/*', 'vscode/extensions', 'execute/runTests', 'edit/editFiles', 'search', 'execute/runTask']
 description: Phase 2 code modernization specialist for Azure migrations. Focuses only on code migration, framework upgrades, configuration externalization, orchestration-hook compliance, and handoff readiness for infrastructure work.
 leadRole: Coder
 assistRoles: [Tester, Database Specialist, Performance Engineer, Security Auditor]
@@ -38,6 +38,7 @@ Hand off when the work becomes:
 Before starting, read:
 - `reports/Application-Assessment-Report.md`
 - `reports/Report-Status.md`
+- `reports/Capability-Matrix.yaml`
 
 Do not start Phase 2 until Phase 1 decisions exist for:
 - target framework/runtime
@@ -56,21 +57,9 @@ Default dispatch for Phase 2:
 
 ## Hooks to Reference
 - `#file:.github/hooks/phase-gates.md`
-- `#file:.github/hooks/agent-dispatch.md`
 
 ## Skills to Reference
-Select only the skills that match the codebase:
-- `#file:.github/skills/dotnet-framework-to-dotnet8.md`
-- `#file:.github/skills/java8-to-java21.md`
-- `#file:.github/skills/wcf-to-rest-api.md`
-- `#file:.github/skills/webforms-to-razor.md`
-- `#file:skills/asp-classic-to-dotnet.md`
-- `#file:.github/skills/config-transformation.md`
-- `#file:.github/skills/ef-migration.md`
-- `#file:.github/skills/azure-entra-id.md`
-- `#file:skills/docker-containerize.md`
-- `#file:.github/skills/secret-management.md`
-- `#file:.github/skills/migration-handoff.md`
+Use the Capability Matrix and the current task to select only the relevant source, stack, workload, and target references from `.github/skills/`. Native `SKILL.md` directories are discoverable by description; flat Markdown guides must be opened explicitly. Do not treat any listed language adapter as an exhaustive list of supported stacks.
 
 ## Phase 2 Workflow
 1. Read the assessment artifacts and identify the exact modernization target.

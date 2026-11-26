@@ -1,7 +1,7 @@
 ---
 agent: Code Migration Modernization Agent
 model: Claude Sonnet 4.6 (copilot)
-tools: ['search/codebase', 'usages', 'vscodeAPI', 'problems', 'changes', 'testFailure', 'runCommands/terminalSelection', 'runCommands/terminalLastCommand', 'openSimpleBrowser', 'fetch', 'search/searchResults', 'githubRepo', 'extensions', 'runTests', 'edit/editFiles', 'runNotebooks', 'search', 'new', 'runCommands', 'runTasks', 'Azure MCP/*', 'Microsoft Docs/*']
+tools: ['search/codebase', 'usages', 'vscodeAPI', 'vscode/askQuestions', 'problems', 'changes', 'testFailure', 'runCommands/terminalSelection', 'runCommands/terminalLastCommand', 'openSimpleBrowser', 'fetch', 'search/searchResults', 'githubRepo', 'extensions', 'runTests', 'edit/editFiles', 'runNotebooks', 'search', 'new', 'runCommands', 'runTasks', 'Azure MCP/*', 'Microsoft Docs/*']
 description: "Plans database migration, validation, and cutover for Azure targets."
 ---
 
@@ -79,7 +79,7 @@ Before Database Migration can do any work, every decision below must be **DECIDE
 2. For each row in the table above, locate its section and read **Status**.
 3. Any decision still at `⏸ PENDING` → STOP. Do not proceed.
 4. Apply the **Decision Hardstop protocol** from `.github/skills/decision-hardstop.md`:
-   - Post the 🛑 DECISION REQUIRED block in chat with options + tradeoffs from `.github/skills/decision-catalog.md`.
+   - In VS Code, use `#vscode/askQuestions` to present the catalog options as selectable answers, with tradeoffs and freeform "Other"; on other surfaces, post the 🛑 DECISION REQUIRED block in chat.
    - Wait for the user's reply (or for the file to be updated).
    - Record the answer in `reports/Decision-Log.md`.
    - Update Status to `✅ DECIDED <ISO date>` in `reports/Decisions-Required.md`.
@@ -108,8 +108,6 @@ Use these database skills:
 ## Orchestration Hooks
 Apply orchestration rules from:
 - `#file:.github/hooks/phase-gates.md`
-- `#file:.github/hooks/agent-dispatch.md`
-- `#file:.github/hooks/use-case-routing.md`
 
 
 # Database Migration Prompt

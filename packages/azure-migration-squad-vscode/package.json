@@ -131,7 +131,7 @@
           {
             "id": "explore",
             "title": "Explore the sidebar — agent, prompts, skills, decisions",
-            "description": "Look for the rocket icon 🚀 in the Activity Bar. Browse the agent definition, 26 prompts, 60+ skills, and pending architecture decisions. Click any item to open its source file.",
+            "description": "Look for the rocket icon 🚀 in the Activity Bar. Browse the agent definition, 19 prompts, 9 Agent Skills, 72 reference guides, and pending architecture decisions. Click any item to open its source file.",
             "media": {
               "image": "media/walkthroughs/step-4-sidebar.png",
               "altText": "Azure Migration Agent sidebar"

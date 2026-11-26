@@ -10,6 +10,7 @@ description: |
 # Azure Infrastructure Skill
 
 Use this skill when generating Infrastructure as Code (IaC) for Azure deployments.
+Before selecting resource API versions, AVM modules, provider constraints, or deployment settings, consult [Azure Guidance Sources](../azure-guidance-sources.md) and verify the current documentation.
 
 ## When to Use This Skill
 

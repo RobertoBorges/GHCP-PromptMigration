@@ -8,7 +8,7 @@
 .github/
 ├── agents/Code-Migration-Modernization.agent.md   ← The agent definition
 ├── prompts/                                          ← 19 slash commands
-├── skills/                                           ← 113 stack/source/workload adapters
+├── skills/                                           ← 9 Agent Skills + 72 prompt reference guides
 ├── chatmodes/                                        ← 8 Copilot Chat modes
 ├── hooks/                                            ← Phase gates + decision protocol
 └── copilot-instructions.md                           ← Top-level rules

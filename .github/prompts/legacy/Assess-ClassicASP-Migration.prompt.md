@@ -24,7 +24,6 @@ Apply these reusable skills when they match the workload:
 ## Orchestration Hooks
 Enforce phase discipline with:
 - `#file:.github/hooks/phase-gates.md`
-- `#file:.github/hooks/agent-dispatch.md`
 
 ## Step 1: Inventory the Classic ASP Application Surface
 Build a full discovery map of the existing site.

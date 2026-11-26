@@ -85,7 +85,7 @@ Before Phase 3 — Generate Infra can do any work, every decision below must be 
 2. For each row in the table above, locate its section and read **Status**.
 3. Any decision still at `⏸ PENDING` → STOP. Do not proceed.
 4. Apply the **Decision Hardstop protocol** from `.github/skills/decision-hardstop.md`:
-   - Post the 🛑 DECISION REQUIRED block in chat with options + tradeoffs from `.github/skills/decision-catalog.md`.
+   - In VS Code, use `#vscode/askQuestions` to present the catalog options as selectable answers, with tradeoffs and freeform "Other"; on other surfaces, post the 🛑 DECISION REQUIRED block in chat.
    - Wait for the user's reply (or for the file to be updated).
    - Record the answer in `reports/Decision-Log.md`.
    - Update Status to `✅ DECIDED <ISO date>` in `reports/Decisions-Required.md`.
@@ -117,6 +117,7 @@ Before generating infrastructure, verify Phase 2 (Code Modernization) is complet
 
 Load the **azure-infrastructure** skill for Bicep/Terraform templates and Azure Verified Modules patterns.
 Load the **azure-containerization** skill if containerization was selected in the assessment.
+Consult `#file:.github/skills/azure-guidance-sources.md` before using Azure versions, SKUs, quotas, regions, resource API versions, or provider settings; verify these against current authoritative documentation.
 
 Use `azure_development-summarize_topic` tool to get high-level instructions to follow.
 

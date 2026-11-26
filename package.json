@@ -13,9 +13,10 @@
     "sync": "npm run sync --workspaces --if-present",
     "validate:descriptions": "node scripts/validate-description-lengths.mjs",
     "validate:decision-coverage": "node scripts/validate-decision-coverage.mjs",
+    "validate:references": "node scripts/validate-agent-content.mjs",
     "inject:decision-gates": "node scripts/inject-decision-gates.mjs",
     "inject:capability-gates": "node scripts/inject-capability-matrix-gates.mjs",
-    "validate:all": "npm run validate:descriptions && npm run validate:decision-coverage"
+    "validate:all": "npm run validate:descriptions && npm run validate:decision-coverage && npm run validate:references"
   },
   "engines": {
     "node": ">=20.0.0"

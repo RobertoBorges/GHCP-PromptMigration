@@ -27,7 +27,6 @@ Apply these reusable skills when they match the codebase:
 ## Orchestration Hooks
 Enforce phase discipline with:
 - `#file:.github/hooks/phase-gates.md`
-- `#file:.github/hooks/agent-dispatch.md`
 
 ## Step 1: Detect the Current .NET Runtime and App Model
 Determine the exact starting point before recommending any path.

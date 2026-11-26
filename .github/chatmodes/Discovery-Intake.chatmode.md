@@ -1,7 +1,7 @@
 ---
 agent: Code Migration Modernization Agent
 model: Claude Sonnet 4.6 (copilot)
-tools: ['search/codebase', 'usages', 'vscodeAPI', 'changes', 'runCommands/terminalLastCommand', 'openSimpleBrowser', 'fetch', 'search/searchResults', 'githubRepo', 'extensions', 'edit/editFiles', 'search', 'runCommands', 'Azure MCP/*', 'Microsoft Docs/*']
+tools: ['search/codebase', 'usages', 'vscodeAPI', 'vscode/askQuestions', 'changes', 'runCommands/terminalLastCommand', 'openSimpleBrowser', 'fetch', 'search/searchResults', 'githubRepo', 'extensions', 'edit/editFiles', 'search', 'runCommands', 'Azure MCP/*', 'Microsoft Docs/*']
 description: Interactive discovery & intake conversation for any application. Walks the user through six fast triage questions, runs adaptive follow-ups based on detected risk, probes source/stack/workload, and produces the Discovery Dossier + Capability Matrix.
 leadRole: Discovery Engineer
 assistRoles: [Architect, Azure Specialist, Database Specialist]
@@ -203,7 +203,6 @@ Load only the skills relevant to this engagement. The starting set is:
 ## Hooks to Reference
 
 - `#file:.github/hooks/phase-gates.md`
-- `#file:.github/hooks/agent-dispatch.md`
 
 ## Handoff Protocol
 

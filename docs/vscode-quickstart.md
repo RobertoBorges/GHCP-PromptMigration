@@ -40,7 +40,7 @@ The extension copies bundled templates into your project. After a few seconds yo
 
 - `.github/agents/Code-Migration-Modernization.agent.md` — the agent definition
 - `.github/prompts/` — 19 slash commands
-- `.github/skills/` — 113 stack/source/workload adapters
+- `.github/skills/` — 9 discoverable Agent Skills + 72 prompt reference guides
 - `.github/chatmodes/` — 8 specialized chat modes
 - `.github/hooks/` — orchestration rules + Wave H decision protocol
 - `.github/copilot-instructions.md` — top-level rules for Copilot

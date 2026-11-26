@@ -1,7 +1,7 @@
 # Azure Migration Agent — VS Code extension
 
 > **Migrate any application to Azure** — directly from your editor.
-> One agent definition, 19 prompts, 113 skills. Stack-agnostic. Discovery-first. Hard-stop user-decision gates.
+> One agent definition, 19 prompts, 9 discoverable Agent Skills, 72 prompt-reference guides. Stack-agnostic. Discovery-first. Hard-stop user-decision gates.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
@@ -35,7 +35,7 @@ Open the **rocket icon 🚀** in the Activity Bar:
 🛑 DECISIONS REQUIRED        ← Wave H artifact — pending architecture decisions
 AGENT                         ← The Code Migration Modernization Agent
 PROMPTS                       ← 19 slash commands
-SKILLS                        ← 113 adapters & patterns
+SKILLS                        ← Agent Skills + selected reference guides
 ```
 
 The **status bar** (bottom-left) shows your current migration phase, or **"⚠ AMS: N/M decisions pending"** with a warning background when you have unanswered architecture decisions.

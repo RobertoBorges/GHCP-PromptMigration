@@ -1,6 +1,6 @@
 # GitHub Copilot Customization for Azure Migration
 
-This folder contains VS Code GitHub Copilot customization files for the **Code Migration Modernization Agent** - a guided workflow for migrating legacy .NET and Java applications to Azure.
+This folder contains GitHub Copilot customizations for the **Universal Application-to-Azure Migration Agent**. It supports the source, stack, and workload combinations defined by Discovery and the Capability Matrix.
 
 ## 📁 Folder Structure
 
@@ -17,15 +17,9 @@ This folder contains VS Code GitHub Copilot customization files for the **Code M
 │   ├── Phase5-SetupCICD.prompt.md
 │   ├── PortfolioStrategy.prompt.md      # Portfolio Planning flow entry point
 │   └── GetStatus.prompt.md
-├── skills/                              # Reusable migration skills
-│   ├── dotnet-modernization/           # .NET Framework → .NET 10+ patterns
-│   ├── java-modernization/             # Java EE → Spring Boot 3.x patterns
-│   ├── azure-infrastructure/           # Bicep/Terraform IaC templates
-│   ├── azure-containerization/         # Docker and Container Apps patterns
-│   ├── wcf-to-rest-migration/          # WCF → REST API conversion
-│   ├── config-transformation/          # web.config → appsettings.json
-│   ├── migration-unit-testing/         # Unit testing for validation
-│   └── migration-strategy-report/      # Portfolio strategy HTML deck generator
+├── skills/                              # Agent Skills + prompt reference guides
+│   ├── <skill-name>/SKILL.md           # Discoverable, relevance-triggered skills
+│   └── <reference-name>.md             # Explicitly included adapters, schemas, and templates
 ├── hooks/                               # Agent lifecycle hooks
 │   ├── validation.json                 # PostToolUse: auto-validate after edits
 │   ├── session-lifecycle.json          # SessionStart + Stop hooks
@@ -63,23 +57,23 @@ Type `/` in Copilot Chat followed by the prompt name:
 - `/Phase5-SetupCICD`
 - `/GetStatus`
 
-## 📚 Skills Reference
+## 📚 Skills and Reference Guides
 
-Skills are automatically loaded based on context. Each skill provides:
-- **SKILL.md** - Patterns, mappings, and best practices
-- **templates/** - Ready-to-use code templates
+The nine directory-based `SKILL.md` files are discoverable Agent Skills with focused trigger descriptions. The 72 flat Markdown files under `.github/skills/` are explicit prompt references—adapters, schemas, templates, and checklists—and are loaded only when a workflow selects them. Use the Capability Matrix to select references; do not attach every source, stack, or workload guide to every run.
 
-| Skill | Purpose |
-|-------|---------|
-| `business-logic-mapping` | **NEW** - Track and preserve business logic during migration |
-| `dotnet-modernization` | .NET Framework → .NET 10+ LTS upgrade patterns |
-| `java-modernization` | Java EE → Spring Boot 3.x with Java 21 |
-| `azure-infrastructure` | Bicep/Terraform using Azure Verified Modules |
-| `azure-containerization` | Multi-stage Dockerfiles, Container Apps |
-| `wcf-to-rest-migration` | WCF service → REST API conversion |
-| `config-transformation` | web.config → appsettings.json transformation |
-| `migration-unit-testing` | xUnit/JUnit 5 patterns for validation |
-| `migration-strategy-report` | **NEW** - Portfolio-level Migration Strategy Report generator (HTML executive deck from CMDB/RVTools/DMA artifacts; CAF-aligned 6 Rs + Factory/Partner/Unknown classification) |
+| Agent Skill | Purpose |
+|---|---|
+| `azure-containerization` | Container patterns for Azure hosting |
+| `azure-infrastructure` | Azure IaC and deployment patterns |
+| `business-logic-mapping` | Preserve and verify business behavior |
+| `config-transformation` | Transform legacy application configuration |
+| `dotnet-modernization` | .NET modernization patterns |
+| `java-modernization` | Java modernization patterns |
+| `migration-strategy-report` | Portfolio strategy report workflow |
+| `migration-unit-testing` | Validate migrated application behavior |
+| `wcf-to-rest-migration` | Migrate WCF services to REST APIs |
+
+Flat references are explicitly attached from prompts/chatmodes with `#file:.github/skills/<name>.md`. Keep prompt-consumable copies under `.github/skills/`; the extension does not ship the root `skills/` reference catalog.
 
 ## 🎯 Supported Migration Paths
 

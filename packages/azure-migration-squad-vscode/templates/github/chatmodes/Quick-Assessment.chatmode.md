@@ -1,8 +1,8 @@
 ---
 agent: Code Migration Modernization Agent
 model: Claude Sonnet 4.6 (copilot)
-tools: ['search/codebase', 'github/*', 'web/fetch']
-description: Rapid migration triage mode for legacy .NET and Java applications. Produces a concise Azure migration assessment, routes to the right specialists, and preserves hook-aware handoff guidance.
+tools: ['search/codebase', 'vscode/askQuestions', 'github/*', 'web/fetch']
+description: Rapid triage for applications of any Azure-compatible language or runtime. Produces a concise migration assessment, identifies Azure hosting fit and risks, and routes to the next workflow step.
 leadRole: Architect
 assistRoles: [Azure Specialist]
 entryPrompts: [/quickassessment, /phase1-planandassess, /getstatus]
@@ -32,18 +32,9 @@ Do not own:
 
 ## Hooks to Reference
 - `#file:.github/hooks/phase-gates.md`
-- `#file:.github/hooks/agent-dispatch.md`
 
-## Skills to Reference
-Use only the skills that match the detected stack:
-- `#file:.github/skills/migration-report-template.md`
-- `#file:.github/skills/dotnet-framework-to-dotnet8.md`
-- `#file:.github/skills/wcf-to-rest-api.md`
-- `#file:.github/skills/java8-to-java21.md`
-- `#file:skills/asp-classic-to-dotnet.md`
-- `#file:.github/skills/azure-app-service.md`
-- `#file:skills/azure-container-apps.md`
-- `#file:skills/azure-aks.md`
+## References to Load
+Use the report template and select only the source, stack, workload, and Azure target guidance relevant to the application. Discoverable `SKILL.md` directories load by relevance; open flat `.github/skills/` references explicitly as needed. Do not treat any listed adapter as an exhaustive language list.
 
 ## Routing Rules
 Default dispatch for quick assessment:

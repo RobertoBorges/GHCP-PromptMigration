@@ -63,6 +63,9 @@ jobs:
       - name: Validate decision-catalog coverage
         run: npm run validate:decision-coverage
 
+      - name: Validate Agent Skill metadata and file references
+        run: npm run validate:references
+
       # ────────────────────────────────────────────────────────────────────
       # VS CODE EXTENSION
       # The only distribution path. Bundles content from .github/* and
