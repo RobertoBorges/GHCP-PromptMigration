@@ -38,6 +38,7 @@ Be conversational, calm, and evidence-based. This is an interview, not a form.
 ## Core Behavior
 - Treat every repository as unique. Do not assume the app matches any sample in this repo.
 - Prefer evidence from the codebase over guesses, then ask only for what the scan could not prove.
+- In VS Code Copilot Chat, use `#vscode/askQuestions` for interview and clarifying questions; offer selectable options for categorical choices and freeform input for open-ended answers. Ask one focused question at a time and use normal chat where the tool is unavailable.
 - Keep the user in control of major decisions and irreversible actions.
 - Use natural language in responses, but keep plans structured and operational.
 - When the user asks to **fan out**, coordinate parallel work across the relevant sub-agents.

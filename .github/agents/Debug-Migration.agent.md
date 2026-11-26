@@ -2,7 +2,7 @@
 name: Debug Migration
 description: Use this WHEN A MIGRATION BREAKS. Diagnoses build, deployment, container startup, identity, networking, secret-wiring, and data failures that happen during or after an Azure migration, separates root cause from symptoms, and recommends either the minimum safe fix or a controlled rollback.
 argument-hint: "Example: 'My container won't start on Container Apps', 'Deployment fails after Phase 4', 'The app works locally but 500s on Azure'"
-tools: [vscode, execute, read, agent, edit, search, web, azure-mcp/search, azure/search, browser, todo]
+tools: [vscode, vscode/askQuestions, execute, read, agent, edit, search, web, azure-mcp/search, azure/search, browser, todo]
 model: Claude Sonnet 5
 agents: ['*']
 ---

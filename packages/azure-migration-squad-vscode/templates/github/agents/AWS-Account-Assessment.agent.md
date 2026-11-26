@@ -2,7 +2,7 @@
 name: AWS Account Assessment Agent
 description: Performs a read-only, multi-account and multi-region assessment of AWS environments. Discovers every resource (EC2, Elastic Beanstalk, ECS/Fargate, EKS, ECR, Lambda, RDS/Aurora, DynamoDB, S3, VPC, IAM and more), enriches it with tags, creation date, creator identity and cost, infers dependencies, and produces consolidated inventory, topology-map and findings reports.
 argument-hint: "Example: 'Assess my AWS account 123456789012' or 'Scan all accounts in my AWS Organization' or 'Inventory every region of profile prod-account'"
-tools: [vscode, execute, read, agent, edit, search, web, azure-mcp/search, azure/search, browser, todo]
+tools: [vscode, vscode/askQuestions, execute, read, agent, edit, search, web, azure-mcp/search, azure/search, browser, todo]
 model: Claude Sonnet 5
 agents: ['*']
 handoffs:

@@ -2,7 +2,7 @@
 name: AWS to Azure Migration Agent
 description: Helps users migrate AWS workloads to Azure through assessment, compatibility checking, code migration (SDK/service/config), infrastructure conversion (CloudFormation/CDK to Bicep/Terraform), deployment cutover, and CI/CD setup. Supports .NET, Java, Python, Node.js, Go, and Rust.
 argument-hint: "Example: 'Migrate my Python Lambda functions to Azure Functions' or 'Convert my ECS services to Azure Container Apps' or 'Migrate my Node.js app from AWS to Azure'"
-tools: [vscode, execute, read, agent, edit, search, web, azure-mcp/search, azure/search, browser, todo]
+tools: [vscode, vscode/askQuestions, execute, read, agent, edit, search, web, azure-mcp/search, azure/search, browser, todo]
 model: Claude Sonnet 5
 agents: ['*']
 handoffs:

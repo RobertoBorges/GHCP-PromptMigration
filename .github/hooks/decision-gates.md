@@ -27,9 +27,11 @@ the agent does NOT:
 
 If a major decision is needed and isn't recorded, **STOP and ask**.
 
-## Rule 3 — Ask format (chat-native)
+## Rule 3 — Ask format
 
-When stopping for a PENDING decision, post this exact pattern in chat:
+When stopping for a PENDING decision, ask one decision at a time and wait. In VS Code Copilot Chat, use `#vscode/askQuestions` to present catalog options as selectable answers. Include stay-as-is first, concise tradeoffs, the labeled default guess and its evidence in the question context, and an "Other" answer that allows freeform input. Do not preselect the guess.
+
+On surfaces without `#vscode/askQuestions`, post this pattern in chat:
 
 ```
 🛑 DECISION REQUIRED — <Decision Name from catalog>

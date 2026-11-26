@@ -2,7 +2,7 @@
 name: Discovery Intake
 description: Use this BEFORE migrating, when you are not yet sure what the application actually is. An interactive, one-question-at-a-time intake that runs fast triage, adapts its follow-ups to the risks it detects, probes source, stack, and workload, and produces the Discovery Dossier and Capability Matrix that every later migration step depends on.
 argument-hint: "Example: 'I have an app but I am not sure what it is', 'Help me work out what this codebase needs', 'Assess the app in my repo'"
-tools: [vscode, execute, read, agent, edit, search, web, azure-mcp/search, azure/search, browser, todo]
+tools: [vscode, vscode/askQuestions, execute, read, agent, edit, search, web, azure-mcp/search, azure/search, browser, todo]
 model: Claude Sonnet 5
 agents: ['*']
 ---
@@ -185,6 +185,7 @@ Or switch to the Migration-Orchestrator agent and it'll take it from here.
 ## Conversation Discipline
 
 - **One topic per turn.** Don't ask the user 5 questions in one block.
+- In VS Code, use `#vscode/askQuestions` for intake and follow-up questions; offer options for categorical choices and freeform input for open-ended answers. Use normal chat where the tool is unavailable.
 - **Wait for the answer.** Don't move on before the user replies.
 - **Mirror the user's language.** If they say "EC2 box", say "EC2 box" — don't immediately re-label it "virtual machine".
 - **Show your reasoning.** When you classify, cite the evidence.

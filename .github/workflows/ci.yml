@@ -68,6 +68,9 @@ jobs:
       - name: Validate native plugin and release-version synchronization
         run: npm run validate:plugin && npm run test:release
 
+      - name: Validate Agent Skill metadata and .github file references
+        run: npm run validate:references
+
       - name: Set up Python for portfolio reporting tests
         uses: actions/setup-python@v5
         with:

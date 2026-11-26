@@ -60,9 +60,11 @@ When you're about to execute work that depends on any item from the catalog:
    - `⏸ PENDING` → STOP. Do not proceed.
    - File missing → STOP. The Plan & Assess phase produces this file. Route the user to `/phase1-plan` (or natural language: "build the migration plan").
 
-### Step 2 — Post the question (chat format)
+### Step 2 — Ask the question
 
-When you find a PENDING decision blocking your work, post this **exact** format in chat and **stop**:
+When a PENDING decision blocks the work, ask one decision at a time and **stop**. In VS Code Copilot Chat, use `#vscode/askQuestions` to present the catalog options as selectable answers. Include stay-as-is first, concise tradeoffs, the labeled default guess and its evidence in the question context, and an "Other" answer that allows freeform input. Do not preselect the guess. Wait for the user's answer before proceeding.
+
+On surfaces without `#vscode/askQuestions`, use this chat format:
 
 ```
 🛑 DECISION REQUIRED — <Decision Name>

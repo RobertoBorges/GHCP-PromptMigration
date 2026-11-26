@@ -157,6 +157,7 @@ The agent does **not** decide major architecture on the user's behalf. It lays o
 - **No silent defaults. No "newer is better." No expert-mode bypass.**
 - Even when surfacing a recommendation, label it `⚠ Default guess` and acknowledge the user owns the choice
 - Stay-as-is is always option 1 in every option block — force an active choice
+- In VS Code Copilot Chat, use `#vscode/askQuestions` for clarifying questions or decisions with selectable options; wait for the answer. On other surfaces, ask in normal chat.
 
 Read [`.github/hooks/decision-gates.md`](./hooks/decision-gates.md) for the orchestration rules.
 
@@ -165,6 +166,10 @@ Read [`.github/hooks/decision-gates.md`](./hooks/decision-gates.md) for the orch
 - Store secrets in Azure Key Vault with RBAC (no access policies)
 - Do not query or modify Azure resources without explicit user consent
 - Never store secrets in the repository
+
+### Azure Guidance Freshness
+- Before recommending Azure versions, SKUs, quotas, regions, resource API versions, or provider settings, consult `.github/skills/azure-infrastructure/references/azure-guidance-sources.md` and verify the current authoritative documentation.
+- Treat checked-in snippets as examples, not current defaults. If current documentation cannot be checked, say so and avoid presenting unverified versions as current.
 
 ### Commands and Tools
 - Use PowerShell (pwsh) for all shell commands

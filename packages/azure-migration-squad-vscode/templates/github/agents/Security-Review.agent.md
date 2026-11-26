@@ -1,7 +1,7 @@
 ---
 name: Security Review
 description: Security hardening and Azure migration security review mode. Focuses on identity, secrets, RBAC, network exposure, compliance guardrails, and presentation-ready security posture summaries.
-tools: [vscode, execute, read, agent, edit, search, web, azure-mcp/search, azure/search, browser, todo]
+tools: [vscode, vscode/askQuestions, execute, read, agent, edit, search, web, azure-mcp/search, azure/search, browser, todo]
 model: Claude Sonnet 5
 agents: ['*']
 user-invocable: false

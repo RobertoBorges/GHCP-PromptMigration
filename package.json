@@ -13,13 +13,14 @@
     "sync": "npm run sync --workspaces --if-present",
     "validate:descriptions": "node scripts/validate-description-lengths.mjs",
     "validate:decision-coverage": "node scripts/validate-decision-coverage.mjs",
+    "validate:references": "node scripts/validate-agent-content.mjs",
     "validate:plugin": "node scripts/validate-plugin.mjs",
     "test:release": "node --test scripts/local-release.test.mjs",
     "version:set": "node packages/azure-migration-squad-vscode/scripts/local-release.mjs --yes --no-build",
     "test:reporting": "python -B scripts/test-strategy-report.py",
     "inject:decision-gates": "node scripts/inject-decision-gates.mjs",
     "inject:capability-gates": "node scripts/inject-capability-matrix-gates.mjs",
-    "validate:all": "npm run validate:descriptions && npm run validate:decision-coverage && npm run validate:plugin"
+    "validate:all": "npm run validate:descriptions && npm run validate:decision-coverage && npm run validate:references && npm run validate:plugin"
   },
   "engines": {
     "node": ">=20.0.0"
