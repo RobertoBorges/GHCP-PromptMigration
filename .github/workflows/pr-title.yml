@@ -1,0 +1,29 @@
+name: PR title
+
+# With squash merge, the PR title becomes the commit on main, and
+# release-please only releases conventional commits (feat:, fix:, ...).
+# A title like "Add Migration Complexity Model" silently produces no
+# release PR. This check makes that visible before merge.
+# Make it a required status check in branch rules if you want it to block.
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+permissions: {}
+
+jobs:
+  conventional-title:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check PR title is a conventional commit
+        env:
+          TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          pattern='^(feat|fix|perf|revert|docs|refactor|chore|test|build|ci|style)(\([^)]+\))?!?: .+'
+          if [[ "$TITLE" =~ $pattern ]]; then
+            echo "✓ \"$TITLE\""
+            exit 0
+          fi
+          echo "::error title=PR title is not a conventional commit::\"$TITLE\" — use e.g. 'feat: add complexity model' or 'fix(sync): handle missing folder'. feat → minor release, fix/perf → patch, chore/docs → no release. See docs/conventional-commits.md."
+          exit 1

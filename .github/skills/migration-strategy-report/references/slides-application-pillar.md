@@ -32,7 +32,7 @@ Application Name, Business Capability, Criticality Rating, Architecture Tier, Te
 ## Slide 5: Migration Strategy — 6 Rs (Application Portfolio)
 
 **Include when:** Applications pillar is detected. The 6 Rs framework applies to application-level migration decisions.
-**Skip when:** Pure infrastructure-only or database-only scenarios — the Factory/ISD / Partner split (Slide 5b) and DB target selection matrix (Slide 4e) serve as the equivalent strategy distribution.
+**Skip when:** Pure infrastructure-only or database-only scenarios — the Microsoft/Partner split (Slide 5b) and DB target selection matrix (Slide 4e) serve as the equivalent strategy distribution.
 
 - Six strategy cards with app counts (Rehost, Replatform, Refactor, Replace, Retire, Retain)
 - **REQUIRED:** Use the CAF-aligned classification algorithm defined in `classification-algorithm.md`. Do NOT use LLM judgment — apply the CAF business-driver indicators mechanically.

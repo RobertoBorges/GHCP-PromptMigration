@@ -7,7 +7,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const referenceDirs = ['.github/prompts', '.github/chatmodes', '.github/agents'];
+const referenceDirs = ['.github'];
 const skillsDir = path.join(repoRoot, '.github', 'skills');
 const problems = [];
 
@@ -23,7 +23,14 @@ async function* walkMarkdown(dir) {
 }
 
 for (const relativeDir of referenceDirs) {
-  for await (const file of walkMarkdown(path.join(repoRoot, relativeDir))) {
+  const directory = path.join(repoRoot, relativeDir);
+  try {
+    await fs.access(directory);
+  } catch (error) {
+    if (error.code === 'ENOENT') continue;
+    throw error;
+  }
+  for await (const file of walkMarkdown(directory)) {
     const content = await fs.readFile(file, 'utf8');
     const pattern = /#file:([A-Za-z0-9._/-]+)/g;
     for (const match of content.matchAll(pattern)) {
@@ -90,4 +97,4 @@ if (problems.length > 0) {
   process.exit(1);
 }
 
-console.log('✓ Agent Skill metadata and prompt/chatmode file references are valid.');
+console.log('✓ Agent Skill metadata and .github file references are valid.');

@@ -45,31 +45,34 @@ This slide adapts its KPI cards and charts based on the detected workload pillar
 
 ## Slide 5b: Execution Ownership
 
-- Donut chart: **Up to 4 segments** — Factory vs ISD / Partner vs No Migration Needed vs Unknown. The "No Migration Needed" segment appears only when SaaS or Already-in-Cloud apps exist in the portfolio.
-- Detailed breakdown table: scope category | VM/app/DB count | Factory service name | migration method
-- Detail columns: Factory (count) | ISD / Partner (count) | No Migration Needed (count, when applicable) | Unknown (count) — with criteria and risks
-- **COTS Vendor labeling:** When apps are classified as ISD / Partner due to COTS/Vendor/Vendor-Managed Application Type, label the bucket as **"ISD / Partner / COTS Vendor"** in the detail table to distinguish vendor-managed apps from other ISD / Partner triggers.
-- **OPTIONAL callout:** "Collaborate delivery model" note explaining that ~X Factory apps at complexity boundary will use Factory-executes + ISD / Partner-validates approach. This is informational — it does NOT create an additional segment or change any counts.
+- Donut chart: **Up to 4 segments** — Microsoft vs Partner vs No Migration Needed vs Unknown. The "No Migration Needed" segment appears only when SaaS or Already-in-Cloud apps exist in the portfolio.
+- Detailed breakdown table: scope category | VM/app/DB count | Migration service name | migration method
+- Detail columns: Microsoft (count) | Partner (count) | No Migration Needed (count, when applicable) | Unknown (count) — with criteria and risks
+- **COTS Vendor labeling:** When apps are classified as Partner due to COTS/Vendor/Vendor-Managed Application Type, label the bucket as **"Partner (COTS Vendor)"** in the detail table to distinguish vendor-managed apps from other Partner triggers.
+- **OPTIONAL callout:** "Collaborate delivery model" note explaining that ~X Microsoft-scope apps at complexity boundary will use Microsoft-executes + Partner-validates approach. This is informational — it does NOT create an additional segment or change any counts.
 - **REQUIRED:** disclaimer note about classification source and bucket fluidity
-- **REQUIRED:** cite the source document used for Factory eligibility (e.g., "Cloud Accelerate Factory — Service Descriptions, May 2026")
-- **REQUIRED:** verification line showing math: "Factory + ISD / Partner + No Migration Needed + Unknown = Total In-Scope ✓"
+- **REQUIRED:** cite the source document used for Microsoft eligibility (e.g., "Migration Service Descriptions, May 2026")
+- **REQUIRED:** verification line showing math: "Microsoft + Partner + No Migration Needed + Unknown = Total In-Scope ✓"
 
 **Rendering by scenario (how Slide 5b adapts to the detected workload type):**
 
 | Scenario | What to show on Slide 5b |
 |----------|-------------------------|
-| **Apps only** | Single donut — APP ownership (Factory/ISD / Partner/No Migration Needed/Unknown). Verification: counts sum to total in-scope apps. |
-| **DB only** | Single donut — DB ownership (Factory/ISD / Partner/Unknown). Verification: counts sum to total DB instances. |
-| **Infra only** | Single donut — INFRA ownership (Factory/ISD / Partner/Unknown). Verification: counts sum to total VMs/servers. |
-| **Mixed (2+ pillars)** | **Combined estate donut** showing TOTAL Factory/ISD / Partner/No Migration Needed/Unknown across ALL detected pillars, PLUS a **per-pillar breakdown table** showing each pillar's split independently. Verification: each pillar sums correctly AND combined total = sum of all pillar totals. |
+| **Apps only** | Single donut — APP ownership (Microsoft/Partner/No Migration Needed/Unknown). Verification: counts sum to total in-scope apps. |
+| **DB only** | Single donut — DB ownership (Microsoft/Partner/Unknown). Verification: counts sum to total DB instances. |
+| **Infra only** | Single donut — INFRA ownership (Microsoft/Partner/Unknown). Verification: counts sum to total VMs/servers. |
+| **Mixed (2+ pillars)** | Separate per-pillar ownership charts and a per-pillar breakdown table. Each pillar reconciles independently. Do not combine applications, DB instances, and VMs into a grand total or donut. |
 
 For mixed scenarios, the per-pillar breakdown table format:
-| Pillar | Total In-Scope | Factory | ISD / Partner | No Migration Needed | Unknown | Verification |
+| Pillar | Total In-Scope | Microsoft | Partner | No Migration Needed | Unknown | Verification |
 |--------|---------------|---------|---------|---------|---------|-------------|
 | Applications | N | n | n | n | n | n+n+n+n = N ✓ |
 | Databases | N | n | n | 0 | n | n+n+0+n = N ✓ |
 | Infrastructure | N | n | n | 0 | n | n+n+0+n = N ✓ |
-| **Combined Estate** | **N** | **n** | **n** | **n** | **n+n+n = N ✓** |
+
+Every breakdown includes confidence, rationale, governing scope citation, and source evidence. Preserve Partner (COTS Vendor) detail without creating a new ownership bucket.
+
+When modernization/PaaS candidates are evidenced, compare like-for-like and modernization options with per-pillar deltas, prerequisites, approval status, and pre/post VM footprint. Keep stay-as-is first when requesting an architecture choice. Use a single migration option when no distinct modernization path is supported. Unknown host mappings remain a footprint gap; do not subtract all PaaS apps/DBs from VM count.
 
 ## Slide 6: Phased Migration Roadmap
 
@@ -94,7 +97,7 @@ This slide provides a **unified full-estate dependency view** — mapping depend
 - Database dependency data (linked servers, replication chains, cross-database queries, ETL pipelines between instances, Always On AG, log shipping)
 
 **Content structure:**
-- **KPI cards (top):** Total Dependency Points (sum across portfolio — integrations + DB dependencies + infra dependencies), High-Fan-Out Apps (apps with 10+ dependencies), Dependency Hubs/Middleware Platforms count, External/Third-Party Dependencies count
+- **KPI cards (top):** Distinct evidence-backed dependency edges (deduplicated source/target/type/environment), High-Fan-Out Apps (apps with 10+ identified dependencies), Dependency Hubs/Middleware Platforms count, External/Third-Party Dependencies count. Do not add CMDB integration counts to the same edges rediscovered in telemetry/source. Aggregate counts without endpoints cannot substantiate a topology.
 - **Dependency Topology Map:** Visual representation (table or grouped layout) showing:
   - **Hub applications** — apps that many others depend on (highest inbound connection count)
   - **High-fan-out applications** — apps that connect to many downstream systems (highest outbound count)
@@ -184,7 +187,7 @@ A **Move Group** is a cluster of applications that should migrate together in th
   - Groups with Mission Critical anchors need extended testing windows
   - Groups spanning multiple vendors require coordinated change windows
   - Groups with shared databases need data migration strategy decided upfront (lift-and-shift DB first, or replicate?)
-  - Undiscovered dependencies (from the 39.9% with no integration data) may merge or split groups during execution — build 20% buffer in wave capacity
+  - Undiscovered dependencies may merge or split groups during execution. Compute the actual missing-data coverage and justify any capacity contingency from this engagement; do not reuse example percentages as facts.
 
 **Key Principle:** This slide answers the leadership question: *"Which apps move together, in what order, and why?"* — it converts raw dependency analysis into a concrete migration execution plan that program managers can schedule against.
 
@@ -212,3 +215,4 @@ A **Move Group** is a cluster of applications that should migrate together in th
 ## Slide 12: Appendix — Portfolio Summary Statistics
 
 - Three columns: by phase, by complexity + containerization, by regulatory + server footprint
+- End with Data Sources and Data Quality, including every input file/sheet, row counts, exclusions, and analytical impact. Evaluate the dimensions and final assurance checks in [reporting-quality.md](reporting-quality.md).

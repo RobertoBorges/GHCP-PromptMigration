@@ -1,7 +1,11 @@
 /**
- * Validate YAML frontmatter description fields on all skill/chatmode/prompt
- * markdown files don't exceed the 1024-character limit enforced by
- * GitHub Copilot when loading them.
+ * Validate YAML frontmatter description fields on all skill and agent markdown
+ * files don't exceed the 1024-character limit enforced by GitHub Copilot when
+ * loading them.
+ *
+ * Skills live at .github/skills/<name>/SKILL.md (plus nested references/*.md);
+ * agents live at .github/agents/<Name>.agent.md. The walker recurses, so
+ * nested SKILL.md files are covered.
  *
  * A real bug in v0.1.0-insider.0: migration-strategy-report/SKILL.md had a
  * 1273-char description and crashed the Copilot extension loader. This check fails the
@@ -19,8 +23,7 @@ const MAX_DESCRIPTION_LENGTH = 1024;
 
 const SCAN_DIRS = [
   '.github/skills',
-  '.github/chatmodes',
-  '.github/prompts',
+  '.github/agents',
 ];
 
 /** Extract YAML frontmatter description field from markdown content. */

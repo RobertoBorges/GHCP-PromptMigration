@@ -1,7 +1,7 @@
 /**
  * Phase 3 tests: extension still activates, all 8 commands are registered,
  * tree view providers return sensible results (NotInstalledItem when no
- * AMS content is present in the workspace).
+ * AMA content is present in the workspace).
  */
 
 import * as assert from 'assert';

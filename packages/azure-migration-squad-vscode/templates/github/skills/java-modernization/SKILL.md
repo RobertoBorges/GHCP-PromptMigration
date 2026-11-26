@@ -5,6 +5,7 @@ description: |
   **Use when:** User has a Java EE, J2EE, or legacy Java 8/11 application and needs to upgrade to Spring Boot 3.x with Java 21.
   **Triggers on:** pom.xml with javax.* dependencies, web.xml files, EJB annotations, JAAS configuration.
   **Covers:** EJB to Spring beans, XML to Java/YAML config, JAAS to Spring Security OAuth2, JPA/Hibernate updates.
+user-invocable: false
 ---
 
 # Java Modernization Skill
@@ -263,3 +264,7 @@ See the [wcf-to-rest-migration](../wcf-to-rest-migration/SKILL.md) skill for det
 5. **Use records for DTOs** - Immutable data carriers
 6. **Configure health endpoints** - For Azure monitoring
 7. **Use SLF4J** - Consistent logging abstraction
+
+## Reference material
+
+- [Java 8 to Java 21 guide](./references/java8-to-java21.md) — Read when upgrading legacy Java runtimes, assessing Java version compatibility, and planning Spring Boot or Jakarta modernization.

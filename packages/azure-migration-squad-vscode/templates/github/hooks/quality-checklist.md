@@ -1,11 +1,11 @@
 # Quality Checklist
 
-Use this hook to ensure migration outputs, prompt flows, and specialist reviews meet the agent's minimum quality bar before handoff.
+Use this hook to ensure migration outputs, skill flows, and specialist reviews meet the agent's minimum quality bar before handoff.
 
 ## Global Checklist
 
 - [ ] `reports/Report-Status.md` reflects the current phase, owner, blockers, and next command
-- [ ] Required artifacts for the active prompt or chatmode are created or updated
+- [ ] Required artifacts for the active skill or agent are created or updated
 - [ ] Assumptions, risks, and trade-offs are explicit
 - [ ] Specialist reviews are named when their domain was touched
 - [ ] Recommendations are actionable enough for the next agent to execute
@@ -24,7 +24,7 @@ Use this hook to ensure migration outputs, prompt flows, and specialist reviews 
 | Performance Engineer | Scaling guidance includes baseline assumptions and measurable targets |
 | Security Auditor | Auth, secrets, RBAC, and compliance trade-offs are reviewed and risk-ranked |
 | Cost Engineer | Every savings recommendation includes estimated dollars/month impact, owners, and guardrails against reliability or security regressions |
-| Evaluator | Prompt, hook, or agent-behavior changes are checked for structural drift |
+| Evaluator | Skill, hook, or agent-behavior changes are checked for structural drift |
 | Cutover Commander | Rollout, rollback, and operational decision points are explicit |
 | Scribe | Decisions and milestones are captured with enough context for future sessions |
 | Presentation Specialist | Stakeholder-facing deliverables are clear, polished, and aligned to the requested narrative |

@@ -3,9 +3,6 @@
 .vscode/
 [Bb]in/
 [Oo]bj/
-# But DO track the npm CLI package's bin/ (npm convention, not .NET output)
-!packages/azure-migration-squad/bin/
-!packages/azure-migration-squad/bin/**
 [Ll]og/
 [Ll]ogs/
 *.user

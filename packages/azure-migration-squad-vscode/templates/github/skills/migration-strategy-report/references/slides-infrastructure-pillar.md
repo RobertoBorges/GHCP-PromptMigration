@@ -63,7 +63,7 @@ This is a **dedicated slide** whenever EOS/EOL data is present (OS versions, DB 
 **Content structure:**
 - 4 KPI cards: Total EOS VMs/servers, ESU-eligible count, no-mitigation count, supported count
 - **Timeline table:** Platform | EOS Date | Count | Months Unsupported (calculated from current date) | CVE Risk Badge
-- **Azure Arc ESU section:** How Factory delivers ESU in ~15 days, enrollment windows, back-charge billing model
+- **Azure Arc ESU section:** How Microsoft-led migration delivers ESU in ~15 days, enrollment windows, back-charge billing model
 - **Three-tier action cards:**
   - **Red (No mitigation available):** Platforms past ESU window (WS2008, Win7, WS2003, CentOS) — must migrate/retire immediately
   - **Orange (ESU bridge available — act now):** Platforms with active ESU window (WS2012/R2, SQL 2014) — deploy Arc ESU as bridge
@@ -144,7 +144,7 @@ This is a **conditional slide** — include when VM/server inventory data is det
   | Web Server (IIS/Apache/Nginx) | n | % | App Service / Container Apps |
   | Application Server | n | % | Azure VM / App Service |
   | File Server | n | % | Azure Files / NetApp Files |
-  | Domain Controller | n | % | Azure AD DS / ISD / Partner scope |
+  | Domain Controller | n | % | Azure AD DS / Partner scope |
   | Print Server | n | % | Azure Universal Print / Retire |
   | Citrix / RDS | n | % | AVD migration |
   | Monitoring / Management | n | % | Azure Monitor / Retire |

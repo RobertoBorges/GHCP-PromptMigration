@@ -2,16 +2,22 @@ name: Release VS Code extension
 
 # ╔═════════════════════════════════════════════════════════════════════════╗
 # ║  PUBLISHES azure-migration-squad-vscode to the VS Code Marketplace     ║
-# ║  AND the Open VSX Registry (for VS Codium etc).                         ║
+# ║  ONLY. This extension is VS Code-only by design — VSCodium, Cursor,    ║
+# ║  Windsurf, Positron, and other forks are intentionally not supported   ║
+# ║  and Open VSX Registry publication is disabled.                         ║
 # ║                                                                          ║
 # ║  Triggered by:                                                           ║
-# ║    1. Push of a tag matching `vscode-vX.Y.Z` (manual release)          ║
-# ║    2. Manual workflow_dispatch (for testing)                             ║
+# ║    1. release-please.yml (workflow_call) right after it creates a       ║
+# ║       release — the normal path, works with plain GITHUB_TOKEN          ║
+# ║    2. Push of a tag matching `vscode-vX.Y.Z` (manual tag)               ║
+# ║    3. Manual workflow_dispatch — dry-run build, or (re)publish a tag    ║
+# ║                                                                          ║
+# ║  Publishing is idempotent: if the version is already on the            ║
+# ║  Marketplace, the publish step is skipped instead of failing.          ║
 # ║                                                                          ║
 # ║  Required secrets:                                                       ║
 # ║    VSCE_PAT       — Personal Access Token for Visual Studio Marketplace ║
 # ║                     (Azure DevOps PAT with Marketplace > Publish scope) ║
-# ║    OVSX_PAT       — (optional) Open VSX Registry token                  ║
 # ║                                                                          ║
 # ║  See: docs/publishing-vscode-extension.md for setup steps.              ║
 # ╚═════════════════════════════════════════════════════════════════════════╝
@@ -20,8 +26,24 @@ on:
   push:
     tags:
       - 'vscode-v*'
+  workflow_call:
+    inputs:
+      tag:
+        description: 'Release tag to build and publish (e.g. vscode-v0.7.2)'
+        required: true
+        type: string
+      dryRun:
+        description: "'true' to build without publishing"
+        required: false
+        default: 'false'
+        type: string
   workflow_dispatch:
     inputs:
+      tag:
+        description: 'Existing tag to build/publish (e.g. vscode-v0.7.2). Leave empty to build the selected branch.'
+        required: false
+        default: ''
+        type: string
       dryRun:
         description: 'Dry-run only (build .vsix, no publish)'
         required: false
@@ -38,9 +60,18 @@ jobs:
   release:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    # A release-please call and a manual tag push for the same tag must not
+    # publish concurrently; the second run sees the version and skips.
+    concurrency:
+      group: vscode-release-${{ inputs.tag || github.ref_name }}
+      cancel-in-progress: false
+    env:
+      RELEASE_TAG: ${{ inputs.tag || (github.ref_type == 'tag' && github.ref_name) || '' }}
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag || github.ref }}
 
       - name: Set up Node.js 20
         uses: actions/setup-node@v4
@@ -50,9 +81,47 @@ jobs:
       - name: Install workspaces
         run: npm install --workspaces=false && npm install --workspaces
 
+      # ────────────────────────────────────────────────────────────────────
+      # TAG vs PACKAGE.JSON version guard
+      #
+      # The release tag (e.g., vscode-v0.7.2) MUST match the version in
+      # packages/azure-migration-squad-vscode/package.json.
+      # A mismatch means:
+      #   - Someone manually tagged without bumping package.json, OR
+      #   - Someone bumped package.json without pushing the matching tag
+      # Either way, we do NOT want to publish — fail fast and loud.
+      #
+      # Skipped only for branch builds (workflow_dispatch without a tag).
+      # ────────────────────────────────────────────────────────────────────
+      - name: Verify tag matches package.json version
+        if: env.RELEASE_TAG != ''
+        run: |
+          TAG_VER="${RELEASE_TAG#vscode-v}"
+          PKG_VER=$(node -p "require('./packages/azure-migration-squad-vscode/package.json').version")
+          echo "Tag version:         $TAG_VER"
+          echo "package.json version: $PKG_VER"
+          if [ "$TAG_VER" != "$PKG_VER" ]; then
+            echo "::error::Tag $RELEASE_TAG (${TAG_VER}) does not match package.json version ${PKG_VER}. Use release-please or 'npm run version:set' so every version file moves together."
+            exit 1
+          fi
+          echo "✓ Tag matches package.json version"
+
       - name: Build VS Code extension
         working-directory: packages/azure-migration-squad-vscode
         run: npm run build
+
+      - name: Validate plugin metadata and release synchronization
+        run: npm run validate:all && npm run test:release
+
+      - name: Set up Python for portfolio reporting tests
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Test portfolio reporting before packaging
+        run: |
+          python -m pip install -r .github/skills/migration-strategy-report/scripts/requirements-delivery.txt
+          npm run test:reporting
 
       - name: Package .vsix
         working-directory: packages/azure-migration-squad-vscode
@@ -74,8 +143,69 @@ jobs:
           path: packages/azure-migration-squad-vscode/*.vsix
           retention-days: 90
 
+      # ────────────────────────────────────────────────────────────────────
+      # RAW AGENT CONTENT PACK
+      # Same content the .vsix bundles under templates/github/, packaged
+      # as a plain ZIP for users who want to drop the agent into their
+      # project without installing the VS Code extension.
+      # ────────────────────────────────────────────────────────────────────
+      - name: Stage agent content pack
+        run: |
+          set -euo pipefail
+          STAGE="$RUNNER_TEMP/agent-content-pack"
+          mkdir -p "$STAGE/.github/plugin"
+          cp -R .github/agents "$STAGE/.github/"
+          cp -R .github/skills "$STAGE/.github/"
+          cp -R .github/hooks "$STAGE/.github/"
+          cp .github/copilot-instructions.md "$STAGE/.github/"
+          cp MIGRATION-START-HERE.md "$STAGE/"
+          cp plugin.json "$STAGE/"
+          cp .github/plugin/marketplace.json "$STAGE/.github/plugin/"
+          cat > "$STAGE/README.md" <<'EOF'
+          # Azure Migration Agent — content pack
+
+          This ZIP contains the canonical agent definitions, skills,
+          hooks, welcome doc, and native plugin manifests that back the Azure Migration Agent.
+
+          ## Usage (without the VS Code extension)
+
+          1. Extract this ZIP into any repository.
+          2. Files land under `.github/` and at the repo root (`MIGRATION-START-HERE.md`).
+          3. Open the folder in a Copilot-Chat-capable client (VS Code + Copilot Chat, GitHub Copilot CLI, etc.).
+          4. Type `/assess-any-application` in Copilot Chat, or the natural-language equivalent.
+
+          Alternatively, register the extracted folder as a local agent plugin
+          with VS Code's chat.pluginLocations setting. Plugin mode exposes
+          skills and agents only; workspace hooks are not automatically registered.
+
+          For the guided experience (sidebar, decisions panel, status bar,
+          session-lifecycle hooks), install the VS Code extension instead:
+          https://marketplace.visualstudio.com/items?itemName=robertoborges.azure-migration-squad-vscode
+
+          Source repo: https://github.com/RobertoBorges/GHCP-PromptMigration
+          EOF
+          # Guard: the pack is worthless without the .github tree. Fail loudly
+          # rather than publishing a near-empty ZIP.
+          STAGED=$(find "$STAGE" -type f | wc -l)
+          echo "Staged content pack: $STAGED file(s)"
+          if [ "$STAGED" -lt 100 ]; then
+            echo "::error::content pack staged only $STAGED files; expected the full .github tree"
+            exit 1
+          fi
+
+      - name: Upload agent content pack artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: agent-content-pack-${{ github.run_number }}
+          path: ${{ runner.temp }}/agent-content-pack/
+          # Required: .github is a dot-directory and upload-artifact@v4 skips
+          # hidden paths by default, which silently drops the entire pack.
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 90
+
       - name: Publish to VS Code Marketplace (vsce)
-        if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.dryRun == 'false')
+        if: inputs.dryRun == 'false' || (github.event_name == 'push' && github.ref_type == 'tag')
         working-directory: packages/azure-migration-squad-vscode
         env:
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
@@ -84,12 +214,19 @@ jobs:
             echo "::error::VSCE_PAT secret is not set. Configure it in repo settings → Secrets and variables → Actions. See docs/publishing-vscode-extension.md."
             exit 1
           fi
+          PKG_ID=$(node -p "const p=require('./package.json'); p.publisher + '.' + p.name")
+          PKG_VER=$(node -p "require('./package.json').version")
+          if npx --no-install vsce show "$PKG_ID" --json > "$RUNNER_TEMP/marketplace.json" 2>/dev/null \
+            && node -e "const j=require(process.argv[1]); process.exit((j.versions||[]).some(v => v.version === process.argv[2]) ? 0 : 1)" "$RUNNER_TEMP/marketplace.json" "$PKG_VER"; then
+            echo "::notice::$PKG_ID@$PKG_VER is already on the Marketplace; skipping publish."
+            exit 0
+          fi
           npm run publish
 
-      - name: Publish to Open VSX Registry
-        if: (github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.dryRun == 'false')) && env.OVSX_PAT != ''
-        working-directory: packages/azure-migration-squad-vscode
-        env:
-          OVSX_PAT: ${{ secrets.OVSX_PAT }}
-        run: |
-          npx -y ovsx publish *.vsix -p "$OVSX_PAT"
+      # ────────────────────────────────────────────────────────────────────
+      # Open VSX Registry publication is intentionally NOT performed.
+      # This extension is VS Code-only by design (see extension.ts host
+      # check + the "VS Code only" note in the extension README). Forks
+      # like VSCodium, Cursor, Windsurf, Positron, and Theia-based IDEs
+      # cannot install it from any marketplace.
+      # ────────────────────────────────────────────────────────────────────

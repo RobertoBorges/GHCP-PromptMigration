@@ -3,23 +3,70 @@
  *
  * Self-contained: bundles all migration content under `templates/` and
  * copies it into the user's workspace on Initialize.
+ *
+ * COMPATIBILITY: This extension is **VS Code only**. It intentionally
+ * does not activate on VS Code forks (VSCodium, Cursor, Windsurf,
+ * Positron, Eclipse Theia-based IDEs, etc.) because it depends on
+ * VS Code-specific behavior around GitHub Copilot Chat slash-command
+ * registration and the Copilot Chat sidebar contract, and we cannot
+ * validate against every fork's runtime differences.
  */
 
 import * as vscode from 'vscode';
 import { AgentsProvider } from './treeProviders/agentsProvider';
-import { PromptsProvider } from './treeProviders/promptsProvider';
-import { SkillsProvider } from './treeProviders/skillsProvider';
+import { MainPathProvider } from './treeProviders/mainPathProvider';
+import { AddonsProvider } from './treeProviders/addonsProvider';
 import { DecisionsProvider } from './treeProviders/decisionsProvider';
 import { registerCommands } from './commands';
 import { AmsStatusBar } from './statusBar';
 import { maybeShowWelcome, showWelcomePanel, ensureCopilotChat } from './welcome';
 
+/**
+ * Whitelist of `vscode.env.appName` values that count as "real VS Code".
+ * These are Microsoft-signed/-branded builds. Forks like VSCodium, Cursor,
+ * Windsurf, Positron, and Theia-based IDEs will report different values
+ * and get the friendly "not supported" message below.
+ */
+const SUPPORTED_APP_NAMES = new Set<string>([
+  'Visual Studio Code',
+  'Visual Studio Code - Insiders',
+  'Visual Studio Code - Exploration',
+  // The Microsoft-signed open-source build that ships from the vscode repo.
+  // Same source code + Marketplace as branded VS Code; commonly used in
+  // corporate environments that repackage but keep the Microsoft signature.
+  'Code - OSS',
+]);
+
+const MARKETPLACE_URL =
+  'https://marketplace.visualstudio.com/items?itemName=robertoborges.azure-migration-squad-vscode';
+
 export function activate(context: vscode.ExtensionContext): void {
-  console.log('[azure-migration-agent] extension activated');
+  // ── Host compatibility check ─────────────────────────────────────────
+  const appName = vscode.env.appName ?? '(unknown)';
+  if (!SUPPORTED_APP_NAMES.has(appName)) {
+    console.warn(
+      `[azure-migration-agent] refusing to activate on non-VS Code host: "${appName}"`
+    );
+    void vscode.window
+      .showErrorMessage(
+        `Azure Migration Agent is only supported on Visual Studio Code. ` +
+          `Detected host: "${appName}". The extension will not activate.`,
+        'Open marketplace listing',
+        'Dismiss'
+      )
+      .then((choice) => {
+        if (choice === 'Open marketplace listing') {
+          void vscode.env.openExternal(vscode.Uri.parse(MARKETPLACE_URL));
+        }
+      });
+    return;
+  }
+
+  console.log(`[azure-migration-agent] extension activated (host: ${appName})`);
 
   const agentsProvider = new AgentsProvider();
-  const promptsProvider = new PromptsProvider();
-  const skillsProvider = new SkillsProvider();
+  const mainPathProvider = new MainPathProvider();
+  const addonsProvider = new AddonsProvider();
   const decisionsProvider = new DecisionsProvider();
 
   context.subscriptions.push(
@@ -27,12 +74,14 @@ export function activate(context: vscode.ExtensionContext): void {
       treeDataProvider: agentsProvider,
       showCollapseAll: true,
     }),
+    // View id kept as `azureMigrationSquadPrompts` for backwards compatibility
+    // with persisted workbench layout state; its title reads "Main path".
     vscode.window.createTreeView('azureMigrationSquadPrompts', {
-      treeDataProvider: promptsProvider,
+      treeDataProvider: mainPathProvider,
       showCollapseAll: true,
     }),
-    vscode.window.createTreeView('azureMigrationSquadSkills', {
-      treeDataProvider: skillsProvider,
+    vscode.window.createTreeView('azureMigrationSquadAddons', {
+      treeDataProvider: addonsProvider,
       showCollapseAll: true,
     }),
     vscode.window.createTreeView('azureMigrationSquadDecisions', {
@@ -64,8 +113,8 @@ export function activate(context: vscode.ExtensionContext): void {
 
   const refreshAll = () => {
     agentsProvider.refresh();
-    promptsProvider.refresh();
-    skillsProvider.refresh();
+    mainPathProvider.refresh();
+    addonsProvider.refresh();
     decisionsProvider.refresh();
     statusBar.refresh();
   };
@@ -152,7 +201,7 @@ export function activate(context: vscode.ExtensionContext): void {
   context.subscriptions.push(
     vscode.commands.registerCommand('azureMigrationSquad.hello', () => {
       vscode.window.showInformationMessage(
-        'Azure Migration Agent extension is active — open the sidebar to browse the agent, prompts, skills, and decisions.'
+        'Azure Migration Agent extension is active — open the sidebar to browse the agents, skills, and decisions.'
       );
     })
   );

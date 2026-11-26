@@ -1,7 +1,7 @@
 # Azure Migration Agent — VS Code extension
 
 > **Migrate any application to Azure** — directly from your editor.
-> One agent definition, 19 prompts, 9 discoverable Agent Skills, 72 prompt-reference guides. Stack-agnostic. Discovery-first. Hard-stop user-decision gates.
+> 10 custom agents (you only ever pick from **three**), 65 skills (35 workflow slash commands + 30 knowledge skills). Stack-agnostic. Discovery-first. Hard-stop user-decision gates.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
@@ -9,7 +9,7 @@
 
 ## What it does
 
-Drops a `.github/agents/Code-Migration-Modernization.agent.md` and the full prompt+skill+chatmode catalog into any VS Code workspace. The agent walks you through:
+Drops a `.github/agents/Code-Migration-Modernization.agent.md` and the full agent + skill + hook catalog into any VS Code workspace. The agent walks you through:
 
 1. **Discovery** — what is this app? (source, stack, workload, data, integrations)
 2. **Plan** — a migration plan + 18 major decisions you need to answer
@@ -17,13 +17,59 @@ Drops a `.github/agents/Code-Migration-Modernization.agent.md` and the full prom
 
 The agent **never picks framework / database / hosting / IaC tool on your behalf**. It surfaces options + tradeoffs and waits.
 
+## Supported languages, frameworks, and platforms
+
+**Not just .NET and Java.** The agent handles any application in any of these stacks — each with a dedicated adapter covering framework detection, Azure hosting targets, effort sizing, and common blockers:
+
+**15 stack adapters (languages / frameworks):**
+`.NET` (Framework 2.x → 10 LTS) · `Java` (8/11 → 17/21 LTS + Spring Boot 3.x) · `Python` (2.x → 3.12+, Django/Flask/FastAPI) · `Node.js` (12/14/16 → 20/22 LTS, Express/NestJS/Next) · `PHP` (5.x/7.x → 8.3+, Laravel/Symfony) · `Ruby` (2.x → 3.3+, Rails) · `Go` (≤ 1.19 → 1.22+) · `Perl` · `Rust` · `Scala/Kotlin` · `Oracle Forms` (→ APEX / Spring Boot) · `PowerBuilder` · `Delphi/VB6` · `C++ Windows`
+
+**Plus on-the-fly skill authoring:** if you show up with a stack the 15 adapters don't cover (Elixir, F#, Julia, Clojure, ABAP, etc.), the built-in **skill-creator** meta-skill offers to research authoritative docs and author a new skill on the spot (~2-5 minutes).
+
+**10 source adapters (where the app runs today):** On-premise · AWS · GCP · Oracle Database · VMware / RVTools · Kubernetes · container registries (ACR / ECR / Docker Hub) · GitHub repo · ZIP archive · escalation path for SaaS-embedded (Salesforce Apex, ServiceNow, SharePoint on-prem, Power Platform, SAP ABAP) and mainframe/midrange workloads
+
+**8 workload patterns:** Web app · API service · Batch job · Event-driven · Serverless (Functions) · Data pipeline · Desktop / client-server · Packaged app
+
+> **Adapter depth varies, by design.** 18 of the 33 adapters are full depth with step-by-step modernization guidance; the other 15 (Go, Ruby, Rust, Perl, Scala/Kotlin, C++ Windows, Delphi/VB6, PowerBuilder, GCP, Oracle DB, VMware/RVTools and three workload patterns) are deliberately lighter — they classify, detect the sub-framework, pick an Azure target, size the effort and flag risks. `skill-creator` deepens any of them on demand.
+
+> **Out of scope as a first-class family:** mainframe / midrange code migration (z/OS, IBM i, COBOL / RPG / Natural). These route to a specialist-partner playbook instead of pretending we can migrate their code.
+
+## Where this extension fits alongside Microsoft's other migration options
+
+Microsoft ships two first-party migration tools that are excellent when they cover your scenario. This extension complements them:
+
+### 🔷 [GitHub Copilot Upgrade](https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.upgrade-agent)
+**In-place .NET code upgrades.** .NET Framework/Core → .NET 8/9/10, Web Forms → Blazor, Azure Functions in-process → isolated, SDK-style conversion, Newtonsoft → System.Text.Json, SqlClient migration, and more. If you have a .NET app and want an in-place upgrade, **start there**.
+
+### 🔷 [Azure Migrate](https://learn.microsoft.com/en-us/azure/migrate/migrate-services-overview)
+**Infrastructure discovery + lift-and-shift.** VMware/Hyper-V/physical servers → Azure VMs, SQL Server → Azure SQL (via Data Migration Assistant + Azure DMS), ASP.NET on VMware → App Service (via App Service Migration Assistant), business case analysis, dependency mapping. If you have on-prem VMs/databases to move as-is, **start there**.
+
+### 🟢 What this extension does differently
+
+| Capability | This extension | Copilot Upgrade | Azure Migrate |
+|------------|----------------|-----------------|---------------|
+| Non-.NET stacks (Java, Python, Node.js, PHP, Ruby, Go, +8 more) | ✅ 15 stack adapters | ❌ .NET only | ⚠ IaaS lift only, no code changes |
+| Universal source intake (GitHub repo, ZIP, "describe-only", any cloud) | ✅ 10 source adapters | ⚠ workspace only | ✅ VMware / Hyper-V / physical / other cloud |
+| **Decision Hardstop Protocol** — 18 architecture Qs answered before code changes; never silently defaults framework, DB engine, hosting, IaC tool | ✅ | ❌ | ❌ |
+| **On-the-fly skill authoring** — mid-migration, agent researches + writes a new skill for any novel stack | ✅ | ❌ | ❌ |
+| **Cross-session trace memory** — canonical Action Log with per-action token accounting | ✅ | ❌ | ❌ |
+| **Portfolio 6Rs strategy report** — CIO-ready HTML deck with Microsoft / Partner / Unknown execution ownership | ✅ | ❌ | ✅ (business case, different format) |
+
+**How to combine them:**
+- .NET app needing an in-place upgrade → **GitHub Copilot Upgrade**
+- On-prem VMs / SQL / web apps to lift into Azure → **Azure Migrate**
+- Java / Python / Node.js / PHP / Ruby / Go / other-stack modernization → **this extension**
+- Mixed-stack portfolio needing a CIO plan → **this extension** for the 6Rs report, then hand off IaaS candidates to Azure Migrate and .NET candidates to GitHub Copilot Upgrade
+
 ## Quick install
 
 1. `Ctrl+Shift+X` in VS Code → search **"Azure Migration Agent"** → Install
 2. Open the folder you want to migrate
 3. Accept the welcome notification → click **Get started**
 4. The extension copies content into `.github/` and `MIGRATION-START-HERE.md`
-5. In Copilot Chat (`Ctrl+Alt+I`), type `/assess-any-application`
+5. In Copilot Chat (`Ctrl+Alt+I`), pick an agent — there are only three:
+   **Code Migration Modernization** (start here — migrate an app), **Discovery Intake** (not sure what the app is yet), or **Debug Migration** (a migration broke). The seven specialists, including AWS account assessment and AWS-to-Azure migration, are dispatched for you automatically.
+6. Type `/assess-any-application`
 
 Full walkthrough: [docs/vscode-quickstart.md](https://github.com/RobertoBorges/GHCP-PromptMigration/blob/main/docs/vscode-quickstart.md)
 
@@ -32,25 +78,32 @@ Full walkthrough: [docs/vscode-quickstart.md](https://github.com/RobertoBorges/G
 Open the **rocket icon 🚀** in the Activity Bar:
 
 ```
-🛑 DECISIONS REQUIRED        ← Wave H artifact — pending architecture decisions
-AGENT                         ← The Code Migration Modernization Agent
-PROMPTS                       ← 19 slash commands
-SKILLS                        ← Agent Skills + selected reference guides
+🛑 DECISIONS REQUIRED           ← pending architecture decisions (from reports/Decisions-Required.md)
+AGENT                            ← the 10 agent definitions (3 selectable in the chat agent picker)
+🟢 MAIN PATH (Assess + Phase 1-6) ← the 7-step migration flow
+🔵 OPTIONAL ADD-ONS              ← Intakes · Portfolio · Specialists · AWS assessment · AWS migration · Utility
 ```
 
-The **status bar** (bottom-left) shows your current migration phase, or **"⚠ AMS: N/M decisions pending"** with a warning background when you have unanswered architecture decisions.
+The **status bar** (bottom-left) shows your current migration phase, or **"⚠ AMA: N/M decisions pending"** with a warning background when you have unanswered architecture decisions.
 
-## Supported tech
+## Standout features
 
-| Sources | Stacks | Workloads |
-|---------|--------|-----------|
-| On-premise, AWS, GCP, Oracle, VMware, Kubernetes, container registries, GitHub repos, ZIPs, mainframes | .NET, Java, Python, Node.js, PHP, Ruby, Go, Perl, Rust, COBOL, Oracle Forms, PowerBuilder, Delphi/VB6, Scala/Kotlin, C++ Windows | Web app, API, batch, event-driven, serverless, data pipeline, desktop, packaged, mainframe transactional |
+- **📊 Evidence-backed portfolio reporting** — source/worksheet manifests, persistent validation audits, per-pillar reconciliation, financial provenance, and resumable HTML generation. Optional bilingual decks and a bundled four-slide PPTX/XLSX execution package reuse the same classified data; Office files are reopened and verified.
+- **☁ AWS account assessment** — read-only multi-account/multi-region inventory, metadata and cost enrichment, dependency maps, findings and Azure readiness. Start with `/aws-assess-phase0-setup-and-scope`.
+- **🔀 AWS-to-Azure migration** — service mapping, compatibility checks, SDK/config conversion, identity/network/observability migration, infrastructure, deployment and CI/CD. Start with `/aws2azure-phase1-plan`.
+- **🎯 Decision Hardstop Protocol** — Phases 2-6 hard-stop until you answer 18 canonical architecture decisions. No silent defaults, no expert-mode bypass. Stay-as-is is always option 1.
+- **🧠 On-the-fly skill authoring** — `skill-creator` writes new stack/source/workload skills mid-migration when it hits an unknown, inspired by [Anthropic's skill-creator](https://github.com/anthropics/skills/tree/main/skills/skill-creator).
+- **📜 Action Log (trace memory)** — every meaningful action logs one line to `reports/Report-Status.md` in a canonical format. New sessions recover from the last 5 log entries. Includes per-action turn count + best-effort token estimate.
+- **✅ Universal, stack-agnostic wording** — every workflow skill was swept to remove ".NET or Java only" phrasing. Default goal is minimum viable Azure compatibility, NOT rewriting to microservices.
 
 ## Requirements
 
-- **VS Code** ≥ 1.85
+- **VS Code** ≥ 1.85 (Visual Studio Code, VS Code Insiders, VS Code Exploration, or Microsoft-signed Code - OSS builds)
 - **GitHub Copilot Chat** extension — the extension offers to install it for you on first use
 - **Node.js** is NOT required to run the extension (it bundles all content)
+- **Optional portfolio tools:** Python 3.8+ for classified-data validation; `python-pptx` and `openpyxl` only for the execution package, or Playwright only for PDF export. These are not required to activate the extension.
+
+> ⚠ **VS Code only.** This extension is intentionally **not supported on VS Code forks** — VSCodium, Cursor, Windsurf, Positron, and Eclipse Theia-based IDEs. If you install the `.vsix` on one of those hosts, the extension will refuse to activate and show a message pointing you at the VS Code Marketplace listing. The extension is not published to the Open VSX Registry either.
 
 ## Settings
 
@@ -67,10 +120,19 @@ The extension is **self-contained**:
 
 - Bundles all migration content under `templates/` (built from the canonical `.github/*` at the repo root via `scripts/sync-templates.mjs`)
 - On Initialize, copies `templates/` into the user's workspace under `.github/`
-- All Copilot Chat slash commands work via the bundled `.github/prompts/*.prompt.md` files
+- All Copilot Chat slash commands are backed by the bundled `.github/skills/<skill-name>/SKILL.md` files
 - The agent definition at `.github/agents/Code-Migration-Modernization.agent.md` orchestrates everything
+- Session-lifecycle hooks read/write `reports/Report-Status.md` so recovery works across sessions
 
-No npm CLI. No external Squad framework. Just the extension and Copilot Chat.
+No npm CLI or external Squad framework is required.
+
+## Native agent plugin alternative
+
+The source repository also ships a **native Copilot-format agent plugin**. Its root `plugin.json` reuses the same 65 skills and 10 agents, and `.github/plugin/marketplace.json` enables repository marketplace discovery. Use the extension for workspace initialization, executable workspace hooks, sidebar and status-bar UI; use the plugin for agent/skill discovery without copying the catalog into each project.
+
+The plugin does not register hooks or MCP servers and does not install workspace-wide instructions. It is installed from the Git repository or a local clone, **not from the VSIX**. Avoid loading both copies of the catalog in the same workspace.
+
+See the [native plugin installation guide](https://github.com/RobertoBorges/GHCP-PromptMigration/blob/main/docs/agent-plugin.md). Git-source installation requires the new manifests to be committed and pushed first.
 
 ## Links
 

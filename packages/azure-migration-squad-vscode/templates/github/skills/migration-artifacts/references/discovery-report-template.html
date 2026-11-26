@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<!--
+  Discovery Report — HTML template
+  =================================
+  Used by /assess-any-application Step 10.5 to render reports/Discovery-Report.html.
+
+  FILLING RULES (for the agent — this comment block may stay in the output):
+  1. Replace every {{TOKEN}} with values from reports/Capability-Matrix.yaml and
+     reports/Discovery-Dossier.md. The HTML must not contain facts absent from those files.
+  2. Blocks wrapped in the comment markers "REPEAT:name" ... "/REPEAT:name" are repeated once per item.
+  3. Blocks wrapped in the comment markers "IF:condition" ... "/IF:condition" are kept only when the
+     condition holds; otherwise delete the block.
+  4. Level CSS class / {{LEVEL_COLOR}}: Low → lvl-low / #107c10, Medium → lvl-medium / #ff8c00,
+     High → lvl-high / #d83b01, Very High → lvl-veryhigh / #a80000, not-estimated → lvl-none / #a19f9d.
+     {{LOC_TOTAL_SHORT}} is a compact form such as 320k or 1.2M.
+  5. Gauge: {{SCORE}} is 0–100 and is used directly as the arc length (pathLength=100).
+  6. Dimension bar width: adjusted rating × 20 (%). Language bar width: share %.
+     {{DIM_RATING_TEXT}} is "N / 5" when no relief applied, or "N → M / 5 (AI)" when the
+     delivery model lowered the rating (N = rating, M = adjusted_rating).
+  7. Escape <, >, & in any user-supplied text. No external CSS, fonts or images. The only
+     allowed external asset is the pinned, integrity-checked Mermaid script in the
+     "IF:diagram-client" block, used only when no pre-rendered SVG is available.
+  8. Missing data → write "unknown" and list it under Unresolved Questions; never invent values.
+  9. Effort breakdown: one REPEAT:segment, REPEAT:legend and REPEAT:stream item per
+     complexity.effort_breakdown entry, in YAML order. Segment width = percent. {{WS_CLASS}} is
+     "ws-" + stream id (colours are defined in the CSS). {{WS_FLAG}} is "widened" when the stream
+     was widened, else "". Team-days follow complexity-model.md Step 5 rounding; when
+     {{WS_DAYS_MIN}} equals {{WS_DAYS_MAX}}, write the value once and drop the dash.
+     Delete the whole section for retire/retain.
+ 10. Diagram: prefer "IF:diagram-svg" with the SVG produced by mmdc pasted inline (strip the XML
+     prolog). Otherwise keep "IF:diagram-client". Keep exactly one of the two. Always keep the
+     <details> block with the Mermaid source.
+ 11. Delivery model: {{DELIVERY_MODEL}} is "AI-assisted" or "Traditional". Keep "IF:ai-assisted"
+     (traditional comparison) only for AI-assisted delivery.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Discovery Report — {{APP_NAME}}</title>
+<style>
+  :root {
+    --blue: #0078d4; --blue-dark: #005a9e; --text: #323130; --muted: #605e5c;
+    --border: #edebe9; --bg-alt: #f3f2f1; --green: #107c10; --amber: #ff8c00;
+    --orange: #d83b01; --red: #a80000; --grey: #a19f9d;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+         color: var(--text); background: var(--bg-alt); font-size: 14px; line-height: 1.5; }
+  header { background: linear-gradient(135deg, var(--blue), var(--blue-dark)); color: #fff; padding: 28px 40px; }
+  header h1 { margin: 0 0 4px; font-size: 24px; font-weight: 600; }
+  header .meta { font-size: 12px; opacity: .9; }
+  main { max-width: 1180px; margin: 0 auto; padding: 24px 40px 48px; }
+  section { background: #fff; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,.08); padding: 20px 24px; margin-bottom: 20px; }
+  h2 { font-size: 19px; font-weight: 600; margin: 0 0 12px; color: var(--text); border-bottom: 2px solid var(--border); padding-bottom: 6px; }
+  h3 { font-size: 15px; font-weight: 600; margin: 16px 0 8px; }
+  .muted { color: var(--muted); font-size: 12px; }
+  .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; margin-bottom: 20px; }
+  .kpi { background: #fff; border-top: 4px solid var(--blue); border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,.08); padding: 14px 16px; }
+  .kpi .v { font-size: 26px; font-weight: 700; color: var(--blue); line-height: 1.15; overflow-wrap: anywhere; }
+  .kpi .l { font-size: 12px; color: var(--muted); }
+  .kpi .s { font-size: 11px; color: var(--muted); }
+  .kpi.lvl-low { border-top-color: var(--green); } .kpi.lvl-low .v { color: var(--green); }
+  .kpi.lvl-medium { border-top-color: var(--amber); } .kpi.lvl-medium .v { color: var(--amber); }
+  .kpi.lvl-high { border-top-color: var(--orange); } .kpi.lvl-high .v { color: var(--orange); }
+  .kpi.lvl-veryhigh { border-top-color: var(--red); } .kpi.lvl-veryhigh .v { color: var(--red); }
+  .kpi.lvl-none { border-top-color: var(--grey); } .kpi.lvl-none .v { color: var(--grey); }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 6px 0 4px; }
+  th { background: var(--blue); color: #fff; font-weight: 600; text-align: left; padding: 7px 10px; }
+  td { padding: 7px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tr:nth-child(even) td { background: var(--bg-alt); }
+  .badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; color: #fff; }
+  .badge.lvl-low { background: var(--green); } .badge.lvl-medium { background: var(--amber); }
+  .badge.lvl-high { background: var(--orange); } .badge.lvl-veryhigh { background: var(--red); } .badge.lvl-none { background: var(--grey); }
+  .conf { font-size: 11px; font-weight: 600; padding: 1px 7px; border-radius: 10px; border: 1px solid; }
+  .conf.high { color: var(--green); border-color: var(--green); }
+  .conf.medium { color: var(--amber); border-color: var(--amber); }
+  .conf.low { color: var(--red); border-color: var(--red); }
+  .cx-grid { display: grid; grid-template-columns: 280px 1fr; gap: 24px; align-items: start; }
+  .gauge { text-align: center; }
+  .gauge svg { width: 240px; height: 140px; }
+  .gauge .score { font-size: 34px; font-weight: 700; fill: var(--text); }
+  .gauge .of { font-size: 12px; fill: var(--muted); }
+  .bar { background: var(--border); border-radius: 4px; height: 10px; width: 100%; min-width: 80px; }
+  .bar > span { display: block; height: 10px; border-radius: 4px; background: var(--blue); }
+  .bar.r1 > span { background: var(--green); } .bar.r2 > span { background: #5c9e31; }
+  .bar.r3 > span { background: var(--amber); } .bar.r4 > span { background: var(--orange); } .bar.r5 > span { background: var(--red); }
+  .effort { border-left: 4px solid var(--blue); background: rgba(0,120,212,.06); padding: 12px 16px; border-radius: 4px; margin-top: 14px; }
+  .effort .big { font-size: 22px; font-weight: 700; color: var(--blue); }
+  .callout { border-left: 4px solid var(--amber); background: rgba(255,140,0,.06); padding: 10px 14px; border-radius: 4px; margin: 10px 0; font-size: 13px; }
+  .callout.risk { border-left-color: var(--red); background: rgba(168,0,0,.06); }
+  .stack { display: flex; height: 26px; border-radius: 4px; overflow: hidden; margin: 8px 0 6px; }
+  .stack > span { display: block; height: 100%; }
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 12px; color: var(--muted); margin-bottom: 10px; }
+  .legend i, td i.sw { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: middle; }
+  .ws-plan { background: #8764b8; } .ws-code { background: #0078d4; } .ws-azure_readiness { background: #00b7c3; }
+  .ws-integrations { background: #038387; } .ws-identity { background: #5c2e91; } .ws-data { background: #ca5010; }
+  .ws-infra { background: #498205; } .ws-testing { background: #c19c00; } .ws-cutover { background: #a4262c; }
+  .lev { font-size: 11px; font-weight: 600; text-transform: uppercase; color: var(--muted); }
+  .lev.high { color: var(--green); } .lev.low { color: var(--orange); }
+  .flag { font-size: 11px; font-weight: 600; color: var(--amber); }
+  figure.diagram { margin: 8px 0; padding: 12px; border: 1px solid var(--border); border-radius: 6px; background: #fff; overflow-x: auto; text-align: center; }
+  figure.diagram svg { max-width: 100%; height: auto; }
+  figure.diagram pre.mermaid { background: transparent; border: 0; text-align: left; }
+  details summary { cursor: pointer; color: var(--muted); font-size: 12px; margin-top: 6px; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  ul { margin: 6px 0; padding-left: 20px; }
+  pre { background: var(--bg-alt); border: 1px solid var(--border); padding: 12px; border-radius: 4px; overflow-x: auto; font-size: 12px; }
+  code { font-family: Consolas, 'Courier New', monospace; font-size: 12px; }
+  footer { text-align: left; font-size: 11px; color: var(--muted); max-width: 1180px; margin: 0 auto; padding: 0 40px 30px; }
+  @media (max-width: 860px) { .cx-grid, .two { grid-template-columns: 1fr; } main, header { padding-left: 18px; padding-right: 18px; } }
+  @media print {
+    body { background: #fff; } section, .kpi { box-shadow: none; border: 1px solid var(--border); }
+    section { page-break-inside: avoid; } header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    th, .badge, .bar > span, .stack > span, .legend i, td i.sw { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    details { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Discovery Report — {{APP_NAME}}</h1>
+  <div class="meta">{{APP_PURPOSE}} · Assessed {{DATE}} · Status: {{STATUS}} · Model version {{MODEL_VERSION}}</div>
+</header>
+
+<main>
+
+  <!-- KPI tiles -->
+  <div class="kpis">
+    <div class="kpi"><div class="v">{{LOC_TOTAL_SHORT}}</div><div class="l">Lines of code</div><div class="s">{{LOC_TOTAL}} lines · {{LOC_METHOD}}</div></div>
+    <div class="kpi {{LEVEL_CLASS}}"><div class="v">{{LEVEL}}</div><div class="l">Migration complexity</div><div class="s">Score {{SCORE}}/100</div></div>
+    <div class="kpi {{LEVEL_CLASS}}"><div class="v">{{EFFORT_MIN}}–{{EFFORT_MAX}} wks</div><div class="l">Estimated effort</div><div class="s">{{STRATEGY}} · {{DELIVERY_MODEL}} · {{PROVISIONAL_TEXT}}</div></div>
+    <div class="kpi"><div class="v">{{STRATEGY}}</div><div class="l">Recommended strategy</div><div class="s">{{TOP_AZURE_TARGET}}</div></div>
+    <div class="kpi"><div class="v">{{PRIMARY_STACK}}</div><div class="l">Primary stack</div><div class="s">{{RUNTIME_VERSION}}</div></div>
+    <div class="kpi"><div class="v">{{INTEGRATION_COUNT}}</div><div class="l">Integrations</div><div class="s">{{RISK_FLAG_COUNT}} risk flags</div></div>
+  </div>
+
+  <!-- 1. Executive summary -->
+  <section id="summary">
+    <h2>Executive summary</h2>
+    <p>{{EXECUTIVE_SUMMARY}}</p>
+  </section>
+
+  <!-- 2. Complexity & effort -->
+  <section id="complexity">
+    <h2>Migration complexity &amp; effort</h2>
+    <div class="cx-grid">
+      <div class="gauge">
+        <svg viewBox="0 0 240 140" role="img" aria-label="Complexity score {{SCORE}} of 100">
+          <path d="M20 120 A100 100 0 0 1 220 120" fill="none" stroke="#edebe9" stroke-width="18" stroke-linecap="round" pathLength="100"/>
+          <!-- Arc colour: Low #107c10, Medium #ff8c00, High #d83b01, Very High #a80000 -->
+          <path d="M20 120 A100 100 0 0 1 220 120" fill="none" stroke="{{LEVEL_COLOR}}" stroke-width="18" stroke-linecap="round" pathLength="100" stroke-dasharray="{{SCORE}} 100"/>
+          <text x="120" y="108" text-anchor="middle" class="score">{{SCORE}}</text>
+          <text x="120" y="128" text-anchor="middle" class="of">out of 100</text>
+        </svg>
+        <div><span class="badge {{LEVEL_CLASS}}">{{LEVEL}}</span></div>
+        <p class="muted">Score alone: {{SCORE_LEVEL}}<br>Minimum-level rules applied: {{FLOOR_RULES_OR_NONE}}</p>
+      </div>
+      <div>
+        <table>
+          <thead><tr><th>Dimension</th><th style="width:150px">Rating</th><th>Weight</th><th>Evidence</th><th>Confidence</th></tr></thead>
+          <tbody>
+            <!-- REPEAT:dimension (8 rows, in complexity-model.yaml order) -->
+            <tr>
+              <td>{{DIM_LABEL}}</td>
+              <td><div class="bar r{{DIM_ADJUSTED}}"><span style="width:{{DIM_ADJUSTED_X20}}%"></span></div><span class="muted">{{DIM_RATING_TEXT}}</span></td>
+              <td>{{DIM_WEIGHT_PCT}}%</td>
+              <td>{{DIM_EVIDENCE}}</td>
+              <td><span class="conf {{DIM_CONFIDENCE}}">{{DIM_CONFIDENCE}}</span></td>
+            </tr>
+            <!-- /REPEAT:dimension -->
+          </tbody>
+        </table>
+        <p class="muted">Weighted rating {{WEIGHTED_RATING}} of 5 (adjusted ratings). Delivery model: {{DELIVERY_MODEL}} — {{TOOLING}}. Method: complexity-model.md (model {{MODEL_VERSION}}).</p>
+      </div>
+    </div>
+
+    <div class="effort">
+      <div class="big">{{EFFORT_MIN}}–{{EFFORT_MAX}} weeks</div>
+      <div>{{LEVEL}} baseline {{LEVEL_WEEKS_MIN}}–{{LEVEL_WEEKS_MAX}} weeks × {{STRATEGY}} factor {{STRATEGY_FACTOR}} · {{DELIVERY_MODEL}} delivery · Team: {{BASELINE_TEAM}}</div>
+      <!-- IF:ai-assisted -->
+      <div class="muted">Without AI assistance: score {{TRAD_SCORE}} ({{TRAD_LEVEL}}), {{TRAD_EFFORT_MIN}}–{{TRAD_EFFORT_MAX}} weeks.</div>
+      <!-- /IF:ai-assisted -->
+      <!-- IF:provisional -->
+      <div class="callout">Provisional: low-confidence evidence on {{LOW_CONFIDENCE_DIMENSIONS}}. The upper bound of {{WIDENED_STREAMS}} was doubled; resolve the open questions below to narrow it.</div>
+      <!-- /IF:provisional -->
+    </div>
+
+    <div class="two">
+      <div>
+        <h3>Top drivers</h3>
+        <ul>
+          <!-- REPEAT:driver --><li>{{DRIVER}}</li><!-- /REPEAT:driver -->
+        </ul>
+      </div>
+      <div>
+        <h3>Effort scope</h3>
+        <p class="muted"><strong>Includes:</strong> {{EFFORT_INCLUDES}}</p>
+        <p class="muted"><strong>Excludes:</strong> {{EFFORT_EXCLUDES}}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2b. Effort breakdown (delete for retire/retain) -->
+  <section id="effort-breakdown">
+    <h2>Where the {{EFFORT_MIN}}–{{EFFORT_MAX}} weeks go</h2>
+    <p class="muted">The estimate split across work streams by share × stream rating (complexity-model.md Step 5). Team-days = weeks × 5 for {{BASELINE_TEAM}}. Streams overlap in practice; the team works several in parallel.</p>
+    <div class="stack" role="img" aria-label="Effort share by work stream">
+      <!-- REPEAT:segment --><span class="{{WS_CLASS}}" style="width:{{WS_PERCENT}}%" title="{{WS_LABEL}} {{WS_PERCENT}}%"></span><!-- /REPEAT:segment -->
+    </div>
+    <div class="legend">
+      <!-- REPEAT:legend --><span><i class="{{WS_CLASS}}"></i>{{WS_LABEL}}</span><!-- /REPEAT:legend -->
+    </div>
+    <table>
+      <thead><tr><th>Work stream</th><th>Main-path phase</th><th>Driven by</th><th>Share</th><th>Team-days</th><th>AI leverage</th></tr></thead>
+      <tbody>
+        <!-- REPEAT:stream (complexity.effort_breakdown, YAML order) -->
+        <tr>
+          <td><i class="sw {{WS_CLASS}}"></i>{{WS_LABEL}}</td>
+          <td>{{WS_PHASE}}</td>
+          <td>{{WS_DRIVERS}} <span class="muted">({{WS_RATING}})</span></td>
+          <td>{{WS_PERCENT}}%</td>
+          <td>{{WS_DAYS_MIN}}–{{WS_DAYS_MAX}} <span class="flag">{{WS_FLAG}}</span></td>
+          <td><span class="lev {{WS_AI_LEVERAGE}}">{{WS_AI_LEVERAGE}}</span></td>
+        </tr>
+        <!-- /REPEAT:stream -->
+      </tbody>
+    </table>
+    <p class="muted">"widened" = maximum doubled because a driver has low-confidence evidence. AI leverage = how much of the stream the coding agent performs (high: mostly generated and reviewed; low: mostly human-paced work such as data copy windows, approvals and cutover).</p>
+  </section>
+
+  <!-- 3. Code size -->
+  <section id="code-size">
+    <h2>Code size</h2>
+    <p><strong>{{LOC_TOTAL}}</strong> non-blank lines of code, excluding vendored, generated and minified files. Test code: {{TEST_LOC}}. Counted with <code>{{LOC_METHOD}}</code>.</p>
+    <table>
+      <thead><tr><th>Language</th><th>Files</th><th>Lines of code</th><th style="width:35%">Share</th></tr></thead>
+      <tbody>
+        <!-- REPEAT:language (descending by lines of code) -->
+        <tr><td>{{LANG}}</td><td>{{LANG_FILES}}</td><td>{{LANG_LOC}}</td><td><div class="bar"><span style="width:{{LANG_SHARE}}%"></span></div><span class="muted">{{LANG_SHARE}}%</span></td></tr>
+        <!-- /REPEAT:language -->
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 4. Application & source -->
+  <section id="identity">
+    <h2>Application &amp; source</h2>
+    <div class="two">
+      <table>
+        <tbody>
+          <tr><td><strong>Name</strong></td><td>{{APP_NAME}}</td></tr>
+          <tr><td><strong>Business owner</strong></td><td>{{OWNER}}</td></tr>
+          <tr><td><strong>Criticality</strong></td><td>{{CRITICALITY}}</td></tr>
+          <tr><td><strong>Business priority</strong></td><td>{{BUSINESS_PRIORITY}}</td></tr>
+        </tbody>
+      </table>
+      <table>
+        <tbody>
+          <tr><td><strong>Source adapter</strong></td><td><code>{{SOURCE_ADAPTER}}</code> <span class="conf {{SOURCE_CONFIDENCE}}">{{SOURCE_CONFIDENCE}}</span></td></tr>
+          <tr><td><strong>Access method</strong></td><td>{{ACCESS_METHOD}}</td></tr>
+          <tr><td><strong>Evidence</strong></td><td>{{SOURCE_EVIDENCE}}</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 5. Stack & workload -->
+  <section id="stack">
+    <h2>Stack &amp; workload</h2>
+    <div class="two">
+      <table>
+        <tbody>
+          <tr><td><strong>Primary stack</strong></td><td>{{PRIMARY_STACK}} <span class="conf {{STACK_CONFIDENCE}}">{{STACK_CONFIDENCE}}</span></td></tr>
+          <tr><td><strong>Framework</strong></td><td>{{PRIMARY_FRAMEWORK}}</td></tr>
+          <tr><td><strong>Runtime</strong></td><td>{{RUNTIME_VERSION}}</td></tr>
+          <tr><td><strong>Build system</strong></td><td>{{BUILD_SYSTEM}}</td></tr>
+        </tbody>
+      </table>
+      <table>
+        <tbody>
+          <tr><td><strong>Workload pattern</strong></td><td>{{WORKLOAD_PATTERN}} <span class="conf {{WORKLOAD_CONFIDENCE}}">{{WORKLOAD_CONFIDENCE}}</span></td></tr>
+          <tr><td><strong>Secondary patterns</strong></td><td>{{SECONDARY_PATTERNS}}</td></tr>
+          <tr><td><strong>Entry points</strong></td><td>{{ENTRY_POINTS}}</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h3>Top external dependencies</h3>
+    <table>
+      <thead><tr><th>Library</th><th>Version</th><th>Notes</th></tr></thead>
+      <tbody>
+        <!-- REPEAT:dependency --><tr><td>{{DEP_NAME}}</td><td>{{DEP_VERSION}}</td><td>{{DEP_NOTES}}</td></tr><!-- /REPEAT:dependency -->
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 6. Data & integrations -->
+  <section id="data">
+    <h2>Data &amp; integrations</h2>
+    <p><strong>Primary datastore:</strong> {{DATASTORE}} ({{DATASTORE_VERSION}}) · <strong>Data gravity:</strong> {{DATA_GRAVITY}} · <span class="conf {{DATA_CONFIDENCE}}">{{DATA_CONFIDENCE}}</span></p>
+    <p class="muted">{{SCHEMA_HIGHLIGHTS}}</p>
+    <table>
+      <thead><tr><th>Integration</th><th>Direction</th><th>Protocol</th><th>Criticality</th><th>Notes</th></tr></thead>
+      <tbody>
+        <!-- REPEAT:integration --><tr><td>{{INT_NAME}}</td><td>{{INT_DIRECTION}}</td><td>{{INT_PROTOCOL}}</td><td>{{INT_CRITICALITY}}</td><td>{{INT_NOTES}}</td></tr><!-- /REPEAT:integration -->
+      </tbody>
+    </table>
+    <p><strong>Identity:</strong> {{IDENTITY_CURRENT}} → {{IDENTITY_TARGET}} · <strong>Network:</strong> {{NETWORK_DEPENDENCIES}}</p>
+  </section>
+
+  <!-- 7. Risks & compliance -->
+  <section id="risks">
+    <h2>Risks &amp; compliance</h2>
+    <!-- REPEAT:risk -->
+    <div class="callout risk"><strong>{{RISK_FLAG}}</strong> — {{RISK_DESCRIPTION}}. <span class="muted">{{RISK_IMPLICATION}}</span></div>
+    <!-- /REPEAT:risk -->
+    <p><strong>Regulations:</strong> {{REGULATIONS}} · <strong>Residency:</strong> {{RESIDENCY}} · <strong>RTO/RPO:</strong> {{RTO}} / {{RPO}} · <strong>Cutover window:</strong> {{CUTOVER_WINDOW}}</p>
+  </section>
+
+  <!-- 8. Strategy & target -->
+  <section id="strategy">
+    <h2>Migration strategy &amp; Azure candidates</h2>
+    <p><strong>Recommended:</strong> <span class="badge" style="background:#0078d4">{{STRATEGY}}</span> — {{STRATEGY_RATIONALE}}</p>
+    <div class="two">
+      <div>
+        <h3>Alternatives considered</h3>
+        <table>
+          <thead><tr><th>Alternative</th><th>Rejected because</th></tr></thead>
+          <tbody>
+            <!-- REPEAT:alternative --><tr><td>{{ALT_NAME}}</td><td>{{ALT_REASON}}</td></tr><!-- /REPEAT:alternative -->
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <h3>Target Azure candidates</h3>
+        <table>
+          <thead><tr><th>#</th><th>Service</th><th>Fit</th><th>Notes</th></tr></thead>
+          <tbody>
+            <!-- REPEAT:candidate --><tr><td>{{CAND_ORDER}}</td><td>{{CAND_SERVICE}}</td><td>{{CAND_FIT}}</td><td>{{CAND_NOTES}}</td></tr><!-- /REPEAT:candidate -->
+          </tbody>
+        </table>
+        <p class="muted">The Architect selects the final target and SKU.</p>
+      </div>
+    </div>
+    <!-- IF:diagram -->
+    <h3>Current architecture</h3>
+    <!-- IF:diagram-svg — preferred: SVG pre-rendered with mmdc, pasted inline -->
+    <figure class="diagram">{{MERMAID_SVG}}</figure>
+    <!-- /IF:diagram-svg -->
+    <!-- IF:diagram-client — fallback when mmdc is unavailable: renders in the browser when online, shows the source when offline -->
+    <figure class="diagram"><pre class="mermaid">{{MERMAID_SOURCE}}</pre></figure>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@11.17.2/dist/mermaid.min.js" integrity="sha384-EOXBFmc3gx5mb+vn0vPvvGqACToJD24hhacX5Yx+8NUUQrHIle/Qi5Bg9o3zKwW2" crossorigin="anonymous"></script>
+    <script>if (window.mermaid) { mermaid.initialize({ startOnLoad: true, securityLevel: 'strict', theme: 'neutral' }); }</script>
+    <!-- /IF:diagram-client -->
+    <details><summary>Mermaid source</summary><pre><code>{{MERMAID_SOURCE}}</code></pre></details>
+    <!-- /IF:diagram -->
+  </section>
+
+  <!-- 9. Open questions, assumptions, next steps -->
+  <section id="next">
+    <h2>Open questions, assumptions &amp; next steps</h2>
+    <table>
+      <thead><tr><th>#</th><th>Question</th><th>Why it matters</th><th>Next probe</th></tr></thead>
+      <tbody>
+        <!-- REPEAT:question --><tr><td>{{Q_ID}}</td><td>{{Q_TEXT}}</td><td>{{Q_IMPACT}}</td><td>{{Q_PROBE}}</td></tr><!-- /REPEAT:question -->
+      </tbody>
+    </table>
+    <h3>Assumptions</h3>
+    <ul>
+      <!-- REPEAT:assumption --><li>{{ASSUMPTION}} <span class="muted">— if wrong: {{ASSUMPTION_IMPACT}}</span></li><!-- /REPEAT:assumption -->
+    </ul>
+    <h3>Required specialists</h3>
+    <p>{{SPECIALISTS}}</p>
+    <h3>Next step</h3>
+    <p><code>/build-migration-plan</code> — {{HANDOFF_NOTE}}</p>
+  </section>
+
+</main>
+
+<footer>
+  Generated by /assess-any-application from reports/Discovery-Dossier.md and reports/Capability-Matrix.yaml · {{DATE}} · Effort ranges are estimates for planning, not commitments.
+</footer>
+
+</body>
+</html>

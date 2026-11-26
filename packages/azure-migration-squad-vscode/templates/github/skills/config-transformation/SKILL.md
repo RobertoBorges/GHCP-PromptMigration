@@ -5,6 +5,7 @@ description: |
   **Use when:** Converting legacy config files to modern cloud-native formats.
   **Triggers on:** web.config, app.config, applicationContext.xml, persistence.xml files.
   **Covers:** web.config to appsettings.json, XML to YAML/properties, connection string externalization.
+user-invocable: false
 ---
 
 # Configuration Transformation Skill
@@ -348,3 +349,7 @@ builder.Configuration.AddAzureAppConfiguration(options =>
 - [ ] Configure logging providers
 - [ ] Test configuration loading in all environments
 - [ ] Document all configuration values
+
+## Reference material
+
+- [Configuration transformation patterns](./references/config-transformation-patterns.md) — Read when converting legacy XML, INI, properties, or environment-specific settings to cloud-native configuration with Key Vault and managed identity patterns.

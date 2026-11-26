@@ -1,15 +1,16 @@
 ---
 name: azure-containerization
 description: |
-  Containerization patterns for Azure-compatible application languages and runtimes.
+  Docker containerization patterns for .NET and Java applications targeting Azure.
   **Use when:** Creating Dockerfiles or deploying to Container Apps, App Service containers, or AKS.
   **Triggers on:** Container Apps or AKS selected as hosting platform, Docker-related requests.
   **Covers:** Multi-stage Dockerfiles, docker-compose, Container Apps configuration, health checks, resource limits.
+user-invocable: false
 ---
 
 # Azure Containerization Skill
 
-Use this skill when containerizing an application for Azure deployment. Examples below show .NET and Java; adapt build and runtime stages to the application's language and framework.
+Use this skill when containerizing applications for Azure deployment. Currently ships worked example Dockerfiles for `.NET` and `Java`; adapt the same multi-stage pattern for other stacks (`python`, `nodejs`, `php`, `ruby`, `go`, `rust`, `perl`, etc.) using their official base images.
 
 ## When to Use This Skill
 
@@ -302,7 +303,11 @@ management:
 
 ## Template Files
 
-- [Dockerfile.dotnet](./templates/Dockerfile.dotnet) - .NET 10 multi-stage Dockerfile
-- [Dockerfile.java](./templates/Dockerfile.java) - Java 21 multi-stage Dockerfile
-- [docker-compose.yml](./templates/docker-compose.yml) - Local development compose
-- [.dockerignore](./templates/.dockerignore) - Files to exclude
+- [.NET Dockerfile](./templates/dotnet/Dockerfile) — .NET 10 multi-stage Dockerfile
+- [Java Dockerfile](./templates/java/Dockerfile) — Java 21 multi-stage Dockerfile
+- [docker-compose.yml](./templates/docker-compose.yml) — Local development compose
+- [container-app.bicep](./templates/container-app.bicep) — Azure Container Apps deployment module
+
+## Reference material
+
+- [Docker containerization guide](./references/docker-containerize.md) — Read when creating or reviewing Dockerfiles, docker-compose files, image hardening, and Azure-ready container settings.

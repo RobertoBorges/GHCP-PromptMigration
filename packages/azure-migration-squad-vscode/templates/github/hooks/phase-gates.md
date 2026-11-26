@@ -27,7 +27,7 @@ Every phase handoff must include:
 | Performance Engineer | baseline, load, and scale review |
 | Security Auditor | auth, secrets, RBAC, compliance, and exposure review |
 | Cost Engineer | cost posture, savings estimates, and budget guardrails review |
-| Evaluator | prompt, hook, and orchestration quality review |
+| Evaluator | skill, hook, and orchestration quality review |
 | Cutover Commander | rollout, rollback, and production sign-off |
 | Scribe | milestone and decision capture |
 | Presentation Specialist | stakeholder-ready reporting, executive summaries, and visual deliverables |
@@ -57,7 +57,7 @@ Checklist:
 - [ ] migration scope agreed (upgrade, remediation, or full modernization)
 - [ ] top risks and blockers ranked
 - [ ] target hosting, IaC, auth, and database choices recorded
-- [ ] `reports/Report-Status.md` updated with next command `/phase2-migratecode`
+- [ ] `reports/Report-Status.md` updated with next command `/phase2-migrate-code`
 - [ ] Architect handoff to Coder recorded
 - [ ] Azure Specialist, Security Auditor, and Database Specialist assumptions recorded by name
 
@@ -74,7 +74,7 @@ Checklist:
 - [ ] WCF/WebForms/Java migration exceptions documented
 - [ ] Tester review requested for build/test evidence
 - [ ] Database Specialist, Performance Engineer, and Security Auditor reviews captured when their areas are touched
-- [ ] `reports/Report-Status.md` updated with next command `/phase3-generateinfra`
+- [ ] `reports/Report-Status.md` updated with next command `/phase3-generate-infra`
 
 ## Phase 3 -> Phase 4
 
@@ -89,7 +89,7 @@ Checklist:
 - [ ] RBAC and private endpoint decisions documented
 - [ ] Azure Specialist and Security Auditor review captured
 - [ ] DevOps Engineer, Observability Engineer, Database Specialist, and Cost Engineer review captured when applicable
-- [ ] `reports/Report-Status.md` updated with next command `/phase4-deploytoazure`
+- [ ] `reports/Report-Status.md` updated with next command `/phase4-deploy-to-azure`
 
 ## Phase 4 -> Phase 5
 
@@ -105,7 +105,7 @@ Checklist:
 - [ ] production blockers called out clearly
 - [ ] DevOps Engineer, Cutover Commander, and Tester review recorded
 - [ ] Azure Specialist and Observability Engineer review recorded when deployment remediation or telemetry validation was required
-- [ ] `reports/Report-Status.md` updated with next command `/phase5-setupcicd`
+- [ ] `reports/Report-Status.md` updated with next command `/phase5-setup-cicd`
 
 ## Phase 5 -> Phase 6
 
@@ -121,7 +121,7 @@ Checklist:
 - [ ] DevOps Engineer and Tester review recorded
 - [ ] Security Auditor review recorded for secrets, approvals, and release controls
 - [ ] Azure Specialist and Cutover Commander review recorded when platform or go-live controls changed
-- [ ] `reports/Report-Status.md` updated with next command `/phase6-postmigrationops`
+- [ ] `reports/Report-Status.md` updated with next command `/phase6-post-migration-ops`
 
 ## Phase 6 -> Closeout
 
@@ -135,7 +135,7 @@ Checklist:
 - [ ] security and cost follow-up items prioritized with Cost Engineer input
 - [ ] ownership for ongoing operations captured
 - [ ] stakeholder-ready reporting, executive summary, or visual deliverable prepared when requested with Presentation Specialist support
-- [ ] final `/getstatus` summary ready
+- [ ] final `/get-status` summary ready
 - [ ] Scribe milestone entry completed
 - [ ] Observability Engineer, Performance Engineer, Security Auditor, Cost Engineer, and Cutover Commander sign-off recorded for operational readiness
 

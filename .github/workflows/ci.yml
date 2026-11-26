@@ -2,14 +2,14 @@ name: CI
 
 # ╔═════════════════════════════════════════════════════════════════════════╗
 # ║  Builds and tests the VS Code extension that bundles the                ║
-# ║  Azure Migration Agent's prompts/skills/chatmodes/agents/hooks.         ║
-# ║                                                                          ║
-# ║  Edit canonical content here:                                            ║
-# ║    .github/{prompts,skills,chatmodes,hooks,agents}/                     ║
+# ║  Azure Migration Agent's skills/agents/hooks.                           ║
+# ║                                                                         ║
+# ║  Edit canonical content here:                                           ║
+# ║    .github/{skills,agents,hooks}/                                       ║
 # ║    .github/copilot-instructions.md                                      ║
-# ║                                                                          ║
+# ║                                                                         ║
 # ║  The extension bundles a copy at packages/azure-migration-squad-vscode/ ║
-# ║  templates/ via the package's sync script (run at build time).         ║
+# ║  templates/ via the package's sync script (run at build time).          ║
 # ╚═════════════════════════════════════════════════════════════════════════╝
 
 on:
@@ -21,6 +21,7 @@ on:
       - 'MIGRATION-START-HERE.md'
       - 'package.json'
       - 'package-lock.json'
+      - 'plugin.json'
       - 'scripts/**'
       - '.github/workflows/ci.yml'
   pull_request:
@@ -30,6 +31,7 @@ on:
       - 'MIGRATION-START-HERE.md'
       - 'package.json'
       - 'package-lock.json'
+      - 'plugin.json'
       - 'scripts/**'
 
 jobs:
@@ -57,19 +59,32 @@ jobs:
       # ────────────────────────────────────────────────────────────────────
       # DECISION HARDSTOP COVERAGE
       # Fails the build if any catalog item in decision-catalog.md is not
-      # referenced by at least one phase prompt. See
-      # .github/skills/decision-hardstop.md for the full protocol.
+      # referenced by at least one phase skill. See
+      # .github/skills/migration-decisions/references/decision-hardstop.md for the full protocol.
       # ────────────────────────────────────────────────────────────────────
       - name: Validate decision-catalog coverage
         run: npm run validate:decision-coverage
 
-      - name: Validate Agent Skill metadata and file references
+      - name: Validate native plugin and release-version synchronization
+        run: npm run validate:plugin && npm run test:release
+
+      - name: Validate Agent Skill metadata and .github file references
         run: npm run validate:references
+
+      - name: Set up Python for portfolio reporting tests
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Test evidence reconciliation and Office delivery
+        run: |
+          python -m pip install -r .github/skills/migration-strategy-report/scripts/requirements-delivery.txt
+          npm run test:reporting
 
       # ────────────────────────────────────────────────────────────────────
       # VS CODE EXTENSION
-      # The only distribution path. Bundles content from .github/* and
-      # ships a Marketplace-ready .vsix.
+      # Bundles content from .github/* and ships a Marketplace-ready
+      # .vsix alongside the native plugin distribution.
       # ────────────────────────────────────────────────────────────────────
       - name: Sync templates from root to extension
         working-directory: packages/azure-migration-squad-vscode
@@ -97,5 +112,73 @@ jobs:
         with:
           name: azure-migration-agent-vsix
           path: packages/azure-migration-squad-vscode/*.vsix
+          if-no-files-found: error
+          retention-days: 30
+
+      # ────────────────────────────────────────────────────────────────────
+      # RAW AGENT CONTENT PACK
+      # A separate artifact containing the canonical .github/* content
+      # plus MIGRATION-START-HERE.md. This is what users who prefer NOT
+      # to install the VS Code extension can download and drop into their
+      # own project's .github/ folder directly. Same content the extension
+      # bundles internally under templates/github/.
+      # ────────────────────────────────────────────────────────────────────
+      - name: Stage agent content pack
+        run: |
+          set -euo pipefail
+          STAGE="$RUNNER_TEMP/agent-content-pack"
+          mkdir -p "$STAGE/.github/plugin" "$STAGE"
+          # Canonical .github subfolders the extension bundles
+          cp -R .github/agents "$STAGE/.github/"
+          cp -R .github/skills "$STAGE/.github/"
+          cp -R .github/hooks "$STAGE/.github/"
+          cp .github/copilot-instructions.md "$STAGE/.github/"
+          # Top-level welcome doc
+          cp MIGRATION-START-HERE.md "$STAGE/"
+          cp plugin.json "$STAGE/"
+          cp .github/plugin/marketplace.json "$STAGE/.github/plugin/"
+          # Small README explaining how to use the pack
+          cat > "$STAGE/README.md" <<'EOF'
+          # Azure Migration Agent — content pack
+
+          This ZIP contains the canonical agent definitions, skills,
+          hooks, welcome doc, and native plugin manifests that back the Azure Migration Agent.
+
+          ## Usage (without the VS Code extension)
+
+          1. Extract this ZIP into any repository.
+          2. Files land under `.github/` and at the repo root (`MIGRATION-START-HERE.md`).
+          3. Open the folder in a Copilot-Chat-capable client (VS Code + Copilot Chat, GitHub Copilot CLI, etc.).
+          4. Type `/assess-any-application` in Copilot Chat, or the natural-language equivalent.
+
+          Alternatively, register the extracted folder as a local agent plugin
+          with VS Code's chat.pluginLocations setting. Plugin mode exposes
+          skills and agents only; workspace hooks are not automatically registered.
+
+          For the guided experience (sidebar, decisions panel, status bar,
+          session-lifecycle hooks), install the VS Code extension instead:
+          https://marketplace.visualstudio.com/items?itemName=robertoborges.azure-migration-squad-vscode
+
+          Source repo: https://github.com/RobertoBorges/GHCP-PromptMigration
+          EOF
+          echo "Staged content pack:"
+          find "$STAGE" -type f | wc -l
+          du -sh "$STAGE"
+          # Guard: the pack is worthless without the .github tree. Fail loudly
+          # rather than shipping a near-empty ZIP.
+          STAGED=$(find "$STAGE" -type f | wc -l)
+          if [ "$STAGED" -lt 100 ]; then
+            echo "::error::content pack staged only $STAGED files; expected the full .github tree"
+            exit 1
+          fi
+
+      - name: Upload agent content pack artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: agent-content-pack
+          path: ${{ runner.temp }}/agent-content-pack/
+          # Required: .github is a dot-directory and upload-artifact@v4 skips
+          # hidden paths by default, which silently drops the entire pack.
+          include-hidden-files: true
           if-no-files-found: error
           retention-days: 30

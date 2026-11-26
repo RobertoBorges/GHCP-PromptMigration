@@ -6,6 +6,7 @@ description: |
   **Triggers on:** .svc files, ServiceContract attributes, OperationContract, DataContract, WCF bindings.
   **Covers:** ServiceContract to controllers, DataContract to DTOs, FaultContract to Problem Details, OpenAPI generation.
   **Important:** This is a rewrite, not a compatibility layer. Existing WCF clients will need updates.
+user-invocable: false
 ---
 
 # WCF to REST Migration Skill
@@ -353,3 +354,7 @@ app.UseSwaggerUI();
 - [ ] Test all endpoints with Swagger UI
 - [ ] Update authentication to JWT/OAuth
 - [ ] Remove WCF dependencies from project
+
+## Reference material
+
+- [WCF to REST API guide](./references/wcf-to-rest-api.md) — Read when converting WCF service contracts, data contracts, bindings, faults, and SOAP clients to ASP.NET Core REST APIs.

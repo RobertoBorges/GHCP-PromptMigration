@@ -202,23 +202,27 @@ function renderWelcomeHtml(): string {
   <div class="actions">
     <button onclick="send('initialize')">Initialize in this workspace</button>
     <button class="secondary" onclick="send('installCopilotChat')">Install GitHub Copilot Chat</button>
-    <button class="secondary" onclick="send('showCatalog')">Show prompt catalog</button>
+    <button class="secondary" onclick="send('showCatalog')">Show command catalog</button>
     <button class="secondary" onclick="send('openSettings')">Open settings</button>
   </div>
 
   <h2>What you get</h2>
   <div class="feature-grid">
     <div class="feature-card">
-      <strong>One migration agent</strong>
-      The Code Migration Modernization Agent reads .github/agents/Code-Migration-Modernization.agent.md and orchestrates Phase 0-6 plus utility prompts.
+      <strong>65 skills and 10 agents</strong>
+      Three entry agents cover migration, discovery and debugging. Seven specialists support the 7-step main path (Discovery + Phase 1-6) and optional tracks.
+    </div>
+    <div class="feature-card">
+      <strong>AWS specialist tracks</strong>
+      Read-only account and region inventory, dependency maps and readiness reports; AWS-to-Azure service, SDK, infrastructure and deployment migration.
     </div>
     <div class="feature-card">
       <strong>Universal source adapters</strong>
-      On-premise, AWS, GCP, Oracle, VMware, Kubernetes, container registries, GitHub repos, ZIPs, mainframes.
+      On-premise, AWS, GCP, Oracle, VMware, Kubernetes, container registries, GitHub repos, ZIPs.
     </div>
     <div class="feature-card">
       <strong>Stack adapters</strong>
-      .NET, Java, Python, Node.js, PHP, Ruby, Go, Perl, Rust, COBOL, Oracle Forms, PowerBuilder, Delphi/VB6, Scala/Kotlin, C++ Windows.
+      .NET, Java, Python, Node.js, PHP, Ruby, Go, Perl, Rust, Oracle Forms, PowerBuilder, Delphi/VB6, Scala/Kotlin, C++ Windows.
     </div>
     <div class="feature-card">
       <strong>Decision Hardstop Protocol</strong>
@@ -226,16 +230,35 @@ function renderWelcomeHtml(): string {
     </div>
   </div>
 
-  <h2>Your first migration in 3 steps</h2>
+  <h2>Your first migration</h2>
+  <p style="opacity: 0.85; margin-top: -6px;">Two setup steps, then the 7-step main path. Run the slash commands in order in Copilot Chat.</p>
   <ol>
-    <li><strong>Click "Initialize in this workspace"</strong> above — drops <code>.github/agents/</code>, <code>.github/prompts/</code>, <code>.github/skills/</code>, etc. into your project.</li>
+    <li><strong>Click "Initialize in this workspace"</strong> above — drops <code>.github/agents/</code>, <code>.github/skills/</code>, and <code>.github/hooks/</code> into your project.</li>
     <li><strong>Open GitHub Copilot Chat</strong> (<kbd>Ctrl+Alt+I</kbd>). If you don't have it, click "Install GitHub Copilot Chat" above.</li>
-    <li><strong>Type</strong> <code>/assess-any-application</code> — the agent will interview you about source, stack, workload, then produce a Capability Matrix.</li>
+    <li><strong><code>/assess-any-application</code></strong> — 🔍 Discovery: characterize source/stack/workload; produce Capability Matrix</li>
+    <li><strong><code>/phase1-plan</code></strong> — 🚀 Plan: produce Application-Assessment-Report + Migration-Plan + Decisions-Required</li>
+    <li><strong><code>/phase2-migrate-code</code></strong> — modernize the code to your chosen target</li>
+    <li><strong><code>/phase3-generate-infra</code></strong> — Bicep or Terraform for Azure</li>
+    <li><strong><code>/phase4-deploy-to-azure</code></strong> — deploy via Azure Developer CLI (azd)</li>
+    <li><strong><code>/phase5-setup-cicd</code></strong> — GitHub Actions or Azure DevOps</li>
+    <li><strong><code>/phase6-post-migration-ops</code></strong> — App Insights, alerts, runbooks</li>
   </ol>
+  <p style="opacity: 0.75; font-size: 0.9em;">Phases 2-6 hard-stop until each pending decision in <code>reports/Decisions-Required.md</code> is answered. The status bar shows a count.</p>
+
+  <h2>Optional add-ons</h2>
+  <p style="opacity: 0.85; margin-top: -6px;">Not part of the default flow — surface only when you need one.</p>
+  <ul>
+    <li><strong>Alternative intakes:</strong> <code>/build-migration-plan</code>, <code>/quick-assessment</code>, <code>/quick-triage</code>, <code>/interactive-migration-interview</code>, <code>/team-skill-assessment</code></li>
+    <li><strong>Portfolio / multi-app:</strong> <code>/portfolio-strategy</code>, <code>/phase0-multi-repo-assessment</code></li>
+    <li><strong>Specialized deep-dives:</strong> <code>/database-migration</code>, <code>/security-hardening</code>, <code>/cost-optimization</code></li>
+    <li><strong>AWS assessment:</strong> start with <code>/aws-assess-phase0-setup-and-scope</code>; continue through discovery, inventory, enrichment, relationships, reports and Azure readiness.</li>
+    <li><strong>AWS-to-Azure migration:</strong> start with <code>/aws2azure-phase1-plan</code>; optional multi-repo assessment, code migration, infrastructure, deployment and CI/CD.</li>
+    <li><strong>Utility / recovery:</strong> <code>/phase-rollback</code>, <code>/get-status</code>, <code>/skill-creator</code></li>
+  </ul>
 
   <h2>Next steps after init</h2>
   <ul>
-    <li>Browse the <strong>agent definition, prompts, skills, and decisions</strong> in the sidebar (look for the rocket icon 🚀 in the Activity Bar).</li>
+    <li>Browse the <strong>Agent, Main path, Optional add-ons, and Decisions</strong> in the sidebar (look for the rocket icon 🚀 in the Activity Bar).</li>
     <li>Check the <strong>status bar</strong> for your current migration phase and pending decisions (bottom-left).</li>
     <li>Open <code>MIGRATION-START-HERE.md</code> in your project root for the full quickstart.</li>
     <li>Use the <strong>Command Palette</strong> (<kbd>Ctrl+Shift+P</kbd>) → type "Azure Migration:" to see all commands.</li>

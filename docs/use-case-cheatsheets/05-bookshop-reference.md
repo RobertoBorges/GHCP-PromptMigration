@@ -1,4 +1,4 @@
-# 05-BookShop Cheat Sheet — The Vault (Reference Implementation)
+# 05-BookShop Cheat Sheet — The Bestseller (Reference Implementation)
 
 ## What is this app?
 
@@ -15,6 +15,8 @@ BookShop is the repo's completed modernization reference: a formerly legacy web 
 | Notes | Preserved under `Legacy-Archive/` |
 
 ## Target stack
+
+> ⚠ The rows below are **candidates, not defaults.** `/phase1-plan` presents each option with tradeoffs and records your answer in `reports/Decisions-Required.md`. The agent never picks a target framework, hosting platform, or database engine on your behalf.
 
 | Area | Implemented reference target |
 |---|---|
@@ -42,15 +44,17 @@ BookShop is the repo's completed modernization reference: a formerly legacy web 
 - How to pair migration work with tests, runbooks, and status artifacts
 - How to package a migration so the next team member can operate it
 
-## Prompt sequence
+## Command sequence
 
-1. `@agent show migration status`
+> Steps marked 🟢 are the 7-step main path. Steps marked 🔵 are optional add-ons. Free-text lines are follow-up requests you type in the same thread.
+
+1. `/get-status`
 2. `Use #file:Use-cases/05-BookShop as the reference implementation for .NET 8, ASP.NET Core, Azure App Service, Azure SQL, Bicep, GitHub Actions, Key Vault, and Application Insights. Extract reusable patterns for use-cases 01, 02, and 07.`
-3. `/run Phase 6 post-migration ops`
-4. `/run security hardening review`
-5. `/run cost optimization review`
-6. `@agent evaluate rollback options`
-7. `@agent show migration status`
+3. `/phase6-post-migration-ops`
+4. `/security-hardening`
+5. `/cost-optimization`
+6. `/phase-rollback`
+7. `/get-status`
 
 ## Agent dispatch order
 
@@ -68,11 +72,12 @@ BookShop is the repo's completed modernization reference: a formerly legacy web 
 
 ## Reference
 
-- [BookShop modernization prompt reference](../../Use-cases/05-BookShop/docs/Modernization-Prompts-Reference.md)
-- [BookShop project summary](../../Use-cases/05-BookShop/PROJECT_SUMMARY.md)
-- [BookShop migration progress](../../Use-cases/05-BookShop/MIGRATION_PROGRESS.md)
+- [Full walkthrough for this app](../walkthroughs/05-bookshop-reference-walkthrough.md)
+- [Skills map](../guides/skills-map.md) — which skills load at which step
+- [BookShop IIS deployment guide](../../Use-cases/05-BookShop/IIS-Deployment-Guide.md)
+- [Skill catalog](../architecture/SKILL-CATALOG.md)
 
-## Sample prompts
+## Sample requests
 
 - `Use #file:Use-cases/05-BookShop as the target-state benchmark for a .NET 8 + App Service + Azure SQL migration.`
 - `Compare my current use-case against BookShop and list the missing reference patterns in code, infra, CI/CD, and operations.`

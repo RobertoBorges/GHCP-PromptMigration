@@ -38,19 +38,21 @@ Click **Get started**.
 
 The extension copies bundled templates into your project. After a few seconds you'll have:
 
-- `.github/agents/Code-Migration-Modernization.agent.md` — the agent definition
-- `.github/prompts/` — 19 slash commands
-- `.github/skills/` — 9 discoverable Agent Skills + 72 prompt reference guides
-- `.github/chatmodes/` — 8 specialized chat modes
-- `.github/hooks/` — orchestration rules + Wave H decision protocol
+- `.github/agents/` — **10 custom agents**, including `Code-Migration-Modernization.agent.md` (the top-level agent definition)
+- `.github/skills/` — **65 skills**, each a folder with a `SKILL.md`, plus **121 supporting files**, 71 of them under `references/`
+  - 20 are **workflow skills** — user-invocable as slash commands (`/assess-any-application`, `/phase1-plan`, …)
+  - 16 are **knowledge skills** — loaded automatically by the agent, hidden from the `/` menu
+- `.github/hooks/` — orchestration rules, phase gates, and the decision hard-stop protocol
 - `.github/copilot-instructions.md` — top-level rules for Copilot
 - `MIGRATION-START-HERE.md` — your 60-second quickstart at the project root
 
 A notification offers to open the welcome doc — click **Open**.
 
-A second notification offers to **reload the VS Code window** so Copilot Chat picks up the new prompts and chatmodes. Click **Reload**.
+A second notification offers to **reload the VS Code window** so Copilot Chat picks up the new skills and agents. Click **Reload**.
 
-## Step 4 — Run Discovery
+> **Why skills and not prompt files?** VS Code has deprecated prompt files for Agent Host sessions — they are no longer loaded, and the Local agent is being removed. Everything this extension ships is authored against the current [Agent Skills spec](https://code.visualstudio.com/docs/agent-customization/agent-skills): a skill is a folder containing `SKILL.md` with YAML frontmatter, and heavier material lives in `references/` that the model reads only when it needs it.
+
+## Step 4 — Run the main path — Step 1: Discovery
 
 In **Copilot Chat** (open with `Ctrl+Alt+I`):
 
@@ -60,39 +62,52 @@ In **Copilot Chat** (open with `Ctrl+Alt+I`):
 
 The agent interviews you about source, stack, workload, data, and integrations. It produces:
 
-- `reports/Discovery-Dossier.md` — narrative + evidence
+- `reports/Discovery-Dossier.md` — narrative + evidence, including lines of code and migration complexity (Low / Medium / High / Very High) with an effort estimate in weeks
 - `reports/Capability-Matrix.yaml` — structured classification
+- `reports/Discovery-Report.html` — the same findings as a self-contained HTML report you can share
 
-## Step 5 — Build the migration plan + answer decisions
+## Step 5 — Run the main path — Step 2: Plan
 
 ```
-/build-migration-plan
+/phase1-plan
 ```
 
-The agent produces:
+Phase 1 reads the Capability Matrix and produces:
 
-- `reports/Migration-Plan.md` — the migration plan
-- `reports/Decisions-Required.md` — **18 major architecture decisions you need to answer** before later phases can run
+- `reports/Application-Assessment-Report.md` — the per-app assessment
+- `reports/Migration-Plan.md` — the migration plan (if not already produced via `/build-migration-plan`)
+- `reports/Decisions-Required.md` — **major architecture decisions you need to answer** before later phases can run
+
+## Step 6 — Answer the decisions
 
 Open `reports/Decisions-Required.md`. For each decision (Target framework, Database engine, Hosting platform, IaC tool, etc.), the agent shows options + tradeoffs. Pick one and fill in your rationale.
 
-The **status bar** (bottom-left) shows **"⚠ AMS: N/M decisions pending"** with a warning background until all are answered.
+The **status bar** (bottom-left) shows **"⚠ AMA: N/M decisions pending"** with a warning background until all are answered.
 
-The **🛑 Decisions Required tree view** in the sidebar (rocket icon 🚀 in the Activity Bar) shows each decision's status. Click any entry to jump to that section of the file.
+The **🛑 Decisions Required tree view** in the sidebar (rocket icon 🚀 in the Activity Bar) shows each decision's status. Click any entry to jump to that section of the file. The same sidebar also has **Agent**, **🟢 Main path (Assess + Phase 1-6)**, and **🔵 Optional add-ons** views.
 
-## Step 6 — Run the phases
+## Step 7 — Run Phase 2 through Phase 6
 
 Once all required decisions are `✅ DECIDED`:
 
 ```
-/Phase2-MigrateCode
-/Phase3-GenerateInfra
-/Phase4-DeployToAzure
-/Phase5-SetupCICD
-/Phase6-PostMigrationOps
+/phase2-migrate-code
+/phase3-generate-infra
+/phase4-deploy-to-azure
+/phase5-setup-cicd
+/phase6-post-migration-ops
 ```
 
 Each phase **hard-stops** if any decision it depends on is still `⏸ PENDING`. The agent will tell you which decisions block its work.
+
+## Optional add-ons
+
+These are **not part of the default flow**. Use them when you need a specific specialized task:
+
+- **Alternative intakes:** `/build-migration-plan`, `/quick-assessment`, `/quick-triage`, `/interactive-migration-interview`, `/team-skill-assessment`
+- **Portfolio / multi-app:** `/portfolio-strategy`, `/phase0-multi-repo-assessment`
+- **Specialized deep-dives:** `/database-migration`, `/security-hardening`, `/cost-optimization`
+- **Utility / recovery:** `/phase-rollback`, `/get-status`
 
 ## Useful Command Palette commands
 
@@ -103,9 +118,11 @@ Each phase **hard-stops** if any decision it depends on is still `⏸ PENDING`. 
 | Initialize in this workspace | Bundle the agent + content into the project |
 | Upgrade to latest version | Overwrite with the latest extension contents |
 | Run health check (doctor) | Verify install + show extension version |
+| Start main path (`/assess-any-application`) | Begin the 7-step default flow |
 | Open Discovery (`/assess-any-application`) | Jump-start the agent in Copilot Chat |
-| Show prompt catalog | Open MIGRATION-START-HERE.md |
+| Show command catalog (MIGRATION-START-HERE.md) | Open the workspace quickstart with every slash command |
 | Show decisions required | Open `reports/Decisions-Required.md` |
+| Open settings | Jump to the extension's settings |
 | Install GitHub Copilot Chat | If you don't have it yet |
 | Show welcome page | The WebView welcome panel |
 | Refresh | Refresh the sidebar trees |
@@ -116,7 +133,7 @@ Each phase **hard-stops** if any decision it depends on is still `⏸ PENDING`. 
 |---------|-----|
 | Slash commands don't show in Copilot Chat | **Reload VS Code window** (`Ctrl+Shift+P` → "Developer: Reload Window") |
 | Welcome notification keeps showing every time | Click **"Don't show again"** — it persists per workspace |
-| Status bar shows "AMS: N/M decisions pending" | Open `reports/Decisions-Required.md` and answer each PENDING decision |
+| Status bar shows "AMA: N/M decisions pending" | Open `reports/Decisions-Required.md` and answer each PENDING decision |
 | Sidebar shows "Click to install Azure Migration Agent here" | Click the entry — it runs Initialize |
 | Tree views are empty after init | Reload VS Code window OR click the refresh button on each tree title |
 
@@ -132,8 +149,10 @@ Each phase **hard-stops** if any decision it depends on is still `⏸ PENDING`. 
 ## Next steps
 
 - Read `.github/agents/Code-Migration-Modernization.agent.md` to understand the agent's responsibilities
-- Read `.github/skills/decision-hardstop.md` to understand why the agent never decides for you
-- Read `.github/skills/decision-catalog.md` to see all 18 major decisions
+- Read `.github/skills/migration-decisions/references/decision-hardstop.md` to understand why the agent never decides for you
+- Read `.github/skills/migration-decisions/references/decision-catalog.md` to see all 18 major decisions
+- Browse the [skill catalog](./architecture/SKILL-CATALOG.md) for all 65 skills and 10 custom agents
+- Read the [architecture overview](./architecture/ARCHITECTURE.md) to see how skills, agents, and hooks fit together
 - Star the [GitHub repo](https://github.com/RobertoBorges/GHCP-PromptMigration) for updates
 
 Happy migrating! 🚀

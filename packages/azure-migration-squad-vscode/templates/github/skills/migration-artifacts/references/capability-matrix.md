@@ -1,0 +1,267 @@
+# Skill: Capability Matrix
+
+> The machine-readable contract between Discovery Engineer and every downstream Phase skill. The Discovery Dossier is for humans; the Capability Matrix is for the agent.
+
+## Output File
+
+`reports/Capability-Matrix.yaml`
+
+## When to Use
+
+- Produced by Discovery Engineer at the end of `/assess-any-application`
+- Consumed by every Phase skill (Phase 1–6) to know which source/stack/workload skills to load and which specialists to dispatch
+- Updated by Architect when strategy is refined
+- Re-emitted by Discovery Engineer when re-discovery is triggered
+
+## Schema (canonical)
+
+```yaml
+# reports/Capability-Matrix.yaml
+# Schema version: 1.0
+# Authored: <YYYY-MM-DD> by Discovery Engineer
+# Approved: <YYYY-MM-DD or "pending"> by Architect
+
+schema_version: 1.0
+authored_date: <YYYY-MM-DD>
+approved_date: <YYYY-MM-DD | "pending">
+
+application:
+  name: <string>
+  owner: <string | "unknown">
+  purpose: <one-line>
+  criticality: <mission-critical | important | nice-to-have>
+  business_priority: <speed | modernize | cost | risk>
+
+source:
+  primary_adapter: <source-github-repo | source-zip-filesystem | source-on-premise | source-aws | source-gcp | source-oracle-db | source-vmware-rvtools | source-kubernetes-cluster | source-container-registry | source-unsupported-escalation>
+  access_method: <git-url | ssh | aws-profile | gcp-project | filesystem-path | rvtools-export | kubectl-context | acr-url | describe-only>
+  secondary_adapters: []                    # e.g., DB on a separate source
+  evidence_confidence: <high | medium | low>
+  evidence_paths:
+    - <relative file path or command>
+
+stack:
+  primary_stack: <dotnet | java | python | nodejs | php | ruby | go | perl | rust | oracle-forms | powerbuilder | delphi-vb6 | scala-kotlin | cpp-windows | unknown>
+  primary_framework: <e.g., spring-boot-3 | aspnet-core-8 | django-4 | laravel-10 | none>
+  secondary_stacks: []
+  build_system: <msbuild | maven | gradle | npm | pnpm | yarn | pip | poetry | composer | bundler | cargo | go-modules | sbt | mix | make | cmake | unknown>
+  runtime_version_detected: <e.g., dotnet8.0 | java-17 | python-3.11 | node-20 | php-8.3 | unknown>
+  evidence_confidence: <high | medium | low>
+  evidence_paths:
+    - <relative file path>
+
+workload:
+  primary_pattern: <webapp | api-service | batch-job | event-driven | serverless | desktop-client-server | packaged-app | data-pipeline>
+  secondary_patterns: []
+  entry_points:
+    - <e.g., src/Program.cs main()>
+    - <e.g., crontab entry: /opt/app/run-nightly.sh>
+  evidence_confidence: <high | medium | low>
+
+data:
+  primary_datastore: <sql-server | azure-sql | oracle | postgresql | mysql | mongo | dynamodb | cosmos | files | s3 | gcs | blob | hdfs | unknown>
+  datastore_version: <e.g., "SQL Server 2016" | "PostgreSQL 14" | unknown>
+  data_gravity: <none | small | medium | large | very-large>
+  schema_highlights:
+    - <e.g., "412 tables, ~80 stored procedures, 12 triggers">
+  evidence_confidence: <high | medium | low>
+
+integrations:
+  - name: <integration name>
+    direction: <inbound | outbound | bidirectional>
+    protocol: <REST | SOAP | SFTP | JMS | AMQP | SMB | gRPC | Kafka | other>
+    criticality: <high | medium | low>
+    notes: <free-form>
+
+identity:
+  current_provider: <ad | ldap | saml | oauth-custom | oauth-azuread | hardcoded | none>
+  target_provider: <entra-id-workload-identity | entra-id-b2c | preserve-existing>
+
+network:
+  on_prem_dependencies: [<list of on-prem systems referenced>]
+  private_endpoints_needed: <true | false>
+  egress_constraints: <e.g., "must reach legacy ESB at 10.0.0.5">
+
+risk_flags:
+  # Add any that apply — these auto-dispatch specialists per .github/copilot-instructions.md
+  - <regulated-data | production-only-system | large-data-gravity | no-source-code-available | unsupported-runtime | vendor-licensed-runtime | tight-cutover-window | unsupported-source | saas-embedded | high-integration-fanout | low-evidence-confidence>
+
+compliance:
+  regulations: [<pii | pci | hipaa | gdpr | sox | fedramp | other>]
+  residency_requirement: <e.g., "EU-only" | "none">
+  audit_logging_required: <true | false>
+
+operational:
+  rto: <e.g., "4 hours" | "unknown">
+  rpo: <e.g., "1 hour" | "unknown">
+  cutover_window: <e.g., "Sat 22:00 - Sun 06:00 ET" | "unknown">
+  current_sla: <e.g., "99.9%" | "unknown">
+
+migration_strategy:
+  recommendation: <rehost | replatform | refactor | rearchitect | rebuild | retire | retain>
+  rationale: <multi-line: which decision-tree branches were taken>
+  decision_path:
+    - <branch and outcome>
+    - <branch and outcome>
+  alternatives_considered:
+    - alternative: <other 6R>
+      rejected_because: <reason>
+    - alternative: <other 6R>
+      rejected_because: <reason>
+  target_azure_candidates:
+    - service: <Azure service>
+      fit: <high | medium | low>
+      fit_notes: <one-line>
+    - service: <...>
+      fit: <...>
+      fit_notes: <...>
+
+complexity:                                 # see references/complexity-model.md + complexity-model.yaml
+  model_version: <e.g., "2.0" — copied from complexity-model.yaml>
+  delivery_model: <ai-assisted | traditional>         # default from complexity-model.yaml
+  tooling: <e.g., "GitHub Copilot agent mode + Claude Sonnet 5.5" | none>
+  loc:
+    total: <integer, non-blank, excluding vendored/generated/test>
+    test_loc: <integer | unknown>
+    method: <scc | cloc | pwsh-fallback | bash-fallback | object-count | user-estimate>
+    by_language:
+      - language: <e.g., C#>
+        loc: <integer>
+  dimensions:                               # exactly 8 entries, ratings 1-5
+    - id: <code_size | stack_gap | integrations | data | architecture | azure_blockers | identity_compliance | delivery_readiness>
+      rating: <1-5>                         # what the evidence says
+      adjusted_rating: <1-5>                # after delivery-model relief; equals rating when no relief applies
+      weight: <from complexity-model.yaml>
+      evidence: <file path, command output, or user statement>
+      evidence_confidence: <high | medium | low>
+  weighted_rating: <1.00-5.00>                         # from adjusted ratings
+  score: <0-100>
+  score_level: <Low | Medium | High | Very High>      # level from score alone
+  floor_rules_applied: [<rule id>, ...]               # [] if none
+  level: <Low | Medium | High | Very High | not-estimated>   # final level after floors
+  effort_weeks:
+    min: <integer>
+    max: <integer>
+    strategy: <migration_strategy.recommendation>
+    strategy_factor: <from complexity-model.yaml>
+    provisional: <true | false>                        # true when any stream was widened for low confidence
+    baseline_team: <from complexity-model.yaml>
+  effort_breakdown:                                    # one entry per work_streams item, YAML order; [] for retire/retain
+    - stream: <work stream id, e.g., code>
+      phase: <from complexity-model.yaml>
+      stream_rating: <1.00-5.00>
+      percent: <0-100, one decimal>
+      days_min: <team-days, 0.5 steps>
+      days_max: <team-days, 0.5 steps>
+      widened: <true | false>                          # max doubled because a driver is low confidence
+  traditional_comparison:                              # only when delivery_model is ai-assisted
+    score: <0-100>
+    level: <Low | Medium | High | Very High>
+    effort_weeks: { min: <integer>, max: <integer> }
+  top_drivers:                                         # 2-3 highest weighted contributors, plain language
+    - <e.g., "320k lines of .NET Framework WebForms code">
+
+required_specialists:
+  - <agent name>
+  - ...
+
+unresolved_questions:
+  - id: Q1
+    question: <text>
+    impact: <why it matters>
+    recommended_probe: <action to raise confidence>
+
+assumptions:
+  - assumption: <text>
+    impact_if_wrong: <text>
+
+handoff:
+  next_command: /build-migration-plan
+  next_lead: Architect
+  notes: <optional 3-5 lines>
+```
+
+## Field Conventions
+
+### `evidence_confidence`
+
+| Value | Meaning |
+|-------|---------|
+| `high` | Manifest, command output, or directly-observed artifact confirms it |
+| `medium` | Strong indirect evidence (file extensions + framework signals) but no manifest |
+| `low` | Only user statement or partial evidence; needs probing |
+
+If any axis is `low`, that axis MUST have a corresponding entry in `unresolved_questions`.
+
+### `data_gravity` bands
+
+| Band | Range |
+|------|-------|
+| `none` | No persistent data |
+| `small` | <1 GB |
+| `medium` | 1 GB – 100 GB |
+| `large` | 100 GB – 1 TB |
+| `very-large` | >1 TB |
+
+### `criticality`
+
+| Value | Implication |
+|-------|------------|
+| `mission-critical` | Auto-add Cutover Commander, Security Auditor, Performance Engineer |
+| `important` | Auto-add Cutover Commander |
+| `nice-to-have` | Standard delivery |
+
+### `risk_flags`
+
+Use only the canonical values (in `.github/copilot-instructions.md`). Each flag triggers auto-dispatch.
+
+## Consumer Contract
+
+Every Phase skill (`/phase1-plan` through `/phase6-post-migration-ops`) reads this matrix at startup. If the matrix is missing or `schema_version` doesn't match, the Phase skill **must**:
+
+1. Refuse to proceed
+2. Print a clear error pointing to `/assess-any-application`
+3. Suggest the user run the Discovery Engineer first
+
+Phase skills use these fields:
+
+| Field | Used by |
+|-------|---------|
+| `source.primary_adapter` | All phases (selects source-* skill) |
+| `stack.primary_stack` + `stack.secondary_stacks` | Phase 2, 3 (selects stack-* skill) |
+| `workload.primary_pattern` | Phase 1, 3 (selects workload-* skill) |
+| `data.*` | Phase 2 (Database Migration), Phase 3, Phase 6 |
+| `integrations` | Phase 1, Phase 3, Phase 4 |
+| `risk_flags` | All phases (auto-dispatch specialists) |
+| `migration_strategy.recommendation` | All phases (which phases are emphasized) |
+| `migration_strategy.target_azure_candidates` | Phase 1 (Architect picks), Phase 3 (IaC generation) |
+| `complexity.level` + `complexity.effort_weeks` | `/build-migration-plan`, Phase 1 (effort estimation), `/quick-assessment` (same model) |
+| `complexity.effort_breakdown` | `/build-migration-plan` and Phase 1 (per-phase effort table) |
+| `complexity.loc` | Phase 1 (effort breakdown), Phase 2 (sizing code-migration batches) |
+
+## Update Discipline
+
+The matrix is **append-only** in terms of fields. To change a value:
+
+1. Discovery Engineer or Architect updates the relevant field
+2. `approved_date` is set to today
+3. A line is added to `reports/Decision-Log.md` recording the change:
+
+```
+Matrix-<app>-<YYYY-MM-DD>: changed <field> from <old> to <new>, reason=<short>
+```
+
+## Quality Gate
+
+A matrix is **valid** when:
+
+- [ ] `schema_version: 1.0` set
+- [ ] All required keys present (use the canonical schema above)
+- [ ] Every `evidence_confidence` filled
+- [ ] Every `low`-confidence axis has at least one `unresolved_questions` entry
+- [ ] `migration_strategy.recommendation` set with rationale + ≥2 alternatives
+- [ ] `target_azure_candidates` has at least 1 entry (or "none" if retire/retain)
+- [ ] `complexity.loc.total` and `complexity.loc.method` set (lines of code measured, or `user-estimate` with low confidence)
+- [ ] `complexity` has 8 rated dimensions (with `adjusted_rating`), `delivery_model`, `score`, final `level`, `effort_weeks` and `effort_breakdown` (or `level: not-estimated` for unsupported sources)
+- [ ] `required_specialists` includes at least Architect + Azure Specialist + Tester + Scribe
+- [ ] `handoff.next_command` set

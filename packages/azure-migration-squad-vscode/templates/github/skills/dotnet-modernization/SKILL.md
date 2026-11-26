@@ -5,6 +5,7 @@ description: |
   **Use when:** User has a .NET Framework 4.x application and needs to upgrade to .NET 10 LTS.
   **Triggers on:** .csproj files with TargetFrameworkVersion, web.config files, System.Web references, Entity Framework 6.
   **Covers:** Project file transformation, web.config to appsettings.json, EF6 to EF Core, Windows/Forms auth to Entra ID.
+user-invocable: false
 ---
 
 # .NET Modernization Skill
@@ -179,3 +180,10 @@ builder.Services.AddDbContext<ModernContext>(options =>
 5. **Use async/await** - For all I/O operations
 6. **Configure middleware order** - Order matters in the pipeline
 7. **Use ILogger** - Consistent logging abstraction
+
+## Reference material
+
+- [ASP Classic to .NET](./references/asp-classic-to-dotnet.md) — Read when discovery finds classic ASP pages, VBScript/JScript server code, COM dependencies, or ASP-to-modern-.NET rewrite work.
+- [.NET Framework to modern .NET](./references/dotnet-framework-to-dotnet8.md) — Read when upgrading .NET Framework applications and evaluating target framework decisions, project conversion, and compatibility gaps.
+- [Web Forms to Razor](./references/webforms-to-razor.md) — Read when migrating ASP.NET Web Forms pages, controls, view state, master pages, or code-behind patterns.
+- [Entity Framework migration](./references/ef-migration.md) — Read when moving EF6, ADO.NET-heavy data access, or legacy ORM patterns toward EF Core or Azure-ready data access.
